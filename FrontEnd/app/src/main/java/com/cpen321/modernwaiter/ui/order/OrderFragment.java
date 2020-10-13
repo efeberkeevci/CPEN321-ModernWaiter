@@ -1,4 +1,4 @@
-package com.cpen321.modernwaiter.ui.dashboard;
+package com.cpen321.modernwaiter.ui.order;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,17 +14,17 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.cpen321.modernwaiter.R;
 
-public class DashboardFragment extends Fragment {
+public class OrderFragment extends Fragment {
 
-    private DashboardViewModel dashboardViewModel;
+    private OrderVIewModel orderVIewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        dashboardViewModel =
-                ViewModelProviders.of(this).get(DashboardViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        orderVIewModel =
+                ViewModelProviders.of(this).get(OrderVIewModel.class);
+        View root = inflater.inflate(R.layout.fragment_order, container, false);
         final TextView textView = root.findViewById(R.id.text_dashboard);
-        dashboardViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        orderVIewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

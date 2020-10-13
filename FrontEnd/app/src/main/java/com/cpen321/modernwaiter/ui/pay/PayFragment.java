@@ -1,4 +1,4 @@
-package com.cpen321.modernwaiter.ui.notifications;
+package com.cpen321.modernwaiter.ui.pay;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,17 +14,17 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.cpen321.modernwaiter.R;
 
-public class NotificationsFragment extends Fragment {
+public class PayFragment extends Fragment {
 
-    private NotificationsViewModel notificationsViewModel;
+    private PayViewModel payViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        notificationsViewModel =
-                ViewModelProviders.of(this).get(NotificationsViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_notifications, container, false);
+        payViewModel =
+                ViewModelProviders.of(this).get(PayViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_pay, container, false);
         final TextView textView = root.findViewById(R.id.text_notifications);
-        notificationsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        payViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

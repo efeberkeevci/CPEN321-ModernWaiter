@@ -1,4 +1,4 @@
-package com.cpen321.modernwaiter.ui.home;
+package com.cpen321.modernwaiter.ui.menu;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,17 +14,17 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.cpen321.modernwaiter.R;
 
-public class HomeFragment extends Fragment {
+public class MenuFragment extends Fragment {
 
-    private HomeViewModel homeViewModel;
+    private MenuViewModel menuViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
+        menuViewModel =
+                ViewModelProviders.of(this).get(MenuViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_menu, container, false);
         final TextView textView = root.findViewById(R.id.text_home);
-        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        menuViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
