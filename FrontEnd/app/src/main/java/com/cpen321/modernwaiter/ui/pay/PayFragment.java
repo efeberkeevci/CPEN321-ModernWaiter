@@ -16,20 +16,20 @@ import com.cpen321.modernwaiter.R;
 
 public class PayFragment extends Fragment {
 
-    private PayViewModel payViewModel;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        payViewModel =
-                ViewModelProviders.of(this).get(PayViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_pay, container, false);
-        final TextView textView = root.findViewById(R.id.text_notifications);
-        payViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        final View root = inflater.inflate(R.layout.fragment_pay, container, false);
+        final TextView textView = root.findViewById(R.id.text_pay);
+
+        textView.setText("Pay Fragment");
+
         return root;
     }
 }

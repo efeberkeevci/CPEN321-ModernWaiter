@@ -16,20 +16,21 @@ import com.cpen321.modernwaiter.R;
 
 public class OrderFragment extends Fragment {
 
-    private OrderVIewModel orderVIewModel;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        orderVIewModel =
-                ViewModelProviders.of(this).get(OrderVIewModel.class);
-        View root = inflater.inflate(R.layout.fragment_order, container, false);
-        final TextView textView = root.findViewById(R.id.text_dashboard);
-        orderVIewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        final View root = inflater.inflate(R.layout.fragment_order, container, false);
+        final TextView textView = root.findViewById(R.id.text_order);
+
+        textView.setText("Order Fragment");
+
         return root;
     }
+
 }
