@@ -3,4 +3,7 @@
     <string name="title_menu">Menu</string>
     <string name="title_order">Order</string>
     <string name="title_pay">Pay</string>
+    <string name="pay_for_all"> Pay for All</string>
+    <string name="split_evenly">Split Evenly</string>
+    <string name="pay_per_item">Pay per Item</string>
 </resources>
