@@ -6,4 +6,7 @@
     <color name="green">#27AE60</color>
     <color name="blue">#2D9CDB</color>
     <color name="orange">#F2994A</color>
+    <color name="red">#EB5757</color>
+    <color name="yellow">#F2994A</color>
+    <color name ="light_green">#6FCF97</color>
 </resources>
