@@ -22,8 +22,8 @@ Response:
 } 
 */
 function GetRestaurantById(id){
-    let sql_query = mysql.format("SELECT * FROM restaurant WHERE restaurant.id = ?", [id]);
-    con.query(sql_query, [id], function(err,result,fields){
+    let sql_query = mysql.format("SELECT * FROM restaurant WHERE id = ?", [id]);
+    con.query(sql_query, function(err,result,fields){
         if (err) throw err;
         console.log(result);
     });
@@ -57,12 +57,16 @@ Response:
     "image" : "some url or local file path of image in vm"
 }]
 */
-/*
-function GetItemsByRestaurantId(restaurantId){
 
+function GetItemsByRestaurantId(restaurantId){
+    let sql_query = mysql.format("SELECT * FROM items WHERE restaurant_id = ?", [restaurantId]);
+    con.query(sql_query, function(err,result,fields){
+        if (err) throw err;
+        console.log(result);
+    });
 }
 
-
+/*
 Items-Options:
 
 JSON GetOptionsIdsByItemsId(int itemsId);
@@ -240,6 +244,7 @@ var con = mysql.createConnection({
 
 function main(){
     GetRestaurantById(1);
+    GetItemsByRestaurantId(1);
 }
 
 
