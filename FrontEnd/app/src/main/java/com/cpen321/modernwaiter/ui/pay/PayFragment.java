@@ -34,10 +34,8 @@ public class PayFragment extends Fragment {
         pay_for_all.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "Trying to pay for all");
-                Toast toast = Toast.makeText(getActivity(),"Trying to pay for everyone", Toast.LENGTH_SHORT);
-                toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL, 0, 190);
-                toast.show();
+                Intent intent = new Intent(getActivity(), StripePayment.class);
+                startActivity(intent);
             }
         });
         split_evenly = root.findViewById(R.id.split_evenly);
