@@ -49,6 +49,7 @@ alter table items
 
 create table items_options
 (
+    id         int not null;
     items_id   int not null,
     options_id int not null,
     constraint items_options_items_id_fk

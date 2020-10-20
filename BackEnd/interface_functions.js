@@ -66,11 +66,9 @@ function GetItemsByRestaurantId(restaurantId){
     });
 }
 
+
+//ITEMs_OPTIONS
 /*
-Items-Options:
-
-JSON GetOptionsIdsByItemsId(int itemsId);
-
 Response:
 
 [{
@@ -88,7 +86,17 @@ Response:
     "items_id" : 3,
     "options_id" : 3 
 }]
+*/
+function GetOptionsIdsByItemsId(itemsId){
+    let sql_query = mysql.format("SELECT * FROM items_options WHERE items_id = ?", [itemsId]);
+    con.query(sql_query, function(err,result,fields){
+        if (err) throw err;
+        console.log(result);
+    });
+}
 
+
+/*
 Options: 
 
 JSON GetOptionsById(int id);
@@ -245,6 +253,7 @@ var con = mysql.createConnection({
 function main(){
     GetRestaurantById(1);
     GetItemsByRestaurantId(1);
+    GetOptionsIdsByItemsId(1);
 }
 
 
