@@ -26,6 +26,7 @@ function GetRestaurantById(id){
     con.query(sql_query, function(err,result,fields){
         if (err) throw err;
         console.log(result);
+        return(result);
     });
 }
 
@@ -63,6 +64,7 @@ function GetItemsByRestaurantId(restaurantId){
     con.query(sql_query, function(err,result,fields){
         if (err) throw err;
         console.log(result);
+        return(result);
     });
 }
 
@@ -92,6 +94,7 @@ function GetOptionsIdsByItemsId(itemsId){
     con.query(sql_query, function(err,result,fields){
         if (err) throw err;
         console.log(result);
+        return(result);
     });
 }
 
@@ -121,24 +124,35 @@ function GetOptionsById( id){
     con.query(sql_query, function(err,result,fields){
         if (err) throw err;
         console.log(result);
+        return(result);
     });
 }
 
 
 
+
+//Tables:
 /*
-Tables:
-
-JSON GetTableById(int id);
-
 Response:
 
-{ "table_number" : 13 }
+[{"id" : 1,
+  "table_number" : 13
+}]
+*/
+function GetTableById(id){
+    let sql_query = mysql.format("SELECT * FROM tables WHERE id = ?", [id]);
+    con.query(sql_query, function(err,result,fields){
+        if (err) throw err;
+        console.log(result);
+        return(result);
+    });
+}
 
-Users:
 
-JSON GetUserById(int id);
 
+//USERS
+
+/*
 Response:
 {
     "id" : 1,
@@ -146,11 +160,22 @@ Response:
     "email" : "tawsif@h.com",
     "created_at" : "11Oct20 blah blah"
 }
+*/
+function GetUserById(id){
+    let sql_query = mysql.format("SELECT * FROM users WHERE id = ?", [id]);
+    con.query(sql_query, function(err,result,fields){
+        if (err) throw err;
+        console.log(result);
+        return(result);
+    });
+}
 
-Orders:
 
-bool PostOrder(JSON requestBody);
 
+
+//ORDERS
+
+/*
 Request:
 
 [{
@@ -163,6 +188,20 @@ Request:
     "has_paid" : false,
     "is_active_session" : true
 }]
+*/
+function PostOrder(requestBody){
+    var request = JSON.parse(yourJSONString);
+    let sql_query = mysql.format("INSERT INTO orders (id, user_id, tables_id, restaurant_id, amount,ordered_at, has_paid, is_active_session) VALUES(?,?,?,?,?,?,?,?)"
+    ,[request.id, request.user_id, request.tables_id, request.restaurant_id, request.amount, request.ordered_at, request.has_paid, request.is_active_session]);
+    con.query(sql_query, function(err,result,fields){
+        if (err) return false;
+        console.log(result);
+        return(true);
+    });
+}
+
+
+/*
 
 bool UpdateOrderAmountById(int id, double amount);
 bool UpdateOrderHasPaidFlag(bool hasPaid);
@@ -265,6 +304,19 @@ function main(){
     GetItemsByRestaurantId(1);
     GetOptionsIdsByItemsId(1);
     GetOptionsById(1);
+    GetTableById(1);
+    GetUserById(1);
+    /*PostOrder([{
+        "id" : 1,
+        "user_id" : 1,
+        "tables_id" : 3,
+        "restaurant_id" : 1,
+        "amount" : 25.0,
+        "ordered_at" : "some timestamp",
+        "has_paid" : false,
+        "is_active_session" : true
+    }]);
+    */ 
 }
 
 
