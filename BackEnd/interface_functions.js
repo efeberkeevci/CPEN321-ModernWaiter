@@ -213,9 +213,9 @@ function PostOrder(requestBody){
 bool UpdateOrderAmountById(int id, double amount);
 bool UpdateOrderHasPaidFlag(bool hasPaid);
 bool UpdateOrderIsActiveSessionFlag(bool isActiveSession);
+*/
 
-JSON GetOrdersByUserId(int userId, bool isActive);
-
+/*
 Response:
 
 [{
@@ -228,11 +228,18 @@ Response:
     "has_paid" : false,
     "is_active_session" : true
 }]
+*/
+function GetOrdersByUserId(users_id, isActive){
+    let sql_query = mysql.format("SELECT * FROM orders WHERE users_id = ? && is_active_session = ? ", [users_id, isActive]);
+    con.query(sql_query, function(err,result,fields){
+        if (err) throw err;
+        console.log(result);
+        return(result);
+    });
+}
 
-JSON GetOrdersByTableId(int tableId, bool isActive);
-
+/*
 Response:
-
 [{
     "id" : 1,
     "users_id" : 2
@@ -263,11 +270,21 @@ Response:
     "has_paid" : false,
     "is_active_session" : true
 }]
+*/
+function GetOrdersByTableId( tables_id, isActive){
+    let sql_query = mysql.format("SELECT * FROM orders WHERE tables_id = ? && is_active_session = ? ", [tables_id, isActive]);
+    con.query(sql_query, function(err,result,fields){
+        if (err) throw err;
+        console.log(result);
+        return(result);
+    });
+}
 
-Ordered Items:
 
-JSON GetOrderedItemsByOrderId(int orderId);
 
+//ORDERED ITEMS
+
+/*
 Response:
 
 [{
@@ -285,10 +302,29 @@ Response:
     “Is_selected: : false
 }]
 
-bool UpdateOrderItemsByOrderId(int orderId, int itemId);
-bool UpdateOrderItemsHasPaidFlag(bool hasPaid);
-
 */
+function GetOrderedItemsByOrderId(orderId){
+    let sql_query = mysql.format("SELECT * FROM ordered_items WHERE orders_id = ?", [ orderId]);
+    con.query(sql_query, function(err,result,fields){
+        if (err) throw err;
+        console.log(result);
+        return(result);
+    });
+}
+
+
+/*
+function UpdateOrderItemsByOrderId(items_id, orders_id){}
+function UpdateOrderItemsHasPaidFlag(items_id, orders_id, hasPaid){
+    let sql_query = mysql.format("UPDATE ordered_items SET has_paid = ? WHERE orders_id = ? && items_id = ?", [hasPaid, orders_id, items_id]);
+    con.query(sql_query, function(err,result,fields){
+        if (err) throw err;
+        console.log(result);
+        return(result);
+    });
+}
+*/
+
 
 var con = mysql.createConnection({
     host: "localhost",
@@ -314,7 +350,7 @@ function main(){
     GetOptionsById(1);
     GetTableById(1);
     GetUserById(1);
-    PostOrder([{
+    /*PostOrder([{
         "id" : Math.ceil(Math.random() * 100),
         "users_id" : 1,
         "tables_id" : 1,
@@ -324,7 +360,9 @@ function main(){
         "has_paid" : 0,
         "is_active_session" : 1
     }]);
-    
+    */
+    GetOrdersByUserId(1,1);
+    GetOrdersByTableId(1,1);
 }
 
 
