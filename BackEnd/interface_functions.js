@@ -1,5 +1,7 @@
-const { randomInt } = require('crypto');
 var mysql = require('mysql');
+
+//TODO: Check function return types
+//TODO: How to handle id autoincrement when adding new
 
 /*
 Interfaces:
@@ -208,12 +210,63 @@ function PostOrder(requestBody){
 }
 
 
-/*
 
-bool UpdateOrderAmountById(int id, double amount);
-bool UpdateOrderHasPaidFlag(bool hasPaid);
-bool UpdateOrderIsActiveSessionFlag(bool isActiveSession);
-*/
+// if you add an item to your order, update the total amount in the order
+function UpdateOrderAmountById(orderId, amount){
+    let sql_query_get_oldamount = mysql. format("SELECT amount FROM orders WHERE id = ?", [orderId]);
+    con.query(sql_query_get_oldamount, function(err,result,fields){
+        if (err) {
+            console.log(result);
+            throw err;
+        };
+        result=JSON.parse(JSON.stringify(result))[0];
+        let old_amount = result["amount"];
+        let new_amount = old_amount + amount;
+        let sql_query = mysql.format("UPDATE orders SET amount = ? WHERE id = ?", [new_amount, orderId]);
+        con.query(sql_query, function(err,result,fields){
+            if (err) {
+                console.log(err);
+                return false;};
+            return(true);
+        });
+    });
+}
+
+// if all the ordered items have been paid for, mark this as has paid 
+function UpdateOrderHasPaidFlag(hasPaid, orderId){
+    /*
+    let sql_query_get_ordered_items_paid_info = mysql. format("SELECT hasPaid FROM ordered_items WHERE id = ?", [orderId]);
+    con.query(sql_query_get_ordered_items_paid_info, function(err,result,fields){
+        if (err) {
+            console.log(result);
+            throw err;
+        };
+        result=JSON.parse(JSON.stringify(result))[0];
+       
+        console.log(result);
+        */
+        let sql_query = mysql.format("UPDATE orders SET has_paid = ? WHERE id = ?", [hasPaid,orderId]);
+        con.query(sql_query, function(err,result,fields){
+            if (err) {
+                console.log(err);
+                return false;};
+            console.log(result);
+            return true;
+        });
+    //});
+}
+
+// if the session is complete, set the active session flag to false
+function UpdateOrderIsActiveSessionFlag(isActive, orderId ){
+    let sql_query = mysql.format("UPDATE orders SET is_active_session = ? WHERE id = ?", [isActive, orderId]);
+    con.query(sql_query, function(err,result,fields){
+        if (err) {
+            console.log(err);
+            return false;};
+        console.log(result);
+        return true;
+    });
+}
 
 /*
 Response:
@@ -280,8 +333,6 @@ function GetOrdersByTableId( tables_id, isActive){
     });
 }
 
-
-
 //ORDERED ITEMS
 
 /*
@@ -312,18 +363,25 @@ function GetOrderedItemsByOrderId(orderId){
     });
 }
 
+// adds a new item to the ordered items table, used when you add an item to your meal later on during your time at the restaurant
+function UpdateOrderItemsByOrderId( orderId,  itemId){
+    let sql_query = mysql.format("INSERT INTO ordered_items (id, orders_id, items_id, has_paid, is_selected) VALUES(?,?,?, 0,0) ", [Math.ceil(Math.random() * 100),orderId,itemId]);
+    con.query(sql_query, function(err,result,fields){
+        if (err) return false;
+        console.log(result);
+        return(true);
+    });
+}
 
-/*
-function UpdateOrderItemsByOrderId(items_id, orders_id){}
+// if you pay for the specific item, mark it as has paid
 function UpdateOrderItemsHasPaidFlag(items_id, orders_id, hasPaid){
     let sql_query = mysql.format("UPDATE ordered_items SET has_paid = ? WHERE orders_id = ? && items_id = ?", [hasPaid, orders_id, items_id]);
     con.query(sql_query, function(err,result,fields){
-        if (err) throw err;
+        if (err) return false;
         console.log(result);
-        return(result);
+        return(true);
     });
 }
-*/
 
 
 var con = mysql.createConnection({
@@ -363,6 +421,9 @@ function main(){
     */
     GetOrdersByUserId(1,1);
     GetOrdersByTableId(1,1);
+    //UpdateOrderAmountById(1,22);
+    //UpdateOrderHasPaidFlag(1,2);
+    //UpdateOrderIsActiveSessionFlag(1,1);
 }
 
 
