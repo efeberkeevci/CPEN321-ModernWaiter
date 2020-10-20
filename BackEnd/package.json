@@ -1,0 +1,15 @@
+	{
+  "name": "modern_waiter_server",
+  "version": "1.0.0",
+  "description": "This is the backend server for the Modern Waiter app",
+  "main": "backend_server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+
+  "author": "Efe Berke Evci",
+  "license": "ISC",
+  "dependencies": {
+    "mysql": "^2.18.1"
+  }
+}

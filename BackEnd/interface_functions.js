@@ -24,7 +24,7 @@ Response:
     "service_fee_percentage" : 6.5
 } 
 */
-function GetRestaurantById(id){
+export function GetRestaurantById(id){
     let sql_query = mysql.format("SELECT * FROM restaurant WHERE id = ?", [id]);
     con.query(sql_query, function(err,result,fields){
         if (err) throw err;
@@ -62,7 +62,7 @@ Response:
 }]
 */
 
-function GetItemsByRestaurantId(restaurantId){
+export function GetItemsByRestaurantId(restaurantId){
     let sql_query = mysql.format("SELECT * FROM items WHERE restaurant_id = ?", [restaurantId]);
     con.query(sql_query, function(err,result,fields){
         if (err) throw err;
@@ -92,7 +92,7 @@ Response:
     "options_id" : 3 
 }]
 */
-function GetOptionsIdsByItemsId(itemsId){
+export function GetOptionsIdsByItemsId(itemsId){
     let sql_query = mysql.format("SELECT * FROM items_options WHERE items_id = ?", [itemsId]);
     con.query(sql_query, function(err,result,fields){
         if (err) throw err;
@@ -122,7 +122,7 @@ Response:
     "cost" : 1.50 
 }]
 */
-function GetOptionsById( id){
+export function GetOptionsById( id){
     let sql_query = mysql.format("SELECT * FROM options WHERE id = ?", [id]);
     con.query(sql_query, function(err,result,fields){
         if (err) throw err;
@@ -142,7 +142,7 @@ Response:
   "table_number" : 13
 }]
 */
-function GetTableById(id){
+export function GetTableById(id){
     let sql_query = mysql.format("SELECT * FROM tables WHERE id = ?", [id]);
     con.query(sql_query, function(err,result,fields){
         if (err) throw err;
@@ -164,7 +164,7 @@ Response:
     "created_at" : "11Oct20 blah blah"
 }
 */
-function GetUserById(id){
+export function GetUserById(id){
     let sql_query = mysql.format("SELECT * FROM users WHERE id = ?", [id]);
     con.query(sql_query, function(err,result,fields){
         if (err) throw err;
@@ -192,7 +192,7 @@ Request:
     "is_active_session" : true
 }]
 */
-function PostOrder(requestBody){
+export function PostOrder(requestBody){
     console.log("IN the postorder function");
     let request = requestBody[0];
     let sql_query = mysql.format("INSERT INTO orders (id, users_id, tables_id, restaurant_id, amount,ordered_at, has_paid, is_active_session) VALUES(?,?,?,?,?,?,?,?)"
@@ -212,7 +212,7 @@ function PostOrder(requestBody){
 
 
 // if you add an item to your order, update the total amount in the order
-function UpdateOrderAmountById(orderId, amount){
+export function UpdateOrderAmountById(orderId, amount){
     let sql_query_get_oldamount = mysql. format("SELECT amount FROM orders WHERE id = ?", [orderId]);
     con.query(sql_query_get_oldamount, function(err,result,fields){
         if (err) {
@@ -233,7 +233,7 @@ function UpdateOrderAmountById(orderId, amount){
 }
 
 // if all the ordered items have been paid for, mark this as has paid 
-function UpdateOrderHasPaidFlag(hasPaid, orderId){
+export function UpdateOrderHasPaidFlag(hasPaid, orderId){
     /*
     let sql_query_get_ordered_items_paid_info = mysql. format("SELECT hasPaid FROM ordered_items WHERE id = ?", [orderId]);
     con.query(sql_query_get_ordered_items_paid_info, function(err,result,fields){
@@ -257,7 +257,7 @@ function UpdateOrderHasPaidFlag(hasPaid, orderId){
 }
 
 // if the session is complete, set the active session flag to false
-function UpdateOrderIsActiveSessionFlag(isActive, orderId ){
+export function UpdateOrderIsActiveSessionFlag(isActive, orderId ){
     let sql_query = mysql.format("UPDATE orders SET is_active_session = ? WHERE id = ?", [isActive, orderId]);
     con.query(sql_query, function(err,result,fields){
         if (err) {
@@ -282,7 +282,7 @@ Response:
     "is_active_session" : true
 }]
 */
-function GetOrdersByUserId(users_id, isActive){
+export function GetOrdersByUserId(users_id, isActive){
     let sql_query = mysql.format("SELECT * FROM orders WHERE users_id = ? && is_active_session = ? ", [users_id, isActive]);
     con.query(sql_query, function(err,result,fields){
         if (err) throw err;
@@ -324,7 +324,7 @@ Response:
     "is_active_session" : true
 }]
 */
-function GetOrdersByTableId( tables_id, isActive){
+export function GetOrdersByTableId( tables_id, isActive){
     let sql_query = mysql.format("SELECT * FROM orders WHERE tables_id = ? && is_active_session = ? ", [tables_id, isActive]);
     con.query(sql_query, function(err,result,fields){
         if (err) throw err;
@@ -354,7 +354,7 @@ Response:
 }]
 
 */
-function GetOrderedItemsByOrderId(orderId){
+export function GetOrderedItemsByOrderId(orderId){
     let sql_query = mysql.format("SELECT * FROM ordered_items WHERE orders_id = ?", [ orderId]);
     con.query(sql_query, function(err,result,fields){
         if (err) throw err;
@@ -364,7 +364,7 @@ function GetOrderedItemsByOrderId(orderId){
 }
 
 // adds a new item to the ordered items table, used when you add an item to your meal later on during your time at the restaurant
-function UpdateOrderItemsByOrderId( orderId,  itemId){
+export function UpdateOrderItemsByOrderId( orderId,  itemId){
     let sql_query = mysql.format("INSERT INTO ordered_items (id, orders_id, items_id, has_paid, is_selected) VALUES(?,?,?, 0,0) ", [Math.ceil(Math.random() * 100),orderId,itemId]);
     con.query(sql_query, function(err,result,fields){
         if (err) return false;
@@ -374,7 +374,7 @@ function UpdateOrderItemsByOrderId( orderId,  itemId){
 }
 
 // if you pay for the specific item, mark it as has paid
-function UpdateOrderItemsHasPaidFlag(items_id, orders_id, hasPaid){
+export function UpdateOrderItemsHasPaidFlag(items_id, orders_id, hasPaid){
     let sql_query = mysql.format("UPDATE ordered_items SET has_paid = ? WHERE orders_id = ? && items_id = ?", [hasPaid, orders_id, items_id]);
     con.query(sql_query, function(err,result,fields){
         if (err) return false;
@@ -382,23 +382,6 @@ function UpdateOrderItemsHasPaidFlag(items_id, orders_id, hasPaid){
         return(true);
     });
 }
-
-
-var con = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "12341234"
-  });
-  
-  con.connect(function(err) {
-    if (err) throw err;
-    console.log("Connected!");
-  });
-  con.query("USE MODERN_WAITER_DB", function(err,result,fields){
-    if (err) throw err;
-    });
-  main();
-
 
 function main(){
     
