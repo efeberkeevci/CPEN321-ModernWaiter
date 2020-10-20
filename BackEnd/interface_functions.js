@@ -1,3 +1,4 @@
+const { randomInt } = require('crypto');
 var mysql = require('mysql');
 
 /*
@@ -180,7 +181,7 @@ Request:
 
 [{
     "id" : 1,
-    “user_id” : 2
+    “users_id” : 2
     "tables_id" : 3,
     "restaurant_id" : 1,
     "amount" : 25.0,
@@ -190,11 +191,17 @@ Request:
 }]
 */
 function PostOrder(requestBody){
-    var request = JSON.parse(yourJSONString);
-    let sql_query = mysql.format("INSERT INTO orders (id, user_id, tables_id, restaurant_id, amount,ordered_at, has_paid, is_active_session) VALUES(?,?,?,?,?,?,?,?)"
-    ,[request.id, request.user_id, request.tables_id, request.restaurant_id, request.amount, request.ordered_at, request.has_paid, request.is_active_session]);
+    console.log("IN the postorder function");
+    let request = requestBody[0];
+    let sql_query = mysql.format("INSERT INTO orders (id, users_id, tables_id, restaurant_id, amount,ordered_at, has_paid, is_active_session) VALUES(?,?,?,?,?,?,?,?)"
+    ,[request["id"], request["users_id"], request["tables_id"], request["restaurant_id"], request["amount"], request["ordered_at"], request["has_paid"], request["is_active_session"]]);
+    
+    //let sql_query = ("INSERT INTO orders (id, users_id, tables_id, restaurant_id, amount,ordered_at, has_paid, is_active_session) VALUES(" + request["id"] + "," + request["user_id"] + "," +  request["tables_id"] + "," +  request["restaurant_id"] + "," +  request["amount"]  + "," + "\'" + String(request["ordered_at"])+ "\'" + "," +  request["has_paid"]  + "," +  request["is_active_session"] +")");
     con.query(sql_query, function(err,result,fields){
-        if (err) return false;
+        if (err) {
+            console.log(err);
+            return false;
+        }
         console.log(result);
         return(true);
     });
@@ -300,23 +307,24 @@ var con = mysql.createConnection({
 
 
 function main(){
+    
     GetRestaurantById(1);
     GetItemsByRestaurantId(1);
     GetOptionsIdsByItemsId(1);
     GetOptionsById(1);
     GetTableById(1);
     GetUserById(1);
-    /*PostOrder([{
-        "id" : 1,
-        "user_id" : 1,
-        "tables_id" : 3,
+    PostOrder([{
+        "id" : Math.ceil(Math.random() * 100),
+        "users_id" : 1,
+        "tables_id" : 1,
         "restaurant_id" : 1,
         "amount" : 25.0,
-        "ordered_at" : "some timestamp",
-        "has_paid" : false,
-        "is_active_session" : true
+        "ordered_at" : "2020-10-20 14:15:11",
+        "has_paid" : 0,
+        "is_active_session" : 1
     }]);
-    */ 
+    
 }
 
 
