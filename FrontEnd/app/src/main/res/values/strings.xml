@@ -8,4 +8,6 @@
     <string name="pay_per_item">Pay per Item</string>
     <string name="add_item">+</string>
     <string name="remove_item">-</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="split_title">Amount to be paid after split</string>
 </resources>
