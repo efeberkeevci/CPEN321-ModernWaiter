@@ -96,11 +96,10 @@ function GetOptionsIdsByItemsId(itemsId){
 }
 
 
+
+//OPTIONS 
 /*
-Options: 
-
-JSON GetOptionsById(int id);
-
+Response:
 [{
     "id" : 1,
     "name" : "Tomatoes",
@@ -116,7 +115,18 @@ JSON GetOptionsById(int id);
     "name" : "Avocado",
     "cost" : 1.50 
 }]
+*/
+function GetOptionsById( id){
+    let sql_query = mysql.format("SELECT * FROM options WHERE id = ?", [id]);
+    con.query(sql_query, function(err,result,fields){
+        if (err) throw err;
+        console.log(result);
+    });
+}
 
+
+
+/*
 Tables:
 
 JSON GetTableById(int id);
@@ -254,6 +264,7 @@ function main(){
     GetRestaurantById(1);
     GetItemsByRestaurantId(1);
     GetOptionsIdsByItemsId(1);
+    GetOptionsById(1);
 }
 
 
