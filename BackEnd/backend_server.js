@@ -1,21 +1,8 @@
 var express = require("express");
 var mysql = require('mysql');
-/*
-import {
-    GetRestaurantById,
-    GetItemsByRestaurantId,
-    GetOptionsIdsByItemsId,
-    GetOptionsById,
-    GetTableById,
-    GetUserById,
-    PostOrder,
-    GetOrdersByUserId,
-    GetOrdersByTableId,
-    UpdateOrderAmountById,
-    UpdateOrderHasPaidFlag,
-    UpdateOrderIsActiveSessionFlag
-} from "./interface_functions";
-*/
+
+var backend_functions = require("./interface_functions");
+
 var app = express();
 
 app.use(express.json());
