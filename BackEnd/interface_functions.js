@@ -1,8 +1,23 @@
 var mysql = require('mysql');
 
-//TODO: Check function return types
-//TODO: How to handle id autoincrement when adding new
+var con = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "12341234"
+});
 
+con.connect(function(err) {
+    if (err) throw err;
+    console.log("Connected!");
+    var server = app.listen(3000,function(){
+        var port = server.address().port;
+        console.log("Server started listening at %s", port);
+    });
+});
+con.query("USE MODERN_WAITER_DB", function(err,result,fields){
+    if (err) throw err;
+});
+//TODO: Check function return types
 /*
 Interfaces:
 Backend interface for Modern Waiter:
@@ -182,7 +197,6 @@ function GetUserById(id){
 Request:
 
 [{
-    "id" : 1,
     “users_id” : 2
     "tables_id" : 3,
     "restaurant_id" : 1,
@@ -195,8 +209,8 @@ Request:
 function PostOrder(requestBody){
     console.log("IN the postorder function");
     let request = requestBody[0];
-    let sql_query = mysql.format("INSERT INTO orders (id, users_id, tables_id, restaurant_id, amount,ordered_at, has_paid, is_active_session) VALUES(?,?,?,?,?,?,?,?)"
-    ,[request["id"], request["users_id"], request["tables_id"], request["restaurant_id"], request["amount"], request["ordered_at"], request["has_paid"], request["is_active_session"]]);
+    let sql_query = mysql.format("INSERT INTO orders ( users_id, tables_id, restaurant_id, amount,ordered_at, has_paid, is_active_session) VALUES(?,?,?,?,?,?,?)"
+    ,[request["users_id"], request["tables_id"], request["restaurant_id"], request["amount"], request["ordered_at"], request["has_paid"], request["is_active_session"]]);
     
     //let sql_query = ("INSERT INTO orders (id, users_id, tables_id, restaurant_id, amount,ordered_at, has_paid, is_active_session) VALUES(" + request["id"] + "," + request["user_id"] + "," +  request["tables_id"] + "," +  request["restaurant_id"] + "," +  request["amount"]  + "," + "\'" + String(request["ordered_at"])+ "\'" + "," +  request["has_paid"]  + "," +  request["is_active_session"] +")");
     con.query(sql_query, function(err,result,fields){
@@ -226,8 +240,9 @@ function UpdateOrderAmountById(orderId, amount){
         con.query(sql_query, function(err,result,fields){
             if (err) {
                 console.log(err);
-                return false;};
-            return(true);
+                return false;
+            };
+            return true;
         });
     });
 }
@@ -249,7 +264,8 @@ function UpdateOrderHasPaidFlag(hasPaid, orderId){
         con.query(sql_query, function(err,result,fields){
             if (err) {
                 console.log(err);
-                return false;};
+                return false;
+            };
             console.log(result);
             return true;
         });
@@ -262,7 +278,8 @@ function UpdateOrderIsActiveSessionFlag(isActive, orderId ){
     con.query(sql_query, function(err,result,fields){
         if (err) {
             console.log(err);
-            return false;};
+            return false;
+        };
         console.log(result);
         return true;
     });
@@ -365,11 +382,11 @@ function GetOrderedItemsByOrderId(orderId){
 
 // adds a new item to the ordered items table, used when you add an item to your meal later on during your time at the restaurant
 function UpdateOrderItemsByOrderId( orderId,  itemId){
-    let sql_query = mysql.format("INSERT INTO ordered_items (id, orders_id, items_id, has_paid, is_selected) VALUES(?,?,?, 0,0) ", [Math.ceil(Math.random() * 100),orderId,itemId]);
+    let sql_query = mysql.format("INSERT INTO ordered_items (orders_id, items_id, has_paid, is_selected) VALUES(?,?, 0,0) ", [orderId,itemId]);
     con.query(sql_query, function(err,result,fields){
         if (err) return false;
         console.log(result);
-        return(true);
+        return true;
     });
 }
 
@@ -379,8 +396,9 @@ function UpdateOrderItemsHasPaidFlag(items_id, orders_id, hasPaid){
     con.query(sql_query, function(err,result,fields){
         if (err) return false;
         console.log(result);
-        return(true);
+        return true;
     });
+    //main();
 }
 
 function main(){
@@ -408,8 +426,8 @@ function main(){
     //UpdateOrderHasPaidFlag(1,2);
     //UpdateOrderIsActiveSessionFlag(1,1);
 }
-/*
-export {
+
+module.exports = {
     GetRestaurantById,
     GetItemsByRestaurantId,
     GetOptionsIdsByItemsId,
@@ -421,7 +439,6 @@ export {
     GetOrdersByTableId,
     UpdateOrderAmountById,
     UpdateOrderHasPaidFlag,
-    UpdateOrderIsActiveSessionFlag
+    UpdateOrderIsActiveSessionFlag,con
 };
 
-*/
