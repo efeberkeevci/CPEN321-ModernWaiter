@@ -1,8 +1,7 @@
 var express = require("express");
 var mysql = require('mysql');
-
-
 var app = express();
+
 
 app.use(express.json());
 var con = mysql.createConnection({
@@ -22,178 +21,6 @@ con.connect(function(err) {
 con.query("USE MODERN_WAITER_DB", function(err,result,fields){
     if (err) throw err;
 });
-//TODO: Check function return types
-/*
-Interfaces:
-Backend interface for Modern Waiter:
-
-Given, from QR code we get the restaurant id and table id
-
-The following are User API.
-*/
-
-//RESTAURANT
-
-/*
-Response:
-{
-    "id": 4,
-    "name" : "Jack's diner",
-    "location" : "East Vancouver",
-    "tax_percentage" : 12.0,
-    "service_fee_percentage" : 6.5
-} 
-*/
-function GetRestaurantById(id){
-    let sql_query = mysql.format("SELECT * FROM restaurant WHERE id = ?", [id]);
-    con.query(sql_query, function(err,result,fields){
-        if (err) {
-            return err;
-        }
-        return(result);
-    });
-}
-
-
-//ITEMS
-
-/*
-Response:
-[{
-    "id" : 2,
-    "restaurant_id" : 4,
-    "name" : "Salad",
-    "description" : "blah blah",
-    "type" : "Sides",
-    "cost" : 5.50,
-    "calories" : 200,
-    "popularity_count" : 11,
-    "image" : "some url or local file path of image in vm"
-}, 
-{
-    "id" : 3,
-    "restaurant_id" : 4,
-    "name" : "Cheeseburger",
-    "description" : "blah blah",
-    "type" : "Burger",
-    "cost" : 8.50,
-    "calories" : 1100,
-    "popularity_count" : 19,
-    "image" : "some url or local file path of image in vm"
-}]
-*/
-
-function GetItemsByRestaurantId(restaurantId){
-    let sql_query = mysql.format("SELECT * FROM items WHERE restaurant_id = ?", [restaurantId]);
-    con.query(sql_query, function(err,result,fields){
-        if (err) throw err;
-        console.log(result);
-        return(result);
-    });
-}
-
-
-//ITEMs_OPTIONS
-/*
-Response:
-
-[{
-    "id" : 1,
-    "items_id" : 3,
-    "options_id" : 1 
-},
-{
-    "id" : 2,
-    "items_id" : 3,
-    "options_id" : 2 
-},
-{
-    "id" : 3,
-    "items_id" : 3,
-    "options_id" : 3 
-}]
-*/
-function GetOptionsIdsByItemsId(itemsId){
-    let sql_query = mysql.format("SELECT * FROM items_options WHERE items_id = ?", [itemsId]);
-    con.query(sql_query, function(err,result,fields){
-        if (err) throw err;
-        console.log(result);
-        return(result);
-    });
-}
-
-
-
-//OPTIONS 
-/*
-Response:
-[{
-    "id" : 1,
-    "name" : "Tomatoes",
-    "cost" : 0 
-},
-{
-    "id" : 2,
-    "name" : "Cherries",
-    "cost" : 0 
-},
-{
-    "id" : 3,
-    "name" : "Avocado",
-    "cost" : 1.50 
-}]
-*/
-function GetOptionsById( id){
-    let sql_query = mysql.format("SELECT * FROM options WHERE id = ?", [id]);
-    con.query(sql_query, function(err,result,fields){
-        if (err) throw err;
-        console.log(result);
-        return(result);
-    });
-}
-
-
-
-
-//Tables:
-/*
-Response:
-
-[{"id" : 1,
-  "table_number" : 13
-}]
-*/
-function GetTableById(id){
-    let sql_query = mysql.format("SELECT * FROM tables WHERE id = ?", [id]);
-    con.query(sql_query, function(err,result,fields){
-        if (err) throw err;
-        console.log(result);
-        return(result);
-    });
-}
-
-
-
-//USERS
-
-/*
-Response:
-{
-    "id" : 1,
-    "username" : "tawsifh",
-    "email" : "tawsif@h.com",
-    "created_at" : "11Oct20 blah blah"
-}
-*/
-function GetUserById(id){
-    let sql_query = mysql.format("SELECT * FROM users WHERE id = ?", [id]);
-    con.query(sql_query, function(err,result,fields){
-        if (err) throw err;
-        console.log(result);
-        return(result);
-    });
-}
-
 
 
 
@@ -228,7 +55,6 @@ function PostOrder(requestBody){
         return(true);
     });
 }
-
 
 
 // if you add an item to your order, update the total amount in the order
@@ -404,38 +230,10 @@ function UpdateOrderItemsHasPaidFlag(items_id, orders_id, hasPaid){
         console.log(result);
         return true;
     });
-    //main();
 }
 
-function main(){
-    
-    GetRestaurantById(1);
-    GetItemsByRestaurantId(1);
-    GetOptionsIdsByItemsId(1);
-    GetOptionsById(1);
-    GetTableById(1);
-    GetUserById(1);
-    /*PostOrder([{
-        "id" : Math.ceil(Math.random() * 100),
-        "users_id" : 1,
-        "tables_id" : 1,
-        "restaurant_id" : 1,
-        "amount" : 25.0,
-        "ordered_at" : "2020-10-20 14:15:11",
-        "has_paid" : 0,
-        "is_active_session" : 1
-    }]);
-    */
-    GetOrdersByUserId(1,1);
-    GetOrdersByTableId(1,1);
-    //UpdateOrderAmountById(1,22);
-    //UpdateOrderHasPaidFlag(1,2);
-    //UpdateOrderIsActiveSessionFlag(1,1);
-}
-
-/*
+//Get restaurant info by restaurant id
 app.get("/restaurant", (req,res) => {
-    console.log(req.protocol + "://" + req.get('host') + req.originalUrl);
     let id = req.query.id;
     let sql_query = mysql.format("SELECT * FROM restaurant WHERE id = ?", [id]);
     con.query(sql_query, function(err,result,fields){
@@ -445,12 +243,80 @@ app.get("/restaurant", (req,res) => {
         res.send(result);
     });
 });
-*/
 
-app.get("/restaurant", (req,res) => {
-    console.log(req.protocol + "://" + req.get('host') + req.originalUrl);
+//Get items with restaurant id
+app.get("/items", (req,res) =>{
     let id = req.query.id;
-    let query_result = GetRestaurantById(id);
-    console.log(query_result);
-    res.send(query_result);
+    let sql_query = mysql.format("SELECT * FROM items WHERE restaurant_id = ?", [id]);
+    con.query(sql_query, function(err,result,fields){
+        if (err) {
+            res.send(err);
+        }
+        res.send(result);
+    });
 });
+
+//Get item options by item id
+app.get("/item_options", (req,res) => {
+    let id = req.query.id;
+    let sql_query = mysql.format("SELECT * FROM items_options WHERE items_id = ?", [id]);
+    con.query(sql_query, function(err,result,fields){
+        if (err) {
+            res.send(err);
+        }
+        res.send(result);
+    });
+});
+
+//Get options by id
+app.get("/options", (req,res) =>{
+    let id = req.query.id;
+    let sql_query = mysql.format("SELECT * FROM options WHERE id = ?", [id]);
+    con.query(sql_query, function(err,result,fields){
+        if (err) {
+            res.send(err);
+        }
+        res.send(result);
+    });
+});
+
+//Get table by id
+app.get("/table", (req,res) => {    
+    let id = req.query.id;
+    let sql_query = mysql.format("SELECT * FROM tables WHERE id = ?", [id]);
+    con.query(sql_query, function(err,result,fields){
+        if (err) {
+            res.send(err);
+        }
+        res.send(result);
+    });
+});
+
+//Get user by id
+app.get("/user", (req, res)=>{
+    let id = req.query.id;
+    let sql_query = mysql.format("SELECT * FROM users WHERE id = ?", [id]);
+    con.query(sql_query, function(err,result,fields){
+        if (err) {
+            res.send(err);
+        }
+        res.send(result);
+    });
+})
+
+//TODO:CHECK IF THE DATA PASSED CORRECTLY
+//Post order with given info
+app.post("/order", (req,res) =>{
+    let request = req.query;
+    let sql_query = mysql.format("INSERT INTO orders ( users_id, tables_id, restaurant_id, amount,ordered_at, has_paid, is_active_session) VALUES(?,?,?,?,?,?,?)"
+    ,[request["users_id"], request["tables_id"], request["restaurant_id"], request["amount"], request["ordered_at"], request["has_paid"], request["is_active_session"]]);
+    
+    con.query(sql_query, function(err,result,fields){
+        if (err) {
+            console.log(err);
+            return false;
+        }
+        console.log(result);
+        return(true);
+    });
+})
