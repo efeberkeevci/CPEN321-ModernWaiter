@@ -2,12 +2,15 @@ var express = require("express");
 var mysql = require('mysql');
 var app = express();
 
-
 app.use(express.json());
+
 var con = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "12341234"
+    host: "mw-db-2.mysql.database.azure.com", 
+    user: "waiter@mw-db-2", 
+    password: "cpen321!", 
+    database: "modern_waiter_db", 
+    port: 3306, 
+    ssl:true
 });
 
 con.connect(function(err) {
@@ -24,213 +27,6 @@ con.query("USE MODERN_WAITER_DB", function(err,result,fields){
 
 
 
-//ORDERS
-
-/*
-Request:
-
-[{
-    “users_id” : 2
-    "tables_id" : 3,
-    "restaurant_id" : 1,
-    "amount" : 25.0,
-    "ordered_at" : "some timestamp",
-    "has_paid" : false,
-    "is_active_session" : true
-}]
-*/
-function PostOrder(requestBody){
-    console.log("IN the postorder function");
-    let request = requestBody[0];
-    let sql_query = mysql.format("INSERT INTO orders ( users_id, tables_id, restaurant_id, amount,ordered_at, has_paid, is_active_session) VALUES(?,?,?,?,?,?,?)"
-    ,[request["users_id"], request["tables_id"], request["restaurant_id"], request["amount"], request["ordered_at"], request["has_paid"], request["is_active_session"]]);
-    
-    //let sql_query = ("INSERT INTO orders (id, users_id, tables_id, restaurant_id, amount,ordered_at, has_paid, is_active_session) VALUES(" + request["id"] + "," + request["user_id"] + "," +  request["tables_id"] + "," +  request["restaurant_id"] + "," +  request["amount"]  + "," + "\'" + String(request["ordered_at"])+ "\'" + "," +  request["has_paid"]  + "," +  request["is_active_session"] +")");
-    con.query(sql_query, function(err,result,fields){
-        if (err) {
-            console.log(err);
-            return false;
-        }
-        console.log(result);
-        return(true);
-    });
-}
-
-
-// if you add an item to your order, update the total amount in the order
-function UpdateOrderAmountById(orderId, amount){
-    let sql_query_get_oldamount = mysql. format("SELECT amount FROM orders WHERE id = ?", [orderId]);
-    con.query(sql_query_get_oldamount, function(err,result,fields){
-        if (err) {
-            console.log(result);
-            throw err;
-        };
-        result=JSON.parse(JSON.stringify(result))[0];
-        let old_amount = result["amount"];
-        let new_amount = old_amount + amount;
-        let sql_query = mysql.format("UPDATE orders SET amount = ? WHERE id = ?", [new_amount, orderId]);
-        con.query(sql_query, function(err,result,fields){
-            if (err) {
-                console.log(err);
-                return false;
-            };
-            return true;
-        });
-    });
-}
-
-// if all the ordered items have been paid for, mark this as has paid 
-function UpdateOrderHasPaidFlag(hasPaid, orderId){
-    /*
-    let sql_query_get_ordered_items_paid_info = mysql. format("SELECT hasPaid FROM ordered_items WHERE id = ?", [orderId]);
-    con.query(sql_query_get_ordered_items_paid_info, function(err,result,fields){
-        if (err) {
-            console.log(result);
-            throw err;
-        };
-        result=JSON.parse(JSON.stringify(result))[0];
-       
-        console.log(result);
-        */
-        let sql_query = mysql.format("UPDATE orders SET has_paid = ? WHERE id = ?", [hasPaid,orderId]);
-        con.query(sql_query, function(err,result,fields){
-            if (err) {
-                console.log(err);
-                return false;
-            };
-            console.log(result);
-            return true;
-        });
-    //});
-}
-
-// if the session is complete, set the active session flag to false
-function UpdateOrderIsActiveSessionFlag(isActive, orderId ){
-    let sql_query = mysql.format("UPDATE orders SET is_active_session = ? WHERE id = ?", [isActive, orderId]);
-    con.query(sql_query, function(err,result,fields){
-        if (err) {
-            console.log(err);
-            return false;
-        };
-        console.log(result);
-        return true;
-    });
-}
-
-/*
-Response:
-
-[{
-    "id" : 1,
-    “users_id” : 2
-    "tables_id" : 3,
-    "restaurant_id" : 1,
-    "amount" : 25.0,
-    "ordered_at" : "some timestamp",
-    "has_paid" : false,
-    "is_active_session" : true
-}]
-*/
-function GetOrdersByUserId(users_id, isActive){
-    let sql_query = mysql.format("SELECT * FROM orders WHERE users_id = ? && is_active_session = ? ", [users_id, isActive]);
-    con.query(sql_query, function(err,result,fields){
-        if (err) throw err;
-        console.log(result);
-        return(result);
-    });
-}
-
-/*
-Response:
-[{
-    "id" : 1,
-    "users_id" : 2
-    "tables_id" : 3,
-    "restaurant_id" : 1,
-    "amount" : 25.0,
-    "ordered_at" : "some timestamp",
-    "has_paid" : false,
-    "is_active_session" : true
-},
-{
-    "id" : 5,
-    "users_id" : 4
-    "tables_id" : 3,
-    "restaurant_id" : 1,
-    "amount" : 35.0,
-    "ordered_at" : "some timestamp",
-    "has_paid" : false,
-    "is_active_session" : true
-},
-{
-    "id" : 11,
-    "users_id" : 5
-    "tables_id" : 3,
-    "restaurant_id" : 1,
-    "amount" : 10.0,
-    "ordered_at" : "some timestamp",
-    "has_paid" : false,
-    "is_active_session" : true
-}]
-*/
-function GetOrdersByTableId( tables_id, isActive){
-    let sql_query = mysql.format("SELECT * FROM orders WHERE tables_id = ? && is_active_session = ? ", [tables_id, isActive]);
-    con.query(sql_query, function(err,result,fields){
-        if (err) throw err;
-        console.log(result);
-        return(result);
-    });
-}
-
-//ORDERED ITEMS
-
-/*
-Response:
-
-[{
-    "id" : 5,
-    "orders_id" : 11
-    "items_id" : 2,
-    "has_paid" : true,
-    “Is_selected” : false
-},
-{
-    "id" : 6,
-    "orders_id" : 11
-    "items_id" : 3,
-    "has_paid" : false,
-    “Is_selected: : false
-}]
-
-*/
-function GetOrderedItemsByOrderId(orderId){
-    let sql_query = mysql.format("SELECT * FROM ordered_items WHERE orders_id = ?", [ orderId]);
-    con.query(sql_query, function(err,result,fields){
-        if (err) throw err;
-        console.log(result);
-        return(result);
-    });
-}
-
-// adds a new item to the ordered items table, used when you add an item to your meal later on during your time at the restaurant
-function UpdateOrderItemsByOrderId( orderId,  itemId){
-    let sql_query = mysql.format("INSERT INTO ordered_items (orders_id, items_id, has_paid, is_selected) VALUES(?,?, 0,0) ", [orderId,itemId]);
-    con.query(sql_query, function(err,result,fields){
-        if (err) return false;
-        console.log(result);
-        return true;
-    });
-}
-
-// if you pay for the specific item, mark it as has paid
-function UpdateOrderItemsHasPaidFlag(items_id, orders_id, hasPaid){
-    let sql_query = mysql.format("UPDATE ordered_items SET has_paid = ? WHERE orders_id = ? && items_id = ?", [hasPaid, orders_id, items_id]);
-    con.query(sql_query, function(err,result,fields){
-        if (err) return false;
-        console.log(result);
-        return true;
-    });
-}
 
 //Get restaurant info by restaurant id
 app.get("/restaurant", (req,res) => {
@@ -307,16 +103,133 @@ app.get("/user", (req, res)=>{
 //TODO:CHECK IF THE DATA PASSED CORRECTLY
 //Post order with given info
 app.post("/order", (req,res) =>{
-    let request = req.query;
     let sql_query = mysql.format("INSERT INTO orders ( users_id, tables_id, restaurant_id, amount,ordered_at, has_paid, is_active_session) VALUES(?,?,?,?,?,?,?)"
-    ,[request["users_id"], request["tables_id"], request["restaurant_id"], request["amount"], request["ordered_at"], request["has_paid"], request["is_active_session"]]);
+    ,[req.body.users_id, req.body.tables_id, req.bodyrestaurant_id,
+      req.body.amount, req.body.ordered_at, req.body.has_paid, req.body.is_active_session]);
     
     con.query(sql_query, function(err,result,fields){
         if (err) {
-            console.log(err);
-            return false;
+            res.send(err);
         }
-        console.log(result);
-        return(true);
+        res.send(result);
+    });
+})
+
+//Update order amount with a given amount
+app.post("/add/amount/to/order", (req,res) => {
+    let id = req.query.id;
+    let amount = req.body.amount;
+    let sql_query_get_oldamount = mysql. format("SELECT amount FROM orders WHERE id = ?", [id]);
+    con.query(sql_query_get_oldamount, function(err,result,fields){
+        if (err) {
+            console.log(result);
+            throw err;
+        };
+        result=JSON.parse(JSON.stringify(result))[0];
+        let old_amount = result["amount"];
+        let new_amount = old_amount + amount;
+        let sql_query = mysql.format("UPDATE orders SET amount = ? WHERE id = ?", [new_amount, id]);
+        con.query(sql_query, function(err,result,fields){
+            if (err) {
+                console.log(err);
+                return false;
+            };
+            return true;
+        });
+    });
+
+})
+
+//Get order by userID
+app.get("/order/user/id", (req,res) =>{
+    let users_id = req.query.users_id;
+    let isActive = req.query.isActive;
+    let sql_query = mysql.format("SELECT * FROM orders WHERE users_id = ? && is_active_session = ? ", [users_id, isActive]);
+    con.query(sql_query, function(err,result,fields){
+        if (err) {
+            res.send(err);
+        }
+        res.send(result);
+    });
+})
+
+//Get order by tablesID
+app.get("/order/table/id", (req,res) =>{
+    let tables_id = req.query.tables_id;
+    let isActive = req.query.isActive;
+    let sql_query = mysql.format("SELECT * FROM orders WHERE tables_id = ? && is_active_session = ? ", [tables_id, isActive]);
+    con.query(sql_query, function(err,result,fields){
+        if (err) {
+            res.send(err);
+        }
+        res.send(result);
+    });
+})
+
+
+// If the session is complete, set the active session flag to false
+app.post("/order/is/active/session", (req,res) => {
+    let orderId = req.query.orderId;
+    let isActive = req.query.isActive;
+    let sql_query = mysql.format("UPDATE orders SET is_active_session = ? WHERE id = ?", [isActive, orderId]);
+    con.query(sql_query, function(err,result,fields){
+        if (err) {
+            res.send(err);
+        };
+        res.send(result);
+    });
+})
+
+
+
+//If all the ordered items have been paid for, mark this as has paid 
+app.post("order/has/paid", (req,res) => {
+    let orderId = req.query.orderId;
+    let hasPaid = req.query.hasPaid;
+    let sql_query = mysql.format("UPDATE orders SET has_paid = ? WHERE id = ?", [hasPaid,orderId]);
+        con.query(sql_query, function(err,result,fields){
+            if (err) {
+                res.send(err);
+            };
+            res.send(result);
+        });
+})
+
+//Gets ordered items via orderid
+app.get("/ordered/items", (req,res) => {
+    let orderId = req.query.orderId;
+    let sql_query = mysql.format("SELECT * FROM ordered_items WHERE orders_id = ?", [ orderId]);
+    con.query(sql_query, function(err,result,fields){
+        if (err) {
+            res.send(err);
+        };
+        res.send(result);
+    });
+})
+
+// adds a new item to the ordered items table, used when you add an item to your meal later on during your time at the restaurant
+app.post("/add/item/to/order", (req,res) => {
+    let orderId = req.query.orderId;
+    let itemId = req.query.itemId;
+    let sql_query = mysql.format("INSERT INTO ordered_items (orders_id, items_id, has_paid, is_selected) VALUES(?,?, 0,0) ", [orderId,itemId]);
+    con.query(sql_query, function(err,result,fields){
+        if (err) {
+            res.send(err);
+        };
+        res.send(result);
+    });
+})
+
+// if you pay for the specific item, mark it as has paid
+app.post("/mark/item/has/paid", (req,res) => {
+    let orderId = req.query.orderId;
+    let itemId = req.query.itemId;
+    let hasPaid = req.query.hasPaid;
+    let sql_query = mysql.format("UPDATE ordered_items SET has_paid = ? WHERE orders_id = ? && items_id = ?", [hasPaid, orderId, itemId]);
+    con.query(sql_query, function(err,result,fields){
+        if (err) {
+            res.send(err);
+        };
+        res.send(result);
     });
 })
