@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+
 import com.cpen321.modernwaiter.R;
 import com.cpen321.modernwaiter.StripePayment;
 
@@ -19,6 +20,7 @@ public class PayFragment extends Fragment {
     private Button pay_for_all;
     private Button split_evenly;
     private Button pay_per_item;
+
     final static String TAG = "PayFragment";
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -29,6 +31,7 @@ public class PayFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         final View root = inflater.inflate(R.layout.fragment_pay, container, false);
         pay_for_all = root.findViewById(R.id.pay_for_all);
         pay_for_all.setOnClickListener(new View.OnClickListener() {
@@ -42,10 +45,7 @@ public class PayFragment extends Fragment {
         split_evenly.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "Trying to split evenly");
-                Toast toast = Toast.makeText(getActivity(),"Trying to split evenly and pay", Toast.LENGTH_SHORT);
-                toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL, 0, 190);
-                toast.show();
+                root.findViewById(R.id.topView).setVisibility(View.GONE);
             }
         });
         pay_per_item = root.findViewById(R.id.pay_per_item);
