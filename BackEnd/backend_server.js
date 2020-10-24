@@ -26,8 +26,8 @@ con.query("USE MODERN_WAITER_DB", function(err,result,fields){
 });
 
 //Get restaurant info by restaurant id
-app.get("/restaurant", (req,res) => {
-    let id = req.body.id;
+app.get("/restaurant/:id", (req,res) => {
+    let id = req.params.id;
     let sql_query = mysql.format("SELECT * FROM restaurant WHERE id = ?", [id]);
     con.query(sql_query, function(err,result,fields){
         if (err) {
@@ -38,8 +38,8 @@ app.get("/restaurant", (req,res) => {
 });
 
 //Get items with restaurant id
-app.get("/items", (req,res) =>{
-    let id = req.body.id;
+app.get("/items/:id", (req,res) =>{
+    let id = req.params.id;
     let sql_query = mysql.format("SELECT * FROM items WHERE restaurant_id = ?", [id]);
     con.query(sql_query, function(err,result,fields){
         if (err) {
@@ -50,8 +50,8 @@ app.get("/items", (req,res) =>{
 });
 
 //Get item options by item id
-app.get("/item_options", (req,res) => {
-    let id = req.body.id;
+app.get("/item_options/:id", (req,res) => {
+    let id = req.params.id;
     let sql_query = mysql.format("SELECT * FROM items_options WHERE items_id = ?", [id]);
     con.query(sql_query, function(err,result,fields){
         if (err) {
@@ -62,8 +62,8 @@ app.get("/item_options", (req,res) => {
 });
 
 //Get options by id
-app.get("/options", (req,res) =>{
-    let id = req.body.id;
+app.get("/options/:id", (req,res) =>{
+    let id = req.params.id;
     let sql_query = mysql.format("SELECT * FROM options WHERE id = ?", [id]);
     con.query(sql_query, function(err,result,fields){
         if (err) {
@@ -74,8 +74,8 @@ app.get("/options", (req,res) =>{
 });
 
 //Get table by id
-app.get("/table", (req,res) => {    
-    let id = req.body.id;
+app.get("/table/:id", (req,res) => {    
+    let id = req.params.id;
     let sql_query = mysql.format("SELECT * FROM tables WHERE id = ?", [id]);
     con.query(sql_query, function(err,result,fields){
         if (err) {
@@ -86,8 +86,8 @@ app.get("/table", (req,res) => {
 });
 
 //Get user by id
-app.get("/user", (req, res)=>{
-    let id = req.body.id;
+app.get("/user/:id", (req, res)=>{
+    let id = req.params.id;
     let sql_query = mysql.format("SELECT * FROM users WHERE id = ?", [id]);
     con.query(sql_query, function(err,result,fields){
         if (err) {
@@ -143,9 +143,9 @@ app.post("/add/amount/to/order", (req,res) => {
 }
 */
 //Get order by userID
-app.get("/order/user/id", (req,res) =>{
-    let users_id = req.body.users_id;
-    let isActive = req.body.isActive;
+app.get("/order/user/id/:users_id/:isActive", (req,res) =>{
+    let users_id = req.params.users_id;
+    let isActive = req.params.isActive;
     let sql_query = mysql.format("SELECT * FROM orders WHERE users_id = ? && is_active_session = ? ", [users_id, isActive]);
     con.query(sql_query, function(err,result,fields){
         if (err) {
@@ -156,9 +156,9 @@ app.get("/order/user/id", (req,res) =>{
 })
 
 //Get order by tablesID
-app.get("/order/table/id", (req,res) =>{
-    let tables_id = req.body.tables_id;
-    let isActive = req.body.isActive;
+app.get("/order/table/id/:tables_id/:isActive", (req,res) =>{
+    let tables_id = req.params.tables_id;
+    let isActive = req.params.isActive;
     let sql_query = mysql.format("SELECT * FROM orders WHERE tables_id = ? && is_active_session = ? ", [tables_id, isActive]);
     con.query(sql_query, function(err,result,fields){
         if (err) {
@@ -198,8 +198,8 @@ app.post("/order/has/paid", (req,res) => {
 })
 
 //Gets ordered items via orderid
-app.get("/ordered/items", (req,res) => {
-    let orderId = req.body.orderId;
+app.get("/ordered/items/:orderId", (req,res) => {
+    let orderId = req.params.orderId;
     let sql_query = mysql.format("SELECT * FROM ordered_items WHERE orders_id = ?", [ orderId]);
     con.query(sql_query, function(err,result,fields){
         if (err) {

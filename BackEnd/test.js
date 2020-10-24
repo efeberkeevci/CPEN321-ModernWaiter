@@ -4,7 +4,7 @@ const Http = new XMLHttpRequest();
 const base_url='http://localhost:3000';
 
 //Get restaurant info by restaurant id
-let url = base_url +"/restaurant?id=1";
+let url = base_url +"/restaurant/1";
 Http.open("GET", url);
 Http.send();
 
@@ -13,7 +13,7 @@ Http.onreadystatechange = (e) => {
 }
 
 //Get items with restaurant id
-url = base_url +"/items?id=1";
+url = base_url +"/items/1";
 Http.open("GET", url);
 Http.send();
 
@@ -22,7 +22,7 @@ Http.onreadystatechange = (e) => {
 }
 
 //Get items with restaurant id
-url = base_url +"/item_options?id=1";
+url = base_url +"/item_options/1";
 Http.open("GET", url);
 Http.send();
 
@@ -31,7 +31,7 @@ Http.onreadystatechange = (e) => {
 }
     
 //Get options by id
-url = base_url +"/options?id=1";
+url = base_url +"/options/1";
 Http.open("GET", url);
 Http.send();
 
@@ -40,7 +40,7 @@ Http.onreadystatechange = (e) => {
 }
 
 //Get table by id
-url = base_url +"/table?id=1";
+url = base_url +"/table/1";
 Http.open("GET", url);
 Http.send();
 
@@ -49,14 +49,13 @@ Http.onreadystatechange = (e) => {
 }
 
 //Get user by id
-url = base_url +"/user?id=1";
+url = base_url +"/user/1";
 Http.open("GET", url);
 Http.send();
 
 Http.onreadystatechange = (e) => {
   console.log(Http.responseText);
 }
-/*
 //Post order with given info data 
 let data= {
     "users_id": "2",
@@ -105,7 +104,7 @@ fetch(url, {
 });
 
 //Get order by userID
-url = base_url +"/order/user/id?id=1";
+url = base_url +"/order/user/1/1";
 Http.open("GET", url);
 Http.send();
 
@@ -114,7 +113,7 @@ Http.onreadystatechange = (e) => {
 }
 
 //Get order by tablesID
-url = base_url +"/order/table/id?id=1";
+url = base_url +"/order/table/1/1";
 Http.open("GET", url);
 Http.send();
 
