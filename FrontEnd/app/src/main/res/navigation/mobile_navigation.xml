@@ -12,12 +12,6 @@
         tools:layout="@layout/fragment_menu" />
 
     <fragment
-        android:id="@+id/navigation_order"
-        android:name="com.cpen321.modernwaiter.ui.order.OrderFragment"
-        android:label="@string/title_order"
-        tools:layout="@layout/fragment_order" />
-
-    <fragment
         android:id="@+id/navigation_pay"
         android:name="com.cpen321.modernwaiter.ui.pay.BillFragment"
         android:label="@string/title_pay"

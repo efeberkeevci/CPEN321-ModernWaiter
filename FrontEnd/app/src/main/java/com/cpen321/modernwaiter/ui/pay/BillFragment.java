@@ -14,7 +14,6 @@ import com.cpen321.modernwaiter.payment.MainPayment;
 
 public class BillFragment extends Fragment {
 
-    final static String TAG = "PayFragment";
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
