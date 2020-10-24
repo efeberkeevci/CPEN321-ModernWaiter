@@ -27,7 +27,7 @@ con.query("USE MODERN_WAITER_DB", function(err,result,fields){
 
 //Get restaurant info by restaurant id
 app.get("/restaurant", (req,res) => {
-    let id = req.query.id;
+    let id = req.body.id;
     let sql_query = mysql.format("SELECT * FROM restaurant WHERE id = ?", [id]);
     con.query(sql_query, function(err,result,fields){
         if (err) {
@@ -39,7 +39,7 @@ app.get("/restaurant", (req,res) => {
 
 //Get items with restaurant id
 app.get("/items", (req,res) =>{
-    let id = req.query.id;
+    let id = req.body.id;
     let sql_query = mysql.format("SELECT * FROM items WHERE restaurant_id = ?", [id]);
     con.query(sql_query, function(err,result,fields){
         if (err) {
@@ -51,7 +51,7 @@ app.get("/items", (req,res) =>{
 
 //Get item options by item id
 app.get("/item_options", (req,res) => {
-    let id = req.query.id;
+    let id = req.body.id;
     let sql_query = mysql.format("SELECT * FROM items_options WHERE items_id = ?", [id]);
     con.query(sql_query, function(err,result,fields){
         if (err) {
