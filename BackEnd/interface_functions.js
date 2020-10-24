@@ -44,7 +44,8 @@ function GetRestaurantById(id){
     con.query(sql_query, function(err,result,fields){
         if (err) throw err;
         console.log(result);
-        return(result);
+        let ret_result = JSON.parse(JSON.stringify(result))
+        return(ret_result);
     });
 }
 
