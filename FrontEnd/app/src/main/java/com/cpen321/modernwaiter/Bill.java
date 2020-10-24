@@ -21,6 +21,7 @@ public class Bill {
             item_name = name;
             item_price = price;
         }
+
     }
 
     public Bill(){

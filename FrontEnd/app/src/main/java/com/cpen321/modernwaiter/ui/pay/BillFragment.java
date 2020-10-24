@@ -18,13 +18,16 @@ import com.cpen321.modernwaiter.Bill;
 import com.cpen321.modernwaiter.MainActivity;
 import com.cpen321.modernwaiter.R;
 import com.cpen321.modernwaiter.payment.MainPayment;
+import com.cpen321.modernwaiter.ui.menu.dummy.DummyContent;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
 public class BillFragment extends Fragment{
-    private String url = "https://192.168.56.1:8080/time";
+    private String url = "https://abc.com/getbill";
     private String server = "https://localhost/8080";
     private RequestQueue queue;
     @Override
@@ -39,14 +42,11 @@ public class BillFragment extends Fragment{
         final View root = inflater.inflate(R.layout.fragment_bill, container, false);
 
         // TODO: SHOW THE BILL
-        Bill bill = getBill();
-
-
         Button startPaymentButton = root.findViewById(R.id.startPaymentButton);
         startPaymentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), MainPayment.class);
+                Intent intent = new Intent(getActivity(), Bill_ItemFragment.class);
                 startActivity(intent);
             }
         });
@@ -55,7 +55,7 @@ public class BillFragment extends Fragment{
     }
 
     //function to make REST GET request
-    private Bill getBill(){
+    public static Bill getBill(){
 
         Bill bill = new Bill();
         //TODO : add right GET calls
@@ -90,6 +90,12 @@ public class BillFragment extends Fragment{
                     }
                 });
         MainActivity.requestQueue.add(jsonObjectRequest);
+
+
+        //for now add some dummy values
+        //TODO: remove dummy values from here
+        bill.Bill_add_item(0,"CheeseSandwich", 10.0);
+        bill.Bill_add_item(10, "burger", 15.0);
         return bill;
     }
 }
