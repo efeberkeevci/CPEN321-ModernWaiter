@@ -24,7 +24,8 @@ public class OrderFragment extends Fragment {
         final View root = inflater.inflate(R.layout.fragment_order, container, false);
         final TextView textView = root.findViewById(R.id.text_order);
 
-        textView.setText("Order Fragment");
+        textView.setText("TODO DO THIS");
+        // TODO: THIS PAGE
 
         return root;
     }

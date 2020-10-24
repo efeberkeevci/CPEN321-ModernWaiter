@@ -10,4 +10,5 @@
     <string name="remove_item">-</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="split_title">Amount to be paid after split</string>
+    <string name="get_bill">Get the Bill</string>
 </resources>
