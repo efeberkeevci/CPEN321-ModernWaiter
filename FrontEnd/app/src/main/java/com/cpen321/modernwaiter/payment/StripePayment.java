@@ -1,4 +1,4 @@
-package com.cpen321.modernwaiter;
+package com.cpen321.modernwaiter.payment;
 
 import android.app.Activity;
 import android.content.Context;
@@ -19,6 +19,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.cpen321.modernwaiter.R;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -129,6 +130,8 @@ public class StripePayment extends AppCompatActivity {
         final String bodyJSON = new Gson().toJson(bodyFields);
         RequestQueue queue = Volley.newRequestQueue(this);
 
+        Intent startPostPayment = new Intent(this, PostPayment.class);
+
         StringRequest stringRequest = new StringRequest(
                 Request.Method.POST,
                 BACKEND_URL + "stripe/pay",
@@ -149,8 +152,7 @@ public class StripePayment extends AppCompatActivity {
                             if ("true".equals(requiresAction)) {
                                 stripe.handleNextActionForPayment(context, paymentIntentClientSecret);
                             } else {
-                                displayAlert("Payment succeeded",
-                                        paymentIntentClientSecret, true);
+                                startActivity(startPostPayment);
                             }
                         }
                     }
@@ -178,7 +180,8 @@ public class StripePayment extends AppCompatActivity {
 
     private Map<String, String> parseResponseToMap(String response) {
         Gson gson = new Gson();
-        Type type = new TypeToken<Map<String, String>>(){}.getType();
+        Type type = new TypeToken<Map<String, String>>() {
+        }.getType();
         final Map<String, String> responseMap;
         if (response != null) {
             responseMap = gson.fromJson(response, type);
@@ -219,73 +222,5 @@ public class StripePayment extends AppCompatActivity {
         // Hook up the pay button to the card widget and stripe instance
         Button payButton = findViewById(R.id.payButton);
         payButton.setOnClickListener((View view) -> pay());
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        // Handle the result of stripe.confirmPayment
-        stripe.onPaymentResult(requestCode, data, new PaymentResultCallback(this));
-    }
-
-    private static final class PaymentResultCallback
-            implements ApiResultCallback<PaymentIntentResult> {
-        private final WeakReference<StripePayment> activityRef;
-
-        PaymentResultCallback(@NonNull StripePayment activity) {
-            activityRef = new WeakReference<>(activity);
-        }
-
-        @Override
-        public void onSuccess(@NonNull PaymentIntentResult result) {
-            final StripePayment activity = activityRef.get();
-            if (activity == null) {
-                return;
-            }
-
-            PaymentIntent paymentIntent = result.getIntent();
-            PaymentIntent.Status status = paymentIntent.getStatus();
-            if (status == PaymentIntent.Status.Succeeded) {
-                // Payment completed successfully
-                activity.runOnUiThread(() -> {
-                    Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                    activity.displayAlert("Payment completed",
-                            gson.toJson(paymentIntent), true);
-                });
-            } else if (status == PaymentIntent.Status.RequiresPaymentMethod) {
-                // Payment failed – allow retrying using a different payment method
-                activity.runOnUiThread(() -> {
-                    final PaymentIntent.Error error = paymentIntent.getLastPaymentError();
-                    final String errorMessage;
-                    if (error != null && error.getMessage() != null) {
-                        errorMessage = error.getMessage();
-                    } else {
-                        errorMessage = "Unknown error";
-                    }
-                    activity.displayAlert("Payment failed", errorMessage, false);
-                });
-            } else if (status == PaymentIntent.Status.RequiresConfirmation) {
-                // After handling a required action on the client, the status of the PaymentIntent is
-                // requires_confirmation. You must send the PaymentIntent ID to your backend
-                // and confirm it to finalize the payment. This step enables your integration to
-                // synchronously fulfill the order on your backend and return the fulfillment result
-                // to your client.
-                activity.sendPaymentMethod(null, paymentIntent.getId());
-            }
-        }
-
-        @Override
-        public void onError(@NonNull Exception e) {
-            final StripePayment activity = activityRef.get();
-            if (activity == null) {
-                return;
-            }
-
-            // Payment request failed – allow retrying using the same payment method
-            activity.runOnUiThread(() ->
-                    activity.displayAlert("Error", e.toString(), false)
-            );
-        }
     }
 }
