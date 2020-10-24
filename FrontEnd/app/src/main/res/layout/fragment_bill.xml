@@ -6,17 +6,18 @@
     android:layout_height="match_parent"
     android:id="@+id/bill_fragment">
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/fragment_menu"
+        android:name="com.cpen321.modernwaiter.ui.menu.MenuItemFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:gravity="center"
-        android:text="TODO: SHOW BILL maybe we should put this in the orders page"
-        android:textAlignment="center"
-        android:textSize="90sp"
+        app:layoutManager="LinearLayoutManager"
         app:layout_constraintBottom_toTopOf="@+id/startPaymentButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:context=".ui.menu.MenuItemFragment"
+        tools:listitem="@layout/bill_item" />
 
     <Button
         android:id="@+id/startPaymentButton"
