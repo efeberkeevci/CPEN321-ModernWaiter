@@ -1,7 +1,6 @@
 package com.cpen321.modernwaiter.ui.menu;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -15,8 +14,6 @@ import android.view.ViewGroup;
 
 import com.cpen321.modernwaiter.R;
 import com.cpen321.modernwaiter.ui.menu.dummy.DummyContent;
-
-import static android.graphics.Color.RED;
 
 /**
  * A fragment representing a list of Items.
@@ -57,7 +54,7 @@ public class MenuItemFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_menu_item_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_menu, container, false);
 
         // Set the adapter
         if (view instanceof RecyclerView) {
