@@ -1,10 +1,10 @@
-
+const fetch = require("node-fetch");
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 const Http = new XMLHttpRequest();
 const base_url='http://localhost:3000';
 
 //Get restaurant info by restaurant id
-url = base_url +"/restaurant?id=1";
+let url = base_url +"/restaurant?id=1";
 Http.open("GET", url);
 Http.send();
 
@@ -56,9 +56,9 @@ Http.send();
 Http.onreadystatechange = (e) => {
   console.log(Http.responseText);
 }
-
-//Post order with given info
-const data = {
+/*
+//Post order with given info data 
+let data= {
     "users_id": "2",
     "tables_id" : "3",
     "restaurant_id" : "1",
@@ -85,8 +85,7 @@ fetch(url, {
 
 
 //Update order amount with a given amount
-app.post("/add/amount/to/order", (req,res) => {
-const data = {
+data = {
     "amount" : "25.0"
 };
 url = base_url +"/add/amount/to/order";
@@ -114,7 +113,6 @@ Http.onreadystatechange = (e) => {
   console.log(Http.responseText);
 }
 
-
 //Get order by tablesID
 url = base_url +"/order/table/id?id=1";
 Http.open("GET", url);
@@ -123,63 +121,4 @@ Http.send();
 Http.onreadystatechange = (e) => {
   console.log(Http.responseText);
 }
-
-//If the session is complete, set the active session flag to false
-const data = {
-    "amount" : "25.0"
-};
-url = base_url +"/add/amount/to/order";
-fetch(url, {
-    method: 'POST', 
-    headers: {
-    'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-})
-.then(response => response.json())
-.then(data => {
-    console.log('Success:', data);
-})
-.catch((error) => {
-    console.error('Error:', error);
-});
-
-//If all the ordered items have been paid for, mark this as has paid 
-app.post("order/has/paid", (req,res) => {
-url = base_url +"/order/has/paid?id=1";
-Http.open("POST", url);
-Http.send();
-
-Http.onreadystatechange = (e) => {
-  console.log(Http.responseText);
-}
-
-
-//Gets ordered items via orderid
-app.get("/ordered/items", (req,res) => {
-
-
-// adds a new item to the ordered items table, used when you add an item to your meal later on during your time at the restaurant
-app.post("/add/item/to/order", (req,res) => {
-
-
-// if you pay for the specific item, mark it as has paid
-app.post("/mark/item/has/paid", (req,res) => {
-const data = {
-    "amount" : "25.0"
-};
-url = base_url +"/mark/item/has/paid";
-fetch(url, {
-    method: 'POST', 
-    headers: {
-    'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-})
-.then(response => response.json())
-.then(data => {
-    console.log('Success:', data);
-})
-.catch((error) => {
-    console.error('Error:', error);
-});
+*/

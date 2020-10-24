@@ -5,7 +5,7 @@ var app = express();
 app.use(express.json());
 
 var con = mysql.createConnection({
-    host: "52.188.158.129", 
+    host: "localhost", 
     user: "admin", 
     password: "modernwaitercpen321!", 
     database: "MODERN_WAITER_DB", 
