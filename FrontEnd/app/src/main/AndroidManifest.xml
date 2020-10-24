@@ -14,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".payment.MainPayment"></activity>
+        <activity android:name=".payment.PostPayment"></activity>
+        <activity android:name=".payment.MainPayment" />
         <activity android:name=".payment.StripePayment" />
         <activity
             android:name=".MainActivity"
