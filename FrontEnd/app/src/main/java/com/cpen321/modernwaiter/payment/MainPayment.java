@@ -20,11 +20,11 @@ public class MainPayment extends AppCompatActivity {
         setContentView(R.layout.activity_main_payment);
 
         Button pay_for_all = findViewById(R.id.pay_for_all);
-        Intent intent = new Intent(this, StripePayment.class);
+        Intent startStripePayment = new Intent(this, StripePayment.class);
         pay_for_all.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(intent);
+                startActivity(startStripePayment);
             }
         });
 

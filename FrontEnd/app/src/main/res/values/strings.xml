@@ -11,4 +11,6 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="split_title">Amount to be paid after split</string>
     <string name="get_bill">Get the Bill</string>
+    <string name="thank_you_post_payment">Payment Successful\nHave a great day!</string>
+    <string name="pay_again">Pay for more items</string>
 </resources>
