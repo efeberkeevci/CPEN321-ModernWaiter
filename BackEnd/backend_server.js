@@ -100,11 +100,10 @@ app.get("/user", (req, res)=>{
     });
 })
 
-//TODO:CHECK IF THE DATA PASSED CORRECTLY
 //Post order with given info
 app.post("/order", (req,res) =>{
     let sql_query = mysql.format("INSERT INTO orders ( users_id, tables_id, restaurant_id, amount,ordered_at, has_paid, is_active_session) VALUES(?,?,?,?,?,?,?)"
-    ,[req.body.users_id, req.body.tables_id, req.bodyrestaurant_id,
+    ,[req.body.users_id, req.body.tables_id, req.body.restaurant_id,
       req.body.amount, req.body.ordered_at, req.body.has_paid, req.body.is_active_session]);
     
     con.query(sql_query, function(err,result,fields){
