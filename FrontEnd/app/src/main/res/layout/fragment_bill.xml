@@ -7,7 +7,7 @@
     android:id="@+id/bill_fragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/fragment_menu"
+        android:id="@+id/recycler"
         android:name="com.cpen321.modernwaiter.ui.menu.MenuItemFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"

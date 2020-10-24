@@ -55,7 +55,7 @@
             app:layout_constraintVertical_bias="0.0">
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -98,7 +98,7 @@
             app:layout_constraintTop_toBottomOf="@+id/name" />
 
         <View
-            android:id="@+id/view"
+            android:id="@+id/horizontal_line"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#C5C5C5"
