@@ -21,29 +21,15 @@ import java.util.HashMap;
 
 public class BillFragment extends Fragment {
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
-    public BillFragment() {
-
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_bill, container, false);
-
-        MainActivity mainActivity = (MainActivity) getActivity();
-
-        HashMap<MenuItem, Integer> billMap = mainActivity.tableSession.getBill();
 
         Button startPaymentButton = view.findViewById(R.id.startPaymentButton);
         startPaymentButton.setOnClickListener(new View.OnClickListener() {
@@ -59,6 +45,9 @@ public class BillFragment extends Fragment {
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.bill_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
+        MainActivity mainActivity = (MainActivity) getActivity();
+        HashMap<MenuItem, Integer> billMap = mainActivity.tableSession.getBill();
 
         BillRecyclerAdapter billRecyclerAdapter = new BillRecyclerAdapter(billMap);
         recyclerView.setAdapter(billRecyclerAdapter);

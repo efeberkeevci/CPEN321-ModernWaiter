@@ -27,6 +27,7 @@ public class BillRecyclerAdapter extends RecyclerView.Adapter<BillRecyclerAdapte
     public BillRecyclerAdapter(HashMap<MenuItem, Integer> billMap) {
         this.billMap = billMap;
 
+        // Add all the items that have been ordered atleast once
         itemArray = new ArrayList<MenuItem>(billMap.keySet().stream()
             .filter(menuItem -> billMap.get(menuItem) > 0)
             .collect(Collectors.toList())
