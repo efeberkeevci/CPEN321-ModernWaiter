@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/*  Contains all the data required for this table's session such as its
+    cart & the restaurant's menu.
+ */
 public class TableSession {
 
     private HashMap<Integer, Integer> orderedItems;
@@ -45,5 +48,7 @@ public class TableSession {
     public void stop() {
         System.out.println(this);
     }
+
+    // TODO: ADD me a method that can return the bill
 
 }
