@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        tableSession = new TableSession(DummyContent.ITEMS);
+        tableSession = new TableSession();
 
         setContentView(R.layout.activity_main);
 

@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.stream.Collectors;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link com.cpen321.modernwaiter.Bill.Bill_item}.
+ * {@link RecyclerView.Adapter} that can display a {@link com.cpen321.modernwaiter.ui.MenuItem}.
  * TODO: Replace the implementation with code for your data type.
  */
 public class BillRecyclerAdapter extends RecyclerView.Adapter<BillRecyclerAdapter.ViewHolder> {
