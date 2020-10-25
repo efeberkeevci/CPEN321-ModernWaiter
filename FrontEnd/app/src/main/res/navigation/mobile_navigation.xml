@@ -7,13 +7,13 @@
 
     <fragment
         android:id="@+id/navigation_menu"
-        android:name="com.cpen321.modernwaiter.ui.menu.MenuItemFragment"
+        android:name="com.cpen321.modernwaiter.ui.menu.MenuFragment"
         android:label="@string/title_menu"
-        tools:layout="@layout/fragment_menu_item_list" />
+        tools:layout="@layout/fragment_menu" />
 
     <fragment
         android:id="@+id/navigation_pay"
-        android:name="com.cpen321.modernwaiter.ui.pay.BillFragment"
+        android:name="com.cpen321.modernwaiter.ui.pay.Bill_ItemFragment"
         android:label="@string/title_pay"
         tools:layout="@layout/fragment_bill" />
 </navigation>

@@ -1,4 +1,4 @@
-package com.cpen321.modernwaiter.ui.menu;
+package com.cpen321.modernwaiter.ui.pay;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -7,35 +7,35 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.cpen321.modernwaiter.Bill;
 import com.cpen321.modernwaiter.R;
-import com.cpen321.modernwaiter.ui.menu.dummy.DummyContent.DummyItem;
 
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem}.
+ * {@link RecyclerView.Adapter} that can display a {@link com.cpen321.modernwaiter.Bill.Bill_item}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> {
+public class Bill_ItemRecyclerViewAdapter extends RecyclerView.Adapter<Bill_ItemRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private final List<Bill.Bill_item> mValues;
 
-    public MyItemRecyclerViewAdapter(List<DummyItem> items) {
+    public Bill_ItemRecyclerViewAdapter(List<Bill.Bill_item> items) {
         mValues = items;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_menu_item, parent, false);
+                .inflate(R.layout.bill_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mIdView.setText(mValues.get(position).item_number);
+        holder.mContentView.setText(mValues.get(position).item_name);
     }
 
     @Override
@@ -47,13 +47,13 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public DummyItem mItem;
+        public Bill.Bill_item mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.item_number);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            mIdView = (TextView) view.findViewById(R.id.name);
+            mContentView = (TextView) view.findViewById(R.id.quantity);
         }
 
         @Override
