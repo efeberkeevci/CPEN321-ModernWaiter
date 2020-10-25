@@ -48,8 +48,6 @@ public class MenuRecyclerAdapter extends RecyclerView.Adapter<MenuRecyclerAdapte
         public ViewHolder(View view) {
             super(view);
             mView = view;
-
-
         }
 
         public void bind(final OnItemClickListener listener) {

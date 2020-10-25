@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/navigation_pay"
-        android:name="com.cpen321.modernwaiter.ui.pay.Bill_ItemFragment"
+        android:name="com.cpen321.modernwaiter.ui.pay.BillFragment"
         android:label="@string/title_pay"
         tools:layout="@layout/fragment_bill" />
 </navigation>
