@@ -1,6 +1,7 @@
 var express = require("express");
 var mysql = require('mysql');
 var app = express();
+var push_notification = require("./push_notification.js");
 
 app.use(express.json());
 
@@ -188,6 +189,9 @@ app.post("/order/has/paid", (req,res) => {
                 res.send(err);
             };
             res.send(result);
+            if(hasPaid){
+                push_notification.messageAccountisClosed(orderId);
+            }
         });
 })
 
@@ -229,4 +233,10 @@ app.post("/mark/item/has/paid", (req,res) => {
         };
         res.send(result);
     });
+})
+
+app.post("/registrationToken", (req,res) => {
+    let registrationToken = req.body.registrationToken;
+    let orderId = req.body.userId;
+    res.send(push_notification.subscribe(registrationToken,orderId));
 })
