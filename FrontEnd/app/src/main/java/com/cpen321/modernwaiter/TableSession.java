@@ -1,6 +1,14 @@
 package com.cpen321.modernwaiter;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.cpen321.modernwaiter.ui.MenuItem;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,19 +23,21 @@ public class TableSession {
     private HashMap<MenuItem, Integer> orderedItems;
     private final ArrayList<MenuItem> orderCart;
 
-    TableSession(List<MenuItem> menu) {
-
-        orderCart = new ArrayList<>(menu);
+    //creates a new session
+    TableSession() {
+        orderCart = new ArrayList<>();
         orderedItems = orderCart.stream().collect(
                 Collectors.toMap(x -> x, x -> 0, (s, a) -> s, HashMap::new)
         );
 
     }
 
-    public ArrayList<MenuItem> getMenu() {
+    //get the list of all ordered items
+    public ArrayList<MenuItem> getOrderCart() {
         return orderCart;
     }
 
+    //remove all items from cart
     public void checkout() {
 
         // TODO: NOTIFY SERVER THAT CUSTOMER ORDER
@@ -49,10 +59,55 @@ public class TableSession {
         System.out.println(this);
     }
 
+    //get the bill from backend
     public HashMap<MenuItem, Integer> getBill() {
+
+        int id = MainActivity.getID();
+
+        String url = "http://my-json-feed";
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        JSONArray jsonArray = null;
+                        try {
+                            jsonArray = response.getJSONArray("data");
+                            for( int i = 0; i<jsonArray.length (); i++) {
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                String item_name = jsonObject.getString("name");
+                                double item_price = jsonObject.getDouble("cost");
+                                String item_id = jsonObject.getString("id");
+                                //TODO: check logic for these values, I ignore description and quantity when getting data from backend
+                                orderCart.add(new MenuItem(item_name,"", "1", item_id, item_price));
+                            }
+                            updateOrderQuantities();
+                        } catch(JSONException e){
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO: Handle error
+
+                    }
+                });
+        MainActivity.requestQueue.add(jsonObjectRequest);
+
         return orderedItems;
     }
 
-    // TODO: ADD me a method that can return the bill
+    //update the orderedItems hashmap to reflect the quantity ordered for one item_id
+    private void updateOrderQuantities(){
+        for (MenuItem menuItem : orderCart) {
+            // Add those value into orderedItems
+            orderedItems.replace(
+                    menuItem, orderedItems.get(menuItem) + Integer.valueOf(menuItem.quantity)
+            );
+        }
+    }
 
 }
