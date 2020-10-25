@@ -1,13 +1,12 @@
 package com.cpen321.modernwaiter;
 
 import android.os.Bundle;
+import android.view.View;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.cpen321.modernwaiter.ui.MenuItem;
+import com.cpen321.modernwaiter.ui.menu.dummy.DummyContent;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,9 +15,15 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import org.json.JSONObject;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
+
+    // Shopping kart
+    private TableSession tableSession;
+
+    // Deserialized restaurant's menu in the from of ID, MenuItem
+    private HashMap<Integer, MenuItem> menuMap;
 
     //Backend stuff
     private static final int ID = 1;
@@ -28,7 +33,21 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        tableSession = new TableSession(DummyContent.ITEMS);
+
         setContentView(R.layout.activity_main);
+
+
+        findViewById(R.id.inspectSession).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        tableSession.stop();
+                    }
+                }
+        );
+
         requestQueue = Volley.newRequestQueue(this);
         navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
@@ -42,6 +61,10 @@ public class MainActivity extends AppCompatActivity {
     }
     public static int getID(){
         return ID;
+    }
+
+    public void openDetailItemView(int id) {
+
     }
 
 }

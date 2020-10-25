@@ -41,7 +41,6 @@ public class BillFragment extends Fragment{
         // TODO: SHOW THE BILL
         Bill bill = getBill();
 
-
         Button startPaymentButton = root.findViewById(R.id.startPaymentButton);
         startPaymentButton.setOnClickListener(new View.OnClickListener() {
             @Override

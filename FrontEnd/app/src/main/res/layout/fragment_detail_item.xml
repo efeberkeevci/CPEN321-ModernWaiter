@@ -78,10 +78,10 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/removeButton" />
+            app:layout_constraintTop_toBottomOf="@+id/decrementButton" />
 
         <Button
-            android:id="@+id/addButton"
+            android:id="@+id/incrementButton"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginTop="16dp"
@@ -97,7 +97,7 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <Button
-            android:id="@+id/removeButton"
+            android:id="@+id/decrementButton"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginTop="16dp"
