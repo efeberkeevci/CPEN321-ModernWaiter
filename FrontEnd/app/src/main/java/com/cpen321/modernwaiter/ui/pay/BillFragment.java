@@ -55,48 +55,4 @@ public class BillFragment extends Fragment {
         return view;
     }
 
-    /**function to make REST GET request
-    private Bill getBill(){
-
-        Bill bill = new Bill();
-        //TODO : add right GET calls
-        int id = MainActivity.getID();
-
-        String url = "http://my-json-feed";
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        JSONArray jsonArray = null;
-                        try {
-                            jsonArray = response.getJSONArray("data");
-                            for( int i = 0; i<jsonArray.length (); i++) {
-                                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                String item_name = jsonObject.getString("name");
-                                double item_price = jsonObject.getDouble("cost");
-                                bill.Bill_add_item(i, item_name,item_price);
-                            }
-                        } catch(JSONException e){
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // TODO: Handle error
-
-                    }
-                });
-        MainActivity.requestQueue.add(jsonObjectRequest);
-
-
-        //for now add some dummy values
-        //TODO: remove dummy values from here
-        bill.Bill_add_item(0,"CheeseSandwich", 10.0);
-        bill.Bill_add_item(10, "burger", 15.0);
-        return bill;
-    }**/
 }

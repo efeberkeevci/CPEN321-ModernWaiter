@@ -64,7 +64,7 @@ public class TableSession {
 
         int id = MainActivity.getID();
 
-        String url = "http://my-json-feed";
+        /*String url = "http://my-json-feed";
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -96,7 +96,12 @@ public class TableSession {
                     }
                 });
         MainActivity.requestQueue.add(jsonObjectRequest);
-
+        */
+        //TODO: delete these dummy values
+        orderCart.add(new MenuItem("CheeseBurger", "BLAH BLAH BLAH", "1","1" ,10.50));
+        orderCart.add(new MenuItem("BigMac", "DIBIDI DABIDI BOO", "1","2" ,12.50));
+        orderCart.add(new MenuItem("CheeseBurger", "BLAH BLOO BLAH BLOO", "1","1" ,10.50));
+        updateOrderQuantities();
         return orderedItems;
     }
 
