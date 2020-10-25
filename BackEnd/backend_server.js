@@ -135,13 +135,7 @@ app.post("/add/amount/to/order", (req,res) => {
     });
 
 })
-//ipadress:portnum/order/user/id?
-/*
-{
-    "users_id" = "1",
-    "isActive" = "1"
-}
-*/
+
 //Get order by userID
 app.get("/order/user/id/:users_id/:isActive", (req,res) =>{
     let users_id = req.params.users_id;
@@ -223,6 +217,7 @@ app.post("/add/item/to/order", (req,res) => {
 })
 
 // if you pay for the specific item, mark it as has paid
+//TODO: should we add userıd so we can send push notification saying x user paid y item
 app.post("/mark/item/has/paid", (req,res) => {
     let orderId = req.body.orderId;
     let itemId = req.body.itemId;
