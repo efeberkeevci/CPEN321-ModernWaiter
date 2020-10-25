@@ -6,7 +6,6 @@ import android.view.View;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.cpen321.modernwaiter.ui.MenuItem;
-import com.cpen321.modernwaiter.ui.menu.dummy.DummyContent;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,7 +19,7 @@ import java.util.HashMap;
 public class MainActivity extends AppCompatActivity {
 
     // Shopping kart
-    private TableSession tableSession;
+    public TableSession tableSession;
 
     // Deserialized restaurant's menu in the from of ID, MenuItem
     private HashMap<Integer, MenuItem> menuMap;
@@ -38,12 +37,11 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-
         findViewById(R.id.inspectSession).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        tableSession.stop();
+                        tableSession.checkout();
                     }
                 }
         );

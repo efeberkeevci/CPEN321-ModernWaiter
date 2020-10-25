@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 
 import com.cpen321.modernwaiter.R;
 import com.cpen321.modernwaiter.ui.MenuItem;
-import com.cpen321.modernwaiter.ui.menu.dummy.DummyContent;
+import com.cpen321.modernwaiter.DummyContent;
 
 /**
  * A fragment representing a list of Items.

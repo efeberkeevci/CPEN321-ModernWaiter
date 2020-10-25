@@ -37,7 +37,7 @@ public class TableSession {
         for (MenuItem menuItem : orderCart) {
             // Add those value into orderedItems
             orderedItems.replace(
-                    menuItem, orderedItems.get(menuItem.id) + 1
+                    menuItem, orderedItems.get(menuItem) + Integer.valueOf(menuItem.quantity)
             );
 
             // Clear the cart of all orders

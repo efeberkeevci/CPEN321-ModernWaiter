@@ -13,4 +13,6 @@
     <string name="get_bill">Initiate Payment</string>
     <string name="thank_you_post_payment">Payment Successful\nHave a great day!</string>
     <string name="pay_again">Pay for more items</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

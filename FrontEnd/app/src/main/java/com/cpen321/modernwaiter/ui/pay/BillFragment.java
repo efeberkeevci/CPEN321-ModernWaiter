@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -22,48 +21,39 @@ import com.cpen321.modernwaiter.Bill;
 import com.cpen321.modernwaiter.MainActivity;
 import com.cpen321.modernwaiter.R;
 import com.cpen321.modernwaiter.payment.MainPayment;
+import com.cpen321.modernwaiter.ui.MenuItem;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Bill_ItemFragment extends Fragment {
+import java.util.HashMap;
 
-    // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-    private int mColumnCount = 1;
+public class BillFragment extends Fragment {
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public Bill_ItemFragment() {
-    }
+    public BillFragment() {
 
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
-    public static Bill_ItemFragment newInstance(int columnCount) {
-        Bill_ItemFragment fragment = new Bill_ItemFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_bill, container, false);
+
+        MainActivity mainActivity = (MainActivity) getActivity();
+
+        HashMap<MenuItem, Integer> billMap = mainActivity.tableSession.getBill();
 
         Button startPaymentButton = view.findViewById(R.id.startPaymentButton);
         startPaymentButton.setOnClickListener(new View.OnClickListener() {
@@ -75,20 +65,18 @@ public class Bill_ItemFragment extends Fragment {
         });
 
         // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            recyclerView.setAdapter(new Bill_ItemRecyclerViewAdapter(getBill().bill_list));
-        }
+        Context context = view.getContext();
+
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.bill_recycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
+        BillRecyclerAdapter billRecyclerAdapter = new BillRecyclerAdapter(billMap);
+        recyclerView.setAdapter(billRecyclerAdapter);
+
         return view;
     }
 
-    //function to make REST GET request
+    /**function to make REST GET request
     private Bill getBill(){
 
         Bill bill = new Bill();
@@ -131,5 +119,5 @@ public class Bill_ItemFragment extends Fragment {
         bill.Bill_add_item(0,"CheeseSandwich", 10.0);
         bill.Bill_add_item(10, "burger", 15.0);
         return bill;
-    }
+    }**/
 }
