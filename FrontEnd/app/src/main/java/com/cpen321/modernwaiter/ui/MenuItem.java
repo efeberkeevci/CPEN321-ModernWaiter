@@ -20,7 +20,6 @@ public class MenuItem {
     public void decrementQuantity() {
         if (!"0".equals(quantity))
             quantity = String.valueOf(Integer.parseInt(quantity) - 1);
-
     }
 
 }
