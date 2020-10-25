@@ -12,14 +12,14 @@ import java.util.stream.Collectors;
  */
 public class TableSession {
 
-    private HashMap<Integer, Integer> orderedItems;
+    private HashMap<MenuItem, Integer> orderedItems;
     private final ArrayList<MenuItem> orderCart;
 
     TableSession(List<MenuItem> menu) {
 
         orderCart = new ArrayList<>(menu);
         orderedItems = orderCart.stream().collect(
-                Collectors.toMap(x -> x.id, x -> 0, (s, a) -> s, HashMap::new)
+                Collectors.toMap(x -> x, x -> 0, (s, a) -> s, HashMap::new)
         );
 
     }
@@ -37,7 +37,7 @@ public class TableSession {
         for (MenuItem menuItem : orderCart) {
             // Add those value into orderedItems
             orderedItems.replace(
-                    menuItem.id, orderedItems.get(menuItem.id) + 1
+                    menuItem, orderedItems.get(menuItem.id) + 1
             );
 
             // Clear the cart of all orders
@@ -47,6 +47,10 @@ public class TableSession {
 
     public void stop() {
         System.out.println(this);
+    }
+
+    public HashMap<MenuItem, Integer> getBill() {
+        return orderedItems;
     }
 
     // TODO: ADD me a method that can return the bill

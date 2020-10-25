@@ -26,7 +26,12 @@ con.query("USE MODERN_WAITER_DB", function(err,result,fields){
     if (err) throw err;
 });
 
-//Get restaurant info by restaurant id
+/**
+ * HTTP GET request to acquire details of a
+ * restaurant using the restaurant id. It
+ * returns the details with a status code of
+ * 200 if successful.
+ */
 app.get("/restaurant/:id", (req,res) => {
     let id = req.params.id;
     let sql_query = mysql.format("SELECT * FROM restaurant WHERE id = ?", [id]);
@@ -38,7 +43,13 @@ app.get("/restaurant/:id", (req,res) => {
     });
 });
 
-//Get items with restaurant id
+/**
+ * HTTP GET request to acquire items of a
+ * restaurant representing its menu. It
+ * returns a list of all the items belonging
+ * to the restaurant with a status code of
+ * 200 if successful.
+ */
 app.get("/items/:id", (req,res) =>{
     let id = req.params.id;
     let sql_query = mysql.format("SELECT * FROM items WHERE restaurant_id = ?", [id]);
@@ -50,8 +61,15 @@ app.get("/items/:id", (req,res) =>{
     });
 });
 
-//Get item options by item id
-app.get("/item_options/:id", (req,res) => {
+/**
+ * HTTP GET request to list option ids for
+ * every item. This can be used to 
+ * identify every additional option per item,
+ * such as extra condiments or ingredients.
+ * It returns the list with a status code of
+ * 200 if successful.
+ */
+app.get("/item-options/:id", (req,res) => {
     let id = req.params.id;
     let sql_query = mysql.format("SELECT * FROM items_options WHERE items_id = ?", [id]);
     con.query(sql_query, function(err,result,fields){
@@ -62,7 +80,11 @@ app.get("/item_options/:id", (req,res) => {
     });
 });
 
-//Get options by id
+/**
+ * HTTP GET request to acquire all options
+ * matching an option id. It returns the list 
+ * with a status code of 200 if successful.
+ */
 app.get("/options/:id", (req,res) =>{
     let id = req.params.id;
     let sql_query = mysql.format("SELECT * FROM options WHERE id = ?", [id]);
@@ -74,7 +96,12 @@ app.get("/options/:id", (req,res) =>{
     });
 });
 
-//Get table by id
+/**
+ * HTTP GET request to get details of the table
+ * a user is seated at. It returns the 
+ * information with a status code of 200 
+ * if successful.
+ */
 app.get("/table/:id", (req,res) => {    
     let id = req.params.id;
     let sql_query = mysql.format("SELECT * FROM tables WHERE id = ?", [id]);
@@ -86,7 +113,12 @@ app.get("/table/:id", (req,res) => {
     });
 });
 
-//Get user by id
+/**
+ * HTTP GET request to get details of a 
+ * user. It returns the 
+ * information with a status code of 200 
+ * if successful.
+ */
 app.get("/user/:id", (req, res)=>{
     let id = req.params.id;
     let sql_query = mysql.format("SELECT * FROM users WHERE id = ?", [id]);
@@ -98,7 +130,10 @@ app.get("/user/:id", (req, res)=>{
     });
 })
 
-//Post order with given info
+/**
+ * HTTP POST request to create an order. It 
+ * returns a status code of 200 if successful.
+ */
 app.post("/order", (req,res) =>{
     let sql_query = mysql.format("INSERT INTO orders ( users_id, tables_id, restaurant_id, amount,ordered_at, has_paid, is_active_session) VALUES(?,?,?,?,?,?,?)"
     ,[req.body.users_id, req.body.tables_id, req.body.restaurant_id,
@@ -112,8 +147,14 @@ app.post("/order", (req,res) =>{
     });
 })
 
-//Update order amount with a given amount
-app.post("/add/amount/to/order", (req,res) => {
+/**
+ * HTTP PUT request to update the amount spent
+ * on ordered items. This is necessary to update
+ * the amount if a user adds an item after 
+ * they already created an order. It returns a 
+ * status code of 200 if successful.
+ */
+app.put("/order/amount", (req,res) => {
     let id = req.body.id;
     let amount = req.body.amount;
     let sql_query_get_oldamount = mysql. format("SELECT amount FROM orders WHERE id = ?", [id]);
@@ -137,10 +178,15 @@ app.post("/add/amount/to/order", (req,res) => {
 
 })
 
-//Get order by userID
-app.get("/order/user/id/:users_id/:isActive", (req,res) =>{
+/**
+ * HTTP GET request to retrieve order details
+ * of a specific user by their user Id. It
+ * returns the details with a status code of 
+ * 200 if successful.
+ */
+app.get("/order/user/:users_id", (req,res) =>{
     let users_id = req.params.users_id;
-    let isActive = req.params.isActive;
+    let isActive = req.query.isActive;
     let sql_query = mysql.format("SELECT * FROM orders WHERE users_id = ? && is_active_session = ? ", [users_id, isActive]);
     con.query(sql_query, function(err,result,fields){
         if (err) {
@@ -150,10 +196,15 @@ app.get("/order/user/id/:users_id/:isActive", (req,res) =>{
     });
 })
 
-//Get order by tablesID
-app.get("/order/table/id/:tables_id/:isActive", (req,res) =>{
+/**
+ * HTTP GET request to retrieve order details
+ * of a specific table by its table Id. It
+ * returns the details with a status code of 
+ * 200 if successful.
+ */
+app.get("/order/table/:tables_id", (req,res) =>{
     let tables_id = req.params.tables_id;
-    let isActive = req.params.isActive;
+    let isActive = req.query.isActive;
     let sql_query = mysql.format("SELECT * FROM orders WHERE tables_id = ? && is_active_session = ? ", [tables_id, isActive]);
     con.query(sql_query, function(err,result,fields){
         if (err) {
@@ -163,9 +214,15 @@ app.get("/order/table/id/:tables_id/:isActive", (req,res) =>{
     });
 })
 
-
-// If the session is complete, set the active session flag to false
-app.post("/order/is/active/session", (req,res) => {
+/**
+ * HTTP PUT request to update the session of orders
+ * at a specific table. This is used to keep track 
+ * of active and inactive sessions. If a group of
+ * users finish their meal, we will use this to 
+ * mark the session as complete. It returns a 
+ * status code of 200 if successful.
+ */
+app.put("/order/session", (req,res) => {
     let orderId = req.body.orderId;
     let isActive = req.body.isActive;
     let sql_query = mysql.format("UPDATE orders SET is_active_session = ? WHERE id = ?", [isActive, orderId]);
@@ -178,9 +235,14 @@ app.post("/order/is/active/session", (req,res) => {
 })
 
 
-
-//If all the ordered items have been paid for, mark this as has paid 
-app.post("/order/has/paid", (req,res) => {
+/**
+ * HTTP PUT request to mark whether an entire
+ * order has been paid off. This is a layer of protection
+ * to ensure a user does not create a double payment
+ * for an order that has been paid for already. It returns a 
+ * status code of 200 if successful.
+ */
+app.put("/order/paid", (req,res) => {
     let orderId = req.body.orderId;
     let hasPaid = req.body.hasPaid;
     let sql_query = mysql.format("UPDATE orders SET has_paid = ? WHERE id = ?", [hasPaid,orderId]);
@@ -195,8 +257,13 @@ app.post("/order/has/paid", (req,res) => {
         });
 })
 
-//Gets ordered items via orderid
-app.get("/ordered/items/:orderId", (req,res) => {
+/**
+ * HTTP GET request to retrieve a list of all the 
+ * items associated with a specific order by the
+ * order Id. It returns the list with a status 
+ * code of 200 if successful.
+ */
+app.get("/ordered-items/:orderId", (req,res) => {
     let orderId = req.params.orderId;
     let sql_query = mysql.format("SELECT * FROM ordered_items WHERE orders_id = ?", [ orderId]);
     con.query(sql_query, function(err,result,fields){
@@ -207,8 +274,13 @@ app.get("/ordered/items/:orderId", (req,res) => {
     });
 })
 
-// adds a new item to the ordered items table, used when you add an item to your meal later on during your time at the restaurant
-app.post("/add/item/to/order", (req,res) => {
+/**
+ * HTTP POST request to add an item to your ordered
+ * items. This will be used when a user adds an item
+ * to their meal during their time at the restaurant.
+ * It returns a status code of 200 if successful.
+ */
+app.post("/ordered-items/:orderId", (req,res) => {
     let orderId = req.body.orderId;
     let itemId = req.body.itemId;
     let sql_query = mysql.format("INSERT INTO ordered_items (orders_id, items_id, has_paid, is_selected) VALUES(?,?, 0,0) ", [orderId,itemId]);
@@ -220,9 +292,15 @@ app.post("/add/item/to/order", (req,res) => {
     });
 })
 
-// if you pay for the specific item, mark it as has paid
 //TODO: should we add userıd so we can send push notification saying x user paid y item
-app.post("/mark/item/has/paid", (req,res) => {
+
+/**
+ * HTTP PUT request to mark an item ordered
+ * as already paid. This is to protect the user
+ * from making double payments for the same item.
+ * It returns a status code of 200 if successful.
+ */
+app.put("/ordered-items/paid", (req,res) => {
     let orderId = req.body.orderId;
     let itemId = req.body.itemId;
     let hasPaid = req.body.hasPaid;
