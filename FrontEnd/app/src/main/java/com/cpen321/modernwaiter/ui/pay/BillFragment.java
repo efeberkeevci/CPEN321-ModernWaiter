@@ -9,23 +9,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.cpen321.modernwaiter.Bill;
 import com.cpen321.modernwaiter.MainActivity;
 import com.cpen321.modernwaiter.R;
 import com.cpen321.modernwaiter.payment.MainPayment;
 import com.cpen321.modernwaiter.ui.MenuItem;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 
