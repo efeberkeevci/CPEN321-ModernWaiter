@@ -24,12 +24,24 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.Map;
+
+import javax.net.ssl.HttpsURLConnection;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -86,24 +98,23 @@ public class MainActivity extends AppCompatActivity {
 
                         // Log and toast
                         Log.d("Success", token);
-                        try{
-                            URL url = new URL("http://52.188.158.129:3000/registerToken");
-                            HttpURLConnection client = null;
-                            client = (HttpURLConnection) url.openConnection();
-                            client.setRequestProperty("Content-Type", "application/json; utf-8");
-                            client.setRequestProperty("Accept", "application/json");
-                            client.setDoOutput(true);
-                            //FIX JSON MESSAGE
-                            String message = "{ \"token\" : " + "\"" + token +"\"";
-                            try(OutputStream os = client.getOutputStream()) {
-                                byte[] input = message.getBytes("utf-8");
-                                os.write(input, 0, input.length);
+                        HashMap<String,String>  post_message_body= new HashMap<> ();
+                        post_message_body.put("registrationToken", token);
+                        Thread thread = new Thread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                try  {
+                                    performPostCall("http://52.188.158.129:3000/registrationToken", post_message_body);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                             }
-                        } catch (MalformedURLException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }                    }
+                        });
+
+                        thread.start();
+
+                    }
                 });
 
 
@@ -114,6 +125,65 @@ public class MainActivity extends AppCompatActivity {
 
     public void openDetailItemView(int id) {
 
+    }
+    public String  performPostCall(String requestURL,
+                                   HashMap<String, String> postDataParams){
+
+        URL url;
+        String response="";
+        try{
+            url=new URL(requestURL);
+
+            HttpURLConnection conn=(HttpURLConnection)url.openConnection();
+            conn.setReadTimeout(15000);
+            conn.setConnectTimeout(15000);
+            conn.setRequestMethod("GET");
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+
+
+            OutputStream os=conn.getOutputStream();
+            BufferedWriter writer=new BufferedWriter(
+                    new OutputStreamWriter(os,"UTF-8"));
+            writer.write(getPostDataString(postDataParams));
+
+            writer.flush();
+            writer.close();
+            os.close();
+            int responseCode=conn.getResponseCode();
+
+            if(responseCode== HttpsURLConnection.HTTP_OK){
+                String line;
+                BufferedReader br=new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                while((line=br.readLine())!=null){
+                    response+=line;
+                }
+            }
+            else{
+                response="";
+
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return response;
+    }
+    private String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
+        StringBuilder result = new StringBuilder();
+        boolean first = true;
+        for(Map.Entry<String, String> entry : params.entrySet()){
+            if (first)
+                first = false;
+            else
+                result.append("&");
+
+            result.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
+            result.append("=");
+            result.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
+        }
+
+        return result.toString();
     }
 
 }
