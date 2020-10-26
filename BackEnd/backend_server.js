@@ -3,6 +3,7 @@ var mysql = require('mysql');
 const { subscribe, messageAccountisClosed } = require("./push_notification.js");
 var app = express();
 var push_notification = require("./push_notification.js");
+var recommendation = require("./recommendation.js");
 
 app.use(express.json());
 
@@ -304,8 +305,6 @@ app.post("/ordered-items/:orderId", (req,res) => {
     });
 })
 
-//TODO: should we add userıd so we can send push notification saying x user paid y item
-
 /**
  * HTTP PUT request to mark an item ordered
  * as already paid. This is to protect the user
@@ -325,6 +324,43 @@ app.put("/ordered-items/paid", (req,res) => {
     });
 })
 
+/**
+ * HTTP GET request to get recommendation
+ * for user from a specific restaurant.
+ * Returns the item Id of the recommended
+ * food with a status code of 200.
+ */
+app.get("/items/recommendation/", (req,res) =>{
+    let userId = req.body.userId;
+    let restaurantId = req.body.restaurantId;
+
+    let user_preference_query = mysql.format("SELECT preferences FROM users WHERE id = 1", [userId]);
+    let item_descriptions_query = mysql.format("SELECT description FROM items WHERE restaurant_id = ?", [restaurantId]);
+
+    var preferences = con.query(user_preference_query, function(err,result,fields){
+        if (err) {
+            res.send(err);
+        }
+        console.log(result);
+        return result;
+    });
+
+    var descriptions = con.query(item_descriptions_query, function(err,result,fields){
+        if (err) {
+            res.send(err);
+        }
+        console.log(result);
+        return result;
+    });
+
+    var recommendedItemId = recommendation.getRecommendation(preferences, descriptions);
+    console.log(recommendedItemId);
+});
+
+/**
+ * HTTP POST request to register token for
+ * push notification service.
+ */
 app.post("/registrationToken", (req,res) => {
     let registrationToken = req.body.registrationToken;
  console.log(registrationToken);
