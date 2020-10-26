@@ -89,7 +89,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                             @Override
                             public void run() {
                                 try {
-                                    performPostCall("http://52.188.158.129:3000/registrationToken", post_message_body);
+                                    performPostCall("http://52.188.158.129:3000/registrationToken", post_message_body,token);
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -103,34 +103,35 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     public static String performPostCall(String requestURL,
-                                         HashMap<String, String> postDataParams) {
+                                         HashMap<String, String> postDataParams, String token) {
 
         URL url;
         String response = "";
         try {
             url = new URL(requestURL);
 
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(15000);
-            conn.setConnectTimeout(15000);
-            conn.setRequestMethod("GET");
-            conn.setDoInput(true);
-            conn.setDoOutput(true);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setUseCaches(false);
+            connection.setDoOutput(true);
+            connection.setDoInput(true);
 
+            connection.setInstanceFollowRedirects(false);
 
-            OutputStream os = conn.getOutputStream();
-            BufferedWriter writer = new BufferedWriter(
-                    new OutputStreamWriter(os, "UTF-8"));
-            writer.write(getPostDataString(postDataParams));
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Connection", "Keep-Alive");
+            connection.setRequestProperty("Cache-Control", "no-cache");
+            connection.setRequestProperty("Content-Type","application/json;charset=utf-8");
+            connection.setRequestProperty("Accept","application/json");
 
+            OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
+            writer.write("{\"registrationToken\":\""+token+"\"}");
             writer.flush();
             writer.close();
-            os.close();
-            int responseCode = conn.getResponseCode();
+            int responseCode = connection.getResponseCode();
 
             if (responseCode == HttpsURLConnection.HTTP_OK) {
                 String line;
-                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 while ((line = br.readLine()) != null) {
                     response += line;
                 }
