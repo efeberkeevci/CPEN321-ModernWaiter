@@ -363,7 +363,7 @@ app.put("/ordered-items/paid", (req,res) => {
 /**
  * HTTP GET request to retrieve user preferences.
  */
-app.get("/user/:id", (req,res) => {
+app.get("/user/preferences/:id", (req,res) => {
     let id = req.params.id;
     let sql_query = mysql.format("SELECT preferences FROM users WHERE id = ?", [id]);
     con.query(sql_query, function(err,result,fields){
