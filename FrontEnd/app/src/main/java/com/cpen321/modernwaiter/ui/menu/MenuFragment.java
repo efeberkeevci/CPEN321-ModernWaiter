@@ -13,9 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.cpen321.modernwaiter.MainActivity;
 import com.cpen321.modernwaiter.R;
 import com.cpen321.modernwaiter.ui.MenuItem;
-import com.cpen321.modernwaiter.DummyContent;
 
 /**
  * A fragment representing a list of Items.
@@ -60,7 +60,8 @@ public class MenuFragment extends Fragment {
             }
         };
 
-        menuRecyclerAdapter = new MenuRecyclerAdapter(DummyContent.ITEMS, listener);
+        MainActivity mainActivity = (MainActivity) getActivity();
+        menuRecyclerAdapter = new MenuRecyclerAdapter(mainActivity.tableSession.getMenuItems(), listener);
 
         recyclerView.setAdapter(menuRecyclerAdapter);
 

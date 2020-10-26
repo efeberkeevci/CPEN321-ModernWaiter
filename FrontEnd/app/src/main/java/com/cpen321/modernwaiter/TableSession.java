@@ -1,40 +1,44 @@
 package com.cpen321.modernwaiter;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.cpen321.modernwaiter.ui.MenuItem;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.stream.Collectors;
 
 /*  Contains all the data required for this table's session such as its
     cart & the restaurant's menu.
+
+    Note that we might change underlying datastructure & thats why we have
+    the getter methods.
  */
 public class TableSession {
 
+    // This is a
     private HashMap<MenuItem, Integer> orderedItems;
-    private final ArrayList<MenuItem> orderCart;
+
+    // A list of Menu's items. Each menu's item will
+    // its common attribute and also a field called quantity.
+    // Quantity is the amount that has is in a user's cart
+    // not to be mistaken with the items that are already ordered in the backend
+    // Once an order is sent to the backend, it cannot be cancelled
+    private final ArrayList<MenuItem> menuItems;
 
     //creates a new session
     TableSession() {
-        orderCart = new ArrayList<>();
-        orderedItems = orderCart.stream().collect(
+
+        // TODO: Initialize the menu
+        menuItems = new ArrayList<>(DummyContent.ITEMS);
+
+        orderedItems = menuItems.stream().collect(
                 Collectors.toMap(x -> x, x -> 0, (s, a) -> s, HashMap::new)
         );
 
     }
 
-    //get the list of all ordered items
-    public ArrayList<MenuItem> getOrderCart() {
-        return orderCart;
+    // Get the list of all items in the menu
+    public ArrayList<MenuItem> getMenuItems() {
+        return menuItems;
     }
 
     //remove all items from cart
@@ -44,7 +48,7 @@ public class TableSession {
         // ITEMS IN THE ORDERCART BASED ON ITS MENUITEM.QUANTITY
 
 
-        for (MenuItem menuItem : orderCart) {
+        for (MenuItem menuItem : menuItems) {
             // Add those value into orderedItems
             orderedItems.replace(
                     menuItem, orderedItems.get(menuItem) + Integer.valueOf(menuItem.quantity)
@@ -55,13 +59,8 @@ public class TableSession {
         }
     }
 
-    public void stop() {
-        System.out.println(this);
-    }
-
-    //get the bill from backend
-    public HashMap<MenuItem, Integer> getBill() {
-
+    // TODO: Update the bill based on the backend
+    public void UpdateBill() {
         int id = MainActivity.getID();
 
         /*String url = "http://my-json-feed";
@@ -97,22 +96,10 @@ public class TableSession {
                 });
         MainActivity.requestQueue.add(jsonObjectRequest);
         */
-        //TODO: delete these dummy values
-        orderCart.add(new MenuItem("CheeseBurger", "BLAH BLAH BLAH", "1","1" ,10.50));
-        orderCart.add(new MenuItem("BigMac", "DIBIDI DABIDI BOO", "1","2" ,12.50));
-        orderCart.add(new MenuItem("CheeseBurger", "BLAH BLOO BLAH BLOO", "1","1" ,10.50));
-        updateOrderQuantities();
+    }
+
+    // Return a map of MenuItems to the quantity ordered in the backend
+    public HashMap<MenuItem, Integer> getBill() {
         return orderedItems;
     }
-
-    //update the orderedItems hashmap to reflect the quantity ordered for one item_id
-    private void updateOrderQuantities(){
-        for (MenuItem menuItem : orderCart) {
-            // Add those value into orderedItems
-            orderedItems.replace(
-                    menuItem, orderedItems.get(menuItem) + Integer.valueOf(menuItem.quantity)
-            );
-        }
-    }
-
 }
