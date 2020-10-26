@@ -16,11 +16,8 @@ admin.initializeApp({
 */
 
 app = admin.initializeApp();
-function push_notification_func(){
+function push_notification_func(orderId){
 console.log("Sending push notification");
-var token ="dti7Svc4SC6utD7GPz9ZXy:APA91bEVZQYS-PJ1OYgYqbOElQkM_BTI7Si_S3eLXOpO-oIpM155VGAJzl-FJHYFUNMMYdfg3cOvWM6bX5X-6m6k7H6QQCdZA96qEZt3lwRpE68iOmb7uVx8hfbx5SZUuy8MnnTdGArg";
-subscribe(token,"1");
-// The topic name can be optionally prefixed with "/topics/".
 var topic = '1';
 
 var message = {
@@ -28,7 +25,7 @@ var message = {
     title: 'Payment Completed!',
     body: 'All items are paid.'
   },
-	topic:topic
+	topic:orderId
 };
 
 // Send a message to devices subscribed to the provided topic.
@@ -84,7 +81,10 @@ function unsubscribe(registrationToken, orderId){
 function messageAccountisClosed(orderId){
     console.log("SENDING TOPIC MESSAGES");
     var message = {
+	    notification:{
     title : "Payment Completed!",
+    body :"All items paid"
+	    },
     topic: orderId
     };
 

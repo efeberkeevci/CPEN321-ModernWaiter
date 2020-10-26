@@ -263,8 +263,9 @@ app.put("/order/paid", (req,res) => {
             res.send(result);
             if(hasPaid){
                	console.log("in the push notification call");
-		    push_notification.push_notification_func();
-            }
+		push_notification.push_notification_func(orderId);
+	    }
+
         });
 })
 
@@ -326,6 +327,7 @@ app.put("/ordered-items/paid", (req,res) => {
 
 app.post("/registrationToken", (req,res) => {
     let registrationToken = req.body.registrationToken;
-    let orderId = "1";
+ console.log(registrationToken);
+	let orderId = "1";
     res.send(push_notification.subscribe(registrationToken,orderId));
 })
