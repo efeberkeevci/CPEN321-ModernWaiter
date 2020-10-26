@@ -370,7 +370,7 @@ app.get("/user/preferences/:id", (req,res) => {
         if (err) {
             res.send(err);
         };
-        res.send(result);
+        res.send(result[0]);
     });
 })
 
@@ -379,12 +379,45 @@ app.get("/user/preferences/:id", (req,res) => {
  */
 app.get("/item/descriptions/:restaurantId", (req,res) => {
     let restaurantId = req.params.restaurantId;
-    let sql_query = mysql.format("SELECT description FROM items WHERE restaurant_id = ?", [restaurantId]);
+    let sql_query = mysql.format("SELECT id, description FROM items WHERE restaurant_id = ?", [restaurantId]);
     con.query(sql_query, function(err,result,fields){
         if (err) {
             res.send(err);
         };
         res.send(result);
+    });
+})
+
+/**
+ * HTTP GET recommendation.
+ */
+app.get("/item/recommend/:userId/:restaurantId", (req,res) => {
+    let userId = req.params.userId;
+    let restaurantId = req.params.restaurantId;
+    let user_query = mysql.format("SELECT preferences FROM users WHERE id = ?", [userId]);
+    let desc_query = mysql.format("SELECT id, description FROM items WHERE restaurant_id = ?", [restaurantId]);
+    
+    con.query(user_query, function(err,prefResult,fields){
+        if (err) {
+            res.send(err);
+        };
+        var preference = prefResult[0]["preferences"];
+
+        con.query(desc_query, function(err,descResult,fields){
+            if (err) {
+                res.send(err);
+            };
+
+            var itemDescriptionMap = new Map()
+
+            descResult.forEach(item => {
+                itemDescriptionMap.set(item["id"], item["description"])
+            });
+
+            var itemId = recommendation.getRecommendation(preference, itemDescriptionMap);
+
+            res.send({"itemId" : itemId});
+        });
     });
 })
 

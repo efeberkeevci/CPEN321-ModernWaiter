@@ -83,6 +83,9 @@ function jensenShannonDivergenceCalculator(sampleA, sampleB){
     var itemKeys = Array.from(itemDescriptionMap.keys());
     var preferenceArray = normalizeStringToArray(preference)
 
+    console.log(itemScoreMap)
+    console.log(preferenceArray)
+
     itemKeys.forEach(itemId => {
         var descriptionArray = normalizeStringToArray(itemDescriptionMap.get(itemId))
         var jsdScore = jensenShannonDivergenceCalculator(preferenceArray, descriptionArray)
