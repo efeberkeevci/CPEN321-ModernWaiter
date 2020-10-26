@@ -408,6 +408,8 @@ app.get("/item/recommend/:userId/:restaurantId", (req,res) => {
                 res.send(err);
             };
 
+            console.log(descResult);
+
             var itemDescriptionMap = new Map()
 
             descResult.forEach(item => {
