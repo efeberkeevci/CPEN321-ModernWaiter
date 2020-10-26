@@ -251,14 +251,19 @@ app.put("/order/session", (req,res) => {
 app.put("/order/paid", (req,res) => {
     let orderId = req.body.orderId;
     let hasPaid = req.body.hasPaid;
+    console.log(orderId,hasPaid);
+    console.log("In the order closed part");
     let sql_query = mysql.format("UPDATE orders SET has_paid = ? WHERE id = ?", [hasPaid,orderId]);
         con.query(sql_query, function(err,result,fields){
             if (err) {
+		console.log(err);
                 res.send(err);
             };
+	console.log("Success");
             res.send(result);
             if(hasPaid){
-                push_notification.push_notification();
+               	console.log("in the push notification call");
+		    push_notification.push_notification_func();
             }
         });
 })

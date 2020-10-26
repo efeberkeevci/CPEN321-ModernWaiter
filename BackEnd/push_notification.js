@@ -16,7 +16,8 @@ admin.initializeApp({
 */
 
 app = admin.initializeApp();
-function push_notification(){
+function push_notification_func(){
+console.log("Sending push notification");
 var token ="dti7Svc4SC6utD7GPz9ZXy:APA91bEVZQYS-PJ1OYgYqbOElQkM_BTI7Si_S3eLXOpO-oIpM155VGAJzl-FJHYFUNMMYdfg3cOvWM6bX5X-6m6k7H6QQCdZA96qEZt3lwRpE68iOmb7uVx8hfbx5SZUuy8MnnTdGArg";
 subscribe(token,"1");
 // The topic name can be optionally prefixed with "/topics/".
@@ -101,4 +102,4 @@ function messageAccountisClosed(orderId){
 //Later use case => Send push notification upon succsfull payment of an item
     //To do this, in the app.post("/mark/item/has/paid" route make callback to this function
 
-module.exports = {messageAccountisClosed, subscribe};
+module.exports = {push_notification_func,messageAccountisClosed, subscribe};
