@@ -14,11 +14,11 @@ import java.util.List;
 
 public class MenuRecyclerAdapter extends RecyclerView.Adapter<MenuRecyclerAdapter.ViewHolder> {
 
-    private final List<MenuItem> mValues;
+    private final List<MenuItem> menuItems;
     private final OnItemClickListener listener;
 
     public MenuRecyclerAdapter(List<MenuItem> items, OnItemClickListener listener) {
-        mValues = items;
+        menuItems = items;
         this.listener = listener;
     }
 
@@ -32,13 +32,13 @@ public class MenuRecyclerAdapter extends RecyclerView.Adapter<MenuRecyclerAdapte
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
+        holder.mItem = menuItems.get(position);
         holder.bind(listener);
     }
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return menuItems.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

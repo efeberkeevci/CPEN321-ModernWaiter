@@ -1,5 +1,7 @@
 package com.cpen321.modernwaiter.ui;
 
+import java.text.DecimalFormat;
+
 public class MenuItem {
     public String name;
     public String description;
@@ -22,6 +24,16 @@ public class MenuItem {
     public void decrementQuantity() {
         if (!"0".equals(quantity))
             quantity = String.valueOf(Integer.parseInt(quantity) - 1);
+    }
+
+    public String getPriceString() {
+        return "$" + new DecimalFormat("#.##")
+                .format(price);
+    }
+
+    public String getTotalPriceString() {
+        return "$" + new DecimalFormat("#.##")
+                .format(price * Integer.parseInt(quantity));
     }
 
     @Override

@@ -50,10 +50,7 @@ public class BillRecyclerAdapter extends RecyclerView.Adapter<BillRecyclerAdapte
         holder.nameView.setText(menuItem.name);
         holder.quantityView.setText(String.valueOf(billMap.get(menuItem)));
 
-        String priceInDollars = "$" + new DecimalFormat("#.##")
-                .format(billMap.get(menuItem) * menuItem.price);
-
-        holder.priceView.setText(priceInDollars);
+        holder.priceView.setText(menuItem.getTotalPriceString());
     }
 
     @Override
