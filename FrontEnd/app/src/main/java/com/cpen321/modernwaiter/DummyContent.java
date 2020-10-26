@@ -1,4 +1,4 @@
-package com.cpen321.modernwaiter.ui.menu.dummy;
+package com.cpen321.modernwaiter;
 
 import com.cpen321.modernwaiter.ui.MenuItem;
 
@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Helper class for providing sample content for user interfaces created by
@@ -40,7 +41,10 @@ public class DummyContent {
     }
 
     private static MenuItem createDummyItem(int position) {
-        return new MenuItem("Item " + position, makeDetails(position), String.valueOf(0), String.valueOf(position));
+
+        Random r = new Random();
+        double price = 1 + (20) * r.nextDouble();
+        return new MenuItem("Item " + position, makeDetails(position), String.valueOf(0), String.valueOf(position), price);
     }
 
     private static String makeDetails(int position) {

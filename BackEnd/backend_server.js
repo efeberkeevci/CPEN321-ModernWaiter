@@ -1,5 +1,6 @@
 var express = require("express");
 var mysql = require('mysql');
+const { subscribe, messageAccountisClosed } = require("./push_notification.js");
 var app = express();
 var push_notification = require("./push_notification.js");
 
@@ -25,6 +26,12 @@ con.connect(function(err) {
 con.query("USE MODERN_WAITER_DB", function(err,result,fields){
     if (err) throw err;
 });
+
+function pushNotificationsDemo(){
+    subscribe("dti7Svc4SC6utD7GPz9ZXy:APA91bEVZQYS-PJ1OYgYqbOElQkM_BTI7Si_S3eLXOpO-oIpM155VGAJzl-FJHYFUNMMYdfg3cOvWM6bX5X-6m6k7H6QQCdZA96qEZt3lwRpE68iOmb7uVx8hfbx5SZUuy8MnnTdGArg","1")
+    messageAccountisClosed(1);
+}
+pushNotificationsDemo();
 
 /**
  * HTTP GET request to acquire details of a
@@ -315,6 +322,6 @@ app.put("/ordered-items/paid", (req,res) => {
 
 app.post("/registrationToken", (req,res) => {
     let registrationToken = req.body.registrationToken;
-    let orderId = req.body.userId;
+    let orderId = "1";
     res.send(push_notification.subscribe(registrationToken,orderId));
 })

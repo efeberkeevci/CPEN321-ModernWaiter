@@ -35,11 +35,13 @@ public class MainPayment extends AppCompatActivity {
                 // TODO
             }
         });
+
+        Intent intent = new Intent(this, PerItemPayment.class);
         Button pay_per_item = findViewById(R.id.pay_per_item);
         pay_per_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO
+                startActivity(intent);
             }
         });
     }

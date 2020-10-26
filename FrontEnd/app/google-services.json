@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "92284251727",
+    "firebase_url": "https://modern-waiter-47e96.firebaseio.com",
+    "project_id": "modern-waiter-47e96",
+    "storage_bucket": "modern-waiter-47e96.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:92284251727:android:dd01b4831d22818161043a",
+        "android_client_info": {
+          "package_name": "com.cpen321.modernwaiter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "92284251727-uj1f7v4d42tofeb0g27tee4qsjhnu2os.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxe9IlV6tv1XxhT6Ezjws2YdPtbLjpbRs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "92284251727-uj1f7v4d42tofeb0g27tee4qsjhnu2os.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

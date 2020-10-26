@@ -4,40 +4,54 @@ import com.cpen321.modernwaiter.ui.MenuItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.stream.Collectors;
 
 /*  Contains all the data required for this table's session such as its
     cart & the restaurant's menu.
+
+    Note that we might change underlying datastructure & thats why we have
+    the getter methods.
  */
 public class TableSession {
 
-    private HashMap<Integer, Integer> orderedItems;
-    private final ArrayList<MenuItem> orderCart;
+    // This is a
+    private HashMap<MenuItem, Integer> orderedItems;
 
-    TableSession(List<MenuItem> menu) {
+    // A list of Menu's items. Each menu's item will
+    // its common attribute and also a field called quantity.
+    // Quantity is the amount that has is in a user's cart
+    // not to be mistaken with the items that are already ordered in the backend
+    // Once an order is sent to the backend, it cannot be cancelled
+    private final ArrayList<MenuItem> menuItems;
 
-        orderCart = new ArrayList<>(menu);
-        orderedItems = orderCart.stream().collect(
-                Collectors.toMap(x -> x.id, x -> 0, (s, a) -> s, HashMap::new)
+    //creates a new session
+    TableSession() {
+
+        // TODO: Initialize the menu
+        menuItems = new ArrayList<>(DummyContent.ITEMS);
+
+        orderedItems = menuItems.stream().collect(
+                Collectors.toMap(x -> x, x -> 0, (s, a) -> s, HashMap::new)
         );
 
     }
 
-    public ArrayList<MenuItem> getMenu() {
-        return orderCart;
+    // Get the list of all items in the menu
+    public ArrayList<MenuItem> getMenuItems() {
+        return menuItems;
     }
 
+    //remove all items from cart
     public void checkout() {
 
         // TODO: NOTIFY SERVER THAT CUSTOMER ORDER
         // ITEMS IN THE ORDERCART BASED ON ITS MENUITEM.QUANTITY
 
 
-        for (MenuItem menuItem : orderCart) {
+        for (MenuItem menuItem : menuItems) {
             // Add those value into orderedItems
             orderedItems.replace(
-                    menuItem.id, orderedItems.get(menuItem.id) + 1
+                    menuItem, orderedItems.get(menuItem) + Integer.valueOf(menuItem.quantity)
             );
 
             // Clear the cart of all orders
@@ -45,10 +59,47 @@ public class TableSession {
         }
     }
 
-    public void stop() {
-        System.out.println(this);
+    // TODO: Update the bill based on the backend
+    public void UpdateBill() {
+        int id = MainActivity.getID();
+
+        /*String url = "http://my-json-feed";
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        JSONArray jsonArray = null;
+                        try {
+                            jsonArray = response.getJSONArray("data");
+                            for( int i = 0; i<jsonArray.length (); i++) {
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                String item_name = jsonObject.getString("name");
+                                double item_price = jsonObject.getDouble("cost");
+                                String item_id = jsonObject.getString("id");
+                                //TODO: check logic for these values, I ignore description and quantity when getting data from backend
+                                orderCart.add(new MenuItem(item_name,"", "1", item_id, item_price));
+                            }
+                            updateOrderQuantities();
+                        } catch(JSONException e){
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO: Handle error
+
+                    }
+                });
+        MainActivity.requestQueue.add(jsonObjectRequest);
+        */
     }
 
-    // TODO: ADD me a method that can return the bill
-
+    // Return a map of MenuItems to the quantity ordered in the backend
+    public HashMap<MenuItem, Integer> getBill() {
+        return orderedItems;
+    }
 }
