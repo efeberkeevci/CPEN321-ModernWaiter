@@ -4,8 +4,46 @@
 //Topic value should be the table's orderID
 // These registration tokens come from the client FCM SDKs.
 
-function subscribe(registrationToken, orderId){
 
+
+var admin = require('firebase-admin');
+var serviceAccount = require("/home/modernwaiter/CPEN321-ModernWaiter/BackEnd/modern-waiter-47e96-firebase-adminsdk-exb5m-82aceb8e76.json");
+/*
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://modern-waiter-47e96.firebaseio.com"
+});
+*/
+
+app = admin.initializeApp();
+function push_notification(){
+var token ="dti7Svc4SC6utD7GPz9ZXy:APA91bEVZQYS-PJ1OYgYqbOElQkM_BTI7Si_S3eLXOpO-oIpM155VGAJzl-FJHYFUNMMYdfg3cOvWM6bX5X-6m6k7H6QQCdZA96qEZt3lwRpE68iOmb7uVx8hfbx5SZUuy8MnnTdGArg";
+subscribe(token,"1");
+// The topic name can be optionally prefixed with "/topics/".
+var topic = '1';
+
+var message = {
+  notification: {
+    title: 'Payment Completed!',
+    body: 'All items are paid.'
+  },
+	topic:topic
+};
+
+// Send a message to devices subscribed to the provided topic.
+admin.messaging().send(message)
+  .then((response) => {
+    // Response is a message ID string.
+    console.log('Successfully sent message:', response);
+  })
+  .catch((error) => {
+    console.log('Error sending message:', error);
+  });
+}
+
+
+function subscribe(registrationToken, orderId){
+    console.log("SUBSCRIBED");
     // Subscribe the devices corresponding to the registration tokens to the
     // topic.
     let topic = orderId;
@@ -43,7 +81,7 @@ function unsubscribe(registrationToken, orderId){
 
 //Initial use case => Send push notification when order is closed aka the whole amount has been paid
 function messageAccountisClosed(orderId){
-
+    console.log("SENDING TOPIC MESSAGES");
     var message = {
     title : "Payment Completed!",
     topic: orderId
