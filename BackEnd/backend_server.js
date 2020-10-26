@@ -361,6 +361,34 @@ app.put("/ordered-items/paid", (req,res) => {
 */
 
 /**
+ * HTTP GET request to retrieve user preferences.
+ */
+app.get("/user/:id", (req,res) => {
+    let id = req.params.id;
+    let sql_query = mysql.format("SELECT preferences FROM users WHERE id = ?", [id]);
+    con.query(sql_query, function(err,result,fields){
+        if (err) {
+            res.send(err);
+        };
+        res.send(result);
+    });
+})
+
+/**
+ * HTTP GET request to item descriptions.
+ */
+app.get("/item/descriptions/:restaurantId", (req,res) => {
+    let restaurantId = req.params.restaurantId;
+    let sql_query = mysql.format("SELECT description FROM items WHERE restaurant_id = ?", [restaurantId]);
+    con.query(sql_query, function(err,result,fields){
+        if (err) {
+            res.send(err);
+        };
+        res.send(result);
+    });
+})
+
+/**
  * HTTP POST request to register token for
  * push notification service.
  */
