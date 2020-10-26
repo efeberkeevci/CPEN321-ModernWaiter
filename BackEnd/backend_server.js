@@ -330,32 +330,35 @@ app.put("/ordered-items/paid", (req,res) => {
  * Returns the item Id of the recommended
  * food with a status code of 200.
  */
-app.get("/items/recommendation/", (req,res) =>{
-    let userId = req.body.userId;
+
+/*app.get("/items/recommendation/:userId", (req,res) =>{
+    console.log("DEBUG: Called recommendation API");
+    let userId = req.param.userId;
     let restaurantId = req.body.restaurantId;
 
-    let user_preference_query = mysql.format("SELECT preferences FROM users WHERE id = 1", [userId]);
+    let user_preference_query = mysql.format("SELECT preferences FROM users WHERE id = ?", [userId]);
     let item_descriptions_query = mysql.format("SELECT description FROM items WHERE restaurant_id = ?", [restaurantId]);
 
-    var preferences = con.query(user_preference_query, function(err,result,fields){
+    con.query(user_preference_query, function(err,result,fields){
         if (err) {
             res.send(err);
-        }
-        console.log(result);
-        return result;
-    });
+        };
 
-    var descriptions = con.query(item_descriptions_query, function(err,result,fields){
-        if (err) {
-            res.send(err);
-        }
-        console.log(result);
-        return result;
-    });
+	console.log(result);
+	res.send(result);
 
-    var recommendedItemId = recommendation.getRecommendation(preferences, descriptions);
-    console.log(recommendedItemId);
+        con.query(item_descriptions_query, function(err,descriptions,fields){
+            if (err) {
+                res.send(err);
+            }
+            console.log(descriptions);
+
+            var recommendedItemId = recommendation.getRecommendation(preference, descriptions);
+            res.send(recommendedItemId);
+        });
+    });
 });
+*/
 
 /**
  * HTTP POST request to register token for
