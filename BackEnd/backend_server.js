@@ -325,42 +325,6 @@ app.put("/ordered-items/paid", (req,res) => {
 })
 
 /**
- * HTTP GET request to get recommendation
- * for user from a specific restaurant.
- * Returns the item Id of the recommended
- * food with a status code of 200.
- */
-
-/*app.get("/items/recommendation/:userId", (req,res) =>{
-    console.log("DEBUG: Called recommendation API");
-    let userId = req.param.userId;
-    let restaurantId = req.body.restaurantId;
-
-    let user_preference_query = mysql.format("SELECT preferences FROM users WHERE id = ?", [userId]);
-    let item_descriptions_query = mysql.format("SELECT description FROM items WHERE restaurant_id = ?", [restaurantId]);
-
-    con.query(user_preference_query, function(err,result,fields){
-        if (err) {
-            res.send(err);
-        };
-
-	console.log(result);
-	res.send(result);
-
-        con.query(item_descriptions_query, function(err,descriptions,fields){
-            if (err) {
-                res.send(err);
-            }
-            console.log(descriptions);
-
-            var recommendedItemId = recommendation.getRecommendation(preference, descriptions);
-            res.send(recommendedItemId);
-        });
-    });
-});
-*/
-
-/**
  * HTTP GET request to retrieve user preferences.
  */
 app.get("/user/preferences/:id", (req,res) => {
@@ -389,14 +353,17 @@ app.get("/item/descriptions/:restaurantId", (req,res) => {
 })
 
 /**
- * HTTP GET recommendation.
+ * HTTP GET request to get a recommendation for
+ * an item at a specific restaurant unique to the
+ * user. Returns the recommended item Id with a
+ * status code of 200.
  */
-app.get("/item/recommend/:userId/:restaurantId", (req,res) => {
-    let userId = req.params.userId;
-    let restaurantId = req.params.restaurantId;
+app.get("/item/recommend", (req,res) => {
+    let userId = req.body.userId;
+    let restaurantId = req.body.restaurantId;
     let user_query = mysql.format("SELECT preferences FROM users WHERE id = ?", [userId]);
     let desc_query = mysql.format("SELECT id, description FROM items WHERE restaurant_id = ?", [restaurantId]);
-    
+
     con.query(user_query, function(err,prefResult,fields){
         if (err) {
             res.send(err);
@@ -408,15 +375,16 @@ app.get("/item/recommend/:userId/:restaurantId", (req,res) => {
                 res.send(err);
             };
 
-            console.log(descResult);
-
+            //console.log(JSON.stringify(descResult));
+            var descriptionJsonArray = JSON.parse(JSON.stringify(descResult));
             var itemDescriptionMap = new Map()
 
-            descResult.forEach(item => {
+            descriptionJsonArray.forEach(item => {
                 itemDescriptionMap.set(item["id"], item["description"])
             });
 
-            var itemId = recommendation.getRecommendation(preference, itemDescriptionMap);
+            // console.log(itemDescriptionMap);
+	    var itemId = recommendation.getRecommendation(preference, itemDescriptionMap);
 
             res.send({"itemId" : itemId});
         });

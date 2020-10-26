@@ -83,19 +83,18 @@ function jensenShannonDivergenceCalculator(sampleA, sampleB){
     var itemKeys = Array.from(itemDescriptionMap.keys());
     var preferenceArray = normalizeStringToArray(preference)
 
-    console.log(itemScoreMap)
-    console.log(preferenceArray)
-
     itemKeys.forEach(itemId => {
         var descriptionArray = normalizeStringToArray(itemDescriptionMap.get(itemId))
-        var jsdScore = jensenShannonDivergenceCalculator(preferenceArray, descriptionArray)
+	var jsdScore = jensenShannonDivergenceCalculator(preferenceArray, descriptionArray)
         itemScoreMap.set(jsdScore, itemId)
     })
     
+    console.log(itemScoreMap)
     var itemScoreMapKeys = Array.from(itemScoreMap.keys());
     itemScoreMapKeys = itemScoreMapKeys.sort(function(a, b){return a-b})
+    console.log(itemScoreMapKeys)
   
-    return itemScoreMap.get(keys[0])
+    return itemScoreMap.get(itemScoreMapKeys[0])
   }
 
   function normalizeStringToArray(stringInput){
