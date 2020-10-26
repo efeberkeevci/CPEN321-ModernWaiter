@@ -4,46 +4,26 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import androidx.annotation.NonNull;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
-import com.cpen321.modernwaiter.ui.MenuItem;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.cpen321.modernwaiter.ui.MenuItem;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.RemoteMessage;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.HashMap;
-import java.util.Map;
-
-import javax.net.ssl.HttpsURLConnection;
-import com.cpen321.modernwaiter.MyFirebaseMessagingService;
+import java.util.LinkedList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -87,7 +67,30 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
         MyFirebaseMessagingService.sendToken();
 
+        Log.i("NOTE:","retrieving menu items");
 
+        RequestQueue queue = Volley.newRequestQueue(this);
+        LinkedList<MenuItem> response_menu_items = new LinkedList<MenuItem>();
+        String url ="http://52.188.158.129:3000/items/1";
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.i("Response:",response);
+
+                        //Toast.makeText(TimeActivity.this,"Date: "+(response),Toast.LENGTH_LONG).show();
+                        //time_text = findViewById(R.id.time_text);
+                        //time_text.setText("Date: "+(response));
+                        menuItemParser(response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("asd",error.toString());
+                //Toast.makeText(TimeActivity.this,("Error"),Toast.LENGTH_LONG);
+            }
+        });
+        queue.add(stringRequest);
     }
     public static int getID(){
         return ID;
@@ -96,5 +99,13 @@ public class MainActivity extends AppCompatActivity {
     public void openDetailItemView(int id) {
 
     }
+    private void menuItemParser(String json){
+        Log.i("NOTE","İN menuItemParser FUNC");
+        
+            // convert JSON array to Java List
+            Log.i("NOTE","parsing");
+            List<MenuItem> menu_items = new Gson().fromJson(json, new TypeToken<List<MenuItem>>() {}.getType());
+            menu_items.forEach(item ->  Log.i("ITEM",item.name));
 
+    }
 }

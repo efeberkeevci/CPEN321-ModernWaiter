@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 /**
  * Helper class for providing sample content for user interfaces created by
@@ -31,7 +30,7 @@ public class DummyContent {
     static {
         // Add some sample items.
         for (int i = 1; i <= COUNT; i++) {
-            addItem(createDummyItem(i));
+            //addItem(createDummyItem(i));
         }
     }
 
@@ -40,13 +39,14 @@ public class DummyContent {
         ITEM_MAP.put(item.id, item);
     }
 
+    /*
     private static MenuItem createDummyItem(int position) {
 
         Random r = new Random();
-        double price = 1 + (20) * r.nextDouble();
-        return new MenuItem("Item " + position, makeDetails(position), String.valueOf(0), String.valueOf(position), price);
+        double cost = 1 + (20) * r.nextDouble();
+        return new MenuItem("Item " + position, makeDetails(position), String.valueOf(0), String.valueOf(position), cost);
     }
-
+*/
     private static String makeDetails(int position) {
         StringBuilder builder = new StringBuilder();
         builder.append("Details about Item: ").append(position);
