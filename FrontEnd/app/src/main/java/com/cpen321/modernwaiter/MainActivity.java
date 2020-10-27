@@ -2,6 +2,7 @@ package com.cpen321.modernwaiter;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +18,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.cpen321.modernwaiter.ui.MenuItem;
+import com.cpen321.modernwaiter.ui.menu.MenuFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -93,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                         //Toast.makeText(TimeActivity.this,"Date: "+(response),Toast.LENGTH_LONG).show();
                         //time_text = findViewById(R.id.time_text);
                         //time_text.setText("Date: "+(response));
-                        menuItemParser(response);
+                        tableSession.addMenuItems(menuItemParser(response));
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -104,11 +106,11 @@ public class MainActivity extends AppCompatActivity {
         });
         queue.add(stringRequest);
     }
-    private void menuItemParser(String json){
+    private ArrayList<MenuItem> menuItemParser(String json){
         Log.i("NOTE","İN menuItemParser FUNC");
 
             // convert JSON array to Java List
             Log.i("NOTE","parsing");
-            menu_items = new Gson().fromJson(json, new TypeToken<List<MenuItem>>() {}.getType());
+            return new Gson().fromJson(json, new TypeToken<List<MenuItem>>() {}.getType());
     }
 }

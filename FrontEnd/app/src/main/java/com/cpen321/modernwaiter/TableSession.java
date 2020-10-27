@@ -35,12 +35,18 @@ public class TableSession {
         orderedItems = menuItems.stream().collect(
                 Collectors.toMap(x -> x, x -> 0, (s, a) -> s, HashMap::new)
         );
-
     }
 
     // Get the list of all items in the menu
     public ArrayList<MenuItem> getMenuItems() {
         return menuItems;
+    }
+
+    public void addMenuItems(ArrayList<MenuItem> menuItems) {
+        for(MenuItem item : menuItems){
+            item.quantity = "0";
+            this.menuItems.add(item);
+        }
     }
 
     //remove all items from cart
