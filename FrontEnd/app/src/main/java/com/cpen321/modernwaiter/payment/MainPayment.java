@@ -35,6 +35,7 @@ public class MainPayment extends AppCompatActivity {
             public void onClick(View view) {
                 // TODO
                 option = "paySplitEvenly";
+                startActivity(startStripePayment);
             }
         });
 
