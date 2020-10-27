@@ -22,13 +22,15 @@ public class TableSession {
     // Quantity is the amount that has is in a user's cart
     // not to be mistaken with the items that are already ordered in the backend
     // Once an order is sent to the backend, it cannot be cancelled
-    private final ArrayList<MenuItem> menuItems;
+    private ArrayList<MenuItem> menuItems;
 
     //creates a new session
     TableSession() {
 
         // TODO: Initialize the menu
-        menuItems = new ArrayList<>(DummyContent.ITEMS);
+        //Make request to server to retrieve menu items to display
+
+        menuItems = MainActivity.menu_items;
 
         orderedItems = menuItems.stream().collect(
                 Collectors.toMap(x -> x, x -> 0, (s, a) -> s, HashMap::new)

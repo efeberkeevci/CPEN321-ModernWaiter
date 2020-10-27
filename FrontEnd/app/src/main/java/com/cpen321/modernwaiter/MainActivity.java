@@ -21,6 +21,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -36,12 +37,13 @@ public class MainActivity extends AppCompatActivity {
     //Backend stuff
     private static final int ID = 1;
     public static RequestQueue requestQueue;
+    public static ArrayList<MenuItem> menu_items = new ArrayList<MenuItem>();
 
     BottomNavigationView navView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        retrieveMenuItems();
         tableSession = new TableSession();
 
         setContentView(R.layout.activity_main);
@@ -67,6 +69,16 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
         MyFirebaseMessagingService.sendToken();
 
+
+    }
+    public static int getID(){
+        return ID;
+    }
+
+    public void openDetailItemView(int id) {
+
+    }
+    private void retrieveMenuItems(){
         Log.i("NOTE:","retrieving menu items");
 
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -92,20 +104,11 @@ public class MainActivity extends AppCompatActivity {
         });
         queue.add(stringRequest);
     }
-    public static int getID(){
-        return ID;
-    }
-
-    public void openDetailItemView(int id) {
-
-    }
     private void menuItemParser(String json){
         Log.i("NOTE","İN menuItemParser FUNC");
-        
+
             // convert JSON array to Java List
             Log.i("NOTE","parsing");
-            List<MenuItem> menu_items = new Gson().fromJson(json, new TypeToken<List<MenuItem>>() {}.getType());
-            menu_items.forEach(item ->  Log.i("ITEM",item.name));
-
+            menu_items = new Gson().fromJson(json, new TypeToken<List<MenuItem>>() {}.getType());
     }
 }
