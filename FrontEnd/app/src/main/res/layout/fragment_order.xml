@@ -8,13 +8,13 @@
     android:background="@color/design_default_color_background">
 
 
-<androidx.recyclerview.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/order_recycler"
         android:name="com.cpen321.modernwaiter.ui.order.OrderFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layoutManager="LinearLayoutManager"
-        app:layout_constraintBottom_toTopOf="@+id/checkoutButton"
+        app:layout_constraintBottom_toTopOf="@+id/startBillButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"

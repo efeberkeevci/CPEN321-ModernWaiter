@@ -89,7 +89,7 @@ public class MenuFragment extends Fragment {
         if (mainActivity.tableSession.getFeatureItem() != null) {
             recyclerView.setAdapter(menuRecyclerAdapter);
             TextView featureNameView = view.findViewById(R.id.feature_name);
-            featureNameView.setText("Recommended: " + mainActivity.tableSession.getFeatureItem().name);
+            featureNameView.setText("Special: " + mainActivity.tableSession.getFeatureItem().name);
 
             TextView featureDescView = view.findViewById(R.id.feature_description);
             featureDescView.setText(mainActivity.tableSession.getFeatureItem().description);
