@@ -13,6 +13,10 @@
         <action
             android:id="@+id/action_navigation_menu_to_navigation_order"
             app:destination="@id/navigation_order" />
+
+        <action
+            android:id="@+id/action_navigation_menu_to_navigation_menu"
+            app:destination="@id/navigation_menu" />
     </fragment>
 
     <fragment

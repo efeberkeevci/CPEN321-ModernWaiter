@@ -5,6 +5,8 @@ import android.app.Activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -265,10 +267,10 @@ public class TableSession {
 
     public void updateMenuFragment() {
         // TODO:
-        MenuFragment menuFragment = (MenuFragment) activity.getSupportFragmentManager().findFragmentById(R.id.fragment_menu);
-        if (menuFragment != null) {
-            menuFragment.refresh();
-        }
+        NavController navController = Navigation.findNavController(activity, R.id.nav_host_fragment);
+        System.out.println(navController.getCurrentDestination());
+        if(navController.getCurrentDestination().getId() == R.id.navigation_menu)
+            navController.navigate(R.id.action_navigation_menu_to_navigation_menu);
 
     }
 
