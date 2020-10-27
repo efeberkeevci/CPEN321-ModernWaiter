@@ -44,6 +44,7 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -51,13 +52,12 @@ public class StripePayment extends AppCompatActivity {
     /**
      * This example collects card payments, implementing the guide here: https://stripe.com/docs/payments/accept-a-payment-synchronously#android
      */
-    // 10.0.2.2 is the Android emulator's alias to localhost
-    private static final String BACKEND_URL = "http://10.0.2.2:3000/";
-    private double totalAmount = 0;
+    private int totalAmount = 0;
     private Stripe stripe;
     private Activity context = this;
-    private int num_users = 0;
+    private int num_users = 1;
     private TextView amount_to_pay;
+    private final RequestQueue requestQueue = MainActivity.requestQueue;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,12 +92,12 @@ public class StripePayment extends AppCompatActivity {
     }
 
     private void requestKey() {
-        RequestQueue queue = Volley.newRequestQueue(this);
+        RequestQueue queue = requestQueue;
         // For added security, our sample app gets the publishable key from the server
 
         StringRequest request = new StringRequest(
                 Request.Method.GET,
-                BACKEND_URL + "key",
+                HARDCODED.URL + "key",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -161,11 +161,11 @@ public class StripePayment extends AppCompatActivity {
                                 JSONObject jsonObject = response.getJSONObject(0);
                                 int id = jsonObject.getInt("id");
                                 int tableId = jsonObject.getInt("tables_id");
-                                double amount = jsonObject.getDouble("users_id");
+                               // double amount = jsonObject.getDouble("users_id");
                                 int has_paid = jsonObject.getInt("has_paid");
                                 int is_active_session = jsonObject.getInt("is_active_session");
                                 //TODO: check logic for these values, I ignore description and quantity when getting data from backend
-                                totalAmount = amount;
+                                totalAmount = 1600;
 
                             } catch(JSONException e){
                                 e.printStackTrace();
@@ -187,42 +187,27 @@ public class StripePayment extends AppCompatActivity {
             Log.i("STRIPEPAYMENT", "INSIDE else");
             totalAmount = 0;
             String url = HARDCODED.URL + "order/table/"+ HARDCODED.TABLE_ID + "?isActive=1";
-            JsonArrayRequest jsonObjectRequest = new JsonArrayRequest
-                    (Request.Method.GET, url,null, new Response.Listener<JSONArray>() {
-
+            StringRequest request = new StringRequest(
+                    Request.Method.GET,
+                    url,
+                    new Response.Listener<String>() {
                         @Override
-                        public void onResponse(JSONArray response) {
-                            Log.i("STRIPEPAYMENT", response.toString());
+                        public void onResponse(String response) {
+                            List<OrderResponse> orderResponseList = new Gson()
+                                    .fromJson(response, new TypeToken<List<OrderResponse>>() {}.getType());
 
-                            try {
-
-                                for( int i = 0; i<response.length (); i++) {
-                                    JSONObject jsonObject = response.getJSONObject(i);
-                                    int id = jsonObject.getInt("id");
-                                    int tableId = jsonObject.getInt("tables_id");
-                                    double amount = jsonObject.getDouble("users_id");
-                                    int has_paid = jsonObject.getInt("has_paid");
-                                    int is_active_session = jsonObject.getInt("is_active_session");
-                                    totalAmount = totalAmount + amount;
-                                    num_users++;
-                                }
-                                amount_to_pay.setText(String.valueOf(totalAmount));
-                            } catch(JSONException e){
-                                e.printStackTrace();
-                                Log.i("STRIPEPAYMENT", "in catch block");
-                            }
+                            totalAmount = (int) (orderResponseList.get(0).amount * 100);
+                            amount_to_pay.setText(String.valueOf(totalAmount));
                         }
-                    }, new Response.ErrorListener() {
-
+                    },
+                    new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            // TODO: Handle error
-                            Log.i("STRIPEPAYMENT", "in error response");
-                            Log.i("STRIPEPAYMENT", error.getMessage());
-
+                            Log.i("asd", error.toString());
                         }
-                    });
-            MainActivity.requestQueue.add(jsonObjectRequest);
+                    }
+            );
+            MainActivity.requestQueue.add(request);
             //get the bill for the entire table
             if(MainPayment.option.equals("payForAll")){
                 return totalAmount;
@@ -249,7 +234,7 @@ public class StripePayment extends AppCompatActivity {
             bodyFields.put("paymentMethodId", paymentMethodId);
             bodyFields.put("currency", "cad");
             // TODO:
-            bodyFields.put("amounts", String .valueOf(totalAmount));
+            bodyFields.put("orderAmount", String.valueOf(totalAmount));
         } else {
             bodyFields.put("paymentIntentId", paymentIntentId);
         }
@@ -261,7 +246,7 @@ public class StripePayment extends AppCompatActivity {
 
         StringRequest stringRequest = new StringRequest(
                 Request.Method.POST,
-                BACKEND_URL + "pay",
+                HARDCODED.URL + "pay",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -439,5 +424,9 @@ public class StripePayment extends AppCompatActivity {
                     }
                 });
         MainActivity.requestQueue.add(jsonObjectRequest);
+    }
+
+    public class OrderResponse {
+        public double amount;
     }
 }
