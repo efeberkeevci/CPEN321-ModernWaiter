@@ -56,6 +56,10 @@ public class MenuItem {
         return Integer.parseInt(quantity);
     }
 
+    public int getCost() {
+        return (int) Math.round(cost * 100);
+    }
+
     @Override
     public int hashCode() {
         return id;
