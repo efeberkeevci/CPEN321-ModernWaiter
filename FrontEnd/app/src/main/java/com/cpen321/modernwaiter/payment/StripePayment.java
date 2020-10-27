@@ -1,8 +1,6 @@
 package com.cpen321.modernwaiter.payment;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,12 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,14 +22,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.cpen321.modernwaiter.HARDCODED;
 import com.cpen321.modernwaiter.MainActivity;
 import com.cpen321.modernwaiter.R;
 import com.cpen321.modernwaiter.ui.MenuItem;
 import com.cpen321.modernwaiter.ui.pay.BillRecyclerAdapter;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.stripe.android.ApiResultCallback;
 import com.stripe.android.PaymentConfiguration;
@@ -71,7 +64,7 @@ public class StripePayment extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.activity_stripe_payment, container, false);
+        view = inflater.inflate(R.layout.fragment_stripe, container, false);
 
         String option_text;
         String amount_text;

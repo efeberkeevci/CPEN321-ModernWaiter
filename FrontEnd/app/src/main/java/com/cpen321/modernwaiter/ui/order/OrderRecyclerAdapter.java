@@ -36,7 +36,7 @@ public class OrderRecyclerAdapter extends RecyclerView.Adapter<OrderRecyclerAdap
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.bill_item, parent, false);
+                .inflate(R.layout.item_bill, parent, false);
 
         return new ViewHolder(view);
     }

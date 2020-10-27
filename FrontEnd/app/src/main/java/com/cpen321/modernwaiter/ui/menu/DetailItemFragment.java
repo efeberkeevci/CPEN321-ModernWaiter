@@ -44,6 +44,9 @@ public class DetailItemFragment extends Fragment {
         TextView descriptionTextView = view.findViewById(R.id.description);
         descriptionTextView.setText(menuItem.description);
 
+        TextView priceTextView = view.findViewById(R.id.price);
+        priceTextView.setText(menuItem.getPriceString());
+
         Button incrementButton = view.findViewById(R.id.incrementButton);
         Button decrementButton = view.findViewById(R.id.decrementButton);
 

@@ -27,7 +27,7 @@ public class PerItemRecyclerAdapter extends RecyclerView.Adapter<PerItemRecycler
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.split_item, parent, false);
+                .inflate(R.layout.item_split, parent, false);
 
         return new ViewHolder(view);
     }

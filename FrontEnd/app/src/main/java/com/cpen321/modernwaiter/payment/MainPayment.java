@@ -1,18 +1,13 @@
 package com.cpen321.modernwaiter.payment;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.cpen321.modernwaiter.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -28,7 +23,7 @@ public class MainPayment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.activity_main_payment, container, false);
+        View view = inflater.inflate(R.layout.fragment_payment, container, false);
 
         BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.nav_view);
         bottomNavigationView.setVisibility(View.INVISIBLE);

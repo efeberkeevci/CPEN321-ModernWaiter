@@ -1,28 +1,16 @@
 package com.cpen321.modernwaiter.ui.menu;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cpen321.modernwaiter.R;
 import com.cpen321.modernwaiter.ui.MenuItem;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
-
-;
 
 public class MenuRecyclerAdapter extends RecyclerView.Adapter<MenuRecyclerAdapter.ViewHolder> {
 
@@ -37,7 +25,7 @@ public class MenuRecyclerAdapter extends RecyclerView.Adapter<MenuRecyclerAdapte
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.menu_item, parent, false);
+                .inflate(R.layout.item_menu, parent, false);
         return new ViewHolder(view);
     }
 
@@ -76,28 +64,8 @@ public class MenuRecyclerAdapter extends RecyclerView.Adapter<MenuRecyclerAdapte
             TextView description = (TextView) itemView.findViewById(R.id.description);
             description.setText(mItem.description);
 
-//            ImageView image = (ImageView) itemView.findViewById(R.id.image);
-//            FirebaseStorage storage = FirebaseStorage.getInstance("gs://modern-waiter-47e96.appspot.com");
-//            StorageReference gsReference = storage.getReferenceFromUrl("gs://bucket/images/stars.jpg");
-//
-//            final long ONE_MEGABYTE = 1024 * 1024;
-//            gsReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-//                @Override
-//                public void onSuccess(byte[] bytes) {
-//                    // Data for "images/island.jpg" is returns, use this as needed
-//                    Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-//                    image.setImageBitmap(Bitmap.createScaledBitmap(bmp, image.getWidth(),
-//                            image.getHeight(), false));
-//
-//                }
-//            }).addOnFailureListener(new OnFailureListener() {
-//                @Override
-//                public void onFailure(@NonNull Exception exception) {
-//                    // Handle any errors
-//                    // Set placeholder image
-//                }
-//            });
-
+            TextView priceView = (TextView) itemView.findViewById(R.id.price);
+            priceView.setText(mItem.getPriceString());
 
             TextView quantityTextView = (TextView) itemView.findViewById(R.id.quantity);
             quantityTextView.setText(mItem.quantity);
