@@ -12,6 +12,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -24,6 +26,7 @@ import com.cpen321.modernwaiter.HARDCODED;
 import com.cpen321.modernwaiter.MainActivity;
 import com.cpen321.modernwaiter.R;
 import com.cpen321.modernwaiter.ui.MenuItem;
+import com.cpen321.modernwaiter.ui.pay.BillRecyclerAdapter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.stripe.android.ApiResultCallback;
@@ -38,6 +41,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +55,6 @@ public class StripePayment extends Fragment {
     private Stripe stripe;
     private View view;
     private int num_users = 1;
-    private TextView amount_to_pay;
     private final RequestQueue requestQueue = MainActivity.requestQueue;
 
     @Override
@@ -62,25 +65,43 @@ public class StripePayment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.activity_stripe_payment, container, false);
-        loadPage();
 
-        TextView payment_option = view.findViewById(R.id.payment_option);
-        amount_to_pay = view.findViewById(R.id.amount_to_pay);
         String option_text;
         String amount_text;
 
-        getAmountToPay();
+        //getAmountToPay();
         if(MainPayment.option.equals("payForAll")) option_text = "Total amount to be paid is:";
         else if(MainPayment.option.equals("paySplitEvenly")) option_text = "Total amount to be paid by you after splitting evenly is:";
         else if(MainPayment.option.equals("payPerItem")) option_text = "Toatl amount to be paid by you for the items you selected is:";
         else option_text = "Oops! Looks like something went wrong with your billing";
 
-        payment_option.setText(option_text);
-
-        amount_text = "$ " + String.valueOf(totalAmount) + " CAD";
-        amount_to_pay.setText(amount_text);
-
+        loadBillRecycler();
+        loadPage();
         return view;
+    }
+
+    private void loadBillRecycler() {
+        Context context = view.getContext();
+
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.stripe_recycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
+        MainActivity mainActivity = (MainActivity) getActivity();
+
+        HashMap<MenuItem, Integer> billMap = mainActivity.tableSession.getBill();
+
+        BillRecyclerAdapter billRecyclerAdapter = new BillRecyclerAdapter(billMap);
+        recyclerView.setAdapter(billRecyclerAdapter);
+
+        totalAmount = 0;
+
+        for(MenuItem menuItem : mainActivity.tableSession.getBill().keySet()) {
+            totalAmount += menuItem.getCost() * mainActivity.tableSession.getBill().get(menuItem);
+        }
+
+        Button payButton = view.findViewById(R.id.payButton);
+        payButton.setText("Pay $" + new DecimalFormat("#.##")
+                .format((double) totalAmount / 100));
     }
 
     private void loadPage() {
@@ -197,7 +218,6 @@ public class StripePayment extends Fragment {
                                     .fromJson(response, new TypeToken<List<OrderResponse>>() {}.getType());
 
                             totalAmount = (int) (orderResponseList.get(0).amount * 100);
-                            amount_to_pay.setText(String.valueOf(totalAmount));
                         }
                     },
                     new Response.ErrorListener() {
