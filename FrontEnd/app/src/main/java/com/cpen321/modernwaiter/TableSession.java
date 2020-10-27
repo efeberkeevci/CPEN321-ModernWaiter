@@ -1,6 +1,10 @@
 package com.cpen321.modernwaiter;
 
+import android.app.Activity;
 import android.view.Menu;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -39,11 +43,14 @@ public class TableSession {
 
     private MenuItem featureItem;
 
-    public static int orderId = -1;
+    public int orderId = -1;
+
+    private final FragmentManager fragmentManager;
 
     //creates a new session
-    TableSession(RequestQueue requestQueue) {
+    TableSession(RequestQueue requestQueue, FragmentManager fragmentManager) {
         //Make request to server to retrieve menu items to display
+        this.fragmentManager = fragmentManager;
 
         menuItems = MainActivity.menu_items;
         orderedItems = menuItems.stream().collect(
@@ -76,6 +83,8 @@ public class TableSession {
                             if (menuItem.id == featureResponse.itemId);
                                 featureItem = menuItem;
                         }
+
+                        updateCurrentFragment();
                     }
                 },
                 new Response.ErrorListener() {
@@ -250,6 +259,11 @@ public class TableSession {
                 return bodyJSON.getBytes();
             }
         };
+    }
+
+    public void updateCurrentFragment() {
+        // TODO:
+
     }
 
     public class OrderResponse {
