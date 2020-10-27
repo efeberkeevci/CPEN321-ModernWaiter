@@ -265,6 +265,7 @@ public class StripePayment extends AppCompatActivity {
                                 stripe.handleNextActionForPayment(context, paymentIntentClientSecret);
                             } else {
                                 putPaid();
+                                endSession();
                                 startActivity(startPostPayment);
                             }
                         }
