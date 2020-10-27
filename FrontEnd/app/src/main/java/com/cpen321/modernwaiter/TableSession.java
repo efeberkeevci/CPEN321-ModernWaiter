@@ -50,6 +50,8 @@ public class TableSession {
 
     private final AppCompatActivity activity;
 
+    public boolean isActive = true;
+
     //creates a new session
     TableSession(RequestQueue requestQueue, AppCompatActivity activity) {
         //Make request to server to retrieve menu items to display

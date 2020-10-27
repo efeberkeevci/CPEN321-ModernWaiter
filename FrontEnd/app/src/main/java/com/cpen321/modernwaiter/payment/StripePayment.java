@@ -12,6 +12,7 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -261,8 +262,6 @@ public class StripePayment extends Fragment {
 
         final String bodyJSON = new Gson().toJson(bodyFields);
 
-        Intent startPostPayment = new Intent(getActivity(), PostPayment.class);
-
         StringRequest stringRequest = new StringRequest(
                 Request.Method.POST,
                 HARDCODED.URL + "pay",
@@ -285,7 +284,8 @@ public class StripePayment extends Fragment {
                             } else {
                                 putPaid();
                                 endSession();
-                                startActivity(startPostPayment);
+                                ((MainActivity) getActivity()).tableSession.isActive = false;
+                                Navigation.findNavController(view).navigate(R.id.action_navigation_stripe_to_navigation_post_payment);
                             }
                         }
                     }

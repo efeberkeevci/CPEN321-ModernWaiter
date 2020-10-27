@@ -21,6 +21,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.HashMap;
 
+import static com.cpen321.modernwaiter.MainActivity.tableSession;
+
 public class BillFragment extends Fragment {
 
     @Override
@@ -37,6 +39,7 @@ public class BillFragment extends Fragment {
         bottomNavigationView.setVisibility(View.VISIBLE);
 
         Button startPaymentButton = view.findViewById(R.id.startPaymentButton);
+
         startPaymentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -52,7 +55,7 @@ public class BillFragment extends Fragment {
 
         MainActivity mainActivity = (MainActivity) getActivity();
 
-        HashMap<MenuItem, Integer> billMap = mainActivity.tableSession.getBill();
+        HashMap<MenuItem, Integer> billMap = tableSession.getBill();
 
         BillRecyclerAdapter billRecyclerAdapter = new BillRecyclerAdapter(billMap);
         recyclerView.setAdapter(billRecyclerAdapter);
