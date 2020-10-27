@@ -1,8 +1,5 @@
 package com.cpen321.modernwaiter.payment;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,8 +11,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.android.volley.Request;
@@ -25,13 +20,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.cpen321.modernwaiter.HARDCODED;
 import com.cpen321.modernwaiter.MainActivity;
 import com.cpen321.modernwaiter.R;
 import com.cpen321.modernwaiter.ui.MenuItem;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.stripe.android.ApiResultCallback;
 import com.stripe.android.PaymentConfiguration;
@@ -357,6 +350,7 @@ public class StripePayment extends Fragment {
                     });
             MainActivity.requestQueue.add(jsonObjectRequest);
         }
+        Log.i("ORDER PAIUD SERVER CALL CHECK", "YES");
         //PUT request for order has been paid fully
         String url_order_paid = HARDCODED.URL + "order/paid/";
         Map<String,String> params = new HashMap<>();
@@ -414,4 +408,5 @@ public class StripePayment extends Fragment {
     public class OrderResponse {
         public double amount;
     }
+
 }
