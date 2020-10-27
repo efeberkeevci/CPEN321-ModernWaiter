@@ -67,7 +67,11 @@ public class OrderFragment extends Fragment {
             public void onClick(View v) {
                 MainActivity mainActivity = (MainActivity) getActivity();
                 mainActivity.tableSession.checkout();
-                orderRecyclerAdapter.notifyDataSetChanged();
+                while (orderRecyclerAdapter.itemArray.size() != 0) {
+                    orderRecyclerAdapter.itemArray.remove(0);
+                    orderRecyclerAdapter.notifyItemRemoved(0);
+                    orderRecyclerAdapter.notifyItemRangeChanged(0, orderRecyclerAdapter.itemArray.size());
+                }
             }
         });
 
