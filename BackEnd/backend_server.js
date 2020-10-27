@@ -160,7 +160,8 @@ app.post("/order", (req,res) =>{
         if (err) {
             res.send(err);
         }
-	res.send(result);
+    res.send(result);
+    push_notification_order_received("1");
 
 /*        let order_id_query = mysql.format("SELECT id FROM orders WHERE users_id = 1 && is_active_session = 1", [users_id]);
 
@@ -290,7 +291,7 @@ app.put("/order/paid", (req,res) => {
             res.send(result);
             if(hasPaid){
                	console.log("in the push notification call");
-		push_notification.push_notification_func(orderId);
+		push_notification.push_notification_payment_done(orderId);
 	    }
 
         });
