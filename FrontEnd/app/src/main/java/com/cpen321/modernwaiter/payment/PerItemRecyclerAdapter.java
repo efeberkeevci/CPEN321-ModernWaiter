@@ -65,7 +65,7 @@ public class PerItemRecyclerAdapter extends RecyclerView.Adapter<PerItemRecycler
             nameTextView.setText(menuItem.name);
 
             TextView priceTextView = (TextView) view.findViewById(R.id.price);
-            priceTextView.setText(menuItem.getPriceString());
+            priceTextView.setText(String.valueOf(menuItem.cost));
 
             System.out.println(this);
         }

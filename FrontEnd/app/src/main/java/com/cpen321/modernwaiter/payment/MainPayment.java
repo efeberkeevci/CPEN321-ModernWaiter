@@ -13,7 +13,7 @@ import android.widget.Toast;
 import com.cpen321.modernwaiter.R;
 
 public class MainPayment extends AppCompatActivity {
-
+    static String option;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,6 +24,7 @@ public class MainPayment extends AppCompatActivity {
         pay_for_all.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                option = "payForAll";
                 startActivity(startStripePayment);
             }
         });
@@ -33,6 +34,8 @@ public class MainPayment extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // TODO
+                option = "paySplitEvenly";
+                startActivity(startStripePayment);
             }
         });
 
@@ -41,6 +44,7 @@ public class MainPayment extends AppCompatActivity {
         pay_per_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                option = "payPerItem";
                 startActivity(intent);
             }
         });

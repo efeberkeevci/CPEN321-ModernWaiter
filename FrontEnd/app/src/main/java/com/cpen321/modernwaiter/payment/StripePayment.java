@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,8 +18,11 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.cpen321.modernwaiter.HARDCODED;
+import com.cpen321.modernwaiter.MainActivity;
 import com.cpen321.modernwaiter.R;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -29,6 +33,10 @@ import com.stripe.android.Stripe;
 import com.stripe.android.model.PaymentMethod;
 import com.stripe.android.model.PaymentMethodCreateParams;
 import com.stripe.android.view.CardInputWidget;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -41,15 +49,33 @@ public class StripePayment extends AppCompatActivity {
      */
     // 10.0.2.2 is the Android emulator's alias to localhost
     private static final String BACKEND_URL = "http://10.0.2.2:3000/";
-
+    private double totalAmount = 0;
     private Stripe stripe;
     private Activity context = this;
+    private int num_users = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stripe_payment);
         loadPage();
+
+        TextView payment_option = findViewById(R.id.payment_option);
+        TextView amount_to_pay = findViewById(R.id.amount_to_pay);
+        String option_text;
+        String amount_text;
+
+        getAmountToPay();
+        if(MainPayment.option.equals("payForAll")) option_text = "Total amount to be paid is:";
+        else if(MainPayment.option.equals("paySplitEvenly")) option_text = "Total amount to be paid by you after splitting evenly is:";
+        else if(MainPayment.option.equals("payPerItem")) option_text = "Toatl amount to be paid by you for the items you selected is:";
+        else option_text = "Oops! Looks like something went wrong with your billing";
+
+        payment_option.setText(option_text);
+
+        amount_text = "$ " + String.valueOf(totalAmount) + " CAD";
+        amount_to_pay.setText(amount_text);
+
     }
 
     private void loadPage() {
@@ -110,6 +136,99 @@ public class StripePayment extends AppCompatActivity {
         });
     }
 
+    /**
+     * Function to get the amount to be paid by a user
+     * @return totalAmount
+     */
+    private double getAmountToPay(){
+
+        if(MainPayment.option.equals("payperItem")){
+            totalAmount = 0;
+            String url = HARDCODED.URL + "order/user/" + HARDCODED.USER_ID + "?isActive=1";
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                    (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            JSONArray jsonArray = null;
+                            try {
+                                jsonArray = response.getJSONArray("data");
+                                //only need this user's bill
+                                JSONObject jsonObject = jsonArray.getJSONObject(0);
+                                int id = jsonObject.getInt("id");
+                                int tableId = jsonObject.getInt("tables_id");
+                                double amount = jsonObject.getDouble("users_id");
+                                int has_paid = jsonObject.getInt("has_paid");
+                                int is_active_session = jsonObject.getInt("is_active_session");
+                                //TODO: check logic for these values, I ignore description and quantity when getting data from backend
+                                totalAmount = amount;
+
+                            } catch(JSONException e){
+                                e.printStackTrace();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // TODO: Handle error
+
+                        }
+                    });
+            MainActivity.requestQueue.add(jsonObjectRequest);
+            //Make GET Request to get the bill for the entire table
+            return totalAmount;
+        }
+        else{
+            totalAmount = 0;
+            String url = HARDCODED.URL + "order/table/"+ HARDCODED.TABLE_ID + "?isActive=1";
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                    (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            JSONArray jsonArray = null;
+                            try {
+                                jsonArray = response.getJSONArray("data");
+                                for( int i = 0; i<jsonArray.length (); i++) {
+                                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                    int id = jsonObject.getInt("id");
+                                    int tableId = jsonObject.getInt("tables_id");
+                                    double amount = jsonObject.getDouble("users_id");
+                                    int has_paid = jsonObject.getInt("has_paid");
+                                    int is_active_session = jsonObject.getInt("is_active_session");
+                                    totalAmount = totalAmount + amount;
+                                    num_users++;
+                                }
+                            } catch(JSONException e){
+                                e.printStackTrace();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // TODO: Handle error
+
+                        }
+                    });
+            MainActivity.requestQueue.add(jsonObjectRequest);
+            //get the bill for the entire table
+            if(MainPayment.option.equals("payForAll")){
+                return totalAmount;
+            }
+            //get bill after splitting evenly
+            else if(MainPayment.option.equals("paySplitEvenly")){
+                return totalAmount/num_users;
+            }
+            //it should never get here really !!
+            else {
+                totalAmount = 0;
+                return totalAmount;
+            }
+        }
+    }
+
     private void sendPaymentMethod(@Nullable String paymentMethodId, @Nullable String paymentIntentId) {
 
         final Map<String, String> bodyFields = new HashMap<>();
@@ -119,6 +238,8 @@ public class StripePayment extends AppCompatActivity {
             bodyFields.put("useStripeSdk", "true");
             bodyFields.put("paymentMethodId", paymentMethodId);
             bodyFields.put("currency", "cad");
+            // TODO:
+            bodyFields.put("amounts", String .valueOf(totalAmount));
             bodyFields.put("items", "fried_rice");
         } else {
             bodyFields.put("paymentIntentId", paymentIntentId);
