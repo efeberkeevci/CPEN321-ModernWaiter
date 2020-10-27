@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -24,6 +25,8 @@ import com.android.volley.toolbox.Volley;
 import com.cpen321.modernwaiter.HARDCODED;
 import com.cpen321.modernwaiter.MainActivity;
 import com.cpen321.modernwaiter.R;
+import com.cpen321.modernwaiter.TableSession;
+import com.cpen321.modernwaiter.ui.MenuItem;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -53,6 +56,7 @@ public class StripePayment extends AppCompatActivity {
     private Stripe stripe;
     private Activity context = this;
     private int num_users = 0;
+    private TextView amount_to_pay;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,7 +65,7 @@ public class StripePayment extends AppCompatActivity {
         loadPage();
 
         TextView payment_option = findViewById(R.id.payment_option);
-        TextView amount_to_pay = findViewById(R.id.amount_to_pay);
+        amount_to_pay = findViewById(R.id.amount_to_pay);
         String option_text;
         String amount_text;
 
@@ -141,8 +145,8 @@ public class StripePayment extends AppCompatActivity {
      * @return totalAmount
      */
     private double getAmountToPay(){
-
-        if(MainPayment.option.equals("payperItem")){
+        Log.i("STRIPEPAYMENT", "INSIDE GETaMOUNTtOPAY");
+        if(MainPayment.option.equals("payPerItem")){
             totalAmount = 0;
             String url = HARDCODED.URL + "order/user/" + HARDCODED.USER_ID + "?isActive=1";
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -180,13 +184,15 @@ public class StripePayment extends AppCompatActivity {
             return totalAmount;
         }
         else{
+            Log.i("STRIPEPAYMENT", "INSIDE else");
             totalAmount = 0;
             String url = HARDCODED.URL + "order/table/"+ HARDCODED.TABLE_ID + "?isActive=1";
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                    (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                    (Request.Method.GET, url,null, new Response.Listener<JSONObject>() {
 
                         @Override
                         public void onResponse(JSONObject response) {
+                            Log.i("STRIPEPAYMENT", response.toString());
                             JSONArray jsonArray = null;
                             try {
                                 jsonArray = response.getJSONArray("data");
@@ -200,8 +206,10 @@ public class StripePayment extends AppCompatActivity {
                                     totalAmount = totalAmount + amount;
                                     num_users++;
                                 }
+                                amount_to_pay.setText(String.valueOf(totalAmount));
                             } catch(JSONException e){
                                 e.printStackTrace();
+                                Log.i("STRIPEPAYMENT", "in catch block");
                             }
                         }
                     }, new Response.ErrorListener() {
@@ -209,6 +217,8 @@ public class StripePayment extends AppCompatActivity {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             // TODO: Handle error
+                            Log.i("STRIPEPAYMENT", "in error response");
+                            Log.i("STRIPEPAYMENT", error.getMessage());
 
                         }
                     });
@@ -270,6 +280,7 @@ public class StripePayment extends AppCompatActivity {
                             if ("true".equals(requiresAction)) {
                                 stripe.handleNextActionForPayment(context, paymentIntentClientSecret);
                             } else {
+                                putPaid();
                                 startActivity(startPostPayment);
                             }
                         }
@@ -340,5 +351,94 @@ public class StripePayment extends AppCompatActivity {
         // Hook up the pay button to the card widget and stripe instance
         Button payButton = findViewById(R.id.payButton);
         payButton.setOnClickListener((View view) -> pay());
+    }
+
+    /**
+     * PUT request to notify backend that the amount has been paid
+     * RIGHT NOW FOR PAY_FOR_ALL ONLY
+     */
+    private void putPaid(){
+        //PUT request to confirm that the order has been paid
+        String url = HARDCODED.URL + "ordered-items/paid/";
+        //TODO: pass order_id, needs billfragment
+        HashMap<MenuItem, Integer> orderedItems = MainActivity.tableSession.getBill();
+        for( Map.Entry<MenuItem, Integer> item : orderedItems.entrySet() ) {
+            Map<String,String> params = new HashMap<>();
+            params.put("orderId", String.valueOf(MainActivity.tableSession.orderId));
+            params.put("itemId", String.valueOf(item.getKey().id));
+            params.put("hasPaid", "1");
+            JSONObject parameters = new JSONObject(params);
+
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                    (Request.Method.PUT, url, parameters, new Response.Listener<JSONObject>() {
+
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            //on success
+                            //TODO: print some message or not
+                        }
+                    }, new Response.ErrorListener() {
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            error.printStackTrace();
+                            // TODO: Handle error
+
+                        }
+                    });
+            MainActivity.requestQueue.add(jsonObjectRequest);
+        }
+        //PUT request for order has been paid fully
+        String url_order_paid = HARDCODED.URL + "order/paid/";
+        Map<String,String> params = new HashMap<>();
+        params.put("orderId", String.valueOf(MainActivity.tableSession.orderId));
+        params.put("hasPaid", "1");
+        JSONObject parameters = new JSONObject(params);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.PUT, url_order_paid, parameters, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        //on success
+                        //TODO: print some message or not
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                        // TODO: Handle error
+
+                    }
+                });
+        MainActivity.requestQueue.add(jsonObjectRequest);
+
+    }
+
+    private void endSession(){
+        //PUT request for order has been paid fully
+        String url = HARDCODED.URL + "order/session/";
+        Map<String,String> params = new HashMap<>();
+        params.put("orderId", String.valueOf(MainActivity.tableSession.orderId));
+        params.put("isActive", "0");
+        JSONObject parameters = new JSONObject(params);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.PUT, url, parameters, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        //on success
+                        //TODO: print some message or not
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                        // TODO: Handle error
+
+                    }
+                });
+        MainActivity.requestQueue.add(jsonObjectRequest);
     }
 }

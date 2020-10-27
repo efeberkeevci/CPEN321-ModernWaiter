@@ -9,11 +9,30 @@
         android:id="@+id/navigation_menu"
         android:name="com.cpen321.modernwaiter.ui.menu.MenuFragment"
         android:label="@string/title_menu"
-        tools:layout="@layout/fragment_menu" />
+        tools:layout="@layout/fragment_menu" >
+        <action
+            android:id="@+id/action_navigation_menu_to_navigation_order"
+            app:destination="@id/navigation_order" />
+
+        <action
+            android:id="@+id/action_navigation_menu_to_navigation_menu"
+            app:destination="@id/navigation_menu" />
+    </fragment>
 
     <fragment
-        android:id="@+id/navigation_pay"
+        android:id="@+id/navigation_order"
+        android:name="com.cpen321.modernwaiter.ui.order.OrderFragment"
+        android:label="Order"
+        tools:layout="@layout/fragment_order" >
+        <action
+            android:id="@+id/action_navigation_order_to_navigation_bill"
+            app:destination="@id/navigation_bill" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_bill"
         android:name="com.cpen321.modernwaiter.ui.pay.BillFragment"
-        android:label="@string/title_pay"
+        android:label="Bill"
         tools:layout="@layout/fragment_bill" />
+
 </navigation>
