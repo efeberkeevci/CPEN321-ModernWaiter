@@ -49,9 +49,46 @@ public class TableSession {
         this.requestQueue = requestQueue;
 
         postOrderId();
-
+        getUserRecommendation();
         // TODO: GET ORDERID order/user/user:id?isActive=1
 
+    }
+
+    public void getUserRecommendation() {
+        final Map<String, String> bodyFields = new HashMap<>();
+        bodyFields.put("userId", HARDCODED.USER_ID);
+        bodyFields.put("restaurantId", HARDCODED.RESTAURANT_ID);
+
+        final String bodyJSON = new Gson().toJson(bodyFields);
+
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.GET,
+                HARDCODED.URL + "item/recommend",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        System.out.println(error);
+                    }
+                }
+        ) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+
+            @Override
+            public byte[] getBody() {
+                return bodyJSON.getBytes();
+            }
+        };
+
+        requestQueue.add(stringRequest);
     }
 
     private void postOrderId() {
@@ -71,7 +108,7 @@ public class TableSession {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        getOrderId();;
+                        getOrderId();
                     }
                 },
                 new Response.ErrorListener() {
@@ -128,47 +165,6 @@ public class TableSession {
             // Clear the cart of all orders
             menuItem.quantity = String.valueOf(0);
         }
-    }
-
-    // TODO: Update the bill based on the backend
-    // Endpoint /order/table/:table_id
-    // Endpoint /order/user/:user_id?isActive
-    public void UpdateBill() {
-        int id = MainActivity.getID();
-
-        /*String url = "http://my-json-feed";
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        JSONArray jsonArray = null;
-                        try {
-                            jsonArray = response.getJSONArray("data");
-                            for( int i = 0; i<jsonArray.length (); i++) {
-                                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                String item_name = jsonObject.getString("name");
-                                double item_price = jsonObject.getDouble("cost");
-                                String item_id = jsonObject.getString("id");
-                                //TODO: check logic for these values, I ignore description and quantity when getting data from backend
-                                orderCart.add(new MenuItem(item_name,"", "1", item_id, item_price));
-                            }
-                            updateOrderQuantities();
-                        } catch(JSONException e){
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // TODO: Handle error
-
-                    }
-                });
-        MainActivity.requestQueue.add(jsonObjectRequest);
-        */
     }
 
     // Return a map of MenuItems to the quantity ordered in the backend
