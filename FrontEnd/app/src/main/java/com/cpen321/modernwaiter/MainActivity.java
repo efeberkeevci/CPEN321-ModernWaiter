@@ -31,7 +31,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     // Shopping kart
-    public TableSession tableSession;
+    public static TableSession tableSession;
 
     // Deserialized restaurant's menu in the from of ID, MenuItem
     private HashMap<Integer, MenuItem> menuMap;

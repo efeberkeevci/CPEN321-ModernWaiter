@@ -93,8 +93,9 @@ public class TableSession {
         };
     }
 
-    private void getOrderId() {
-
+    public int getOrderId() {
+        //TODO: change this
+        return 1;
     }
 
     // Get the list of all items in the menu

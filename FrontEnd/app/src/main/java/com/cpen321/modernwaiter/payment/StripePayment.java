@@ -24,6 +24,8 @@ import com.android.volley.toolbox.Volley;
 import com.cpen321.modernwaiter.HARDCODED;
 import com.cpen321.modernwaiter.MainActivity;
 import com.cpen321.modernwaiter.R;
+import com.cpen321.modernwaiter.TableSession;
+import com.cpen321.modernwaiter.ui.MenuItem;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -270,6 +272,7 @@ public class StripePayment extends AppCompatActivity {
                             if ("true".equals(requiresAction)) {
                                 stripe.handleNextActionForPayment(context, paymentIntentClientSecret);
                             } else {
+                                putPaid();
                                 startActivity(startPostPayment);
                             }
                         }
@@ -340,5 +343,42 @@ public class StripePayment extends AppCompatActivity {
         // Hook up the pay button to the card widget and stripe instance
         Button payButton = findViewById(R.id.payButton);
         payButton.setOnClickListener((View view) -> pay());
+    }
+
+    /**
+     * PUT request to notify backend that the amount has been paid
+     * RIGHT NOW FOR PAY_FOR_ALL ONLY
+     */
+    private void putPaid(){
+        //PUT request to confirm that the order has been paid
+        String url = HARDCODED.URL + "ordered-items/paid/" + "?isActive=1";
+        //TODO: pass order_id, needs billfragment
+        HashMap<MenuItem, Integer> orderedItems = MainActivity.tableSession.getBill();
+        for( Map.Entry<MenuItem, Integer> item : orderedItems.entrySet() ) {
+            Map<String,String> params = new HashMap<>();
+            params.put("orderId", String.valueOf(MainActivity.tableSession.getOrderId()));
+            params.put("itemId", String.valueOf(item.getKey().id));
+            params.put("hasPaid", "1");
+            JSONObject parameters = new JSONObject(params);
+
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                    (Request.Method.PUT, url, parameters, new Response.Listener<JSONObject>() {
+
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            //on success
+                            //TODO: print some message or not
+                        }
+                    }, new Response.ErrorListener() {
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            error.printStackTrace();
+                            // TODO: Handle error
+
+                        }
+                    });
+            MainActivity.requestQueue.add(jsonObjectRequest);
+        }
     }
 }
