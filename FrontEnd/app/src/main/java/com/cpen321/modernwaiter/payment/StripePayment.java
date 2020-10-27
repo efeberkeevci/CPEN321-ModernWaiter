@@ -380,5 +380,30 @@ public class StripePayment extends AppCompatActivity {
                     });
             MainActivity.requestQueue.add(jsonObjectRequest);
         }
+        //PUT request for order has been paid fully
+        String url_order_paid = HARDCODED.URL + "order/paid/" + "?isActive=1";
+        Map<String,String> params = new HashMap<>();
+        params.put("orderId", String.valueOf(MainActivity.tableSession.orderId));
+        params.put("hasPaid", "1");
+        JSONObject parameters = new JSONObject(params);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.PUT, url, parameters, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        //on success
+                        //TODO: print some message or not
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                        // TODO: Handle error
+
+                    }
+                });
+        MainActivity.requestQueue.add(jsonObjectRequest);
+
     }
 }
