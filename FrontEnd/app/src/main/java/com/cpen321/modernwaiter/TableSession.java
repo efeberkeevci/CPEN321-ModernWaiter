@@ -39,7 +39,7 @@ public class TableSession {
 
     private MenuItem featureItem;
 
-    public int orderId = -1;
+    public static int orderId = -1;
 
     //creates a new session
     TableSession(RequestQueue requestQueue) {

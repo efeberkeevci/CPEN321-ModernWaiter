@@ -356,7 +356,7 @@ public class StripePayment extends AppCompatActivity {
         HashMap<MenuItem, Integer> orderedItems = MainActivity.tableSession.getBill();
         for( Map.Entry<MenuItem, Integer> item : orderedItems.entrySet() ) {
             Map<String,String> params = new HashMap<>();
-            params.put("orderId", String.valueOf(MainActivity.tableSession.getOrderId()));
+            params.put("orderId", String.valueOf(MainActivity.tableSession.orderId));
             params.put("itemId", String.valueOf(item.getKey().id));
             params.put("hasPaid", "1");
             JSONObject parameters = new JSONObject(params);
