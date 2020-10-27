@@ -161,7 +161,7 @@ app.post("/order", (req,res) =>{
             res.send(err);
         }
     res.send(result);
-    push_notification_order_received("1");
+    //push_notification.push_notification_order_received("1");
 
 /*        let order_id_query = mysql.format("SELECT id FROM orders WHERE users_id = 1 && is_active_session = 1", [users_id]);
 
@@ -289,11 +289,8 @@ app.put("/order/paid", (req,res) => {
             };
 	console.log("Success");
             res.send(result);
-            if(hasPaid){
-               	console.log("in the push notification call");
+               	console.log("Sending payment done notification");
 		push_notification.push_notification_payment_done(orderId);
-	    }
-
         });
 })
 
@@ -529,4 +526,14 @@ const generateResponse = intent => {
   }
 };
 
+//Informs server that the current cart is checked out
+app.get("/checkout", (req,res) =>{
+    console.log("Checkout received");
+    push_notification.push_notification_order_received("1");
+    res.send("Success");
+});
 
+/* HTTP GET request for health check */
+app.get('/_health', (req, res) => {
+  res.status(200).send('ok')
+})
