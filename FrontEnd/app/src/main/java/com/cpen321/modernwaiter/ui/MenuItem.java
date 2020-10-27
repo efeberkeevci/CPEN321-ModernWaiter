@@ -12,7 +12,8 @@ public class MenuItem {
     public final int calories;
     public final int popularity_count;
     public final String image;
-    public  String quantity;
+    public String quantity;
+    public boolean recommended;
 
     public MenuItem(String id, String restaurant_id, String name, String type, String cost, String description, String calories, String popularity_count, String image) {
 
@@ -45,6 +46,10 @@ public class MenuItem {
     public String getTotalPriceString() {
         return "$" + new DecimalFormat("#.##")
                 .format(cost * Integer.parseInt(quantity));
+    }
+
+    public int getIntegerQuantity() {
+        return Integer.parseInt(quantity);
     }
 
     @Override
