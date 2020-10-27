@@ -404,10 +404,10 @@ app.get("/item/descriptions/:restaurantId", (req,res) => {
  * status code of 200.
  */
 app.get("/item/recommend", (req,res) => {
-    let userId = req.body.userId;
-    let restaurantId = req.body.restaurantId;
-    let user_query = mysql.format("SELECT preferences FROM users WHERE id = ?", [userId]);
-    let desc_query = mysql.format("SELECT id, description FROM items WHERE restaurant_id = ?", [restaurantId]);
+    let users_id = 1; //req.body.users_id;
+    let restaurant_id = 1; //req.body.restaurant_id;
+    let user_query = mysql.format("SELECT preferences FROM users WHERE id = ?", [users_id]);
+    let desc_query = mysql.format("SELECT id, description FROM items WHERE restaurant_id = ?", [restaurant_id]);
 
     con.query(user_query, function(err,prefResult,fields){
         if (err) {
