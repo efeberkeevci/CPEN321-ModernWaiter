@@ -19,6 +19,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -96,7 +97,7 @@ public class StripePayment extends AppCompatActivity {
 
         StringRequest request = new StringRequest(
                 Request.Method.GET,
-                BACKEND_URL + "stripe/key",
+                BACKEND_URL + "key",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -126,6 +127,7 @@ public class StripePayment extends AppCompatActivity {
         if (params == null) {
             return;
         }
+
         stripe.createPaymentMethod(params, new ApiResultCallback<PaymentMethod>() {
             @Override
             public void onSuccess(@NonNull PaymentMethod result) {
@@ -135,7 +137,7 @@ public class StripePayment extends AppCompatActivity {
 
             @Override
             public void onError(@NonNull Exception e) {
-
+                Log.i("STRIPEPAYMENT", "error in pay()");
             }
         });
     }
@@ -149,16 +151,14 @@ public class StripePayment extends AppCompatActivity {
         if(MainPayment.option.equals("payPerItem")){
             totalAmount = 0;
             String url = HARDCODED.URL + "order/user/" + HARDCODED.USER_ID + "?isActive=1";
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                    (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            JsonArrayRequest jsonObjectRequest = new JsonArrayRequest
+                    (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
 
                         @Override
-                        public void onResponse(JSONObject response) {
-                            JSONArray jsonArray = null;
+                        public void onResponse(JSONArray response) {
                             try {
-                                jsonArray = response.getJSONArray("data");
                                 //only need this user's bill
-                                JSONObject jsonObject = jsonArray.getJSONObject(0);
+                                JSONObject jsonObject = response.getJSONObject(0);
                                 int id = jsonObject.getInt("id");
                                 int tableId = jsonObject.getInt("tables_id");
                                 double amount = jsonObject.getDouble("users_id");
@@ -187,17 +187,17 @@ public class StripePayment extends AppCompatActivity {
             Log.i("STRIPEPAYMENT", "INSIDE else");
             totalAmount = 0;
             String url = HARDCODED.URL + "order/table/"+ HARDCODED.TABLE_ID + "?isActive=1";
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                    (Request.Method.GET, url,null, new Response.Listener<JSONObject>() {
+            JsonArrayRequest jsonObjectRequest = new JsonArrayRequest
+                    (Request.Method.GET, url,null, new Response.Listener<JSONArray>() {
 
                         @Override
-                        public void onResponse(JSONObject response) {
+                        public void onResponse(JSONArray response) {
                             Log.i("STRIPEPAYMENT", response.toString());
-                            JSONArray jsonArray = null;
+
                             try {
-                                jsonArray = response.getJSONArray("data");
-                                for( int i = 0; i<jsonArray.length (); i++) {
-                                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                                for( int i = 0; i<response.length (); i++) {
+                                    JSONObject jsonObject = response.getJSONObject(i);
                                     int id = jsonObject.getInt("id");
                                     int tableId = jsonObject.getInt("tables_id");
                                     double amount = jsonObject.getDouble("users_id");
@@ -250,7 +250,6 @@ public class StripePayment extends AppCompatActivity {
             bodyFields.put("currency", "cad");
             // TODO:
             bodyFields.put("amounts", String .valueOf(totalAmount));
-            bodyFields.put("items", "fried_rice");
         } else {
             bodyFields.put("paymentIntentId", paymentIntentId);
         }
@@ -262,7 +261,7 @@ public class StripePayment extends AppCompatActivity {
 
         StringRequest stringRequest = new StringRequest(
                 Request.Method.POST,
-                BACKEND_URL + "stripe/pay",
+                BACKEND_URL + "pay",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
