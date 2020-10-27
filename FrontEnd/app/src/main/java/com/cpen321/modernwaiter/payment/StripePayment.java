@@ -6,7 +6,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -14,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -26,7 +29,6 @@ import com.android.volley.toolbox.Volley;
 import com.cpen321.modernwaiter.HARDCODED;
 import com.cpen321.modernwaiter.MainActivity;
 import com.cpen321.modernwaiter.R;
-import com.cpen321.modernwaiter.TableSession;
 import com.cpen321.modernwaiter.ui.MenuItem;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -48,13 +50,13 @@ import java.util.List;
 import java.util.Map;
 
 
-public class StripePayment extends AppCompatActivity {
+public class StripePayment extends Fragment {
     /**
      * This example collects card payments, implementing the guide here: https://stripe.com/docs/payments/accept-a-payment-synchronously#android
      */
     private int totalAmount = 0;
     private Stripe stripe;
-    private Activity context = this;
+    private View view;
     private int num_users = 1;
     private TextView amount_to_pay;
     private final RequestQueue requestQueue = MainActivity.requestQueue;
@@ -62,11 +64,15 @@ public class StripePayment extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_stripe_payment);
+    }
+
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.activity_stripe_payment, container, false);
         loadPage();
 
-        TextView payment_option = findViewById(R.id.payment_option);
-        amount_to_pay = findViewById(R.id.amount_to_pay);
+        TextView payment_option = view.findViewById(R.id.payment_option);
+        amount_to_pay = view.findViewById(R.id.amount_to_pay);
         String option_text;
         String amount_text;
 
@@ -81,11 +87,12 @@ public class StripePayment extends AppCompatActivity {
         amount_text = "$ " + String.valueOf(totalAmount) + " CAD";
         amount_to_pay.setText(amount_text);
 
+        return view;
     }
 
     private void loadPage() {
         // Clear the card widget
-        CardInputWidget cardInputWidget = findViewById(R.id.cardInputWidget);
+        CardInputWidget cardInputWidget = view.findViewById(R.id.cardInputWidget);
         cardInputWidget.clear();
 
         requestKey();
@@ -121,7 +128,7 @@ public class StripePayment extends AppCompatActivity {
     }
 
     private void pay() {
-        CardInputWidget cardInputWidget = findViewById(R.id.cardInputWidget);
+        CardInputWidget cardInputWidget = view.findViewById(R.id.cardInputWidget);
         PaymentMethodCreateParams params = cardInputWidget.getPaymentMethodCreateParams();
 
         if (params == null) {
@@ -240,9 +247,8 @@ public class StripePayment extends AppCompatActivity {
         }
 
         final String bodyJSON = new Gson().toJson(bodyFields);
-        RequestQueue queue = Volley.newRequestQueue(this);
 
-        Intent startPostPayment = new Intent(this, PostPayment.class);
+        Intent startPostPayment = new Intent(getActivity(), PostPayment.class);
 
         StringRequest stringRequest = new StringRequest(
                 Request.Method.POST,
@@ -259,10 +265,10 @@ public class StripePayment extends AppCompatActivity {
                         String requiresAction = responseMap.get("requiresAction");
 
                         if (error != null) {
-                            displayAlert("Error", error, false);
+                            Log.i("Stripe Payment", "Error, response is  not null");
                         } else if (paymentIntentClientSecret != null) {
                             if ("true".equals(requiresAction)) {
-                                stripe.handleNextActionForPayment(context, paymentIntentClientSecret);
+                                stripe.handleNextActionForPayment(getActivity(), paymentIntentClientSecret);
                             } else {
                                 putPaid();
                                 endSession();
@@ -289,7 +295,7 @@ public class StripePayment extends AppCompatActivity {
             }
         };
 
-        queue.add(stringRequest);
+        requestQueue.add(stringRequest);
     }
 
     private Map<String, String> parseResponseToMap(String response) {
@@ -306,35 +312,13 @@ public class StripePayment extends AppCompatActivity {
         return responseMap;
     }
 
-    private void displayAlert(@NonNull String title, @NonNull String message, boolean restartDemo) {
-        runOnUiThread(() -> {
-            final AlertDialog.Builder builder =
-                    new AlertDialog.Builder(this)
-                            .setTitle(title)
-                            .setMessage(message);
-            new GsonBuilder()
-                    .setPrettyPrinting()
-                    .create();
-            if (restartDemo) {
-                builder.setPositiveButton("Restart demo",
-                        (DialogInterface dialog, int index) -> loadPage());
-            } else {
-                builder.setPositiveButton("Ok", null);
-            }
-            builder
-                    .create()
-                    .show();
-        });
-    }
-
     private void onRetrievedKey(@NonNull String stripePublishableKey) {
         // Configure the SDK with your Stripe publishable key so that it can make requests to the Stripe API
-        final Context applicationContext = getApplicationContext();
-        PaymentConfiguration.init(applicationContext, stripePublishableKey);
-        stripe = new Stripe(applicationContext, stripePublishableKey);
+        PaymentConfiguration.init(getActivity(), stripePublishableKey);
+        stripe = new Stripe(getActivity(), stripePublishableKey);
 
         // Hook up the pay button to the card widget and stripe instance
-        Button payButton = findViewById(R.id.payButton);
+        Button payButton = view.findViewById(R.id.payButton);
         payButton.setOnClickListener((View view) -> pay());
     }
 
