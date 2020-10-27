@@ -119,6 +119,8 @@ public class StripePayment extends AppCompatActivity {
             bodyFields.put("useStripeSdk", "true");
             bodyFields.put("paymentMethodId", paymentMethodId);
             bodyFields.put("currency", "cad");
+            // TODO:
+            bodyFields.put("amounts", "1600");
             bodyFields.put("items", "fried_rice");
         } else {
             bodyFields.put("paymentIntentId", paymentIntentId);
