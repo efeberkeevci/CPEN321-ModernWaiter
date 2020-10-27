@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         requestQueue = Volley.newRequestQueue(this);
-        tableSession = new TableSession(requestQueue);
+        tableSession = new TableSession(requestQueue, getSupportFragmentManager());
 
         navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
@@ -60,8 +61,6 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
         MyFirebaseMessagingService.sendToken();
-
-
     }
     public static int getID(){
         return ID;
