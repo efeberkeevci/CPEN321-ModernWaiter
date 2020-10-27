@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -55,6 +56,7 @@ public class StripePayment extends AppCompatActivity {
     private Stripe stripe;
     private Activity context = this;
     private int num_users = 0;
+    private TextView amount_to_pay;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,7 +65,7 @@ public class StripePayment extends AppCompatActivity {
         loadPage();
 
         TextView payment_option = findViewById(R.id.payment_option);
-        TextView amount_to_pay = findViewById(R.id.amount_to_pay);
+        amount_to_pay = findViewById(R.id.amount_to_pay);
         String option_text;
         String amount_text;
 
@@ -143,8 +145,8 @@ public class StripePayment extends AppCompatActivity {
      * @return totalAmount
      */
     private double getAmountToPay(){
-
-        if(MainPayment.option.equals("payperItem")){
+        Log.i("STRIPEPAYMENT", "INSIDE GETaMOUNTtOPAY");
+        if(MainPayment.option.equals("payPerItem")){
             totalAmount = 0;
             String url = HARDCODED.URL + "order/user/" + HARDCODED.USER_ID + "?isActive=1";
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -182,13 +184,15 @@ public class StripePayment extends AppCompatActivity {
             return totalAmount;
         }
         else{
+            Log.i("STRIPEPAYMENT", "INSIDE else");
             totalAmount = 0;
             String url = HARDCODED.URL + "order/table/"+ HARDCODED.TABLE_ID + "?isActive=1";
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                    (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                    (Request.Method.GET, url,null, new Response.Listener<JSONObject>() {
 
                         @Override
                         public void onResponse(JSONObject response) {
+                            Log.i("STRIPEPAYMENT", response.toString());
                             JSONArray jsonArray = null;
                             try {
                                 jsonArray = response.getJSONArray("data");
@@ -202,8 +206,10 @@ public class StripePayment extends AppCompatActivity {
                                     totalAmount = totalAmount + amount;
                                     num_users++;
                                 }
+                                amount_to_pay.setText(String.valueOf(totalAmount));
                             } catch(JSONException e){
                                 e.printStackTrace();
+                                Log.i("STRIPEPAYMENT", "in catch block");
                             }
                         }
                     }, new Response.ErrorListener() {
@@ -211,6 +217,8 @@ public class StripePayment extends AppCompatActivity {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             // TODO: Handle error
+                            Log.i("STRIPEPAYMENT", "in error response");
+                            Log.i("STRIPEPAYMENT", error.getMessage());
 
                         }
                     });
@@ -273,7 +281,6 @@ public class StripePayment extends AppCompatActivity {
                                 stripe.handleNextActionForPayment(context, paymentIntentClientSecret);
                             } else {
                                 putPaid();
-                                endSession();
                                 startActivity(startPostPayment);
                             }
                         }
