@@ -1,28 +1,28 @@
 package com.cpen321.modernwaiter.ui.order;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.cpen321.modernwaiter.HARDCODED;
 import com.cpen321.modernwaiter.MainActivity;
 import com.cpen321.modernwaiter.R;
-import com.cpen321.modernwaiter.payment.MainPayment;
 import com.cpen321.modernwaiter.ui.MenuItem;
-import com.cpen321.modernwaiter.ui.menu.DetailItemFragment;
-import com.cpen321.modernwaiter.ui.pay.BillFragment;
 
 import java.util.HashMap;
 
@@ -66,6 +66,7 @@ public class OrderFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 MainActivity mainActivity = (MainActivity) getActivity();
+                notifyCheckout();
                 mainActivity.tableSession.checkout();
                 while (orderRecyclerAdapter.itemArray.size() != 0) {
                     orderRecyclerAdapter.itemArray.remove(0);
@@ -77,5 +78,30 @@ public class OrderFragment extends Fragment {
 
         return view;
     }
+    private void notifyCheckout(){
+        Log.i("IN CHECKOUT2","AS");
 
+        // Instantiate the RequestQueue.
+        RequestQueue queue = Volley.newRequestQueue((MainActivity) getActivity());
+        String url = HARDCODED.URL+"checkout";
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Display the first 500 characters of the response string.
+                        Log.i("MSG:",response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("ERR:",error.toString());
+            }
+        });
+
+// Add the request to the RequestQueue.
+        queue.add(stringRequest);
+
+    }
 }

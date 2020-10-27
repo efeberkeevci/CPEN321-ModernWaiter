@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "This is the backend server for the Modern Waiter app",
   "main": "backend_server.js",
-  "scripts": {
+  "scripts":{
+    "start": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Efe Berke Evci",
@@ -18,5 +19,8 @@
     "save": "^2.4.0",
     "string.prototype.startswith": "^1.0.0",
     "stripe": "^8.118.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
   }
 }
