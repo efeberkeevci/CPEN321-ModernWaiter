@@ -17,8 +17,11 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.cpen321.modernwaiter.HARDCODED;
+import com.cpen321.modernwaiter.MainActivity;
 import com.cpen321.modernwaiter.R;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -29,6 +32,10 @@ import com.stripe.android.Stripe;
 import com.stripe.android.model.PaymentMethod;
 import com.stripe.android.model.PaymentMethodCreateParams;
 import com.stripe.android.view.CardInputWidget;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -41,7 +48,7 @@ public class StripePayment extends AppCompatActivity {
      */
     // 10.0.2.2 is the Android emulator's alias to localhost
     private static final String BACKEND_URL = "http://10.0.2.2:3000/";
-
+    private double totalAmount = 0;
     private Stripe stripe;
     private Activity context = this;
 
@@ -110,6 +117,46 @@ public class StripePayment extends AppCompatActivity {
         });
     }
 
+    private double getAmountToPay(){
+        if(MainPayment.option.equals("payForAll")){
+            String url = HARDCODED.URL + "order/table/"+ HARDCODED.TABLE_ID + "?isActive=1";
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                    (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            JSONArray jsonArray = null;
+                            try {
+                                jsonArray = response.getJSONArray("data");
+                                for( int i = 0; i<jsonArray.length (); i++) {
+                                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                    int id = jsonObject.getInt("id");
+                                    int tableId = jsonObject.getInt("tables_id");
+                                    double amount = jsonObject.getDouble("users_id");
+                                    int has_paid = jsonObject.getInt("has_paid");
+                                    int is_active_session = jsonObject.getInt("is_active_session");
+                                    //TODO: check logic for these values, I ignore description and quantity when getting data from backend
+                                    totalAmount = totalAmount + amount;
+                                }
+                            } catch(JSONException e){
+                                e.printStackTrace();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // TODO: Handle error
+
+                        }
+                    });
+            MainActivity.requestQueue.add(jsonObjectRequest);
+            //Make GET Request to get the bill for the entire table
+            return totalAmount;
+        }
+        return 0;
+    }
+
     private void sendPaymentMethod(@Nullable String paymentMethodId, @Nullable String paymentIntentId) {
 
         final Map<String, String> bodyFields = new HashMap<>();
@@ -120,7 +167,7 @@ public class StripePayment extends AppCompatActivity {
             bodyFields.put("paymentMethodId", paymentMethodId);
             bodyFields.put("currency", "cad");
             // TODO:
-            bodyFields.put("amounts", "1600");
+            bodyFields.put("amounts", String .valueOf(totalAmount));
             bodyFields.put("items", "fried_rice");
         } else {
             bodyFields.put("paymentIntentId", paymentIntentId);
