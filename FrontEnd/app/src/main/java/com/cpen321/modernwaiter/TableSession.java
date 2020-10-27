@@ -1,6 +1,7 @@
 package com.cpen321.modernwaiter;
 
 import android.app.Activity;
+import android.view.Menu;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /*  Contains all the data required for this table's session such as its
@@ -164,6 +166,8 @@ public class TableSession {
                         List<OrderResponse> orderResponse = new Gson().fromJson(response, new TypeToken<List<OrderResponse>>() {}.getType());
 
                         orderId = orderResponse.get(0).id;
+                        updateBill();
+
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -174,9 +178,38 @@ public class TableSession {
         requestQueue.add(stringRequest);
     }
 
-    // Get the list of all items in the menu
-    public ArrayList<MenuItem> getMenuItems() {
-        return menuItems;
+    public void updateBill() {
+
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.GET,
+                HARDCODED.URL + "ordered-items/" + orderId,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        List<OrderedItemResponse> orderedItemResponses = new Gson().fromJson(response, new TypeToken<List<OrderedItemResponse>>() {
+                        }.getType());
+                        HashMap<MenuItem, Integer> updatedBillMap = new HashMap<MenuItem, Integer>(menuItems.stream().collect(Collectors.toMap(
+                                Function.identity(), x -> 0
+                        )));
+
+                        for (OrderedItemResponse orderedItem : orderedItemResponses) {
+                            MenuItem fakeMenuItem = new MenuItem(orderedItem.items_id);
+                            updatedBillMap.replace(fakeMenuItem, updatedBillMap.get(fakeMenuItem) + 1);
+                        }
+
+                        for (MenuItem menuItem : updatedBillMap.keySet()) {
+                            orderedItems.replace(menuItem, updatedBillMap.get(menuItem));
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println(error);
+            }
+        }
+        );
+
+        requestQueue.add(stringRequest);
     }
 
     public void addMenuItems(ArrayList<MenuItem> menuItems) {
@@ -215,6 +248,11 @@ public class TableSession {
             // Clear the cart of all orders
             menuItem.quantity = String.valueOf(0);
         }
+    }
+
+    // Get the list of all items in the menu
+    public ArrayList<MenuItem> getMenuItems() {
+        return menuItems;
     }
 
     // Return a map of MenuItems to the quantity ordered in the backend
@@ -282,5 +320,9 @@ public class TableSession {
 
     public class FeatureResponse {
         public int itemId;
+    }
+
+    public class OrderedItemResponse {
+        public int items_id;
     }
 }

@@ -28,6 +28,18 @@ public class MenuItem {
         this.image = image;
     }
 
+    public MenuItem(int id) {
+        this.id = id;
+        restaurant_id = -1;
+        name = "dummy";
+        type = "dummy";
+        cost = -1;
+        description = "dummy";
+        calories = -1;
+        popularity_count = -1;
+        image = "dummy";
+    }
+
     public void incrementQuantity() {
         quantity = String.valueOf(Integer.parseInt(quantity) + 1);
     }
@@ -63,6 +75,13 @@ public class MenuItem {
     @Override
     public int hashCode() {
         return id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof MenuItem)
+            return ((MenuItem) o).id == id;
+        return false;
     }
 
 }

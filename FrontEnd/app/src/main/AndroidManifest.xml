@@ -15,9 +15,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".payment.PerItemPayment" />
-        <activity android:name=".payment.PostPayment" />
-        <activity android:name=".payment.MainPayment" />
-        <activity android:name=".payment.StripePayment" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
