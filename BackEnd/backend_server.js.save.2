@@ -142,26 +142,15 @@ app.get("/user/:id", (req, res)=>{
  * returns a status code of 200 if successful.
  */
 app.post("/order", (req,res) =>{
-    let sql_query = mysql.format("INSERT INTO orders ( users_id, tables_id, restaurant_id, amount, has_paid, is_active_session) VALUES(?,?,?,?,?,?)"
+    let sql_query = mysql.format("INSERT INTO orders ( users_id, tables_id, restaurant_id, amount,ordered_at, has_paid, is_active_session) VALUES(?,?,?,?,?,?,?)"
     ,[req.body.users_id, req.body.tables_id, req.body.restaurant_id,
-      req.body.amount, req.body.has_paid, req.body.is_active_session]);
+      req.body.amount, req.body.ordered_at, req.body.has_paid, req.body.is_active_session]);
     
     con.query(sql_query, function(err,result,fields){
         if (err) {
             res.send(err);
         }
-	res.send(result);
-
-/*        let order_id_query = mysql.format("SELECT id FROM orders WHERE users_id = 1 && is_active_session = 1", [users_id]);
-
-        con.query(order_id_query, function(err,result2,fields){
-            if (err) {
-                res.send(err);
-            }
-            result2=JSON.parse(JSON.stringify(result2))[0];
-            let id = result2["id"];
-            res.send({"orderId" : id});
-        });*/
+        res.send(result);
     });
 })
 
@@ -304,7 +293,7 @@ app.get("/ordered-items/:orderId", (req,res) => {
  * to their meal during their time at the restaurant.
  * It returns a status code of 200 if successful.
  */
-app.post("/ordered-items", (req,res) => {
+app.post("/ordered-items/:orderId", (req,res) => {
     let orderId = req.body.orderId;
     let itemId = req.body.itemId;
     let sql_query = mysql.format("INSERT INTO ordered_items (orders_id, items_id, has_paid, is_selected) VALUES(?,?, 0,0) ", [orderId,itemId]);
@@ -312,43 +301,9 @@ app.post("/ordered-items", (req,res) => {
         if (err) {
             res.send(err);
         };
-        updateOrderAmount(orderId, itemId);
         res.send(result);
     });
 })
-
-function updateOrderAmount(orderId, itemId) {
-    let item_cost_query = mysql.format("SELECT cost FROM items WHERE id = ?", [itemId]);
-    let old_amount_query = mysql. format("SELECT amount FROM orders WHERE id = ?", [orderId]);
-
-    con.query(item_cost_query, function(err,result,fields){
-        if (err) {
-            console.log(result);
-            throw err;
-        };
-        result=JSON.parse(JSON.stringify(result))[0];
-        let item_cost = result["cost"];
-
-        con.query(old_amount_query, function(err,result2,fields){
-            if (err) {
-                console.log(err);
-                throw err;
-            };
-            result2=JSON.parse(JSON.stringify(result2))[0];
-            let old_amount = result2["amount"];
-            let new_amount = old_amount + item_cost;
-            let update_query = mysql.format("UPDATE orders SET amount = ? WHERE id = ?", [new_amount, orderId]);
-
-            con.query(update_query, function(err,result3,fields){
-                if (err) {
-                    console.log(err);
-                    throw err;
-                };
-            });
-        });
-    });
-    return true;
-}
 
 /**
  * HTTP PUT request to mark an item ordered
@@ -370,6 +325,42 @@ app.put("/ordered-items/paid", (req,res) => {
 })
 
 /**
+ * HTTP GET request to get recommendation
+ * for user from a specific restaurant.
+ * Returns the item Id of the recommended
+ * food with a status code of 200.
+ */
+
+/*app.get("/items/recommendation/:userId", (req,res) =>{
+    console.log("DEBUG: Called recommendation API");
+    let userId = req.param.userId;
+    let restaurantId = req.body.restaurantId;
+
+    let user_preference_query = mysql.format("SELECT preferences FROM users WHERE id = ?", [userId]);
+    let item_descriptions_query = mysql.format("SELECT description FROM items WHERE restaurant_id = ?", [restaurantId]);
+
+    con.query(user_preference_query, function(err,result,fields){
+        if (err) {
+            res.send(err);
+        };
+
+	console.log(result);
+	res.send(result);
+
+        con.query(item_descriptions_query, function(err,descriptions,fields){
+            if (err) {
+                res.send(err);
+            }
+            console.log(descriptions);
+
+            var recommendedItemId = recommendation.getRecommendation(preference, descriptions);
+            res.send(recommendedItemId);
+        });
+    });
+});
+*/
+
+/**
  * HTTP GET request to retrieve user preferences.
  */
 app.get("/user/preferences/:id", (req,res) => {
@@ -380,6 +371,7 @@ app.get("/user/preferences/:id", (req,res) => {
             res.send(err);
         };
         res.send(result[0]);
+	
     });
 })
 
@@ -388,51 +380,12 @@ app.get("/user/preferences/:id", (req,res) => {
  */
 app.get("/item/descriptions/:restaurantId", (req,res) => {
     let restaurantId = req.params.restaurantId;
-    let sql_query = mysql.format("SELECT id, description FROM items WHERE restaurant_id = ?", [restaurantId]);
+    let sql_query = mysql.format("SELECT description FROM items WHERE restaurant_id = ?", [restaurantId]);
     con.query(sql_query, function(err,result,fields){
         if (err) {
             res.send(err);
         };
         res.send(result);
-    });
-})
-
-/**
- * HTTP GET request to get a recommendation for
- * an item at a specific restaurant unique to the
- * user. Returns the recommended item Id with a
- * status code of 200.
- */
-app.get("/item/recommend", (req,res) => {
-    let userId = req.body.userId;
-    let restaurantId = req.body.restaurantId;
-    let user_query = mysql.format("SELECT preferences FROM users WHERE id = ?", [userId]);
-    let desc_query = mysql.format("SELECT id, description FROM items WHERE restaurant_id = ?", [restaurantId]);
-
-    con.query(user_query, function(err,prefResult,fields){
-        if (err) {
-            res.send(err);
-        };
-        var preference = prefResult[0]["preferences"];
-
-        con.query(desc_query, function(err,descResult,fields){
-            if (err) {
-                res.send(err);
-            };
-
-            console.log(JSON.stringify(descResult));
-            var descriptionJsonArray = JSON.parse(JSON.stringify(descResult));
-            var itemDescriptionMap = new Map()
-
-            descriptionJsonArray.forEach(item => {
-                itemDescriptionMap.set(item["id"], item["description"])
-            });
-
-            console.log(itemDescriptionMap);
-	    var itemId = recommendation.getRecommendation(preference, itemDescriptionMap);
-
-            res.send({"itemId" : itemId});
-        });
     });
 })
 
