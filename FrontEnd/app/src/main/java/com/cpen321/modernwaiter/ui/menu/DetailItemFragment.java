@@ -70,7 +70,8 @@ public class DetailItemFragment extends Fragment {
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-                adapter.notifyDataSetChanged();
+                if (adapter != null)
+                    adapter.notifyDataSetChanged();
 
                 fragmentTransaction.remove(thisFragment);
                 fragmentTransaction.commit();

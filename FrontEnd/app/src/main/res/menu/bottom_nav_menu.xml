@@ -7,8 +7,8 @@
         android:title="@string/title_menu" />
 
     <item
-        android:id="@+id/navigation_pay"
+        android:id="@+id/navigation_order"
         android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="@string/title_pay" />
+        android:title="@string/title_cart" />
 
 </menu>

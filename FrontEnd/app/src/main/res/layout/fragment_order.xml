@@ -4,18 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/fragment_bill"
+    android:id="@+id/fragment_order"
     android:background="@color/design_default_color_background">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/bill_recycler"
-        android:name="com.cpen321.modernwaiter.ui.pay.Bill_ItemFragment"
+
+<androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/order_recycler"
+        android:name="com.cpen321.modernwaiter.ui.order.OrderFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layoutManager="LinearLayoutManager"
-        app:layout_constraintBottom_toTopOf="@+id/startPaymentButton"
+        app:layout_constraintBottom_toTopOf="@+id/checkoutButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
@@ -23,12 +24,25 @@
         tools:listitem="@layout/bill_item" />
 
     <Button
-        android:id="@+id/startPaymentButton"
+        android:id="@+id/checkoutButton"
         android:layout_width="0dp"
         android:layout_height="75dp"
         android:backgroundTint="@color/green"
-        android:text="@string/get_bill"
+        android:text="@string/checkout"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/startBillButton"
+        android:layout_width="0dp"
+        android:layout_height="75dp"
+        android:backgroundTint="@color/orange"
+        android:text="@string/view_bill"
+        app:layout_constraintBottom_toTopOf="@+id/checkoutButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"

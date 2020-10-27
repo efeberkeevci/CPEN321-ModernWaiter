@@ -1,5 +1,7 @@
 package com.cpen321.modernwaiter;
 
+import android.view.Menu;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -7,10 +9,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.cpen321.modernwaiter.ui.MenuItem;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -34,14 +37,15 @@ public class TableSession {
 
     private final RequestQueue requestQueue;
 
+    private MenuItem featureItem;
+
+    public int orderId = -1;
+
     //creates a new session
     TableSession(RequestQueue requestQueue) {
-
-        // TODO: Initialize the menu
         //Make request to server to retrieve menu items to display
 
         menuItems = MainActivity.menu_items;
-
         orderedItems = menuItems.stream().collect(
                 Collectors.toMap(x -> x, x -> 0, (s, a) -> s, HashMap::new)
         );
@@ -49,9 +53,50 @@ public class TableSession {
         this.requestQueue = requestQueue;
 
         postOrderId();
+        getUserRecommendation();
+    }
 
-        // TODO: GET ORDERID order/user/user:id?isActive=1
+    public void getUserRecommendation() {
+        final Map<String, String> bodyFields = new HashMap<>();
+        bodyFields.put("users_id", HARDCODED.USER_ID);
+        bodyFields.put("restaurant_id", HARDCODED.RESTAURANT_ID);
 
+        final String bodyJSON = new Gson().toJson(bodyFields);
+
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.GET,
+                HARDCODED.URL + "item/recommend",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        FeatureResponse featureResponse = new Gson().fromJson(response, FeatureResponse.class);
+
+                        for (MenuItem menuItem : menuItems) {
+                            if (menuItem.id == featureResponse.itemId);
+                                featureItem = menuItem;
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        System.out.println(error);
+                    }
+                }
+        ) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+
+            @Override
+            public byte[] getBody() {
+                return bodyJSON.getBytes();
+            }
+        };
+
+        requestQueue.add(stringRequest);
     }
 
     private void postOrderId() {
@@ -59,20 +104,134 @@ public class TableSession {
         bodyFields.put("users_id", HARDCODED.USER_ID);
         bodyFields.put("tables_id", HARDCODED.TABLE_ID);
         bodyFields.put("restaurant_id", HARDCODED.RESTAURANT_ID);
-        bodyFields.put("ordered_at", Calendar.getInstance().getTime().toString());
+        bodyFields.put("amount", "0");
         bodyFields.put("has_paid", "0");
         bodyFields.put("is_active_session", "1");
 
         final String bodyJSON = new Gson().toJson(bodyFields);
-        // TODO: MAKE POST /order
         StringRequest stringRequest = new StringRequest(
                 Request.Method.POST,
-                HARDCODED.URL + "/order",
+                HARDCODED.URL + "order",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        getOrderId();;
+                        getOrderId();
                     }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        System.out.println(error);
+                    }
+                }
+        ) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+
+            @Override
+            public byte[] getBody() {
+                return bodyJSON.getBytes();
+            }
+        };
+
+        requestQueue.add(stringRequest);
+    }
+
+    private void getOrderId() {
+        //
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.GET,
+                HARDCODED.URL + "order/user/" + HARDCODED.USER_ID + "?isActive=1",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        List<OrderResponse> orderResponse = new Gson().fromJson(response, new TypeToken<List<OrderResponse>>() {}.getType());
+
+                        orderId = orderResponse.get(0).id;
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        requestQueue.add(stringRequest);
+    }
+
+    // Get the list of all items in the menu
+    public ArrayList<MenuItem> getMenuItems() {
+        return menuItems;
+    }
+
+    public void addMenuItems(ArrayList<MenuItem> menuItems) {
+        for(MenuItem item : menuItems){
+            item.quantity = "0";
+            this.menuItems.add(item);
+            orderedItems.put(item, 0);
+        }
+    }
+
+    //remove all items from cart
+    public void checkout() {
+        // Post /ordered-item/order:id forever
+        // ITEMS IN THE ORDERCART BASED ON ITS MENUITEM.QUANTITY
+        // Set is active to 2
+        if (orderId == -1) {
+            return;
+        }
+
+        for (MenuItem menuItem : menuItems) {
+
+            if(Integer.parseInt(menuItem.quantity) > 0) {
+                StringRequest stringRequest = createPostOrder(menuItem);
+
+                for (int i = 0; i < Integer.parseInt(menuItem.quantity); i++) {
+                    requestQueue.add(stringRequest);
+                }
+
+                // Add those value into orderedItems
+                orderedItems.replace(
+                        menuItem, orderedItems.get(menuItem) + Integer.valueOf(menuItem.quantity)
+                );
+            }
+
+            // Clear the cart of all orders
+            menuItem.quantity = String.valueOf(0);
+        }
+    }
+
+    // Return a map of MenuItems to the quantity ordered in the backend
+    public HashMap<MenuItem, Integer> getBill() {
+        return orderedItems;
+    }
+
+    public HashMap<MenuItem, Integer> getCart() {
+        return new HashMap<>(menuItems.stream()
+                .collect(
+                        Collectors.toMap(x -> x, MenuItem::getIntegerQuantity)
+                ));
+    }
+
+    public MenuItem getFeatureItem() {
+        return featureItem;
+    }
+
+    public StringRequest createPostOrder(MenuItem menuItem) {
+        HashMap<String, String> bodyFields = new HashMap<>();
+        bodyFields.put("orderId", String.valueOf(orderId));
+        bodyFields.put("itemId", String.valueOf(menuItem.id));
+
+        final String bodyJSON = new Gson().toJson(bodyFields);
+        return new StringRequest(
+                Request.Method.POST,
+                HARDCODED.URL + "ordered-items",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                            System.out.println("Success");
+                        }
                 },
                 new Response.ErrorListener() {
                     @Override
@@ -93,87 +252,11 @@ public class TableSession {
         };
     }
 
-    public int getOrderId() {
-        //TODO: change this
-        return 1;
+    public class OrderResponse {
+        public int id;
     }
 
-    // Get the list of all items in the menu
-    public ArrayList<MenuItem> getMenuItems() {
-        return menuItems;
-    }
-
-    public void addMenuItems(ArrayList<MenuItem> menuItems) {
-        for(MenuItem item : menuItems){
-            item.quantity = "0";
-            this.menuItems.add(item);
-            orderedItems.put(item, 0);
-        }
-    }
-
-    //remove all items from cart
-    public void checkout() {
-
-        // TODO: NOTIFY SERVER THAT CUSTOMER ORDER - /order POST once
-        // Post /ordered-item/order:id forever
-        // ITEMS IN THE ORDERCART BASED ON ITS MENUITEM.QUANTITY
-        // Set is active to 2
-
-
-        for (MenuItem menuItem : menuItems) {
-            // Add those value into orderedItems
-            orderedItems.replace(
-                    menuItem, orderedItems.get(menuItem) + Integer.valueOf(menuItem.quantity)
-            );
-
-            // Clear the cart of all orders
-            menuItem.quantity = String.valueOf(0);
-        }
-    }
-
-    // TODO: Update the bill based on the backend
-    // Endpoint /order/table/:table_id
-    // Endpoint /order/user/:user_id?isActive
-    public void UpdateBill() {
-        int id = MainActivity.getID();
-
-        /*String url = "http://my-json-feed";
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        JSONArray jsonArray = null;
-                        try {
-                            jsonArray = response.getJSONArray("data");
-                            for( int i = 0; i<jsonArray.length (); i++) {
-                                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                String item_name = jsonObject.getString("name");
-                                double item_price = jsonObject.getDouble("cost");
-                                String item_id = jsonObject.getString("id");
-                                //TODO: check logic for these values, I ignore description and quantity when getting data from backend
-                                orderCart.add(new MenuItem(item_name,"", "1", item_id, item_price));
-                            }
-                            updateOrderQuantities();
-                        } catch(JSONException e){
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // TODO: Handle error
-
-                    }
-                });
-        MainActivity.requestQueue.add(jsonObjectRequest);
-        */
-    }
-
-    // Return a map of MenuItems to the quantity ordered in the backend
-    public HashMap<MenuItem, Integer> getBill() {
-        return orderedItems;
+    public class FeatureResponse {
+        public int itemId;
     }
 }

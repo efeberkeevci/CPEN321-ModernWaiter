@@ -47,6 +47,7 @@ public class BillFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         MainActivity mainActivity = (MainActivity) getActivity();
+
         HashMap<MenuItem, Integer> billMap = mainActivity.tableSession.getBill();
 
         BillRecyclerAdapter billRecyclerAdapter = new BillRecyclerAdapter(billMap);
