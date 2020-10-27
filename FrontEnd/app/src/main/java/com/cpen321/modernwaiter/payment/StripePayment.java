@@ -273,6 +273,7 @@ public class StripePayment extends AppCompatActivity {
                                 stripe.handleNextActionForPayment(context, paymentIntentClientSecret);
                             } else {
                                 putPaid();
+                                endSession();
                                 startActivity(startPostPayment);
                             }
                         }
@@ -351,7 +352,7 @@ public class StripePayment extends AppCompatActivity {
      */
     private void putPaid(){
         //PUT request to confirm that the order has been paid
-        String url = HARDCODED.URL + "ordered-items/paid/" + "?isActive=1";
+        String url = HARDCODED.URL + "ordered-items/paid/";
         //TODO: pass order_id, needs billfragment
         HashMap<MenuItem, Integer> orderedItems = MainActivity.tableSession.getBill();
         for( Map.Entry<MenuItem, Integer> item : orderedItems.entrySet() ) {
@@ -381,7 +382,7 @@ public class StripePayment extends AppCompatActivity {
             MainActivity.requestQueue.add(jsonObjectRequest);
         }
         //PUT request for order has been paid fully
-        String url_order_paid = HARDCODED.URL + "order/paid/" + "?isActive=1";
+        String url_order_paid = HARDCODED.URL + "order/paid/";
         Map<String,String> params = new HashMap<>();
         params.put("orderId", String.valueOf(MainActivity.tableSession.orderId));
         params.put("hasPaid", "1");
@@ -405,5 +406,32 @@ public class StripePayment extends AppCompatActivity {
                 });
         MainActivity.requestQueue.add(jsonObjectRequest);
 
+    }
+
+    private void endSession(){
+        //PUT request for order has been paid fully
+        String url = HARDCODED.URL + "order/session/";
+        Map<String,String> params = new HashMap<>();
+        params.put("orderId", String.valueOf(MainActivity.tableSession.orderId));
+        params.put("isActive", "0");
+        JSONObject parameters = new JSONObject(params);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.PUT, url, parameters, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        //on success
+                        //TODO: print some message or not
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                        // TODO: Handle error
+
+                    }
+                });
+        MainActivity.requestQueue.add(jsonObjectRequest);
     }
 }
