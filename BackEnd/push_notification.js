@@ -13,27 +13,50 @@ admin.initializeApp({
   databaseURL: "https://modern-waiter-47e96.firebaseio.com"
 });
 
-function push_notification_func(orderId){
-console.log("Sending push notification");
-var topic = '1';
+function push_notification_payment_done(orderId){
+  console.log("Sending push notification");
+  var topic = '1';
 
-var message = {
-  notification: {
-    title: 'Payment Completed!',
-    body: 'All items are paid.'
-  },
-	topic:orderId
-};
+  var message = {
+    notification: {
+      title: 'Payment Completed!',
+      body: 'All items are paid.'
+    },
+    topic:orderId
+  };
 
-// Send a message to devices subscribed to the provided topic.
-admin.messaging().send(message)
-  .then((response) => {
-    // Response is a message ID string.
-    console.log('Successfully sent message:', response);
-  })
-  .catch((error) => {
-    console.log('Error sending message:', error);
-  });
+  // Send a message to devices subscribed to the provided topic.
+  admin.messaging().send(message)
+    .then((response) => {
+      // Response is a message ID string.
+      console.log('Successfully sent message:', response);
+    })
+    .catch((error) => {
+      console.log('Error sending message:', error);
+    });
+}
+
+function push_notification_order_received(orderId){
+  console.log("Sending order received push notification");
+  var topic = '1';
+
+  var message = {
+    notification: {
+      title: 'Order Received!',
+      body: 'Your order is being prepared now'
+    },
+    topic:orderId
+  };
+
+  // Send a message to devices subscribed to the provided topic.
+  admin.messaging().send(message)
+    .then((response) => {
+      // Response is a message ID string.
+      console.log('Successfully sent message:', response);
+    })
+    .catch((error) => {
+      console.log('Error sending message:', error);
+    });
 }
 
 
@@ -99,4 +122,4 @@ function messageAccountisClosed(orderId){
 //Later use case => Send push notification upon succsfull payment of an item
     //To do this, in the app.post("/mark/item/has/paid" route make callback to this function
 
-module.exports = {push_notification_func,messageAccountisClosed, subscribe};
+module.exports = {push_notification_payment_done, push_notification_order_received,messageAccountisClosed, subscribe};
