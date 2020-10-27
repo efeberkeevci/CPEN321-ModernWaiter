@@ -26,7 +26,6 @@ public class MenuItem {
         this.calories = Integer.valueOf(calories);
         this.popularity_count = Integer.valueOf(popularity_count);
         this.image = image;
-        //this.quantity = quantity;
     }
 
     public void incrementQuantity() {
@@ -43,9 +42,14 @@ public class MenuItem {
                 .format(cost);
     }
 
-    public String getTotalPriceString() {
+    public String getTotalCartPriceString() {
         return "$" + new DecimalFormat("#.##")
                 .format(cost * Integer.parseInt(quantity));
+    }
+
+    public String getTotalBillPriceString(int count) {
+        return "$" + new DecimalFormat("#.##")
+                .format(cost * count);
     }
 
     public int getIntegerQuantity() {

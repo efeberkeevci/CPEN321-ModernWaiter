@@ -49,7 +49,7 @@ public class OrderRecyclerAdapter extends RecyclerView.Adapter<OrderRecyclerAdap
         holder.nameView.setText(menuItem.name);
         holder.quantityView.setText(String.valueOf(orderMap.get(menuItem)));
 
-        holder.priceView.setText(menuItem.getTotalPriceString());
+        holder.priceView.setText(menuItem.getTotalCartPriceString());
     }
 
     @Override
