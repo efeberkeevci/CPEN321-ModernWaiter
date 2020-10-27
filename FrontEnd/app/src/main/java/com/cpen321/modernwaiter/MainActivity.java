@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         requestQueue = Volley.newRequestQueue(this);
-        tableSession = new TableSession(requestQueue, getSupportFragmentManager());
+        tableSession = new TableSession(requestQueue, this);
 
         navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each

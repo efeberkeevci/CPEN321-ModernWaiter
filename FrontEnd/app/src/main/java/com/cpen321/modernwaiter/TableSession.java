@@ -1,8 +1,8 @@
 package com.cpen321.modernwaiter;
 
 import android.app.Activity;
-import android.view.Menu;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -12,6 +12,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.cpen321.modernwaiter.ui.MenuItem;
+import com.cpen321.modernwaiter.ui.menu.MenuFragment;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -45,12 +46,12 @@ public class TableSession {
 
     public int orderId = -1;
 
-    private final FragmentManager fragmentManager;
+    private final AppCompatActivity activity;
 
     //creates a new session
-    TableSession(RequestQueue requestQueue, FragmentManager fragmentManager) {
+    TableSession(RequestQueue requestQueue, AppCompatActivity activity) {
         //Make request to server to retrieve menu items to display
-        this.fragmentManager = fragmentManager;
+        this.activity = activity;
 
         menuItems = MainActivity.menu_items;
         orderedItems = menuItems.stream().collect(
@@ -84,7 +85,7 @@ public class TableSession {
                                 featureItem = menuItem;
                         }
 
-                        updateCurrentFragment();
+                        updateMenuFragment();
                     }
                 },
                 new Response.ErrorListener() {
@@ -180,6 +181,7 @@ public class TableSession {
             this.menuItems.add(item);
             orderedItems.put(item, 0);
         }
+        updateMenuFragment();
     }
 
     //remove all items from cart
@@ -261,8 +263,12 @@ public class TableSession {
         };
     }
 
-    public void updateCurrentFragment() {
+    public void updateMenuFragment() {
         // TODO:
+        MenuFragment menuFragment = (MenuFragment) activity.getSupportFragmentManager().findFragmentById(R.id.fragment_menu);
+        if (menuFragment != null) {
+            menuFragment.refresh();
+        }
 
     }
 

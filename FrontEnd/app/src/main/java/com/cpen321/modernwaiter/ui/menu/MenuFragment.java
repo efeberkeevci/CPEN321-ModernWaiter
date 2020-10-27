@@ -30,6 +30,7 @@ import com.cpen321.modernwaiter.ui.pay.BillFragment;
 public class MenuFragment extends Fragment {
 
     MenuRecyclerAdapter menuRecyclerAdapter;
+    View view;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -46,7 +47,13 @@ public class MenuFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_menu, container, false);
+        this.view = inflater.inflate(R.layout.fragment_menu, container, false);
+
+        refresh();
+        return view;
+    }
+
+    public void refresh() {
 
         Button viewCartButton = view.findViewById(R.id.viewCartButton);
         viewCartButton.setOnClickListener(new View.OnClickListener() {
@@ -100,7 +107,5 @@ public class MenuFragment extends Fragment {
                 }
             });
         }
-
-        return view;
     }
 }
