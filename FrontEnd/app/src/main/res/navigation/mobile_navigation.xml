@@ -33,6 +33,26 @@
         android:id="@+id/navigation_bill"
         android:name="com.cpen321.modernwaiter.ui.pay.BillFragment"
         android:label="Bill"
-        tools:layout="@layout/fragment_bill" />
+        tools:layout="@layout/fragment_bill" >
+        <action
+            android:id="@+id/action_navigation_bill_to_navigation_payment"
+            app:destination="@id/navigation_payment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_payment"
+        android:name="com.cpen321.modernwaiter.payment.MainPayment"
+        android:label="Payment"
+        tools:layout="@layout/activity_main_payment" >
+        <action
+            android:id="@+id/action_navigation_payment_to_navigation_stripe"
+            app:destination="@id/navigation_stripe" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_stripe"
+        android:name="com.cpen321.modernwaiter.payment.StripePayment"
+        android:label="Stripe"
+        tools:layout="@layout/activity_stripe_payment" />
 
 </navigation>

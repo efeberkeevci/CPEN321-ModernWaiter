@@ -1,52 +1,63 @@
 package com.cpen321.modernwaiter.payment;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.cpen321.modernwaiter.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class MainPayment extends AppCompatActivity {
+public class MainPayment extends Fragment {
     static String option;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_payment);
+    }
 
-        Button pay_for_all = findViewById(R.id.pay_for_all);
-        Intent startStripePayment = new Intent(this, StripePayment.class);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.activity_main_payment, container, false);
+
+        BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.nav_view);
+        bottomNavigationView.setVisibility(View.INVISIBLE);
+
+        Button pay_for_all = view.findViewById(R.id.pay_for_all);
         pay_for_all.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 option = "payForAll";
-                startActivity(startStripePayment);
+                Navigation.findNavController(view).navigate(R.id.action_navigation_payment_to_navigation_stripe);
             }
         });
 
-        Button split_evenly = findViewById(R.id.split_evenly);
+        Button split_evenly = view.findViewById(R.id.split_evenly);
         split_evenly.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // TODO
-                option = "paySplitEvenly";
-                startActivity(startStripePayment);
+                Navigation.findNavController(view).navigate(R.id.action_navigation_payment_to_navigation_stripe);
             }
         });
 
-        Intent intent = new Intent(this, PerItemPayment.class);
-        Button pay_per_item = findViewById(R.id.pay_per_item);
+        Button pay_per_item = view.findViewById(R.id.pay_per_item);
         pay_per_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                option = "payPerItem";
-                startActivity(intent);
+                Navigation.findNavController(view).navigate(R.id.action_navigation_payment_to_navigation_stripe);
             }
         });
+        return view;
     }
 }

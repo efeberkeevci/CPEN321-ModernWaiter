@@ -1,19 +1,19 @@
 package com.cpen321.modernwaiter.payment;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -22,14 +22,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.cpen321.modernwaiter.HARDCODED;
 import com.cpen321.modernwaiter.MainActivity;
 import com.cpen321.modernwaiter.R;
-import com.cpen321.modernwaiter.TableSession;
 import com.cpen321.modernwaiter.ui.MenuItem;
+import com.cpen321.modernwaiter.ui.pay.BillRecyclerAdapter;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.stripe.android.ApiResultCallback;
 import com.stripe.android.PaymentConfiguration;
@@ -43,61 +41,84 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.text.DecimalFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
-public class StripePayment extends AppCompatActivity {
+public class StripePayment extends Fragment {
     /**
      * This example collects card payments, implementing the guide here: https://stripe.com/docs/payments/accept-a-payment-synchronously#android
      */
-    // 10.0.2.2 is the Android emulator's alias to localhost
-    private static final String BACKEND_URL = "http://10.0.2.2:3000/";
-    private double totalAmount = 0;
+    private int totalAmount = 0;
     private Stripe stripe;
-    private Activity context = this;
-    private int num_users = 0;
-    private TextView amount_to_pay;
+    private View view;
+    private int num_users = 1;
+    private final RequestQueue requestQueue = MainActivity.requestQueue;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_stripe_payment);
-        loadPage();
+    }
 
-        TextView payment_option = findViewById(R.id.payment_option);
-        amount_to_pay = findViewById(R.id.amount_to_pay);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.activity_stripe_payment, container, false);
+
         String option_text;
         String amount_text;
 
-        getAmountToPay();
+        //getAmountToPay();
         if(MainPayment.option.equals("payForAll")) option_text = "Total amount to be paid is:";
         else if(MainPayment.option.equals("paySplitEvenly")) option_text = "Total amount to be paid by you after splitting evenly is:";
         else if(MainPayment.option.equals("payPerItem")) option_text = "Toatl amount to be paid by you for the items you selected is:";
         else option_text = "Oops! Looks like something went wrong with your billing";
 
-        payment_option.setText(option_text);
+        loadBillRecycler();
+        loadPage();
+        return view;
+    }
 
-        amount_text = "$ " + String.valueOf(totalAmount) + " CAD";
-        amount_to_pay.setText(amount_text);
+    private void loadBillRecycler() {
+        Context context = view.getContext();
 
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.stripe_recycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
+        MainActivity mainActivity = (MainActivity) getActivity();
+
+        HashMap<MenuItem, Integer> billMap = mainActivity.tableSession.getBill();
+
+        BillRecyclerAdapter billRecyclerAdapter = new BillRecyclerAdapter(billMap);
+        recyclerView.setAdapter(billRecyclerAdapter);
+
+        totalAmount = 0;
+
+        for(MenuItem menuItem : mainActivity.tableSession.getBill().keySet()) {
+            totalAmount += menuItem.getCost() * mainActivity.tableSession.getBill().get(menuItem);
+        }
+
+        Button payButton = view.findViewById(R.id.payButton);
+        payButton.setText("Pay $" + new DecimalFormat("#.##")
+                .format((double) totalAmount / 100));
     }
 
     private void loadPage() {
         // Clear the card widget
-        CardInputWidget cardInputWidget = findViewById(R.id.cardInputWidget);
+        CardInputWidget cardInputWidget = view.findViewById(R.id.cardInputWidget);
         cardInputWidget.clear();
 
         requestKey();
     }
 
     private void requestKey() {
-        RequestQueue queue = Volley.newRequestQueue(this);
+        RequestQueue queue = requestQueue;
         // For added security, our sample app gets the publishable key from the server
 
         StringRequest request = new StringRequest(
                 Request.Method.GET,
-                BACKEND_URL + "key",
+                HARDCODED.URL + "key",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -121,7 +142,7 @@ public class StripePayment extends AppCompatActivity {
     }
 
     private void pay() {
-        CardInputWidget cardInputWidget = findViewById(R.id.cardInputWidget);
+        CardInputWidget cardInputWidget = view.findViewById(R.id.cardInputWidget);
         PaymentMethodCreateParams params = cardInputWidget.getPaymentMethodCreateParams();
 
         if (params == null) {
@@ -161,11 +182,11 @@ public class StripePayment extends AppCompatActivity {
                                 JSONObject jsonObject = response.getJSONObject(0);
                                 int id = jsonObject.getInt("id");
                                 int tableId = jsonObject.getInt("tables_id");
-                                double amount = jsonObject.getDouble("users_id");
+                               // double amount = jsonObject.getDouble("users_id");
                                 int has_paid = jsonObject.getInt("has_paid");
                                 int is_active_session = jsonObject.getInt("is_active_session");
                                 //TODO: check logic for these values, I ignore description and quantity when getting data from backend
-                                totalAmount = amount;
+                                totalAmount = 1600;
 
                             } catch(JSONException e){
                                 e.printStackTrace();
@@ -187,42 +208,26 @@ public class StripePayment extends AppCompatActivity {
             Log.i("STRIPEPAYMENT", "INSIDE else");
             totalAmount = 0;
             String url = HARDCODED.URL + "order/table/"+ HARDCODED.TABLE_ID + "?isActive=1";
-            JsonArrayRequest jsonObjectRequest = new JsonArrayRequest
-                    (Request.Method.GET, url,null, new Response.Listener<JSONArray>() {
-
+            StringRequest request = new StringRequest(
+                    Request.Method.GET,
+                    url,
+                    new Response.Listener<String>() {
                         @Override
-                        public void onResponse(JSONArray response) {
-                            Log.i("STRIPEPAYMENT", response.toString());
+                        public void onResponse(String response) {
+                            List<OrderResponse> orderResponseList = new Gson()
+                                    .fromJson(response, new TypeToken<List<OrderResponse>>() {}.getType());
 
-                            try {
-
-                                for( int i = 0; i<response.length (); i++) {
-                                    JSONObject jsonObject = response.getJSONObject(i);
-                                    int id = jsonObject.getInt("id");
-                                    int tableId = jsonObject.getInt("tables_id");
-                                    double amount = jsonObject.getDouble("users_id");
-                                    int has_paid = jsonObject.getInt("has_paid");
-                                    int is_active_session = jsonObject.getInt("is_active_session");
-                                    totalAmount = totalAmount + amount;
-                                    num_users++;
-                                }
-                                amount_to_pay.setText(String.valueOf(totalAmount));
-                            } catch(JSONException e){
-                                e.printStackTrace();
-                                Log.i("STRIPEPAYMENT", "in catch block");
-                            }
+                            totalAmount = (int) (orderResponseList.get(0).amount * 100);
                         }
-                    }, new Response.ErrorListener() {
-
+                    },
+                    new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            // TODO: Handle error
-                            Log.i("STRIPEPAYMENT", "in error response");
-                            Log.i("STRIPEPAYMENT", error.getMessage());
-
+                            Log.i("asd", error.toString());
                         }
-                    });
-            MainActivity.requestQueue.add(jsonObjectRequest);
+                    }
+            );
+            MainActivity.requestQueue.add(request);
             //get the bill for the entire table
             if(MainPayment.option.equals("payForAll")){
                 return totalAmount;
@@ -249,19 +254,18 @@ public class StripePayment extends AppCompatActivity {
             bodyFields.put("paymentMethodId", paymentMethodId);
             bodyFields.put("currency", "cad");
             // TODO:
-            bodyFields.put("amounts", String .valueOf(totalAmount));
+            bodyFields.put("orderAmount", String.valueOf(totalAmount));
         } else {
             bodyFields.put("paymentIntentId", paymentIntentId);
         }
 
         final String bodyJSON = new Gson().toJson(bodyFields);
-        RequestQueue queue = Volley.newRequestQueue(this);
 
-        Intent startPostPayment = new Intent(this, PostPayment.class);
+        Intent startPostPayment = new Intent(getActivity(), PostPayment.class);
 
         StringRequest stringRequest = new StringRequest(
                 Request.Method.POST,
-                BACKEND_URL + "pay",
+                HARDCODED.URL + "pay",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -274,12 +278,13 @@ public class StripePayment extends AppCompatActivity {
                         String requiresAction = responseMap.get("requiresAction");
 
                         if (error != null) {
-                            displayAlert("Error", error, false);
+                            Log.i("Stripe Payment", "Error, response is  not null");
                         } else if (paymentIntentClientSecret != null) {
                             if ("true".equals(requiresAction)) {
-                                stripe.handleNextActionForPayment(context, paymentIntentClientSecret);
+                                stripe.handleNextActionForPayment(getActivity(), paymentIntentClientSecret);
                             } else {
                                 putPaid();
+                                endSession();
                                 startActivity(startPostPayment);
                             }
                         }
@@ -303,7 +308,7 @@ public class StripePayment extends AppCompatActivity {
             }
         };
 
-        queue.add(stringRequest);
+        requestQueue.add(stringRequest);
     }
 
     private Map<String, String> parseResponseToMap(String response) {
@@ -320,35 +325,13 @@ public class StripePayment extends AppCompatActivity {
         return responseMap;
     }
 
-    private void displayAlert(@NonNull String title, @NonNull String message, boolean restartDemo) {
-        runOnUiThread(() -> {
-            final AlertDialog.Builder builder =
-                    new AlertDialog.Builder(this)
-                            .setTitle(title)
-                            .setMessage(message);
-            new GsonBuilder()
-                    .setPrettyPrinting()
-                    .create();
-            if (restartDemo) {
-                builder.setPositiveButton("Restart demo",
-                        (DialogInterface dialog, int index) -> loadPage());
-            } else {
-                builder.setPositiveButton("Ok", null);
-            }
-            builder
-                    .create()
-                    .show();
-        });
-    }
-
     private void onRetrievedKey(@NonNull String stripePublishableKey) {
         // Configure the SDK with your Stripe publishable key so that it can make requests to the Stripe API
-        final Context applicationContext = getApplicationContext();
-        PaymentConfiguration.init(applicationContext, stripePublishableKey);
-        stripe = new Stripe(applicationContext, stripePublishableKey);
+        PaymentConfiguration.init(getActivity(), stripePublishableKey);
+        stripe = new Stripe(getActivity(), stripePublishableKey);
 
         // Hook up the pay button to the card widget and stripe instance
-        Button payButton = findViewById(R.id.payButton);
+        Button payButton = view.findViewById(R.id.payButton);
         payButton.setOnClickListener((View view) -> pay());
     }
 
@@ -387,6 +370,7 @@ public class StripePayment extends AppCompatActivity {
                     });
             MainActivity.requestQueue.add(jsonObjectRequest);
         }
+        Log.i("ORDER PAIUD SERVER CALL CHECK", "YES");
         //PUT request for order has been paid fully
         String url_order_paid = HARDCODED.URL + "order/paid/";
         Map<String,String> params = new HashMap<>();
@@ -440,4 +424,9 @@ public class StripePayment extends AppCompatActivity {
                 });
         MainActivity.requestQueue.add(jsonObjectRequest);
     }
+
+    public class OrderResponse {
+        public double amount;
+    }
+
 }
