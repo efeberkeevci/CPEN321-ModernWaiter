@@ -10,7 +10,6 @@ import android.widget.TextView;
 import com.cpen321.modernwaiter.R;
 import com.cpen321.modernwaiter.ui.MenuItem;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.stream.Collectors;
@@ -50,7 +49,7 @@ public class BillRecyclerAdapter extends RecyclerView.Adapter<BillRecyclerAdapte
         holder.nameView.setText(menuItem.name);
         holder.quantityView.setText(String.valueOf(billMap.get(menuItem)));
 
-        holder.priceView.setText(menuItem.getTotalPriceString());
+        holder.priceView.setText(menuItem.getTotalBillPriceString(billMap.get(menuItem)));
     }
 
     @Override

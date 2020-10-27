@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class OrderRecyclerAdapter extends RecyclerView.Adapter<OrderRecyclerAdapter.ViewHolder> {
 
     private final HashMap<MenuItem, Integer> orderMap;
-    private final ArrayList<MenuItem> itemArray;
+    public ArrayList<MenuItem> itemArray;
 
     public OrderRecyclerAdapter(HashMap<MenuItem, Integer> orderMap) {
         this.orderMap = orderMap;
@@ -49,7 +49,7 @@ public class OrderRecyclerAdapter extends RecyclerView.Adapter<OrderRecyclerAdap
         holder.nameView.setText(menuItem.name);
         holder.quantityView.setText(String.valueOf(orderMap.get(menuItem)));
 
-        holder.priceView.setText(menuItem.getTotalPriceString());
+        holder.priceView.setText(menuItem.getTotalCartPriceString());
     }
 
     @Override
@@ -75,5 +75,12 @@ public class OrderRecyclerAdapter extends RecyclerView.Adapter<OrderRecyclerAdap
         public String toString() {
             return super.toString() + " '" + quantityView.getText() + "'";
         }
+    }
+
+    public void refresh() {
+        itemArray = new ArrayList<MenuItem>(orderMap.keySet().stream()
+                .filter(menuItem -> orderMap.get(menuItem) > 0)
+                .collect(Collectors.toList())
+        );
     }
 }
