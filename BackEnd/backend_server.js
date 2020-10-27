@@ -5,6 +5,9 @@ var app = express();
 var push_notification = require("./push_notification.js");
 var recommendation = require("./recommendation.js");
 
+const env = require("dotenv").config({ path: "./.env" });
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+
 app.use(express.json());
 
 var con = mysql.createConnection({
@@ -40,6 +43,7 @@ function pushNotificationsDemo(){
  * 200 if successful.
  */
 app.get("/restaurant/:id", (req,res) => {
+    console.log("/restaurant/{{id}}");
     let id = req.params.id;
     let sql_query = mysql.format("SELECT * FROM restaurant WHERE id = ?", [id]);
     con.query(sql_query, function(err,result,fields){
@@ -58,6 +62,7 @@ app.get("/restaurant/:id", (req,res) => {
  * 200 if successful.
  */
 app.get("/items/:id", (req,res) =>{
+    console.log("/items/{{id}}");
     let id = req.params.id;
     let sql_query = mysql.format("SELECT * FROM items WHERE restaurant_id = ?", [id]);
     con.query(sql_query, function(err,result,fields){
@@ -77,6 +82,7 @@ app.get("/items/:id", (req,res) =>{
  * 200 if successful.
  */
 app.get("/item-options/:id", (req,res) => {
+    console.log("/item-options/{{id}}");
     let id = req.params.id;
     let sql_query = mysql.format("SELECT * FROM items_options WHERE items_id = ?", [id]);
     con.query(sql_query, function(err,result,fields){
@@ -93,6 +99,7 @@ app.get("/item-options/:id", (req,res) => {
  * with a status code of 200 if successful.
  */
 app.get("/options/:id", (req,res) =>{
+    console.log("/options/{{id}}");
     let id = req.params.id;
     let sql_query = mysql.format("SELECT * FROM options WHERE id = ?", [id]);
     con.query(sql_query, function(err,result,fields){
@@ -110,6 +117,7 @@ app.get("/options/:id", (req,res) =>{
  * if successful.
  */
 app.get("/table/:id", (req,res) => {    
+    console.log("/table/{{id}}");
     let id = req.params.id;
     let sql_query = mysql.format("SELECT * FROM tables WHERE id = ?", [id]);
     con.query(sql_query, function(err,result,fields){
@@ -127,6 +135,7 @@ app.get("/table/:id", (req,res) => {
  * if successful.
  */
 app.get("/user/:id", (req, res)=>{
+    console.log("/user/{{id}}");
     let id = req.params.id;
     let sql_query = mysql.format("SELECT * FROM users WHERE id = ?", [id]);
     con.query(sql_query, function(err,result,fields){
@@ -142,6 +151,7 @@ app.get("/user/:id", (req, res)=>{
  * returns a status code of 200 if successful.
  */
 app.post("/order", (req,res) =>{
+    console.log("/order");
     let sql_query = mysql.format("INSERT INTO orders ( users_id, tables_id, restaurant_id, amount, has_paid, is_active_session) VALUES(?,?,?,?,?,?)"
     ,[req.body.users_id, req.body.tables_id, req.body.restaurant_id,
       req.body.amount, req.body.has_paid, req.body.is_active_session]);
@@ -173,6 +183,7 @@ app.post("/order", (req,res) =>{
  * status code of 200 if successful.
  */
 app.put("/order/amount", (req,res) => {
+    console.log("/order/amount");
     let id = req.body.id;
     let amount = req.body.amount;
     let sql_query_get_oldamount = mysql. format("SELECT amount FROM orders WHERE id = ?", [id]);
@@ -203,6 +214,7 @@ app.put("/order/amount", (req,res) => {
  * 200 if successful.
  */
 app.get("/order/user/:users_id", (req,res) =>{
+    console.log("/order/user/{{userId}}");
     let users_id = req.params.users_id;
     let isActive = req.query.isActive;
     let sql_query = mysql.format("SELECT * FROM orders WHERE users_id = ? && is_active_session = ? ", [users_id, isActive]);
@@ -221,6 +233,7 @@ app.get("/order/user/:users_id", (req,res) =>{
  * 200 if successful.
  */
 app.get("/order/table/:tables_id", (req,res) =>{
+    console.log("/order/table/{{tableId}}");
     let tables_id = req.params.tables_id;
     let isActive = req.query.isActive;
     let sql_query = mysql.format("SELECT * FROM orders WHERE tables_id = ? && is_active_session = ? ", [tables_id, isActive]);
@@ -241,6 +254,7 @@ app.get("/order/table/:tables_id", (req,res) =>{
  * status code of 200 if successful.
  */
 app.put("/order/session", (req,res) => {
+    console.log("/order/session");
     let orderId = req.body.orderId;
     let isActive = req.body.isActive;
     let sql_query = mysql.format("UPDATE orders SET is_active_session = ? WHERE id = ?", [isActive, orderId]);
@@ -261,6 +275,7 @@ app.put("/order/session", (req,res) => {
  * status code of 200 if successful.
  */
 app.put("/order/paid", (req,res) => {
+    console.log("/order/paid");
     let orderId = req.body.orderId;
     let hasPaid = req.body.hasPaid;
     console.log(orderId,hasPaid);
@@ -288,6 +303,7 @@ app.put("/order/paid", (req,res) => {
  * code of 200 if successful.
  */
 app.get("/ordered-items/:orderId", (req,res) => {
+    console.log("/ordered-items/{{orderId}}");
     let orderId = req.params.orderId;
     let sql_query = mysql.format("SELECT * FROM ordered_items WHERE orders_id = ?", [ orderId]);
     con.query(sql_query, function(err,result,fields){
@@ -305,6 +321,7 @@ app.get("/ordered-items/:orderId", (req,res) => {
  * It returns a status code of 200 if successful.
  */
 app.post("/ordered-items", (req,res) => {
+    console.log("/ordered-items");
     let orderId = req.body.orderId;
     let itemId = req.body.itemId;
     let sql_query = mysql.format("INSERT INTO ordered_items (orders_id, items_id, has_paid, is_selected) VALUES(?,?, 0,0) ", [orderId,itemId]);
@@ -357,6 +374,7 @@ function updateOrderAmount(orderId, itemId) {
  * It returns a status code of 200 if successful.
  */
 app.put("/ordered-items/paid", (req,res) => {
+    console.log("/ordered-items/paid");
     let orderId = req.body.orderId;
     let itemId = req.body.itemId;
     let hasPaid = req.body.hasPaid;
@@ -373,6 +391,7 @@ app.put("/ordered-items/paid", (req,res) => {
  * HTTP GET request to retrieve user preferences.
  */
 app.get("/user/preferences/:id", (req,res) => {
+    console.log("/user/preferences/{{id}}");
     let id = req.params.id;
     let sql_query = mysql.format("SELECT preferences FROM users WHERE id = ?", [id]);
     con.query(sql_query, function(err,result,fields){
@@ -387,6 +406,7 @@ app.get("/user/preferences/:id", (req,res) => {
  * HTTP GET request to item descriptions.
  */
 app.get("/item/descriptions/:restaurantId", (req,res) => {
+    console.log("/item/descriptions/{{restaurantId}}");
     let restaurantId = req.params.restaurantId;
     let sql_query = mysql.format("SELECT id, description FROM items WHERE restaurant_id = ?", [restaurantId]);
     con.query(sql_query, function(err,result,fields){
@@ -404,6 +424,7 @@ app.get("/item/descriptions/:restaurantId", (req,res) => {
  * status code of 200.
  */
 app.get("/item/recommend", (req,res) => {
+    console.log("/item/recommend");
     let users_id = 1; //req.body.users_id;
     let restaurant_id = 1; //req.body.restaurant_id;
     let user_query = mysql.format("SELECT preferences FROM users WHERE id = ?", [users_id]);
@@ -446,3 +467,65 @@ app.post("/registrationToken", (req,res) => {
 	let orderId = "1";
     res.send(push_notification.subscribe(registrationToken,orderId));
 })
+
+/* GET users listing. */
+app.get('/key', (req, res) => {
+  res.send({ publishableKey: process.env.STRIPE_PUBLISHABLE_KEY });
+});
+
+app.post('/pay', async(req, res) => {
+  const { paymentMethodId, paymentIntentId, currency, useStripeSdk, orderAmount } = req.body;
+
+  try {
+    let intent;
+    if (paymentMethodId) {
+      // Create new PaymentIntent with a PaymentMethod ID from the client.
+      intent = await stripe.paymentIntents.create({
+        amount: orderAmount,
+        currency: currency,
+        payment_method: paymentMethodId,
+        confirmation_method: "manual",
+        confirm: true,
+        // If a mobile client passes `useStripeSdk`, set `use_stripe_sdk=true`
+        // to take advantage of new authentication features in mobile SDKs
+        use_stripe_sdk: useStripeSdk,
+      });
+      // After create, if the PaymentIntent's status is succeeded, fulfill the order.
+    } else if (paymentIntentId) {
+      // Confirm the PaymentIntent to finalize payment after handling a required action
+      // on the client.
+      intent = await stripe.paymentIntents.confirm(paymentIntentId);
+      // After confirm, if the PaymentIntent's status is succeeded, fulfill the order.
+    }
+    res.send(generateResponse(intent));
+  } catch (e) {
+    // Handle "hard declines" e.g. insufficient funds, expired card, etc
+    // See https://stripe.com/docs/declines/codes for more
+    res.send({ error: e.message });
+  }
+})
+
+const generateResponse = intent => {
+  // Generate a response based on the intent's status
+  switch (intent.status) {
+    case "requires_action":
+    case "requires_source_action":
+      // Card requires authentication
+      return {
+        requiresAction: true,
+        clientSecret: intent.client_secret
+      };
+    case "requires_payment_method":
+    case "requires_source":
+      // Card was not properly authenticated, suggest a new payment method
+      return {
+        error: "Your card was denied, please provide a new payment method"
+      };
+    case "succeeded":
+      // Payment is complete, authentication not required
+      // To cancel the payment after capture you will need to issue a Refund (https://stripe.com/docs/api/refunds)
+      return { clientSecret: intent.client_secret };
+  }
+};
+
+
