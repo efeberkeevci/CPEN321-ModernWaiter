@@ -387,7 +387,7 @@ public class StripePayment extends AppCompatActivity {
         params.put("hasPaid", "1");
         JSONObject parameters = new JSONObject(params);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.PUT, url, parameters, new Response.Listener<JSONObject>() {
+                (Request.Method.PUT, url_order_paid, parameters, new Response.Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(JSONObject response) {
