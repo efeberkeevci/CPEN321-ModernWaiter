@@ -8,8 +8,6 @@ import androidx.navigation.Navigation;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.cpen321.modernwaiter.ui.MenuItem;
 import com.google.gson.Gson;
@@ -17,9 +15,9 @@ import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -39,7 +37,6 @@ public class TableSession {
     // Quantity is the amount that has is in a user's cart
     // not to be mistaken with the items that are already ordered in the backend
     // Once an order is sent to the backend, it cannot be cancelled
-    private ArrayList<MenuItem> menuItems;
 
     private final RequestQueue requestQueue;
 
@@ -57,7 +54,6 @@ public class TableSession {
         this.activity = activity;
         this.requestQueue = requestQueue;
 
-        menuItems = new ArrayList<MenuItem>();
         orderedItems = new HashMap<MenuItem, Integer>();
 
         fetchMenu();
@@ -66,8 +62,8 @@ public class TableSession {
     }
 
     // Get the list of all items in the menu
-    public ArrayList<MenuItem> getMenuItems() {
-        return menuItems;
+    public Set<MenuItem> getMenuItems() {
+        return getBill().keySet();
     }
 
     // Return a map of MenuItems to the quantity ordered in the backend
@@ -77,7 +73,7 @@ public class TableSession {
 
     // Return a hashmap of MenuItem & Its quantity integer
     public HashMap<MenuItem, Integer> getCart() {
-        return new HashMap<>(menuItems.stream()
+        return new HashMap<>(getMenuItems().stream()
                 .collect(
                         Collectors.toMap(x -> x, MenuItem::getIntegerQuantity)
                 ));
@@ -96,7 +92,7 @@ public class TableSession {
             return;
         }
 
-        for (MenuItem menuItem : menuItems) {
+        for (MenuItem menuItem : getMenuItems()) {
 
             if(Integer.parseInt(menuItem.quantity) > 0) {
                 StringRequest stringRequest = createPostOrder(menuItem);
@@ -126,9 +122,8 @@ public class TableSession {
                     ArrayList<MenuItem> newMenuItems = new Gson().fromJson(response, new TypeToken<List<MenuItem>>() {}.getType());
 
                     for (MenuItem newMenuItem : newMenuItems) {
-                        if (!menuItems.contains(newMenuItem)) {
+                        if (!getMenuItems().contains(newMenuItem)) {
                             newMenuItem.quantity = "0";
-                            menuItems.add(newMenuItem);
                             orderedItems.put(newMenuItem, 0);
                         }
                     }
@@ -190,7 +185,7 @@ public class TableSession {
                 response -> {
                     List<OrderedItemResponse> orderedItemResponses = new Gson().fromJson(response, new TypeToken<List<OrderedItemResponse>>() {
                     }.getType());
-                    HashMap<MenuItem, Integer> updatedBillMap = new HashMap<MenuItem, Integer>(menuItems.stream().collect(Collectors.toMap(
+                    HashMap<MenuItem, Integer> updatedBillMap = new HashMap<MenuItem, Integer>(getMenuItems().stream().collect(Collectors.toMap(
                             Function.identity(), x -> 0
                     )));
 
@@ -222,9 +217,9 @@ public class TableSession {
 
                     FeatureResponse featureResponse = new Gson().fromJson(response, FeatureResponse.class);
 
-                    for (MenuItem menuItem : menuItems) {
-                        if (menuItem.id == featureResponse.itemId);
-                        featureItem = menuItem;
+                    for (MenuItem menuItem : getMenuItems()) {
+                        if (menuItem.id == featureResponse.itemId)
+                            featureItem = menuItem;
                     }
 
                     updateMenuFragment();

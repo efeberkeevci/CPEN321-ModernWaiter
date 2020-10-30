@@ -24,6 +24,8 @@ import com.cpen321.modernwaiter.ui.MenuItem;
 import com.cpen321.modernwaiter.ui.order.OrderFragment;
 import com.cpen321.modernwaiter.ui.pay.BillFragment;
 
+import java.util.ArrayList;
+
 /**
  * A fragment representing a list of Items.
  */
@@ -83,7 +85,9 @@ public class MenuFragment extends Fragment {
         };
 
         MainActivity mainActivity = (MainActivity) getActivity();
-        menuRecyclerAdapter = new MenuRecyclerAdapter(mainActivity.tableSession.getMenuItems(), listener);
+        ArrayList<MenuItem> menuItems = new ArrayList<>(mainActivity.tableSession.getMenuItems());
+
+        menuRecyclerAdapter = new MenuRecyclerAdapter(menuItems, listener);
 
 
         if (mainActivity.tableSession.getFeatureItem() != null) {
