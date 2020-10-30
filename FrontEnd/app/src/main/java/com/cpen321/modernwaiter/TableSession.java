@@ -57,7 +57,7 @@ public class TableSession {
         this.activity = activity;
         this.requestQueue = requestQueue;
 
-        menuItems = new ArrayList<>();
+        menuItems = new ArrayList<MenuItem>();
         orderedItems = new HashMap<MenuItem, Integer>();
 
         fetchMenu();
@@ -65,185 +65,29 @@ public class TableSession {
         getUserRecommendation();
     }
 
-    private void fetchMenu() {
-
-        LinkedList<MenuItem> response_menu_items = new LinkedList<MenuItem>();
-        String url = HARDCODED.URL + HARDCODED.RESTAURANT_ID;
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-
-                        ArrayList<MenuItem> newMenuItems = new Gson().fromJson(response, new TypeToken<List<MenuItem>>() {}.getType());
-
-                        for (MenuItem newMenuItem : newMenuItems) {
-                            if (!menuItems.contains(newMenuItem)) {
-                                menuItems.add(newMenuItem);
-                                orderedItems.put(newMenuItem, 0);
-                            }
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.i("Fetch Menu", error.toString());
-            }
-        });
-        requestQueue.add(stringRequest);
+    // Get the list of all items in the menu
+    public ArrayList<MenuItem> getMenuItems() {
+        return menuItems;
     }
 
-    public void getUserRecommendation() {
-        final Map<String, String> bodyFields = new HashMap<>();
-        bodyFields.put("users_id", HARDCODED.USER_ID);
-        bodyFields.put("restaurant_id", HARDCODED.RESTAURANT_ID);
-
-        final String bodyJSON = new Gson().toJson(bodyFields);
-
-        StringRequest stringRequest = new StringRequest(
-                Request.Method.GET,
-                HARDCODED.URL + "item/recommend",
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-
-                        FeatureResponse featureResponse = new Gson().fromJson(response, FeatureResponse.class);
-
-                        for (MenuItem menuItem : menuItems) {
-                            if (menuItem.id == featureResponse.itemId);
-                                featureItem = menuItem;
-                        }
-
-                        updateMenuFragment();
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        System.out.println(error);
-                    }
-                }
-        ) {
-            @Override
-            public String getBodyContentType() {
-                return "application/json; charset=utf-8";
-            }
-
-            @Override
-            public byte[] getBody() {
-                return bodyJSON.getBytes();
-            }
-        };
-
-        requestQueue.add(stringRequest);
+    // Return a map of MenuItems to the quantity ordered in the backend
+    public HashMap<MenuItem, Integer> getBill() {
+        return orderedItems;
     }
 
-    private void postOrderId() {
-        final Map<String, String> bodyFields = new HashMap<>();
-        bodyFields.put("users_id", HARDCODED.USER_ID);
-        bodyFields.put("tables_id", HARDCODED.TABLE_ID);
-        bodyFields.put("restaurant_id", HARDCODED.RESTAURANT_ID);
-        bodyFields.put("amount", "0");
-        bodyFields.put("has_paid", "0");
-        bodyFields.put("is_active_session", "1");
-
-        final String bodyJSON = new Gson().toJson(bodyFields);
-        StringRequest stringRequest = new StringRequest(
-                Request.Method.POST,
-                HARDCODED.URL + "order",
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        getOrderId();
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        System.out.println(error);
-                    }
-                }
-        ) {
-            @Override
-            public String getBodyContentType() {
-                return "application/json; charset=utf-8";
-            }
-
-            @Override
-            public byte[] getBody() {
-                return bodyJSON.getBytes();
-            }
-        };
-
-        requestQueue.add(stringRequest);
+    // Return a hashmap of MenuItem & Its quantity integer
+    public HashMap<MenuItem, Integer> getCart() {
+        return new HashMap<>(menuItems.stream()
+                .collect(
+                        Collectors.toMap(x -> x, MenuItem::getIntegerQuantity)
+                ));
     }
 
-    private void getOrderId() {
-        //
-        StringRequest stringRequest = new StringRequest(
-                Request.Method.GET,
-                HARDCODED.URL + "order/user/" + HARDCODED.USER_ID + "?isActive=1",
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        List<OrderResponse> orderResponse = new Gson().fromJson(response, new TypeToken<List<OrderResponse>>() {}.getType());
-
-                        orderId = orderResponse.get(0).id;
-                        updateBill();
-
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-        requestQueue.add(stringRequest);
+    public MenuItem getFeatureItem() {
+        return featureItem;
     }
 
-    public void updateBill() {
-
-        StringRequest stringRequest = new StringRequest(
-                Request.Method.GET,
-                HARDCODED.URL + "ordered-items/" + orderId,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        List<OrderedItemResponse> orderedItemResponses = new Gson().fromJson(response, new TypeToken<List<OrderedItemResponse>>() {
-                        }.getType());
-                        HashMap<MenuItem, Integer> updatedBillMap = new HashMap<MenuItem, Integer>(menuItems.stream().collect(Collectors.toMap(
-                                Function.identity(), x -> 0
-                        )));
-
-                        for (OrderedItemResponse orderedItem : orderedItemResponses) {
-                            MenuItem fakeMenuItem = new MenuItem(orderedItem.items_id);
-                            updatedBillMap.replace(fakeMenuItem, updatedBillMap.get(fakeMenuItem) + 1);
-                        }
-
-                        for (MenuItem menuItem : updatedBillMap.keySet()) {
-                            orderedItems.replace(menuItem, updatedBillMap.get(menuItem));
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                System.out.println(error);
-            }
-        }
-        );
-
-        requestQueue.add(stringRequest);
-    }
-
-    public void addMenuItems(ArrayList<MenuItem> menuItems) {
-        for(MenuItem item : menuItems){
-            item.quantity = "0";
-            this.menuItems.add(item);
-            orderedItems.put(item, 0);
-        }
-        updateMenuFragment();
-    }
-
-    //remove all items from cart
+    // Post an order to the server for all items on the cart then remove it
     public void checkout() {
         // Post /ordered-item/order:id forever
         // ITEMS IN THE ORDERCART BASED ON ITS MENUITEM.QUANTITY
@@ -272,25 +116,134 @@ public class TableSession {
         }
     }
 
-    // Get the list of all items in the menu
-    public ArrayList<MenuItem> getMenuItems() {
-        return menuItems;
+    private void fetchMenu() {
+
+        String url = HARDCODED.URL + "items/" + HARDCODED.RESTAURANT_ID;
+
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.GET, url,
+                response -> {
+                    ArrayList<MenuItem> newMenuItems = new Gson().fromJson(response, new TypeToken<List<MenuItem>>() {}.getType());
+
+                    for (MenuItem newMenuItem : newMenuItems) {
+                        if (!menuItems.contains(newMenuItem)) {
+                            newMenuItem.quantity = "0";
+                            menuItems.add(newMenuItem);
+                            orderedItems.put(newMenuItem, 0);
+                        }
+                    }
+                }, error -> Log.i("Fetch Menu", error.toString()));
+
+        requestQueue.add(stringRequest);
     }
 
-    // Return a map of MenuItems to the quantity ordered in the backend
-    public HashMap<MenuItem, Integer> getBill() {
-        return orderedItems;
+    private void postOrderId() {
+        final Map<String, String> bodyFields = new HashMap<>();
+        bodyFields.put("users_id", HARDCODED.USER_ID);
+        bodyFields.put("tables_id", HARDCODED.TABLE_ID);
+        bodyFields.put("restaurant_id", HARDCODED.RESTAURANT_ID);
+        bodyFields.put("amount", "0");
+        bodyFields.put("has_paid", "0");
+        bodyFields.put("is_active_session", "1");
+
+        final String bodyJSON = new Gson().toJson(bodyFields);
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.POST,
+                HARDCODED.URL + "order",
+
+                response -> getOrderId(),
+
+                error -> Log.i("Post order", error.toString())
+        ) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+
+            @Override
+            public byte[] getBody() {
+                return bodyJSON.getBytes();
+            }
+        };
+
+        requestQueue.add(stringRequest);
     }
 
-    public HashMap<MenuItem, Integer> getCart() {
-        return new HashMap<>(menuItems.stream()
-                .collect(
-                        Collectors.toMap(x -> x, MenuItem::getIntegerQuantity)
-                ));
+    private void getOrderId() {
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.GET, HARDCODED.URL + "order/user/" + HARDCODED.USER_ID + "?isActive=1",
+                response -> {
+                    List<OrderResponse> orderResponse = new Gson().fromJson(response, new TypeToken<List<OrderResponse>>() {}.getType());
+
+                    orderId = orderResponse.get(0).id;
+                    updateBill();
+
+                }, error -> Log.i("Fetch order id", error.toString()));
+
+        requestQueue.add(stringRequest);
     }
 
-    public MenuItem getFeatureItem() {
-        return featureItem;
+    public void updateBill() {
+
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.GET, HARDCODED.URL + "ordered-items/" + orderId,
+                response -> {
+                    List<OrderedItemResponse> orderedItemResponses = new Gson().fromJson(response, new TypeToken<List<OrderedItemResponse>>() {
+                    }.getType());
+                    HashMap<MenuItem, Integer> updatedBillMap = new HashMap<MenuItem, Integer>(menuItems.stream().collect(Collectors.toMap(
+                            Function.identity(), x -> 0
+                    )));
+
+                    for (OrderedItemResponse orderedItem : orderedItemResponses) {
+                        MenuItem fakeMenuItem = new MenuItem(orderedItem.items_id);
+                        updatedBillMap.replace(fakeMenuItem, updatedBillMap.get(fakeMenuItem) + 1);
+                    }
+
+                    for (MenuItem menuItem : updatedBillMap.keySet()) {
+                        orderedItems.replace(menuItem, updatedBillMap.get(menuItem));
+                    }
+
+                }, error -> Log.i("Fetch Bill", error.toString())
+        );
+
+        requestQueue.add(stringRequest);
+    }
+
+    public void getUserRecommendation() {
+        final Map<String, String> bodyFields = new HashMap<>();
+        bodyFields.put("users_id", HARDCODED.USER_ID);
+        bodyFields.put("restaurant_id", HARDCODED.RESTAURANT_ID);
+
+        final String bodyJSON = new Gson().toJson(bodyFields);
+
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.GET, HARDCODED.URL + "item/recommend",
+                response -> {
+
+                    FeatureResponse featureResponse = new Gson().fromJson(response, FeatureResponse.class);
+
+                    for (MenuItem menuItem : menuItems) {
+                        if (menuItem.id == featureResponse.itemId);
+                        featureItem = menuItem;
+                    }
+
+                    updateMenuFragment();
+                },
+
+                error -> Log.i("Fetch User recommendation", error.toString())
+        ) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+
+            @Override
+            public byte[] getBody() {
+                return bodyJSON.getBytes();
+            }
+        };
+
+        requestQueue.add(stringRequest);
     }
 
     public StringRequest createPostOrder(MenuItem menuItem) {
@@ -300,20 +253,10 @@ public class TableSession {
 
         final String bodyJSON = new Gson().toJson(bodyFields);
         return new StringRequest(
-                Request.Method.POST,
-                HARDCODED.URL + "ordered-items",
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                            System.out.println("Success");
-                        }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        System.out.println(error);
-                    }
-                }
+                Request.Method.POST, HARDCODED.URL + "ordered-items",
+                response -> System.out.println("Success"),
+
+                error -> Log.i("Post order", error.toString())
         ) {
             @Override
             public String getBodyContentType() {
@@ -328,12 +271,10 @@ public class TableSession {
     }
 
     public void updateMenuFragment() {
-        // TODO:
         NavController navController = Navigation.findNavController(activity, R.id.nav_host_fragment);
-        System.out.println(navController.getCurrentDestination());
+
         if(navController.getCurrentDestination().getId() == R.id.navigation_menu)
             navController.navigate(R.id.action_navigation_menu_to_navigation_menu);
-
     }
 
     public class OrderResponse {

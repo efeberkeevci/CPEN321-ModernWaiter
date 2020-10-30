@@ -118,26 +118,18 @@ public class StripePayment extends Fragment {
         // For added security, our sample app gets the publishable key from the server
 
         StringRequest request = new StringRequest(
-                Request.Method.GET,
-                HARDCODED.URL + "key",
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Map<String, String> responseMap = parseResponseToMap(response);
+            Request.Method.GET, HARDCODED.URL + "key",
+            response -> {
+                Map<String, String> responseMap = parseResponseToMap(response);
 
-                        final String stripePublishableKey = responseMap.get("publishableKey");
-                        if (stripePublishableKey != null) {
-                            System.out.println(stripePublishableKey);
-                            onRetrievedKey(stripePublishableKey);
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        System.out.println(error);
-                    }
-                });
+                final String stripePublishableKey = responseMap.get("publishableKey");
+                if (stripePublishableKey != null) {
+                    System.out.println(stripePublishableKey);
+                    onRetrievedKey(stripePublishableKey);
+                }
+            },
+
+            error -> System.out.println(error));
 
         queue.add(request);
     }
@@ -173,34 +165,26 @@ public class StripePayment extends Fragment {
         if(MainPayment.option.equals("payPerItem")){
             totalAmount = 0;
             String url = HARDCODED.URL + "order/user/" + HARDCODED.USER_ID + "?isActive=1";
-            JsonArrayRequest jsonObjectRequest = new JsonArrayRequest
-                    (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            JsonArrayRequest jsonObjectRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+                response -> {
+                    try {
+                        //only need this user's bill
+                        JSONObject jsonObject = response.getJSONObject(0);
+                        int id = jsonObject.getInt("id");
+                        int tableId = jsonObject.getInt("tables_id");
+                       // double amount = jsonObject.getDouble("users_id");
+                        int has_paid = jsonObject.getInt("has_paid");
+                        int is_active_session = jsonObject.getInt("is_active_session");
+                        //TODO: check logic for these values, I ignore description and quantity when getting data from backend
+                        totalAmount = 1600;
 
-                        @Override
-                        public void onResponse(JSONArray response) {
-                            try {
-                                //only need this user's bill
-                                JSONObject jsonObject = response.getJSONObject(0);
-                                int id = jsonObject.getInt("id");
-                                int tableId = jsonObject.getInt("tables_id");
-                               // double amount = jsonObject.getDouble("users_id");
-                                int has_paid = jsonObject.getInt("has_paid");
-                                int is_active_session = jsonObject.getInt("is_active_session");
-                                //TODO: check logic for these values, I ignore description and quantity when getting data from backend
-                                totalAmount = 1600;
+                    } catch(JSONException e){
+                        e.printStackTrace();
+                    }
+                }, error -> {
+                    // TODO: Handle error
+            });
 
-                            } catch(JSONException e){
-                                e.printStackTrace();
-                            }
-                        }
-                    }, new Response.ErrorListener() {
-
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            // TODO: Handle error
-
-                        }
-                    });
             MainActivity.requestQueue.add(jsonObjectRequest);
             //Make GET Request to get the bill for the entire table
             return totalAmount;
@@ -209,24 +193,14 @@ public class StripePayment extends Fragment {
             Log.i("STRIPEPAYMENT", "INSIDE else");
             totalAmount = 0;
             String url = HARDCODED.URL + "order/table/"+ HARDCODED.TABLE_ID + "?isActive=1";
-            StringRequest request = new StringRequest(
-                    Request.Method.GET,
-                    url,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            List<OrderResponse> orderResponseList = new Gson()
-                                    .fromJson(response, new TypeToken<List<OrderResponse>>() {}.getType());
+            StringRequest request = new StringRequest(Request.Method.GET, url,
+                response -> {
+                    List<OrderResponse> orderResponseList = new Gson()
+                            .fromJson(response, new TypeToken<List<OrderResponse>>() {}.getType());
 
-                            totalAmount = (int) (orderResponseList.get(0).amount * 100);
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Log.i("asd", error.toString());
-                        }
-                    }
+                    totalAmount = (int) (orderResponseList.get(0).amount * 100);
+                },
+                error -> Log.i("asd", error.toString())
             );
             MainActivity.requestQueue.add(request);
             //get the bill for the entire table
@@ -263,39 +237,30 @@ public class StripePayment extends Fragment {
         final String bodyJSON = new Gson().toJson(bodyFields);
 
         StringRequest stringRequest = new StringRequest(
-                Request.Method.POST,
-                HARDCODED.URL + "pay",
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        System.out.println(response);
+                Request.Method.POST, HARDCODED.URL + "pay",
+                response -> {
+                    System.out.println(response);
 
-                        Map<String, String> responseMap = parseResponseToMap(response);
+                    Map<String, String> responseMap = parseResponseToMap(response);
 
-                        String error = responseMap.get("error");
-                        String paymentIntentClientSecret = responseMap.get("clientSecret");
-                        String requiresAction = responseMap.get("requiresAction");
+                    String error = responseMap.get("error");
+                    String paymentIntentClientSecret = responseMap.get("clientSecret");
+                    String requiresAction = responseMap.get("requiresAction");
 
-                        if (error != null) {
-                            Log.i("Stripe Payment", "Error, response is  not null");
-                        } else if (paymentIntentClientSecret != null) {
-                            if ("true".equals(requiresAction)) {
-                                stripe.handleNextActionForPayment(getActivity(), paymentIntentClientSecret);
-                            } else {
-                                putPaid();
-                                endSession();
-                                ((MainActivity) getActivity()).tableSession.isActive = false;
-                                Navigation.findNavController(view).navigate(R.id.action_navigation_stripe_to_navigation_post_payment);
-                            }
+                    if (error != null) {
+                        Log.i("Stripe Payment", "Error, response is  not null");
+                    } else if (paymentIntentClientSecret != null) {
+                        if ("true".equals(requiresAction)) {
+                            stripe.handleNextActionForPayment(getActivity(), paymentIntentClientSecret);
+                        } else {
+                            putPaid();
+                            endSession();
+                            ((MainActivity) getActivity()).tableSession.isActive = false;
+                            Navigation.findNavController(view).navigate(R.id.action_navigation_stripe_to_navigation_post_payment);
                         }
                     }
                 },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        System.out.println(error);
-                    }
-                }
+                error -> System.out.println(error)
         ) {
             @Override
             public String getBodyContentType() {
@@ -351,23 +316,17 @@ public class StripePayment extends Fragment {
             params.put("hasPaid", "1");
             JSONObject parameters = new JSONObject(params);
 
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                    (Request.Method.PUT, url, parameters, new Response.Listener<JSONObject>() {
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                    Request.Method.PUT, url, parameters,
+                    response -> {
+                        //on success
+                        //TODO: print some message or not
+                    }, error -> {
+                        error.printStackTrace();
+                        // TODO: Handle error
 
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            //on success
-                            //TODO: print some message or not
-                        }
-                    }, new Response.ErrorListener() {
-
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            error.printStackTrace();
-                            // TODO: Handle error
-
-                        }
                     });
+
             MainActivity.requestQueue.add(jsonObjectRequest);
         }
         //PUT request for order has been paid fully
@@ -376,23 +335,17 @@ public class StripePayment extends Fragment {
         params.put("orderId", String.valueOf(MainActivity.tableSession.orderId));
         params.put("hasPaid", "1");
         JSONObject parameters = new JSONObject(params);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.PUT, url_order_paid, parameters, new Response.Listener<JSONObject>() {
 
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        //on success
-                        //TODO: print some message or not
-                    }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
-                        // TODO: Handle error
-
-                    }
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.PUT, url_order_paid, parameters,
+                response -> {
+                //on success
+                //TODO: print some message or not
+                }, error -> {
+                    error.printStackTrace();
+                    // TODO: Handle error
                 });
+
         MainActivity.requestQueue.add(jsonObjectRequest);
 
     }
@@ -404,23 +357,18 @@ public class StripePayment extends Fragment {
         params.put("orderId", String.valueOf(MainActivity.tableSession.orderId));
         params.put("isActive", "0");
         JSONObject parameters = new JSONObject(params);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.PUT, url, parameters, new Response.Listener<JSONObject>() {
 
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        //on success
-                        //TODO: print some message or not
-                    }
-                }, new Response.ErrorListener() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.PUT, url, parameters,
+                response -> {
+                    //on success
+                    //TODO: print some message or not
+                }, error -> {
+                    error.printStackTrace();
+                    // TODO: Handle error
 
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
-                        // TODO: Handle error
-
-                    }
                 });
+
         MainActivity.requestQueue.add(jsonObjectRequest);
     }
 
