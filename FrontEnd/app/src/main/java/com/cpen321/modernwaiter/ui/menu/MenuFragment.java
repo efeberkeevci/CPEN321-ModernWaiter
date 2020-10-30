@@ -7,7 +7,6 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,13 +17,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.cpen321.modernwaiter.MainActivity;
 import com.cpen321.modernwaiter.R;
 import com.cpen321.modernwaiter.ui.MenuItem;
-import com.cpen321.modernwaiter.ui.order.OrderFragment;
-import com.cpen321.modernwaiter.ui.pay.BillFragment;
 
 import java.util.ArrayList;
+
+import static com.cpen321.modernwaiter.MainActivity.tableSession;
 
 /**
  * A fragment representing a list of Items.
@@ -67,14 +65,14 @@ public class MenuFragment extends Fragment {
 
         // Set the adapter
         Context context = view.getContext();
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.menu_recycler);
+        RecyclerView recyclerView = view.findViewById(R.id.menu_recycler);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         MenuRecyclerAdapter.OnItemClickListener listener = new MenuRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(MenuItem item) {
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
                 DetailItemFragment detailItemFragment = new DetailItemFragment(item, menuRecyclerAdapter);
@@ -84,27 +82,29 @@ public class MenuFragment extends Fragment {
             }
         };
 
-        MainActivity mainActivity = (MainActivity) getActivity();
-        ArrayList<MenuItem> menuItems = new ArrayList<>(mainActivity.tableSession.getMenuItems());
-
+        ArrayList<MenuItem> menuItems = new ArrayList<>(tableSession.getMenuItems());
+        System.out.println(menuItems);
         menuRecyclerAdapter = new MenuRecyclerAdapter(menuItems, listener);
 
+        recyclerView.setAdapter(menuRecyclerAdapter);
 
-        if (mainActivity.tableSession.getFeatureItem() != null) {
-            recyclerView.setAdapter(menuRecyclerAdapter);
+        if (tableSession.getFeatureItem() != null) {
+           // recyclerView.setAdapter(menuRecyclerAdapter);
             TextView featureNameView = view.findViewById(R.id.feature_name);
-            featureNameView.setText("Special: " + mainActivity.tableSession.getFeatureItem().name);
+            String featureItemText = "Special: " + tableSession.getFeatureItem().name;
+
+            featureNameView.setText(featureItemText);
 
             TextView featureDescView = view.findViewById(R.id.feature_description);
-            featureDescView.setText(mainActivity.tableSession.getFeatureItem().description);
+            featureDescView.setText(tableSession.getFeatureItem().description);
 
             CardView featureCardView = view.findViewById(R.id.featureItem);
             featureCardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    DetailItemFragment detailItemFragment = new DetailItemFragment(mainActivity.tableSession.getFeatureItem(), null);
+                    DetailItemFragment detailItemFragment = new DetailItemFragment(tableSession.getFeatureItem(), null);
                     fragmentTransaction.add(R.id.fragment_menu, detailItemFragment);
 
                     fragmentTransaction.commit();

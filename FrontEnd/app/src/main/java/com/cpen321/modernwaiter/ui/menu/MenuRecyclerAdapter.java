@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cpen321.modernwaiter.R;
 import com.cpen321.modernwaiter.ui.MenuItem;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 public class MenuRecyclerAdapter extends RecyclerView.Adapter<MenuRecyclerAdapter.ViewHolder> {
@@ -22,6 +24,7 @@ public class MenuRecyclerAdapter extends RecyclerView.Adapter<MenuRecyclerAdapte
         this.listener = listener;
     }
 
+    @NotNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -31,7 +34,7 @@ public class MenuRecyclerAdapter extends RecyclerView.Adapter<MenuRecyclerAdapte
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = menuItems.get(position);
+        holder.menuItem = menuItems.get(position);
         holder.bind(listener);
     }
 
@@ -40,40 +43,35 @@ public class MenuRecyclerAdapter extends RecyclerView.Adapter<MenuRecyclerAdapte
         return menuItems.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
-        public MenuItem mItem;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        public final View view;
+        public MenuItem menuItem;
 
         public ViewHolder(View view) {
             super(view);
-            mView = view;
+            this.view = view;
         }
 
         public void bind(final OnItemClickListener listener) {
             itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        listener.onItemClick(mItem);
+                        listener.onItemClick(menuItem);
                     }
                 }
             );
 
-            TextView nameTextView = (TextView) itemView.findViewById(R.id.name);
-            nameTextView.setText(mItem.name);
+            TextView nameTextView = itemView.findViewById(R.id.name);
+            nameTextView.setText(menuItem.name);
 
-            TextView description = (TextView) itemView.findViewById(R.id.description);
-            description.setText(mItem.description);
+            TextView description = itemView.findViewById(R.id.description);
+            description.setText(menuItem.description);
 
-            TextView priceView = (TextView) itemView.findViewById(R.id.price);
-            priceView.setText(mItem.getPriceString());
+            TextView priceView = itemView.findViewById(R.id.price);
+            priceView.setText(menuItem.getPriceString());
 
-            TextView quantityTextView = (TextView) itemView.findViewById(R.id.quantity);
-            quantityTextView.setText(mItem.quantity);
-        }
-
-        @Override
-        public String toString() {
-            return super.toString() + " '" + mItem.toString() + "'";
+            TextView quantityTextView = itemView.findViewById(R.id.quantity);
+            quantityTextView.setText(menuItem.quantity);
         }
     }
 

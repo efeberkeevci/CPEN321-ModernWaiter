@@ -1,7 +1,6 @@
 package com.cpen321.modernwaiter.ui.pay;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,9 +12,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.cpen321.modernwaiter.MainActivity;
 import com.cpen321.modernwaiter.R;
-import com.cpen321.modernwaiter.payment.MainPayment;
 import com.cpen321.modernwaiter.ui.MenuItem;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -35,7 +32,7 @@ public class BillFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_bill, container, false);
 
-        BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.nav_view);
+        BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
         bottomNavigationView.setVisibility(View.VISIBLE);
 
         Button startPaymentButton = view.findViewById(R.id.startPaymentButton);
@@ -50,10 +47,8 @@ public class BillFragment extends Fragment {
         // Set the adapter
         Context context = view.getContext();
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.bill_recycler);
+        RecyclerView recyclerView = view.findViewById(R.id.bill_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-
-        MainActivity mainActivity = (MainActivity) getActivity();
 
         HashMap<MenuItem, Integer> billMap = tableSession.getBill();
 

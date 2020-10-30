@@ -61,10 +61,10 @@ public class PerItemRecyclerAdapter extends RecyclerView.Adapter<PerItemRecycler
                 }
             });
 
-            TextView nameTextView = (TextView) view.findViewById(R.id.name);
+            TextView nameTextView = view.findViewById(R.id.name);
             nameTextView.setText(menuItem.name);
 
-            TextView priceTextView = (TextView) view.findViewById(R.id.price);
+            TextView priceTextView = view.findViewById(R.id.price);
             priceTextView.setText(String.valueOf(menuItem.cost));
 
             System.out.println(this);

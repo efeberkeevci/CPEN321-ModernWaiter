@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cpen321.modernwaiter.R;
 import com.cpen321.modernwaiter.ui.MenuItem;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.stream.Collectors;
@@ -27,12 +29,12 @@ public class OrderRecyclerAdapter extends RecyclerView.Adapter<OrderRecyclerAdap
         this.orderMap = orderMap;
 
         // Add all the items that have been ordered atleast once
-        itemArray = new ArrayList<MenuItem>(orderMap.keySet().stream()
-            .filter(menuItem -> orderMap.get(menuItem) > 0)
-            .collect(Collectors.toList())
-        );
+        itemArray = orderMap.keySet().stream()
+                .filter(menuItem -> orderMap.get(menuItem) > 0)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
+    @NotNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -75,12 +77,5 @@ public class OrderRecyclerAdapter extends RecyclerView.Adapter<OrderRecyclerAdap
         public String toString() {
             return super.toString() + " '" + quantityView.getText() + "'";
         }
-    }
-
-    public void refresh() {
-        itemArray = new ArrayList<MenuItem>(orderMap.keySet().stream()
-                .filter(menuItem -> orderMap.get(menuItem) > 0)
-                .collect(Collectors.toList())
-        );
     }
 }

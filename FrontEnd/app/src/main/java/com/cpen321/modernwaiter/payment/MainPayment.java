@@ -25,7 +25,7 @@ public class MainPayment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_payment, container, false);
 
-        BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.nav_view);
+        BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
         bottomNavigationView.setVisibility(View.INVISIBLE);
 
         Button pay_for_all = view.findViewById(R.id.pay_for_all);

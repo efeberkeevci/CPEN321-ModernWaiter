@@ -5,15 +5,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
-import com.cpen321.modernwaiter.DummyContent;
 import com.cpen321.modernwaiter.R;
 import com.cpen321.modernwaiter.ui.MenuItem;
 
 import java.util.ArrayList;
+
+import static com.cpen321.modernwaiter.MainActivity.tableSession;
 
 public class PerItemPayment extends AppCompatActivity {
 
@@ -39,7 +37,7 @@ public class PerItemPayment extends AppCompatActivity {
 
     private ArrayList<MenuItem> getOrderList() {
         // TODO:
-        return new ArrayList<>(DummyContent.ITEMS);
+        return new ArrayList<>(tableSession.getMenuItems());
     }
 
 }

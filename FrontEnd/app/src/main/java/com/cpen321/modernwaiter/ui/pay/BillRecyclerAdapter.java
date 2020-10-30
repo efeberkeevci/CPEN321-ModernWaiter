@@ -10,6 +10,8 @@ import android.widget.TextView;
 import com.cpen321.modernwaiter.R;
 import com.cpen321.modernwaiter.ui.MenuItem;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.stream.Collectors;
@@ -27,12 +29,12 @@ public class BillRecyclerAdapter extends RecyclerView.Adapter<BillRecyclerAdapte
         this.billMap = billMap;
 
         // Add all the items that have been ordered atleast once
-        itemArray = new ArrayList<MenuItem>(billMap.keySet().stream()
-            .filter(menuItem -> billMap.get(menuItem) > 0)
-            .collect(Collectors.toList())
-        );
+        itemArray = billMap.keySet().stream()
+                .filter(menuItem -> billMap.get(menuItem) > 0)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
+    @NotNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -66,9 +68,9 @@ public class BillRecyclerAdapter extends RecyclerView.Adapter<BillRecyclerAdapte
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            nameView = (TextView) view.findViewById(R.id.name);
-            quantityView = (TextView) view.findViewById(R.id.quantity);
-            priceView = (TextView) view.findViewById(R.id.price);
+            nameView = view.findViewById(R.id.name);
+            quantityView = view.findViewById(R.id.quantity);
+            priceView = view.findViewById(R.id.price);
         }
 
         @Override

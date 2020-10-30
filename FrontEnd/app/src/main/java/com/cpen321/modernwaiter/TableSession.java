@@ -8,7 +8,10 @@ import androidx.navigation.Navigation;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.cpen321.modernwaiter.ui.MenuItem;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -30,13 +33,8 @@ import java.util.stream.Collectors;
 public class TableSession {
 
     // This is a map of how many items are already ordered in the server
+    // The amount of items on the cart is recorded in MenuItem.quantity
     private HashMap<MenuItem, Integer> orderedItems;
-
-    // A list of Menu's items. Each menu's item will
-    // its common attribute and also a field called quantity.
-    // Quantity is the amount that has is in a user's cart
-    // not to be mistaken with the items that are already ordered in the backend
-    // Once an order is sent to the backend, it cannot be cancelled
 
     private final RequestQueue requestQueue;
 
@@ -58,7 +56,6 @@ public class TableSession {
 
         fetchMenu();
         postOrderId();
-        getUserRecommendation();
     }
 
     // Get the list of all items in the menu
@@ -92,10 +89,26 @@ public class TableSession {
             return;
         }
 
+
+        String url = HARDCODED.URL + "checkout";
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.GET, url,
+                response -> {
+                    // Display the first 500 characters of the response string.
+                    Log.i("MSG:",response);
+
+                }, error -> Log.i("ERR:", error.toString()));
+
+        // Add the request to the RequestQueue.
+        requestQueue.add(stringRequest);
+
+
         for (MenuItem menuItem : getMenuItems()) {
 
             if(Integer.parseInt(menuItem.quantity) > 0) {
-                StringRequest stringRequest = createPostOrder(menuItem);
+                stringRequest = createPostOrder(menuItem);
 
                 for (int i = 0; i < Integer.parseInt(menuItem.quantity); i++) {
                     requestQueue.add(stringRequest);
@@ -126,6 +139,8 @@ public class TableSession {
                             newMenuItem.quantity = "0";
                             orderedItems.put(newMenuItem, 0);
                         }
+
+                        getUserRecommendation();
                     }
                 }, error -> Log.i("Fetch Menu", error.toString()));
 

@@ -13,18 +13,17 @@ public class MenuItem {
     public final int popularity_count;
     public final String image;
     public String quantity;
-    public boolean recommended;
 
     public MenuItem(String id, String restaurant_id, String name, String type, String cost, String description, String calories, String popularity_count, String image) {
 
-        this.id = Integer.valueOf(id);
-        this.restaurant_id = Integer.valueOf(restaurant_id);
+        this.id = Integer.parseInt(id);
+        this.restaurant_id = Integer.parseInt(restaurant_id);
         this.name = name;
         this.type = type;
-        this.cost = Integer.valueOf(cost);
+        this.cost = Integer.parseInt(cost);
         this.description = description;
-        this.calories = Integer.valueOf(calories);
-        this.popularity_count = Integer.valueOf(popularity_count);
+        this.calories = Integer.parseInt(calories);
+        this.popularity_count = Integer.parseInt(popularity_count);
         this.image = image;
     }
 

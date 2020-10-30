@@ -255,7 +255,7 @@ public class StripePayment extends Fragment {
                         } else {
                             putPaid();
                             endSession();
-                            ((MainActivity) getActivity()).tableSession.isActive = false;
+                            MainActivity.tableSession.isActive = false;
                             Navigation.findNavController(view).navigate(R.id.action_navigation_stripe_to_navigation_post_payment);
                         }
                     }
