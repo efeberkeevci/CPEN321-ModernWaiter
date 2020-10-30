@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_menu"
-        android:name="com.cpen321.modernwaiter.ui.menu.MenuFragment"
+        android:name="com.cpen321.modernwaiter.main.menu.MenuFragment"
         android:label="@string/title_menu"
         tools:layout="@layout/fragment_menu" >
         <action
@@ -21,7 +21,7 @@
 
     <fragment
         android:id="@+id/navigation_order"
-        android:name="com.cpen321.modernwaiter.ui.order.OrderFragment"
+        android:name="com.cpen321.modernwaiter.main.order.OrderFragment"
         android:label="Order"
         tools:layout="@layout/fragment_order" >
         <action
@@ -31,7 +31,7 @@
 
     <fragment
         android:id="@+id/navigation_bill"
-        android:name="com.cpen321.modernwaiter.ui.pay.BillFragment"
+        android:name="com.cpen321.modernwaiter.main.bill.BillFragment"
         android:label="Bill"
         tools:layout="@layout/fragment_bill" >
         <action
