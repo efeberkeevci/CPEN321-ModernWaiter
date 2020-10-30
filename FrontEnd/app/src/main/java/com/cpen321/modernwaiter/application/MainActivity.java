@@ -1,4 +1,4 @@
-package com.cpen321.modernwaiter;
+package com.cpen321.modernwaiter.application;
 
 import android.os.Bundle;
 
@@ -10,6 +10,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.cpen321.modernwaiter.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {

@@ -1,4 +1,4 @@
-package com.cpen321.modernwaiter.payment;
+package com.cpen321.modernwaiter.payment.perItem;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cpen321.modernwaiter.R;
-import com.cpen321.modernwaiter.ui.MenuItem;
+import com.cpen321.modernwaiter.application.MenuItem;
 
 import java.util.ArrayList;
 

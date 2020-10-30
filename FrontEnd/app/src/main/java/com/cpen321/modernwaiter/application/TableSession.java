@@ -1,4 +1,4 @@
-package com.cpen321.modernwaiter;
+package com.cpen321.modernwaiter.application;
 
 import android.util.Log;
 
@@ -8,11 +8,8 @@ import androidx.navigation.Navigation;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.cpen321.modernwaiter.ui.MenuItem;
+import com.cpen321.modernwaiter.R;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 

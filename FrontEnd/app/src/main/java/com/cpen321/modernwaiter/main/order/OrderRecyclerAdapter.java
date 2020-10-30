@@ -1,4 +1,4 @@
-package com.cpen321.modernwaiter.ui.order;
+package com.cpen321.modernwaiter.main.order;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,7 +8,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cpen321.modernwaiter.R;
-import com.cpen321.modernwaiter.ui.MenuItem;
+import com.cpen321.modernwaiter.application.MenuItem;
 
 import org.jetbrains.annotations.NotNull;
 

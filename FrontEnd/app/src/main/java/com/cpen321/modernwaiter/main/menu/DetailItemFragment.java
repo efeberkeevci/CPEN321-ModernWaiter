@@ -1,4 +1,4 @@
-package com.cpen321.modernwaiter.ui.menu;
+package com.cpen321.modernwaiter.main.menu;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,7 +13,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.cpen321.modernwaiter.R;
-import com.cpen321.modernwaiter.ui.MenuItem;
+import com.cpen321.modernwaiter.application.MenuItem;
 
 public class DetailItemFragment extends Fragment {
 

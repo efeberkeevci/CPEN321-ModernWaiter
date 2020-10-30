@@ -1,4 +1,4 @@
-package com.cpen321.modernwaiter.ui;
+package com.cpen321.modernwaiter.application;
 
 import java.text.DecimalFormat;
 

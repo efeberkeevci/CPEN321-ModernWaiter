@@ -1,4 +1,4 @@
-package com.cpen321.modernwaiter.payment;
+package com.cpen321.modernwaiter.payment.perItem;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -7,11 +7,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 
 import com.cpen321.modernwaiter.R;
-import com.cpen321.modernwaiter.ui.MenuItem;
+import com.cpen321.modernwaiter.application.MenuItem;
 
 import java.util.ArrayList;
 
-import static com.cpen321.modernwaiter.MainActivity.tableSession;
+import static com.cpen321.modernwaiter.application.MainActivity.tableSession;
 
 public class PerItemPayment extends AppCompatActivity {
 

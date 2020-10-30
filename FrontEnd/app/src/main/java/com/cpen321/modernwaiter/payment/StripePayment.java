@@ -1,7 +1,6 @@
 package com.cpen321.modernwaiter.payment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,16 +17,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.cpen321.modernwaiter.HARDCODED;
-import com.cpen321.modernwaiter.MainActivity;
+import com.cpen321.modernwaiter.application.HARDCODED;
+import com.cpen321.modernwaiter.application.MainActivity;
 import com.cpen321.modernwaiter.R;
-import com.cpen321.modernwaiter.ui.MenuItem;
-import com.cpen321.modernwaiter.ui.pay.BillRecyclerAdapter;
+import com.cpen321.modernwaiter.application.MenuItem;
+import com.cpen321.modernwaiter.main.bill.BillRecyclerAdapter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.stripe.android.ApiResultCallback;
@@ -37,7 +34,6 @@ import com.stripe.android.model.PaymentMethod;
 import com.stripe.android.model.PaymentMethodCreateParams;
 import com.stripe.android.view.CardInputWidget;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 

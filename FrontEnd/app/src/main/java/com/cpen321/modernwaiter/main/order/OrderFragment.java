@@ -1,4 +1,4 @@
-package com.cpen321.modernwaiter.ui.order;
+package com.cpen321.modernwaiter.main.order;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,13 +12,13 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.cpen321.modernwaiter.MainActivity;
+import com.cpen321.modernwaiter.application.MainActivity;
 import com.cpen321.modernwaiter.R;
-import com.cpen321.modernwaiter.ui.MenuItem;
+import com.cpen321.modernwaiter.application.MenuItem;
 
 import java.util.HashMap;
 
-import static com.cpen321.modernwaiter.MainActivity.tableSession;
+import static com.cpen321.modernwaiter.application.MainActivity.tableSession;
 
 public class OrderFragment extends Fragment {
 

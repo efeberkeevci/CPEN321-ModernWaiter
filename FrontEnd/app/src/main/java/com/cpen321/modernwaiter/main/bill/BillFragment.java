@@ -1,4 +1,4 @@
-package com.cpen321.modernwaiter.ui.pay;
+package com.cpen321.modernwaiter.main.bill;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -13,12 +13,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cpen321.modernwaiter.R;
-import com.cpen321.modernwaiter.ui.MenuItem;
+import com.cpen321.modernwaiter.application.MenuItem;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.HashMap;
 
-import static com.cpen321.modernwaiter.MainActivity.tableSession;
+import static com.cpen321.modernwaiter.application.MainActivity.tableSession;
 
 public class BillFragment extends Fragment {
 

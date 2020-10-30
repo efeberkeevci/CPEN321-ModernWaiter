@@ -11,7 +11,7 @@ import androidx.navigation.Navigation;
 
 import com.cpen321.modernwaiter.R;
 
-import static com.cpen321.modernwaiter.MainActivity.tableSession;
+import static com.cpen321.modernwaiter.application.MainActivity.tableSession;
 
 public class PostPayment extends Fragment {
 

@@ -1,4 +1,4 @@
-package com.cpen321.modernwaiter;
+package com.cpen321.modernwaiter.application;
 
 public class HARDCODED {
     public static final String RESTAURANT_ID = "1";

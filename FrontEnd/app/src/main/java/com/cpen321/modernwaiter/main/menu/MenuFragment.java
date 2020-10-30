@@ -1,4 +1,4 @@
-package com.cpen321.modernwaiter.ui.menu;
+package com.cpen321.modernwaiter.main.menu;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -18,11 +18,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.cpen321.modernwaiter.R;
-import com.cpen321.modernwaiter.ui.MenuItem;
+import com.cpen321.modernwaiter.application.MenuItem;
 
 import java.util.ArrayList;
 
-import static com.cpen321.modernwaiter.MainActivity.tableSession;
+import static com.cpen321.modernwaiter.application.MainActivity.tableSession;
 
 /**
  * A fragment representing a list of Items.

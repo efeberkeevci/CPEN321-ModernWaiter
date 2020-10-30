@@ -1,4 +1,4 @@
-package com.cpen321.modernwaiter;
+package com.cpen321.modernwaiter.application;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import com.cpen321.modernwaiter.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;

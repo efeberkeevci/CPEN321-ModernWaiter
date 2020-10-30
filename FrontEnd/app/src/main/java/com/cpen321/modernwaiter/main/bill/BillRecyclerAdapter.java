@@ -1,4 +1,4 @@
-package com.cpen321.modernwaiter.ui.pay;
+package com.cpen321.modernwaiter.main.bill;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.cpen321.modernwaiter.R;
-import com.cpen321.modernwaiter.ui.MenuItem;
+import com.cpen321.modernwaiter.application.MenuItem;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.stream.Collectors;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link com.cpen321.modernwaiter.ui.MenuItem}.
+ * {@link RecyclerView.Adapter} that can display a {@link MenuItem}.
  * TODO: Replace the implementation with code for your data type.
  */
 public class BillRecyclerAdapter extends RecyclerView.Adapter<BillRecyclerAdapter.ViewHolder> {
