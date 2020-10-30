@@ -57,6 +57,9 @@ public class TableSession {
         this.activity = activity;
         this.requestQueue = requestQueue;
 
+        menuItems = new ArrayList<>();
+        orderedItems = new HashMap<MenuItem, Integer>();
+
         fetchMenu();
         postOrderId();
         getUserRecommendation();
@@ -65,7 +68,7 @@ public class TableSession {
     private void fetchMenu() {
 
         LinkedList<MenuItem> response_menu_items = new LinkedList<MenuItem>();
-        String url ="http://52.188.158.129:3000/items/1";
+        String url = HARDCODED.URL + HARDCODED.RESTAURANT_ID;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
