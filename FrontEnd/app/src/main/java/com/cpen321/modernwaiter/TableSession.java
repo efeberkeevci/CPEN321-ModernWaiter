@@ -1,11 +1,8 @@
 package com.cpen321.modernwaiter;
 
-import android.app.Activity;
-import android.view.Menu;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -15,12 +12,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.cpen321.modernwaiter.ui.MenuItem;
-import com.cpen321.modernwaiter.ui.menu.MenuFragment;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -34,7 +31,7 @@ import java.util.stream.Collectors;
  */
 public class TableSession {
 
-    // This is a
+    // This is a map of how many items are already ordered in the server
     private HashMap<MenuItem, Integer> orderedItems;
 
     // A list of Menu's items. Each menu's item will
@@ -58,16 +55,38 @@ public class TableSession {
     TableSession(RequestQueue requestQueue, AppCompatActivity activity) {
         //Make request to server to retrieve menu items to display
         this.activity = activity;
-
-        menuItems = MainActivity.menu_items;
-        orderedItems = menuItems.stream().collect(
-                Collectors.toMap(x -> x, x -> 0, (s, a) -> s, HashMap::new)
-        );
-
         this.requestQueue = requestQueue;
 
+        fetchMenu();
         postOrderId();
         getUserRecommendation();
+    }
+
+    private void fetchMenu() {
+
+        LinkedList<MenuItem> response_menu_items = new LinkedList<MenuItem>();
+        String url ="http://52.188.158.129:3000/items/1";
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        ArrayList<MenuItem> newMenuItems = new Gson().fromJson(response, new TypeToken<List<MenuItem>>() {}.getType());
+
+                        for (MenuItem newMenuItem : newMenuItems) {
+                            if (!menuItems.contains(newMenuItem)) {
+                                menuItems.add(newMenuItem);
+                                orderedItems.put(newMenuItem, 0);
+                            }
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("Fetch Menu", error.toString());
+            }
+        });
+        requestQueue.add(stringRequest);
     }
 
     public void getUserRecommendation() {
