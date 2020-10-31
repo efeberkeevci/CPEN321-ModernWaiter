@@ -11,6 +11,8 @@ var con = mysql.createConnection({
 })
 
 module.exports = function(app){
+    app.use(express.json());
+    
     /**
      * HTTP GET request to list option ids for
      * every item. This can be used to 

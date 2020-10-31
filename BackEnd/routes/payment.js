@@ -6,6 +6,8 @@ const env = require("dotenv").config({ path: "./../.env" })
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
 
 module.exports = function(app){
+    app.use(express.json());
+    
     /* GET users listing. */
     app.get('/key', (req, res) => {
         res.send({ publishableKey: process.env.STRIPE_PUBLISHABLE_KEY })

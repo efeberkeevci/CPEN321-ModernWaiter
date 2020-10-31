@@ -13,6 +13,8 @@ var con = mysql.createConnection({
 })
 
 module.exports = function(app){
+    app.use(express.json());
+    
     /**
      * HTTP POST request to create an order. It 
      * returns a status code of 200 if successful.

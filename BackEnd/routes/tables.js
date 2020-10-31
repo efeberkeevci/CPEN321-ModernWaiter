@@ -11,6 +11,8 @@ var con = mysql.createConnection({
 })
 
 module.exports = function(app){
+    app.use(express.json());
+    
     /**
      * HTTP GET request to get details of the table
      * a user is seated at. It returns the 

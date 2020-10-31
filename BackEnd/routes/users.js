@@ -11,6 +11,8 @@ var con = mysql.createConnection({
 })
 
 module.exports = function(app){
+    app.use(express.json());
+    
     /**
      * HTTP GET request to get details of a 
      * user. It returns the 

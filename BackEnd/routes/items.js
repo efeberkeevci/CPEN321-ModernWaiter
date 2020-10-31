@@ -11,6 +11,8 @@ var con = mysql.createConnection({
 })
 
 module.exports = function(app){
+    app.use(express.json());
+    
     /**
      * HTTP GET request to acquire items of a
      * restaurant representing its menu. It
