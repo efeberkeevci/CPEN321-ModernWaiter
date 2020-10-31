@@ -1,6 +1,6 @@
 const express = require("express");
 const mysql = require('mysql');
-const { subscribe, messageAccountisClosed } = require("./push_notification.js");
+// const { subscribe, messageAccountisClosed } = require("./push_notification.js");
 const app = express();
 const push_notification = require("./push_notification.js");
 
@@ -35,14 +35,10 @@ con.connect(function(err) {
     });
 });
 
-// con.query("USE MODERN_WAITER_DB", function(err,result,fields){
-//     if (err) throw err;
-// });
-
-function pushNotificationsDemo(){
-    subscribe("dti7Svc4SC6utD7GPz9ZXy:APA91bEVZQYS-PJ1OYgYqbOElQkM_BTI7Si_S3eLXOpO-oIpM155VGAJzl-FJHYFUNMMYdfg3cOvWM6bX5X-6m6k7H6QQCdZA96qEZt3lwRpE68iOmb7uVx8hfbx5SZUuy8MnnTdGArg","1")
-    messageAccountisClosed(1);
-}
+// function pushNotificationsDemo(){
+//     subscribe("dti7Svc4SC6utD7GPz9ZXy:APA91bEVZQYS-PJ1OYgYqbOElQkM_BTI7Si_S3eLXOpO-oIpM155VGAJzl-FJHYFUNMMYdfg3cOvWM6bX5X-6m6k7H6QQCdZA96qEZt3lwRpE68iOmb7uVx8hfbx5SZUuy8MnnTdGArg","1")
+//     messageAccountisClosed(1);
+// }
 
 /**
  * HTTP POST request to register token for

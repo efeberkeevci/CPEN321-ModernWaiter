@@ -1,7 +1,6 @@
 const express = require('express')
 const mysql = require('mysql')
 const push_notification = require("./../push_notification.js")
-const { subscribe, messageAccountisClosed } = require("./../push_notification.js")
 
 module.exports = function(app, con){
     app.use(express.json());
