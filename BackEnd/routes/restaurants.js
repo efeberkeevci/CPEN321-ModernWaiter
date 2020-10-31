@@ -23,7 +23,7 @@ module.exports = function(app){
         console.log("/restaurant/{{id}}");
         let id = req.params.id;
         let sql_query = mysql.format("SELECT * FROM restaurant WHERE id = ?", [id]);
-        con.query(sql_query, function(err,result,fields){
+        con.query(sql_query, function(err,result){
             if (err) {
                 res.send(err);
             }

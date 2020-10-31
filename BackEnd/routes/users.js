@@ -23,7 +23,7 @@ module.exports = function(app){
         console.log("/user/{{id}}");
         let id = req.params.id;
         let sql_query = mysql.format("SELECT * FROM users WHERE id = ?", [id]);
-        con.query(sql_query, function(err,result,fields){
+        con.query(sql_query, function(err,result){
             if (err) {
                 res.send(err);
             }
@@ -38,7 +38,7 @@ module.exports = function(app){
         console.log("/user/preferences/{{id}}");
         let id = req.params.id;
         let sql_query = mysql.format("SELECT preferences FROM users WHERE id = ?", [id]);
-        con.query(sql_query, function(err,result,fields){
+        con.query(sql_query, function(err,result){
             if (err) {
                 res.send(err);
             };

@@ -25,7 +25,7 @@ module.exports = function(app){
         ,[req.body.users_id, req.body.tables_id, req.body.restaurant_id,
         req.body.amount, req.body.has_paid, req.body.is_active_session])
         
-        con.query(sql_query, function(err,result,fields){
+        con.query(sql_query, function(err,result){
             if (err) {
                 res.send(err)
             }
@@ -57,7 +57,7 @@ module.exports = function(app){
         let id = req.body.id
         let amount = req.body.amount
         let sql_query_get_oldamount = mysql. format("SELECT amount FROM orders WHERE id = ?", [id])
-        con.query(sql_query_get_oldamount, function(err,result,fields){
+        con.query(sql_query_get_oldamount, function(err,result){
             if (err) {
                 console.log(result)
                 throw err
@@ -66,7 +66,7 @@ module.exports = function(app){
             let old_amount = result["amount"]
             let new_amount = old_amount + amount
             let sql_query = mysql.format("UPDATE orders SET amount = ? WHERE id = ?", [new_amount, id])
-            con.query(sql_query, function(err,result,fields){
+            con.query(sql_query, function(err,result){
                 if (err) {
                     console.log(err)
                     return false
@@ -88,7 +88,7 @@ module.exports = function(app){
         let users_id = req.params.users_id
         let isActive = req.query.isActive
         let sql_query = mysql.format("SELECT * FROM orders WHERE users_id = ? && is_active_session = ? ", [users_id, isActive])
-        con.query(sql_query, function(err,result,fields){
+        con.query(sql_query, function(err,result){
             if (err) {
                 res.send(err)
             }
@@ -107,7 +107,7 @@ module.exports = function(app){
         let tables_id = req.params.tables_id
         let isActive = req.query.isActive
         let sql_query = mysql.format("SELECT * FROM orders WHERE tables_id = ? && is_active_session = ? ", [tables_id, isActive])
-        con.query(sql_query, function(err,result,fields){
+        con.query(sql_query, function(err,result){
             if (err) {
                 res.send(err)
             }
@@ -128,7 +128,7 @@ module.exports = function(app){
         let orderId = req.body.orderId
         let isActive = req.body.isActive
         let sql_query = mysql.format("UPDATE orders SET is_active_session = ? WHERE id = ?", [isActive, orderId])
-        con.query(sql_query, function(err,result,fields){
+        con.query(sql_query, function(err,result){
             if (err) {
                 res.send(err)
             }
@@ -150,7 +150,7 @@ module.exports = function(app){
         console.log(orderId,hasPaid)
         console.log("In the order closed part")
         let sql_query = mysql.format("UPDATE orders SET has_paid = ? WHERE id = ?", [hasPaid,orderId])
-            con.query(sql_query, function(err,result,fields){
+            con.query(sql_query, function(err,result){
                 if (err) {
             console.log(err)
                     res.send(err)

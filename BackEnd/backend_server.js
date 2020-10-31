@@ -1,9 +1,10 @@
-var express = require("express");
-var mysql = require('mysql');
+const express = require("express");
+const mysql = require('mysql');
 const { subscribe, messageAccountisClosed } = require("./push_notification.js");
-var app = express();
-var push_notification = require("./push_notification.js");
+const app = express();
+const push_notification = require("./push_notification.js");
 
+// Reference to the API routes
 const items = require('./routes/items.js')(app)
 const options = require('./routes/options.js')(app)
 const orders = require('./routes/orders.js')(app)

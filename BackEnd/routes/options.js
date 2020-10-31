@@ -25,7 +25,7 @@ module.exports = function(app){
         console.log("/item-options/{{id}}")
         let id = req.params.id
         let sql_query = mysql.format("SELECT * FROM items_options WHERE items_id = ?", [id])
-        con.query(sql_query, function(err,result,fields){
+        con.query(sql_query, function(err,result){
             if (err) {
                 res.send(err)
             }
@@ -42,7 +42,7 @@ module.exports = function(app){
         console.log("/options/{{id}}")
         let id = req.params.id
         let sql_query = mysql.format("SELECT * FROM options WHERE id = ?", [id])
-        con.query(sql_query, function(err,result,fields){
+        con.query(sql_query, function(err,result){
             if (err) {
                 res.send(err)
             }

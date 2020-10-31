@@ -21,7 +21,7 @@ module.exports = function(app){
         console.log("/item/descriptions/{{restaurantId}}");
         let restaurantId = req.params.restaurantId;
         let sql_query = mysql.format("SELECT id, description FROM items WHERE restaurant_id = ?", [restaurantId]);
-        con.query(sql_query, function(err,result,fields){
+        con.query(sql_query, function(err,result){
             if (err) {
                 res.send(err);
             };
@@ -42,13 +42,13 @@ module.exports = function(app){
         let user_query = mysql.format("SELECT preferences FROM users WHERE id = ?", [users_id]);
         let desc_query = mysql.format("SELECT id, description FROM items WHERE restaurant_id = ?", [restaurant_id]);
 
-        con.query(user_query, function(err,prefResult,fields){
+        con.query(user_query, function(err,prefResult){
             if (err) {
                 res.send(err);
             };
             var preference = prefResult[0]["preferences"];
 
-            con.query(desc_query, function(err,descResult,fields){
+            con.query(desc_query, function(err,descResult){
                 if (err) {
                     res.send(err);
                 };

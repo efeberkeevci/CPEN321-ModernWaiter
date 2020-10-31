@@ -26,7 +26,7 @@ module.exports = function(app){
         console.log("/ordered-items/{{orderId}}")
         let orderId = req.params.orderId
         let sql_query = mysql.format("SELECT * FROM ordered_items WHERE orders_id = ?", [ orderId])
-        con.query(sql_query, function(err,result,fields){
+        con.query(sql_query, function(err,result){
             if (err) {
                 res.send(err)
             }
@@ -45,7 +45,7 @@ module.exports = function(app){
         let orderId = req.body.orderId
         let itemId = req.body.itemId
         let sql_query = mysql.format("INSERT INTO ordered_items (orders_id, items_id, has_paid, is_selected) VALUES(?,?, 0, 0) ", [orderId,itemId])
-        con.query(sql_query, function(err,result,fields){
+        con.query(sql_query, function(err,result){
             if (err) {
                 res.send(err)
             }
@@ -66,7 +66,7 @@ module.exports = function(app){
         let itemId = req.body.itemId
         let hasPaid = req.body.hasPaid
         let sql_query = mysql.format("UPDATE ordered_items SET has_paid = ? WHERE orders_id = ? && items_id = ?", [hasPaid, orderId, itemId])
-        con.query(sql_query, function(err,result,fields){
+        con.query(sql_query, function(err,result){
             if (err) {
                 res.send(err)
             }
@@ -78,7 +78,7 @@ module.exports = function(app){
         let item_cost_query = mysql.format("SELECT cost FROM items WHERE id = ?", [itemId])
         let old_amount_query = mysql. format("SELECT amount FROM orders WHERE id = ?", [orderId])
 
-        con.query(item_cost_query, function(err,result,fields){
+        con.query(item_cost_query, function(err,result){
             if (err) {
                 console.log(result)
                 throw err
@@ -86,7 +86,7 @@ module.exports = function(app){
             result=JSON.parse(JSON.stringify(result))[0]
             let item_cost = result["cost"]
 
-            con.query(old_amount_query, function(err,result2,fields){
+            con.query(old_amount_query, function(err,result2){
                 if (err) {
                     console.log(err)
                     throw err
@@ -96,7 +96,7 @@ module.exports = function(app){
                 let new_amount = old_amount + item_cost
                 let update_query = mysql.format("UPDATE orders SET amount = ? WHERE id = ?", [new_amount, orderId])
 
-                con.query(update_query, function(err,result3,fields){
+                con.query(update_query, function(err,result3){
                     if (err) {
                         console.log(err)
                         throw err
