@@ -8,6 +8,8 @@ var recommendation = require("./recommendation.js");
 const env = require("dotenv").config({ path: "./.env" });
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
+const router = require('./routes/items.js')
+
 app.use(express.json());
 
 var con = mysql.createConnection({
