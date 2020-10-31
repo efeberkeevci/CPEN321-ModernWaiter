@@ -19,17 +19,17 @@ module.exports = function(app){
      * HTTP POST request to create an order. It 
      * returns a status code of 200 if successful.
      */
-    app.post("/order", (req,res) =>{
-        console.log("/order")
+    app.post("/orders", (req,res) =>{
+        console.log("/orders")
         let sql_query = mysql.format("INSERT INTO orders ( users_id, tables_id, restaurant_id, amount, has_paid, is_active_session) VALUES(?,?,?,?,?,?)"
-        ,[req.body.users_id, req.body.tables_id, req.body.restaurant_id,
-        req.body.amount, req.body.has_paid, req.body.is_active_session])
+        ,[req.body.userId, req.body.tableId, req.body.restaurantId,
+        req.body.amount, req.body.hasPaid, req.body.isActive])
         
         con.query(sql_query, function(err,result){
             if (err) {
                 res.send(err)
             }
-        res.send(result)
+        res.send()
         //push_notification.push_notification_order_received("1")
 
     /*        let order_id_query = mysql.format("SELECT id FROM orders WHERE users_id = 1 && is_active_session = 1", [users_id])
@@ -52,8 +52,8 @@ module.exports = function(app){
      * they already created an order. It returns a 
      * status code of 200 if successful.
      */
-    app.put("/order/amount", (req,res) => {
-        console.log("/order/amount")
+    app.put("/orders/amount", (req,res) => {
+        console.log("/orders/amount")
         let id = req.body.id
         let amount = req.body.amount
         let sql_query_get_oldamount = mysql. format("SELECT amount FROM orders WHERE id = ?", [id])
@@ -83,8 +83,8 @@ module.exports = function(app){
      * returns the details with a status code of 
      * 200 if successful.
      */
-    app.get("/order/user/:users_id", (req,res) =>{
-        console.log("/order/user/{{userId}}")
+    app.get("/orders/user/:users_id", (req,res) =>{
+        console.log("/orders/user/{{userId}}")
         let users_id = req.params.users_id
         let isActive = req.query.isActive
         let sql_query = mysql.format("SELECT * FROM orders WHERE users_id = ? && is_active_session = ? ", [users_id, isActive])
@@ -102,8 +102,8 @@ module.exports = function(app){
      * returns the details with a status code of 
      * 200 if successful.
      */
-    app.get("/order/table/:tables_id", (req,res) =>{
-        console.log("/order/table/{{tableId}}")
+    app.get("/orders/table/:tables_id", (req,res) =>{
+        console.log("/orders/table/{{tableId}}")
         let tables_id = req.params.tables_id
         let isActive = req.query.isActive
         let sql_query = mysql.format("SELECT * FROM orders WHERE tables_id = ? && is_active_session = ? ", [tables_id, isActive])
@@ -123,8 +123,8 @@ module.exports = function(app){
      * mark the session as complete. It returns a 
      * status code of 200 if successful.
      */
-    app.put("/order/session", (req,res) => {
-        console.log("/order/session")
+    app.put("/orders/session", (req,res) => {
+        console.log("/orders/session")
         let orderId = req.body.orderId
         let isActive = req.body.isActive
         let sql_query = mysql.format("UPDATE orders SET is_active_session = ? WHERE id = ?", [isActive, orderId])
@@ -143,8 +143,8 @@ module.exports = function(app){
      * for an order that has been paid for already. It returns a 
      * status code of 200 if successful.
      */
-    app.put("/order/paid", (req,res) => {
-        console.log("/order/paid")
+    app.put("/orders/paid", (req,res) => {
+        console.log("/orders/paid")
         let orderId = req.body.orderId
         let hasPaid = req.body.hasPaid
         console.log(orderId,hasPaid)
