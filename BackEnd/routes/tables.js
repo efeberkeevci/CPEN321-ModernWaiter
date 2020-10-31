@@ -19,8 +19,8 @@ module.exports = function(app){
      * information with a status code of 200 
      * if successful.
      */
-    app.get("/table/:id", (req,res) => {    
-        console.log("/table/{{id}}");
+    app.get("/tables/:id", (req,res) => {    
+        console.log("/tables/{{id}}");
         let id = req.params.id;
         let sql_query = mysql.format("SELECT * FROM tables WHERE id = ?", [id]);
         con.query(sql_query, function(err,result){

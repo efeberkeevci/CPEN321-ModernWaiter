@@ -19,7 +19,7 @@ module.exports = function(app){
      * information with a status code of 200 
      * if successful.
      */
-    app.get("/user/:id", (req, res)=>{
+    app.get("/users/:id", (req, res)=>{
         console.log("/user/{{id}}");
         let id = req.params.id;
         let sql_query = mysql.format("SELECT * FROM users WHERE id = ?", [id]);
@@ -34,7 +34,7 @@ module.exports = function(app){
     /**
      * HTTP GET request to retrieve user preferences.
      */
-    app.get("/user/preferences/:id", (req,res) => {
+    app.get("/users/preferences/:id", (req,res) => {
         console.log("/user/preferences/{{id}}");
         let id = req.params.id;
         let sql_query = mysql.format("SELECT preferences FROM users WHERE id = ?", [id]);

@@ -19,11 +19,11 @@ module.exports = function(app){
      * returns the details with a status code of
      * 200 if successful.
      */
-    app.get("/restaurant/:id", (req,res) => {
+    app.get("/restaurant/:id", (req, res) => {
         console.log("/restaurant/{{id}}");
         let id = req.params.id;
         let sql_query = mysql.format("SELECT * FROM restaurant WHERE id = ?", [id]);
-        con.query(sql_query, function(err,result){
+        con.query(sql_query, function(err, result){
             if (err) {
                 res.send(err);
             }
