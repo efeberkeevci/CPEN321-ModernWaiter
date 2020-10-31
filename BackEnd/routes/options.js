@@ -21,11 +21,11 @@ module.exports = function(app){
      * It returns the list with a status code of
      * 200 if successful.
      */
-    app.get("/item-options/:id", (req,res) => {
+    app.get("/item-options/:id", (req, res) => {
         console.log("/item-options/{{id}}")
         let id = req.params.id
         let sql_query = mysql.format("SELECT * FROM items_options WHERE items_id = ?", [id])
-        con.query(sql_query, function(err,result){
+        con.query(sql_query, function(err, result) {
             if (err) {
                 res.send(err)
             }
@@ -38,11 +38,11 @@ module.exports = function(app){
      * matching an option id. It returns the list 
      * with a status code of 200 if successful.
      */
-    app.get("/options/:id", (req,res) =>{
+    app.get("/options/:id", (req, res) => {
         console.log("/options/{{id}}")
         let id = req.params.id
         let sql_query = mysql.format("SELECT * FROM options WHERE id = ?", [id])
-        con.query(sql_query, function(err,result){
+        con.query(sql_query, function(err, result) {
             if (err) {
                 res.send(err)
             }

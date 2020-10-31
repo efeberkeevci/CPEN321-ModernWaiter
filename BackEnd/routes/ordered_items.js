@@ -26,7 +26,7 @@ module.exports = function(app){
         console.log("/ordered-items/{{orderId}}")
         let orderId = req.params.orderId
         let sql_query = mysql.format("SELECT * FROM ordered_items WHERE orders_id = ?", [ orderId])
-        con.query(sql_query, function(err,result){
+        con.query(sql_query, function(err, result){
             if (err) {
                 res.send(err)
             }
@@ -40,12 +40,12 @@ module.exports = function(app){
      * to their meal during their time at the restaurant.
      * It returns a status code of 200 if successful.
      */
-    app.post("/ordered-items", (req,res) => {
+    app.post("/ordered-items", (req, res) => {
         console.log("/ordered-items")
         let orderId = req.body.orderId
         let itemId = req.body.itemId
         let sql_query = mysql.format("INSERT INTO ordered_items (orders_id, items_id, has_paid, is_selected) VALUES(?,?, 0, 0) ", [orderId,itemId])
-        con.query(sql_query, function(err,result){
+        con.query(sql_query, function(err, result){
             if (err) {
                 res.send(err)
             }
@@ -60,13 +60,13 @@ module.exports = function(app){
      * from making double payments for the same item.
      * It returns a status code of 200 if successful.
      */
-    app.put("/ordered-items/paid", (req,res) => {
+    app.put("/ordered-items/paid", (req, res) => {
         console.log("/ordered-items/paid")
         let orderId = req.body.orderId
         let itemId = req.body.itemId
         let hasPaid = req.body.hasPaid
         let sql_query = mysql.format("UPDATE ordered_items SET has_paid = ? WHERE orders_id = ? && items_id = ?", [hasPaid, orderId, itemId])
-        con.query(sql_query, function(err,result){
+        con.query(sql_query, function(err, result){
             if (err) {
                 res.send(err)
             }
