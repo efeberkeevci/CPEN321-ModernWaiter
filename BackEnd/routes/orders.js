@@ -3,16 +3,7 @@ const mysql = require('mysql')
 const push_notification = require("./../push_notification.js")
 const { subscribe, messageAccountisClosed } = require("./../push_notification.js")
 
-var con = mysql.createConnection({
-    host: "localhost", 
-    user: "admin", 
-    password: "modernwaitercpen321!", 
-    database: "MODERN_WAITER_DB", 
-    port: 3306, 
-    ssl:true
-})
-
-module.exports = function(app){
+module.exports = function(app, con){
     app.use(express.json());
     
     /**

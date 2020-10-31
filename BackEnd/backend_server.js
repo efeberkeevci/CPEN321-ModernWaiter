@@ -4,19 +4,6 @@ const { subscribe, messageAccountisClosed } = require("./push_notification.js");
 const app = express();
 const push_notification = require("./push_notification.js");
 
-// Reference to the API routes
-const items = require('./routes/items.js')(app)
-const options = require('./routes/options.js')(app)
-const orders = require('./routes/orders.js')(app)
-const ordered_items = require('./routes/ordered_items.js')(app)
-const payment = require('./routes/payment.js')(app)
-const recommendation = require('./routes/recommendation.js')(app)
-const restaurants = require('./routes/restaurants.js')(app)
-const tables = require('./routes/tables.js')(app)
-const users = require('./routes/users.js')(app)
-
-app.use(express.json());
-
 var con = mysql.createConnection({
     host: "localhost", 
     user: "admin", 
@@ -25,6 +12,19 @@ var con = mysql.createConnection({
     port: 3306, 
     ssl:true
 });
+
+// Reference to the API routes
+const items = require('./routes/items.js')(app, con)
+const options = require('./routes/options.js')(app, con)
+const orders = require('./routes/orders.js')(app, con)
+const ordered_items = require('./routes/ordered_items.js')(app, con)
+const payment = require('./routes/payment.js')(app)
+const recommendation = require('./routes/recommendation.js')(app, con)
+const restaurants = require('./routes/restaurants.js')(app, con)
+const tables = require('./routes/tables.js')(app, con)
+const users = require('./routes/users.js')(app, con)
+
+app.use(express.json());
 
 con.connect(function(err) {
     if (err) throw err;

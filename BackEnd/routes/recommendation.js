@@ -2,16 +2,7 @@ const express = require('express')
 const mysql = require('mysql')
 var recommendation = require("./../recommendation.js");
 
-var con = mysql.createConnection({
-    host: "localhost", 
-    user: "admin", 
-    password: "modernwaitercpen321!", 
-    database: "MODERN_WAITER_DB", 
-    port: 3306, 
-    ssl:true
-})
-
-module.exports = function(app){
+module.exports = function(app, con){
     app.use(express.json());
 
     /**

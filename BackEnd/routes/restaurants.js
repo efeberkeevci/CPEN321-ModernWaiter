@@ -1,16 +1,7 @@
 const express = require('express')
 const mysql = require('mysql')
 
-var con = mysql.createConnection({
-    host: "localhost", 
-    user: "admin", 
-    password: "modernwaitercpen321!", 
-    database: "MODERN_WAITER_DB", 
-    port: 3306, 
-    ssl:true
-})
-
-module.exports = function(app){
+module.exports = function(app, con){
     app.use(express.json());
     
     /**
@@ -19,8 +10,8 @@ module.exports = function(app){
      * returns the details with a status code of
      * 200 if successful.
      */
-    app.get("/restaurant/:id", (req, res) => {
-        console.log("/restaurant/{{id}}");
+    app.get("/restaurants/:id", (req, res) => {
+        console.log("/restaurants/{{id}}");
         let id = req.params.id;
         let sql_query = mysql.format("SELECT * FROM restaurant WHERE id = ?", [id]);
         con.query(sql_query, function(err, result){
