@@ -7,8 +7,6 @@ public class API {
 
     public static final String URL = "http://52.188.158.129:3000/";
 
-    public static final String orderTable = URL + "order/table/";
-
     public static final String items = URL + "items/";
     public static final String userOrder = URL + "order/user/";
     public static final String orderedItems = URL + "ordered-items/";

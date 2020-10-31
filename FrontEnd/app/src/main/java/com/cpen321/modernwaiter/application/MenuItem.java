@@ -14,19 +14,6 @@ public class MenuItem {
     public final String image;
     public String quantity;
 
-    public MenuItem(String id, String restaurant_id, String name, String type, String cost, String description, String calories, String popularity_count, String image) {
-
-        this.id = Integer.parseInt(id);
-        this.restaurant_id = Integer.parseInt(restaurant_id);
-        this.name = name;
-        this.type = type;
-        this.cost = Integer.parseInt(cost);
-        this.description = description;
-        this.calories = Integer.parseInt(calories);
-        this.popularity_count = Integer.parseInt(popularity_count);
-        this.image = image;
-    }
-
     public MenuItem(int id) {
         this.id = id;
         restaurant_id = -1;

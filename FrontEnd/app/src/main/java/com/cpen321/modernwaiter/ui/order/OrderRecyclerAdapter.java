@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 public class OrderRecyclerAdapter extends RecyclerView.Adapter<OrderRecyclerAdapter.ViewHolder> {
 
     private final HashMap<MenuItem, Integer> orderMap;
-    public ArrayList<MenuItem> itemArray;
+    public final ArrayList<MenuItem> itemArray;
 
     public OrderRecyclerAdapter(HashMap<MenuItem, Integer> orderMap) {
         this.orderMap = orderMap;
@@ -60,22 +60,17 @@ public class OrderRecyclerAdapter extends RecyclerView.Adapter<OrderRecyclerAdap
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
+        public final View view;
         public final TextView nameView;
         public final TextView quantityView;
         public final TextView priceView;
 
         public ViewHolder(View view) {
             super(view);
-            mView = view;
+            this.view = view;
             nameView = (TextView) view.findViewById(R.id.name);
             quantityView = (TextView) view.findViewById(R.id.quantity);
             priceView = (TextView) view.findViewById(R.id.price);
-        }
-
-        @Override
-        public String toString() {
-            return super.toString() + " '" + quantityView.getText() + "'";
         }
     }
 }

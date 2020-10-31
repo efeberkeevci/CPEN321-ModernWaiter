@@ -13,7 +13,6 @@ import com.cpen321.modernwaiter.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainPaymentFragment extends Fragment {
-    static String option;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +31,6 @@ public class MainPaymentFragment extends Fragment {
         pay_for_all.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                option = "payForAll";
                 Navigation.findNavController(view).navigate(R.id.action_navigation_payment_to_navigation_stripe);
             }
         });

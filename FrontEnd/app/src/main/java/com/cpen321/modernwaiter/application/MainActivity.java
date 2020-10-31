@@ -19,7 +19,6 @@ public class MainActivity extends AppCompatActivity {
     public static TableSession tableSession;
 
     //Backend stuff
-    private static final int ID = 1;
     public static RequestQueue requestQueue;
 
     BottomNavigationView navView;
@@ -35,9 +34,6 @@ public class MainActivity extends AppCompatActivity {
         navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_menu, R.id.navigation_order)
-                .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupWithNavController(navView, navController);
         MyFirebaseMessagingService.sendToken();

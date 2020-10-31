@@ -60,22 +60,17 @@ public class BillRecyclerAdapter extends RecyclerView.Adapter<BillRecyclerAdapte
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
+        public final View view;
         public final TextView nameView;
         public final TextView quantityView;
         public final TextView priceView;
 
         public ViewHolder(View view) {
             super(view);
-            mView = view;
+            this.view = view;
             nameView = view.findViewById(R.id.name);
             quantityView = view.findViewById(R.id.quantity);
             priceView = view.findViewById(R.id.price);
-        }
-
-        @Override
-        public String toString() {
-            return super.toString() + " '" + quantityView.getText() + "'";
         }
     }
 }

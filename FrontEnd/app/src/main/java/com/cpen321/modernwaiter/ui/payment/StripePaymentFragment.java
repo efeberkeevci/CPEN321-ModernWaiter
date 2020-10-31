@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.cpen321.modernwaiter.application.API;
@@ -34,14 +33,14 @@ import com.stripe.android.model.PaymentMethod;
 import com.stripe.android.model.PaymentMethodCreateParams;
 import com.stripe.android.view.CardInputWidget;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+
+import static com.cpen321.modernwaiter.application.MainActivity.tableSession;
 
 
 public class StripePaymentFragment extends Fragment {
@@ -51,7 +50,6 @@ public class StripePaymentFragment extends Fragment {
     private int totalAmount = 0;
     private Stripe stripe;
     private View view;
-    private int num_users = 1;
     private final RequestQueue requestQueue = MainActivity.requestQueue;
 
     @Override
@@ -62,15 +60,6 @@ public class StripePaymentFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_stripe, container, false);
-
-        String option_text;
-        String amount_text;
-
-        //getAmountToPay();
-        if(MainPaymentFragment.option.equals("payForAll")) option_text = "Total amount to be paid is:";
-        else if(MainPaymentFragment.option.equals("paySplitEvenly")) option_text = "Total amount to be paid by you after splitting evenly is:";
-        else if(MainPaymentFragment.option.equals("payPerItem")) option_text = "Toatl amount to be paid by you for the items you selected is:";
-        else option_text = "Oops! Looks like something went wrong with your billing";
 
         loadBillRecycler();
         loadPage();
@@ -83,18 +72,15 @@ public class StripePaymentFragment extends Fragment {
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.stripe_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-        MainActivity mainActivity = (MainActivity) getActivity();
-
-        HashMap<MenuItem, Integer> billMap = mainActivity.tableSession.getBill();
+        HashMap<MenuItem, Integer> billMap = tableSession.getBill();
 
         BillRecyclerAdapter billRecyclerAdapter = new BillRecyclerAdapter(billMap);
         recyclerView.setAdapter(billRecyclerAdapter);
 
         totalAmount = 0;
 
-        for(MenuItem menuItem : mainActivity.tableSession.getBill().keySet()) {
-            totalAmount += menuItem.getCost() * mainActivity.tableSession.getBill().get(menuItem);
-        }
+        tableSession.getBill().forEach(((menuItem, count) ->
+                totalAmount += menuItem.getCost() * count));
 
         Button payButton = view.findViewById(R.id.payButton);
         payButton.setText("Pay $" + new DecimalFormat("#.##")
@@ -110,7 +96,6 @@ public class StripePaymentFragment extends Fragment {
     }
 
     private void requestKey() {
-        RequestQueue queue = requestQueue;
         // For added security, our sample app gets the publishable key from the server
 
         StringRequest request = new StringRequest(
@@ -125,9 +110,10 @@ public class StripePaymentFragment extends Fragment {
                 }
             },
 
-            error -> System.out.println(error));
+            error -> Log.i("Request Stripe Key", error.toString())
+        );
 
-        queue.add(request);
+        tableSession.requestQueue.add(request);
     }
 
     private void pay() {
@@ -142,7 +128,7 @@ public class StripePaymentFragment extends Fragment {
             @Override
             public void onSuccess(@NonNull PaymentMethod result) {
                 // Create and confirm the PaymentIntent by calling the sample server's /pay endpoint.
-                sendPaymentMethod(result.id, null);
+                sendPaymentMethod(result.id);
             }
 
             @Override
@@ -152,70 +138,7 @@ public class StripePaymentFragment extends Fragment {
         });
     }
 
-    /**
-     * Function to get the amount to be paid by a user
-     * @return totalAmount
-     */
-    private double getAmountToPay(){
-        Log.i("STRIPEPAYMENT", "INSIDE GETaMOUNTtOPAY");
-        if(MainPaymentFragment.option.equals("payPerItem")){
-            totalAmount = 0;
-            String url = API.userOrder + API.USER_ID + API.isActive;
-            JsonArrayRequest jsonObjectRequest = new JsonArrayRequest(Request.Method.GET, url, null,
-                response -> {
-                    try {
-                        //only need this user's bill
-                        JSONObject jsonObject = response.getJSONObject(0);
-                        int id = jsonObject.getInt("id");
-                        int tableId = jsonObject.getInt("tables_id");
-                       // double amount = jsonObject.getDouble("users_id");
-                        int has_paid = jsonObject.getInt("has_paid");
-                        int is_active_session = jsonObject.getInt("is_active_session");
-                        //TODO: check logic for these values, I ignore description and quantity when getting data from backend
-                        totalAmount = 1600;
-
-                    } catch(JSONException e){
-                        e.printStackTrace();
-                    }
-                }, error -> {
-                    // TODO: Handle error
-            });
-
-            MainActivity.requestQueue.add(jsonObjectRequest);
-            //Make GET Request to get the bill for the entire table
-            return totalAmount;
-        }
-        else{
-            Log.i("STRIPEPAYMENT", "INSIDE else");
-            totalAmount = 0;
-            String url = API.orderTable + API.TABLE_ID + API.isActive;
-            StringRequest request = new StringRequest(Request.Method.GET, url,
-                response -> {
-                    List<OrderResponse> orderResponseList = new Gson()
-                            .fromJson(response, new TypeToken<List<OrderResponse>>() {}.getType());
-
-                    totalAmount = (int) (orderResponseList.get(0).amount * 100);
-                },
-                error -> Log.i("asd", error.toString())
-            );
-            MainActivity.requestQueue.add(request);
-            //get the bill for the entire table
-            if(MainPaymentFragment.option.equals("payForAll")){
-                return totalAmount;
-            }
-            //get bill after splitting evenly
-            else if(MainPaymentFragment.option.equals("paySplitEvenly")){
-                return totalAmount/num_users;
-            }
-            //it should never get here really !!
-            else {
-                totalAmount = 0;
-                return totalAmount;
-            }
-        }
-    }
-
-    private void sendPaymentMethod(@Nullable String paymentMethodId, @Nullable String paymentIntentId) {
+    private void sendPaymentMethod(@Nullable String paymentMethodId) {
 
         final Map<String, String> bodyFields = new HashMap<>();
 
@@ -227,7 +150,7 @@ public class StripePaymentFragment extends Fragment {
             // TODO:
             bodyFields.put("orderAmount", String.valueOf(totalAmount));
         } else {
-            bodyFields.put("paymentIntentId", paymentIntentId);
+            bodyFields.put("paymentIntentId", null);
         }
 
         final String bodyJSON = new Gson().toJson(bodyFields);
@@ -244,19 +167,19 @@ public class StripePaymentFragment extends Fragment {
                     String requiresAction = responseMap.get("requiresAction");
 
                     if (error != null) {
-                        Log.i("Stripe Payment", "Error, response is  not null");
+                        Log.i("Stripe Payment", "Error, response is " + error);
                     } else if (paymentIntentClientSecret != null) {
                         if ("true".equals(requiresAction)) {
-                            stripe.handleNextActionForPayment(getActivity(), paymentIntentClientSecret);
+                            stripe.handleNextActionForPayment(requireActivity(), paymentIntentClientSecret);
                         } else {
                             putPaid();
                             endSession();
-                            MainActivity.tableSession.isActive = false;
+                            tableSession.isActive = false;
                             Navigation.findNavController(view).navigate(R.id.action_navigation_stripe_to_navigation_post_payment);
                         }
                     }
                 },
-                error -> System.out.println(error)
+                error -> Log.i("Request Stripe Key", error.toString())
         ) {
             @Override
             public String getBodyContentType() {
@@ -274,8 +197,7 @@ public class StripePaymentFragment extends Fragment {
 
     private Map<String, String> parseResponseToMap(String response) {
         Gson gson = new Gson();
-        Type type = new TypeToken<Map<String, String>>() {
-        }.getType();
+        Type type = new TypeToken<Map<String, String>>() {}.getType();
         final Map<String, String> responseMap;
         if (response != null) {
             responseMap = gson.fromJson(response, type);
@@ -288,8 +210,8 @@ public class StripePaymentFragment extends Fragment {
 
     private void onRetrievedKey(@NonNull String stripePublishableKey) {
         // Configure the SDK with your Stripe publishable key so that it can make requests to the Stripe API
-        PaymentConfiguration.init(getActivity(), stripePublishableKey);
-        stripe = new Stripe(getActivity(), stripePublishableKey);
+        PaymentConfiguration.init(requireActivity(), stripePublishableKey);
+        stripe = new Stripe(requireActivity(), stripePublishableKey);
 
         // Hook up the pay button to the card widget and stripe instance
         Button payButton = view.findViewById(R.id.payButton);
@@ -304,10 +226,10 @@ public class StripePaymentFragment extends Fragment {
         //PUT request to confirm that the order has been paid
         String url = API.paidOrderItems;
         //TODO: pass order_id, needs billfragment
-        HashMap<MenuItem, Integer> orderedItems = MainActivity.tableSession.getBill();
+        HashMap<MenuItem, Integer> orderedItems = tableSession.getBill();
         for( Map.Entry<MenuItem, Integer> item : orderedItems.entrySet() ) {
             Map<String,String> params = new HashMap<>();
-            params.put("orderId", String.valueOf(MainActivity.tableSession.orderId));
+            params.put("orderId", String.valueOf(tableSession.orderId));
             params.put("itemId", String.valueOf(item.getKey().id));
             params.put("hasPaid", "1");
             JSONObject parameters = new JSONObject(params);
@@ -317,18 +239,15 @@ public class StripePaymentFragment extends Fragment {
                     response -> {
                         //on success
                         //TODO: print some message or not
-                    }, error -> {
-                        error.printStackTrace();
-                        // TODO: Handle error
-
-                    });
+                    }, error -> Log.i("Request put paid item", error.toString())
+            );
 
             MainActivity.requestQueue.add(jsonObjectRequest);
         }
         //PUT request for order has been paid fully
         String url_order_paid = API.paidOrder;
         Map<String,String> params = new HashMap<>();
-        params.put("orderId", String.valueOf(MainActivity.tableSession.orderId));
+        params.put("orderId", String.valueOf(tableSession.orderId));
         params.put("hasPaid", "1");
         JSONObject parameters = new JSONObject(params);
 
@@ -337,20 +256,18 @@ public class StripePaymentFragment extends Fragment {
                 response -> {
                 //on success
                 //TODO: print some message or not
-                }, error -> {
-                    error.printStackTrace();
-                    // TODO: Handle error
-                });
+            }, error -> Log.i("Request put paid full", error.toString())
+        );
 
         MainActivity.requestQueue.add(jsonObjectRequest);
 
     }
 
     private void endSession(){
-        //PUT request for order has been paid fully
+        // PUT request for order has been paid fully
         String url = API.orderSession;
         Map<String,String> params = new HashMap<>();
-        params.put("orderId", String.valueOf(MainActivity.tableSession.orderId));
+        params.put("orderId", String.valueOf(tableSession.orderId));
         params.put("isActive", "0");
         JSONObject parameters = new JSONObject(params);
 
@@ -359,15 +276,9 @@ public class StripePaymentFragment extends Fragment {
                 response -> {
                     //on success
                     //TODO: print some message or not
-                }, error -> {
-                    error.printStackTrace();
-                    // TODO: Handle error
-                });
+                }, error -> Log.i("Request end session", error.toString())
+        );
 
         MainActivity.requestQueue.add(jsonObjectRequest);
-    }
-
-    public class OrderResponse {
-        public double amount;
     }
 }

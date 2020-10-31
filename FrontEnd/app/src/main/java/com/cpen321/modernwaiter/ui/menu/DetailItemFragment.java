@@ -17,10 +17,10 @@ import com.cpen321.modernwaiter.application.MenuItem;
 
 public class DetailItemFragment extends Fragment {
 
-    MenuItem menuItem;
+    final MenuItem menuItem;
     TextView quantityText;
-    Fragment thisFragment = this;
-    MenuRecyclerAdapter adapter;
+    final Fragment thisFragment = this;
+    final MenuRecyclerAdapter adapter;
 
     DetailItemFragment(MenuItem menuItem, MenuRecyclerAdapter adapter) {
         this.adapter = adapter;

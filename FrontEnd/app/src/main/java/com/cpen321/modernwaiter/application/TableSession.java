@@ -18,7 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /*  Contains all the data required for this table's session such as its
@@ -31,9 +30,9 @@ public class TableSession {
 
     // This is a map of how many items are already ordered in the server
     // The amount of items on the cart is recorded in MenuItem.quantity
-    private HashMap<MenuItem, Integer> orderedItems;
+    private final HashMap<MenuItem, Integer> orderedItems;
 
-    private final RequestQueue requestQueue;
+    public final RequestQueue requestQueue;
 
     private MenuItem featureItem;
 
@@ -44,9 +43,9 @@ public class TableSession {
     public boolean isActive = true;
 
     // Testing values, change later
-    private String restaurantId = API.RESTAURANT_ID;
-    private String tableId = API.TABLE_ID;
-    private String userId = API.USER_ID;
+    private final String restaurantId = API.RESTAURANT_ID;
+    private final String tableId = API.TABLE_ID;
+    private final String userId = API.USER_ID;
 
     //creates a new session
     TableSession(RequestQueue requestQueue, AppCompatActivity activity) {
@@ -91,7 +90,6 @@ public class TableSession {
             return;
         }
 
-
         String url = API.checkout;
 
         // Request a string response from the provided URL.
@@ -106,25 +104,21 @@ public class TableSession {
         // Add the request to the RequestQueue.
         requestQueue.add(stringRequest);
 
-
-        for (MenuItem menuItem : getMenuItems()) {
-
-            if(Integer.parseInt(menuItem.quantity) > 0) {
-                stringRequest = createPostOrder(menuItem);
+        orderedItems.forEach(((menuItem, count) -> {
+            if (menuItem.getIntegerQuantity() > 0) {
+                StringRequest stringRequest1 = createPostOrder(menuItem);
 
                 for (int i = 0; i < Integer.parseInt(menuItem.quantity); i++) {
-                    requestQueue.add(stringRequest);
+                    requestQueue.add(stringRequest1);
                 }
 
                 // Add those value into orderedItems
-                orderedItems.replace(
-                        menuItem, orderedItems.get(menuItem) + Integer.valueOf(menuItem.quantity)
-                );
+                orderedItems.replace(menuItem, count + menuItem.getIntegerQuantity());
             }
 
-            // Clear the cart of all orders
-            menuItem.quantity = String.valueOf(0);
-        }
+            // Clear cart of all items
+            menuItem.quantity = "0";
+        }));
     }
 
     private void fetchMenu() {
@@ -200,13 +194,15 @@ public class TableSession {
                 response -> {
                     List<OrderedItemResponse> orderedItemResponses = new Gson().fromJson(response, new TypeToken<List<OrderedItemResponse>>() {
                     }.getType());
-                    HashMap<MenuItem, Integer> updatedBillMap = new HashMap<>(getMenuItems().stream().collect(Collectors.toMap(
-                            Function.identity(), x -> 0
-                    )));
+                    HashMap<MenuItem, Integer> updatedBillMap = new HashMap<>();
 
                     for (OrderedItemResponse orderedItem : orderedItemResponses) {
                         MenuItem fakeMenuItem = new MenuItem(orderedItem.items_id);
-                        updatedBillMap.replace(fakeMenuItem, updatedBillMap.get(fakeMenuItem) + 1);
+
+                        if (updatedBillMap.containsKey(fakeMenuItem))
+                            updatedBillMap.replace(fakeMenuItem, updatedBillMap.get(fakeMenuItem) + 1);
+                        else
+                            updatedBillMap.put(fakeMenuItem, 1);
                     }
 
                     for (MenuItem menuItem : updatedBillMap.keySet()) {
@@ -283,7 +279,9 @@ public class TableSession {
     public void updateMenuFragment() {
         NavController navController = Navigation.findNavController(activity, R.id.nav_host_fragment);
 
-        if(navController.getCurrentDestination().getId() == R.id.navigation_menu)
+        if(navController.getCurrentDestination() != null
+                && navController.getCurrentDestination().getId() == R.id.navigation_menu)
+
             navController.navigate(R.id.action_navigation_menu_to_navigation_menu);
     }
 
