@@ -80,7 +80,7 @@ module.exports = function(app, con){
                 throw err
             }
             cost_result = JSON.parse(JSON.stringify(cost_result))[0]
-            let item_cost = result["cost"]
+            let item_cost = cost_result["cost"]
 
             con.query(old_amount_query, function(err, old_amount_result){
                 if (err) {
