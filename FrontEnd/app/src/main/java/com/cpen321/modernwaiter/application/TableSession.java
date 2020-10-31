@@ -56,7 +56,7 @@ public class TableSession {
         orderedItems = new HashMap<>();
 
         fetchMenu();
-        postOrderId();
+        getOrderId();
     }
 
     // Get the list of all items in the menu
@@ -135,9 +135,9 @@ public class TableSession {
                             newMenuItem.quantity = "0";
                             orderedItems.put(newMenuItem, 0);
                         }
-
-                        getUserRecommendation();
                     }
+
+                    getUserRecommendation();
                 }, error -> Log.i("Fetch Menu", error.toString()));
 
         requestQueue.add(stringRequest);
@@ -145,12 +145,12 @@ public class TableSession {
 
     private void postOrderId() {
         final Map<String, String> bodyFields = new HashMap<>();
-        bodyFields.put("users_id", userId);
-        bodyFields.put("tables_id", tableId);
-        bodyFields.put("restaurant_id", restaurantId);
+        bodyFields.put("userId", userId);
+        bodyFields.put("tableId", tableId);
+        bodyFields.put("restaurantId", restaurantId);
         bodyFields.put("amount", "0");
-        bodyFields.put("has_paid", "0");
-        bodyFields.put("is_active_session", "1");
+        bodyFields.put("hasPaid", "0");
+        bodyFields.put("isActive", "1");
 
         final String bodyJSON = new Gson().toJson(bodyFields);
         StringRequest stringRequest = new StringRequest(
@@ -178,17 +178,19 @@ public class TableSession {
                 Request.Method.GET, API.userOrder + userId + API.isActive,
                 response -> {
                     List<OrderResponse> orderResponse = new Gson().fromJson(response, new TypeToken<List<OrderResponse>>() {}.getType());
-
-                    orderId = orderResponse.get(0).id;
-                    updateBill();
+                    if (orderResponse.size() == 0) {
+                        postOrderId();
+                    } else {
+                        orderId = orderResponse.get(0).id;
+                        updateBill();
+                    }
 
                 }, error -> Log.i("Fetch order id", error.toString()));
 
-        requestQueue.add(stringRequest);
+            requestQueue.add(stringRequest);
     }
 
     public void updateBill() {
-
         StringRequest stringRequest = new StringRequest(
                 Request.Method.GET, API.orderedItems + orderId,
                 response -> {
@@ -216,20 +218,14 @@ public class TableSession {
     }
 
     public void getUserRecommendation() {
-        final Map<String, String> bodyFields = new HashMap<>();
-        bodyFields.put("users_id", userId);
-        bodyFields.put("restaurant_id", restaurantId);
-
-        final String bodyJSON = new Gson().toJson(bodyFields);
-
         StringRequest stringRequest = new StringRequest(
-                Request.Method.GET, API.recommend,
+                Request.Method.GET, API.recommend + userId + "/" + restaurantId,
                 response -> {
 
-                    FeatureResponse featureResponse = new Gson().fromJson(response, FeatureResponse.class);
+                    FeatureResponse featureResponses = new Gson().fromJson(response, FeatureResponse.class);
 
                     for (MenuItem menuItem : getMenuItems()) {
-                        if (menuItem.id == featureResponse.itemId)
+                        if (menuItem.id == featureResponses.itemId)
                             featureItem = menuItem;
                     }
 
@@ -237,23 +233,13 @@ public class TableSession {
                 },
 
                 error -> Log.i("Fetch User recommendation", error.toString())
-        ) {
-            @Override
-            public String getBodyContentType() {
-                return "application/json; charset=utf-8";
-            }
-
-            @Override
-            public byte[] getBody() {
-                return bodyJSON.getBytes();
-            }
-        };
+        );
 
         requestQueue.add(stringRequest);
     }
 
     public StringRequest createPostOrder(MenuItem menuItem) {
-        HashMap<String, String> bodyFields = new HashMap<>();
+        final Map<String, String> bodyFields = new HashMap<>();
         bodyFields.put("orderId", String.valueOf(orderId));
         bodyFields.put("itemId", String.valueOf(menuItem.id));
 

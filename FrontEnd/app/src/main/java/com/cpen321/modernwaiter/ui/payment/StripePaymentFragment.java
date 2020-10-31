@@ -266,7 +266,7 @@ public class StripePaymentFragment extends Fragment {
     private void endSession(){
         // PUT request for order has been paid fully
         String url = API.orderSession;
-        Map<String,String> params = new HashMap<>();
+        final Map<String,String> params = new HashMap<>();
         params.put("orderId", String.valueOf(tableSession.orderId));
         params.put("isActive", "0");
         JSONObject parameters = new JSONObject(params);
