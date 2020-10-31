@@ -14,6 +14,8 @@ var con = mysql.createConnection({
 })
 
 module.exports = function(app){
+    app.use(express.json());
+
     /**
      * HTTP GET request to retrieve a list of all the 
      * items associated with a specific order by the
@@ -42,7 +44,7 @@ module.exports = function(app){
         console.log("/ordered-items")
         let orderId = req.body.orderId
         let itemId = req.body.itemId
-        let sql_query = mysql.format("INSERT INTO ordered_items (orders_id, items_id, has_paid, is_selected) VALUES(?,?, 0,0) ", [orderId,itemId])
+        let sql_query = mysql.format("INSERT INTO ordered_items (orders_id, items_id, has_paid, is_selected) VALUES(?,?, 0, 0) ", [orderId,itemId])
         con.query(sql_query, function(err,result,fields){
             if (err) {
                 res.send(err)
