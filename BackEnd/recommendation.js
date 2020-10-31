@@ -1,8 +1,15 @@
+/**
+ * Function to calculation the Jensen-Shannon
+ * divergence between two strings.
+ * @param {*} sampleA The first string.
+ * @param {*} sampleB The second string.
+ */
 function jensenShannonDivergenceCalculator(sampleA, sampleB){
     var preferenceMap = new Map()
     var descriptionMap = new Map()
     var allWords = []
   
+    // Creates a frequency map for sampleA.
     sampleA.forEach(item => {
       if(preferenceMap.get(item) != null){
         preferenceMap.set(item, preferenceMap.get(item) + 1)
@@ -16,6 +23,7 @@ function jensenShannonDivergenceCalculator(sampleA, sampleB){
       }
     })
   
+    // Creates a frequency map for sampleB.
     sampleB.forEach(item => {
       if(descriptionMap.get(item) != null){
         descriptionMap.set(item, descriptionMap.get(item) + 1)
@@ -29,6 +37,7 @@ function jensenShannonDivergenceCalculator(sampleA, sampleB){
       }
     })
   
+    // Creates a set of unique words from both samples.
     var uniqueWordSet = [...new Set(allWords)]
   
     var JSD = 0
@@ -43,6 +52,9 @@ function jensenShannonDivergenceCalculator(sampleA, sampleB){
     var plogp_m
     var qlogq_m
   
+    // Use the probability of occurence of the words
+    // in the samples to calculate Jensen-Shannon 
+    // divergence.
     allWords.forEach(item => {
       if(preferenceMap.get(item) != null){
         p = preferenceMap.get(item) / Pcount
@@ -77,7 +89,13 @@ function jensenShannonDivergenceCalculator(sampleA, sampleB){
   
     return JSD
   }
-  
+
+  /**
+   * Function to get the recommended item using 
+   * Jensen-Shannon divergence.
+   * @param {*} preference User's food preference.
+   * @param {*} itemDescriptionMap Item descriptions from a restaurant's menu.
+   */
   function getRecommendation(preference, itemDescriptionMap){    
     var itemScoreMap = new Map()
     var itemKeys = Array.from(itemDescriptionMap.keys());
@@ -97,6 +115,12 @@ function jensenShannonDivergenceCalculator(sampleA, sampleB){
     return itemScoreMap.get(itemScoreMapKeys[0])
   }
 
+  /**
+   * Function to normalize a string by
+   * removing punctuations and converting into
+   * lowercase.
+   * @param {*} stringInput 
+   */
   function normalizeStringToArray(stringInput){
       return stringInput
       .replace(/[^\w\s]|_/g, "")
