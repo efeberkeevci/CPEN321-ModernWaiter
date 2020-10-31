@@ -8,13 +8,12 @@ var recommendation = require("./recommendation.js");
 const env = require("dotenv").config({ path: "./.env" });
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
-const router = require('./routes/items.js')(app)
-// const router = require('./routes/orders.js')
-// const router = require('./routes/options.js')
-// const router = require('./routes/ordered_items.js')
+const items = require('./routes/items.js')(app)
+const orders = require('./routes/orders.js')(app)
+const options = require('./routes/options.js')(app)
+const ordered_items = require('./routes/ordered_items.js')(app)
 
 app.use(express.json());
-app.use(router);
 
 var con = mysql.createConnection({
     host: "localhost", 
