@@ -74,29 +74,35 @@ module.exports = function(app){
         })
     })
 
+    /**
+     * Function to update the order amount when 
+     * an item is added to the order.
+     * @param {*} orderId Id of the order.
+     * @param {*} itemId Id of the item.
+     */
     function updateOrderAmount(orderId, itemId) {
         let item_cost_query = mysql.format("SELECT cost FROM items WHERE id = ?", [itemId])
         let old_amount_query = mysql. format("SELECT amount FROM orders WHERE id = ?", [orderId])
 
-        con.query(item_cost_query, function(err,result){
+        con.query(item_cost_query, function(err, cost_result){
             if (err) {
-                console.log(result)
+                console.log(cost_result)
                 throw err
             }
-            result=JSON.parse(JSON.stringify(result))[0]
+            cost_result = JSON.parse(JSON.stringify(cost_result))[0]
             let item_cost = result["cost"]
 
-            con.query(old_amount_query, function(err,result2){
+            con.query(old_amount_query, function(err, old_amount_result){
                 if (err) {
                     console.log(err)
                     throw err
                 }
-                result2=JSON.parse(JSON.stringify(result2))[0]
-                let old_amount = result2["amount"]
+                old_amount_result = JSON.parse(JSON.stringify(old_amount_result))[0]
+                let old_amount = old_amount_result["amount"]
                 let new_amount = old_amount + item_cost
                 let update_query = mysql.format("UPDATE orders SET amount = ? WHERE id = ?", [new_amount, orderId])
 
-                con.query(update_query, function(err,result3){
+                con.query(update_query, function(err, result){
                     if (err) {
                         console.log(err)
                         throw err

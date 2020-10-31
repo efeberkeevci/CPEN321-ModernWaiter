@@ -13,21 +13,6 @@ var con = mysql.createConnection({
 
 module.exports = function(app){
     app.use(express.json());
-    
-    /**
-     * HTTP GET request to item descriptions.
-     */
-    app.get("/item/descriptions/:restaurantId", (req,res) => {
-        console.log("/item/descriptions/{{restaurantId}}");
-        let restaurantId = req.params.restaurantId;
-        let sql_query = mysql.format("SELECT id, description FROM items WHERE restaurant_id = ?", [restaurantId]);
-        con.query(sql_query, function(err,result){
-            if (err) {
-                res.send(err);
-            };
-            res.send(result);
-        });
-    })
 
     /**
      * HTTP GET request to get a recommendation for
@@ -35,10 +20,10 @@ module.exports = function(app){
      * user. Returns the recommended item Id with a
      * status code of 200.
      */
-    app.get("/item/recommend", (req,res) => {
-        console.log("/item/recommend");
-        let users_id = 1; //req.body.users_id;
-        let restaurant_id = 1; //req.body.restaurant_id;
+    app.get("/items/recommendation", (req, res) => {
+        console.log("/items/recommendation");
+        let users_id = req.body.userId;
+        let restaurant_id = req.body.restaurantId;
         let user_query = mysql.format("SELECT preferences FROM users WHERE id = ?", [users_id]);
         let desc_query = mysql.format("SELECT id, description FROM items WHERE restaurant_id = ?", [restaurant_id]);
 
@@ -62,8 +47,7 @@ module.exports = function(app){
                 });
 
                 console.log(itemDescriptionMap);
-            var itemId = recommendation.getRecommendation(preference, itemDescriptionMap);
-
+                var itemId = recommendation.getRecommendation(preference, itemDescriptionMap);
                 res.send({"itemId" : itemId});
             });
         });
