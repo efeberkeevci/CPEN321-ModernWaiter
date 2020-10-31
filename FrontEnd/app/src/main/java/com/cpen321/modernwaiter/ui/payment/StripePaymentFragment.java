@@ -20,7 +20,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.cpen321.modernwaiter.application.HARDCODED;
+import com.cpen321.modernwaiter.application.API;
 import com.cpen321.modernwaiter.application.MainActivity;
 import com.cpen321.modernwaiter.R;
 import com.cpen321.modernwaiter.application.MenuItem;
@@ -114,7 +114,7 @@ public class StripePaymentFragment extends Fragment {
         // For added security, our sample app gets the publishable key from the server
 
         StringRequest request = new StringRequest(
-            Request.Method.GET, HARDCODED.URL + "key",
+            Request.Method.GET, API.stripeKey,
             response -> {
                 Map<String, String> responseMap = parseResponseToMap(response);
 
@@ -160,7 +160,7 @@ public class StripePaymentFragment extends Fragment {
         Log.i("STRIPEPAYMENT", "INSIDE GETaMOUNTtOPAY");
         if(MainPaymentFragment.option.equals("payPerItem")){
             totalAmount = 0;
-            String url = HARDCODED.URL + "order/user/" + HARDCODED.USER_ID + "?isActive=1";
+            String url = API.userOrder + API.USER_ID + API.isActive;
             JsonArrayRequest jsonObjectRequest = new JsonArrayRequest(Request.Method.GET, url, null,
                 response -> {
                     try {
@@ -188,7 +188,7 @@ public class StripePaymentFragment extends Fragment {
         else{
             Log.i("STRIPEPAYMENT", "INSIDE else");
             totalAmount = 0;
-            String url = HARDCODED.URL + "order/table/"+ HARDCODED.TABLE_ID + "?isActive=1";
+            String url = API.orderTable + API.TABLE_ID + API.isActive;
             StringRequest request = new StringRequest(Request.Method.GET, url,
                 response -> {
                     List<OrderResponse> orderResponseList = new Gson()
@@ -233,7 +233,7 @@ public class StripePaymentFragment extends Fragment {
         final String bodyJSON = new Gson().toJson(bodyFields);
 
         StringRequest stringRequest = new StringRequest(
-                Request.Method.POST, HARDCODED.URL + "pay",
+                Request.Method.POST, API.stripePay,
                 response -> {
                     System.out.println(response);
 
@@ -302,7 +302,7 @@ public class StripePaymentFragment extends Fragment {
      */
     private void putPaid(){
         //PUT request to confirm that the order has been paid
-        String url = HARDCODED.URL + "ordered-items/paid/";
+        String url = API.paidOrderItems;
         //TODO: pass order_id, needs billfragment
         HashMap<MenuItem, Integer> orderedItems = MainActivity.tableSession.getBill();
         for( Map.Entry<MenuItem, Integer> item : orderedItems.entrySet() ) {
@@ -326,7 +326,7 @@ public class StripePaymentFragment extends Fragment {
             MainActivity.requestQueue.add(jsonObjectRequest);
         }
         //PUT request for order has been paid fully
-        String url_order_paid = HARDCODED.URL + "order/paid/";
+        String url_order_paid = API.paidOrder;
         Map<String,String> params = new HashMap<>();
         params.put("orderId", String.valueOf(MainActivity.tableSession.orderId));
         params.put("hasPaid", "1");
@@ -348,7 +348,7 @@ public class StripePaymentFragment extends Fragment {
 
     private void endSession(){
         //PUT request for order has been paid fully
-        String url = HARDCODED.URL + "order/session/";
+        String url = API.orderSession;
         Map<String,String> params = new HashMap<>();
         params.put("orderId", String.valueOf(MainActivity.tableSession.orderId));
         params.put("isActive", "0");
@@ -362,7 +362,6 @@ public class StripePaymentFragment extends Fragment {
                 }, error -> {
                     error.printStackTrace();
                     // TODO: Handle error
-
                 });
 
         MainActivity.requestQueue.add(jsonObjectRequest);

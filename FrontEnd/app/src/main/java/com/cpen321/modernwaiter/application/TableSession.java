@@ -43,13 +43,18 @@ public class TableSession {
 
     public boolean isActive = true;
 
+    // Testing values, change later
+    private String restaurantId = API.RESTAURANT_ID;
+    private String tableId = API.TABLE_ID;
+    private String userId = API.USER_ID;
+
     //creates a new session
     TableSession(RequestQueue requestQueue, AppCompatActivity activity) {
         //Make request to server to retrieve menu items to display
         this.activity = activity;
         this.requestQueue = requestQueue;
 
-        orderedItems = new HashMap<MenuItem, Integer>();
+        orderedItems = new HashMap<>();
 
         fetchMenu();
         postOrderId();
@@ -87,7 +92,7 @@ public class TableSession {
         }
 
 
-        String url = HARDCODED.URL + "checkout";
+        String url = API.checkout;
 
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(
@@ -124,7 +129,7 @@ public class TableSession {
 
     private void fetchMenu() {
 
-        String url = HARDCODED.URL + "items/" + HARDCODED.RESTAURANT_ID;
+        String url = API.items + restaurantId;
 
         StringRequest stringRequest = new StringRequest(
                 Request.Method.GET, url,
@@ -146,18 +151,16 @@ public class TableSession {
 
     private void postOrderId() {
         final Map<String, String> bodyFields = new HashMap<>();
-        bodyFields.put("users_id", HARDCODED.USER_ID);
-        bodyFields.put("tables_id", HARDCODED.TABLE_ID);
-        bodyFields.put("restaurant_id", HARDCODED.RESTAURANT_ID);
+        bodyFields.put("users_id", userId);
+        bodyFields.put("tables_id", tableId);
+        bodyFields.put("restaurant_id", restaurantId);
         bodyFields.put("amount", "0");
         bodyFields.put("has_paid", "0");
         bodyFields.put("is_active_session", "1");
 
         final String bodyJSON = new Gson().toJson(bodyFields);
         StringRequest stringRequest = new StringRequest(
-                Request.Method.POST,
-                HARDCODED.URL + "order",
-
+                Request.Method.POST, API.order,
                 response -> getOrderId(),
 
                 error -> Log.i("Post order", error.toString())
@@ -178,7 +181,7 @@ public class TableSession {
 
     private void getOrderId() {
         StringRequest stringRequest = new StringRequest(
-                Request.Method.GET, HARDCODED.URL + "order/user/" + HARDCODED.USER_ID + "?isActive=1",
+                Request.Method.GET, API.userOrder + userId + API.isActive,
                 response -> {
                     List<OrderResponse> orderResponse = new Gson().fromJson(response, new TypeToken<List<OrderResponse>>() {}.getType());
 
@@ -193,11 +196,11 @@ public class TableSession {
     public void updateBill() {
 
         StringRequest stringRequest = new StringRequest(
-                Request.Method.GET, HARDCODED.URL + "ordered-items/" + orderId,
+                Request.Method.GET, API.orderedItems + orderId,
                 response -> {
                     List<OrderedItemResponse> orderedItemResponses = new Gson().fromJson(response, new TypeToken<List<OrderedItemResponse>>() {
                     }.getType());
-                    HashMap<MenuItem, Integer> updatedBillMap = new HashMap<MenuItem, Integer>(getMenuItems().stream().collect(Collectors.toMap(
+                    HashMap<MenuItem, Integer> updatedBillMap = new HashMap<>(getMenuItems().stream().collect(Collectors.toMap(
                             Function.identity(), x -> 0
                     )));
 
@@ -218,13 +221,13 @@ public class TableSession {
 
     public void getUserRecommendation() {
         final Map<String, String> bodyFields = new HashMap<>();
-        bodyFields.put("users_id", HARDCODED.USER_ID);
-        bodyFields.put("restaurant_id", HARDCODED.RESTAURANT_ID);
+        bodyFields.put("users_id", userId);
+        bodyFields.put("restaurant_id", restaurantId);
 
         final String bodyJSON = new Gson().toJson(bodyFields);
 
         StringRequest stringRequest = new StringRequest(
-                Request.Method.GET, HARDCODED.URL + "item/recommend",
+                Request.Method.GET, API.recommend,
                 response -> {
 
                     FeatureResponse featureResponse = new Gson().fromJson(response, FeatureResponse.class);
@@ -260,7 +263,7 @@ public class TableSession {
 
         final String bodyJSON = new Gson().toJson(bodyFields);
         return new StringRequest(
-                Request.Method.POST, HARDCODED.URL + "ordered-items",
+                Request.Method.POST, API.orderedItems,
                 response -> System.out.println("Success"),
 
                 error -> Log.i("Post order", error.toString())
