@@ -1,7 +1,7 @@
 const express = require('express')
 const mysql = require('mysql')
-var push_notification = require("./../push_notification.js");
-const { subscribe, messageAccountisClosed } = require("./../push_notification.js");
+const push_notification = require("./../push_notification.js")
+const { subscribe, messageAccountisClosed } = require("./../push_notification.js")
 
 var con = mysql.createConnection({
     host: "localhost", 
