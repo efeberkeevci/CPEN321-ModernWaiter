@@ -50,7 +50,7 @@ module.exports = function(app){
                 res.send(err)
             }
             updateOrderAmount(orderId, itemId)
-            res.send(result)
+            res.send()
         })
     })
 
@@ -70,7 +70,7 @@ module.exports = function(app){
             if (err) {
                 res.send(err)
             }
-            res.send(result)
+            res.send()
         })
     })
 
