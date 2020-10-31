@@ -12,35 +12,35 @@ var con = mysql.createConnection({
 })
 
 module.exports = function(app){
-    /**
-     * HTTP POST request to create an order. It 
-     * returns a status code of 200 if successful.
-     */
-    app.post("/order", (req,res) =>{
-        console.log("/order")
-        let sql_query = mysql.format("INSERT INTO orders ( users_id, tables_id, restaurant_id, amount, has_paid, is_active_session) VALUES(?,?,?,?,?,?)"
-        ,[req.body.users_id, req.body.tables_id, req.body.restaurant_id,
-        req.body.amount, req.body.has_paid, req.body.is_active_session])
+    // /**
+    //  * HTTP POST request to create an order. It 
+    //  * returns a status code of 200 if successful.
+    //  */
+    // app.post("/order", (req,res) =>{
+    //     console.log("/order")
+    //     let sql_query = mysql.format("INSERT INTO orders ( users_id, tables_id, restaurant_id, amount, has_paid, is_active_session) VALUES(?,?,?,?,?,?)"
+    //     ,[req.body.users_id, req.body.tables_id, req.body.restaurant_id,
+    //     req.body.amount, req.body.has_paid, req.body.is_active_session])
         
-        con.query(sql_query, function(err,result,fields){
-            if (err) {
-                res.send(err)
-            }
-        res.send(result)
-        //push_notification.push_notification_order_received("1")
+    //     con.query(sql_query, function(err,result,fields){
+    //         if (err) {
+    //             res.send(err)
+    //         }
+    //     res.send(result)
+    //     //push_notification.push_notification_order_received("1")
 
-    /*        let order_id_query = mysql.format("SELECT id FROM orders WHERE users_id = 1 && is_active_session = 1", [users_id])
+    // /*        let order_id_query = mysql.format("SELECT id FROM orders WHERE users_id = 1 && is_active_session = 1", [users_id])
 
-            con.query(order_id_query, function(err,result2,fields){
-                if (err) {
-                    res.send(err)
-                }
-                result2=JSON.parse(JSON.stringify(result2))[0]
-                let id = result2["id"]
-                res.send({"orderId" : id})
-            })*/
-        })
-    })
+    //         con.query(order_id_query, function(err,result2,fields){
+    //             if (err) {
+    //                 res.send(err)
+    //             }
+    //             result2=JSON.parse(JSON.stringify(result2))[0]
+    //             let id = result2["id"]
+    //             res.send({"orderId" : id})
+    //         })*/
+    //     })
+    // })
 
     /**
      * HTTP PUT request to update the amount spent
