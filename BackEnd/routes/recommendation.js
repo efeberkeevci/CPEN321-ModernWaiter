@@ -22,8 +22,8 @@ module.exports = function(app){
      */
     app.get("/items/recommend", (req, res) => {
         console.log("/items/recommend");
-        let users_id = req.body.userId;
-        let restaurant_id = req.body.restaurantId;
+        let users_id = 1; //req.body.userId;
+        let restaurant_id = 1; //req.body.restaurantId;
         let user_query = mysql.format("SELECT preferences FROM users WHERE id = ?", [users_id]);
         let desc_query = mysql.format("SELECT id, description FROM items WHERE restaurant_id = ?", [restaurant_id]);
 
