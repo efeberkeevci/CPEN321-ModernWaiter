@@ -20,10 +20,10 @@ module.exports = function(app){
      * user. Returns the recommended item Id with a
      * status code of 200.
      */
-    app.get("/items/recommend", (req, res) => {
-        console.log("/items/recommend");
-        let users_id = 1; //req.body.userId;
-        let restaurant_id = 1; //req.body.restaurantId;
+    app.get("/recommendation", (req, res) => {
+        console.log("/recommendation");
+        let users_id = req.body.userId;
+        let restaurant_id = req.body.restaurantId;
         let user_query = mysql.format("SELECT preferences FROM users WHERE id = ?", [users_id]);
         let desc_query = mysql.format("SELECT id, description FROM items WHERE restaurant_id = ?", [restaurant_id]);
 
