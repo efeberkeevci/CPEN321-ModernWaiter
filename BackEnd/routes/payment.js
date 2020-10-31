@@ -2,7 +2,7 @@ const express = require('express')
 const mysql = require('mysql')
 const push_notification = require("./../push_notification.js")
 const { subscribe, messageAccountisClosed } = require("./../push_notification.js")
-const env = require("dotenv").config({ path: "./../.env" })
+const env = require("dotenv").config({ path: "./.env" })
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
 
 module.exports = function(app){
