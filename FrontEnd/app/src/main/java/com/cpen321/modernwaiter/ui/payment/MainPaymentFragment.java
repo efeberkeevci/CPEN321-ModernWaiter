@@ -1,4 +1,4 @@
-package com.cpen321.modernwaiter.payment;
+package com.cpen321.modernwaiter.ui.payment;
 
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
@@ -12,7 +12,7 @@ import android.widget.Button;
 import com.cpen321.modernwaiter.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class MainPayment extends Fragment {
+public class MainPaymentFragment extends Fragment {
     static String option;
     @Override
     public void onCreate(Bundle savedInstanceState) {

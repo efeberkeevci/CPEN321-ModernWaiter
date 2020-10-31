@@ -1,11 +1,11 @@
-package com.cpen321.modernwaiter.main.order;
+package com.cpen321.modernwaiter.ui.bill;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.cpen321.modernwaiter.R;
 import com.cpen321.modernwaiter.application.MenuItem;
@@ -20,17 +20,17 @@ import java.util.stream.Collectors;
  * {@link RecyclerView.Adapter} that can display a {@link MenuItem}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class OrderRecyclerAdapter extends RecyclerView.Adapter<OrderRecyclerAdapter.ViewHolder> {
+public class BillRecyclerAdapter extends RecyclerView.Adapter<BillRecyclerAdapter.ViewHolder> {
 
-    private final HashMap<MenuItem, Integer> orderMap;
-    public ArrayList<MenuItem> itemArray;
+    private final HashMap<MenuItem, Integer> billMap;
+    private final ArrayList<MenuItem> itemArray;
 
-    public OrderRecyclerAdapter(HashMap<MenuItem, Integer> orderMap) {
-        this.orderMap = orderMap;
+    public BillRecyclerAdapter(HashMap<MenuItem, Integer> billMap) {
+        this.billMap = billMap;
 
         // Add all the items that have been ordered atleast once
-        itemArray = orderMap.keySet().stream()
-                .filter(menuItem -> orderMap.get(menuItem) > 0)
+        itemArray = billMap.keySet().stream()
+                .filter(menuItem -> billMap.get(menuItem) > 0)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
@@ -49,9 +49,9 @@ public class OrderRecyclerAdapter extends RecyclerView.Adapter<OrderRecyclerAdap
         MenuItem menuItem = itemArray.get(position);
 
         holder.nameView.setText(menuItem.name);
-        holder.quantityView.setText(String.valueOf(orderMap.get(menuItem)));
+        holder.quantityView.setText(String.valueOf(billMap.get(menuItem)));
 
-        holder.priceView.setText(menuItem.getTotalCartPriceString());
+        holder.priceView.setText(menuItem.getTotalBillPriceString(billMap.get(menuItem)));
     }
 
     @Override
@@ -68,9 +68,9 @@ public class OrderRecyclerAdapter extends RecyclerView.Adapter<OrderRecyclerAdap
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            nameView = (TextView) view.findViewById(R.id.name);
-            quantityView = (TextView) view.findViewById(R.id.quantity);
-            priceView = (TextView) view.findViewById(R.id.price);
+            nameView = view.findViewById(R.id.name);
+            quantityView = view.findViewById(R.id.quantity);
+            priceView = view.findViewById(R.id.price);
         }
 
         @Override

@@ -1,4 +1,4 @@
-package com.cpen321.modernwaiter.payment;
+package com.cpen321.modernwaiter.ui.payment;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -24,7 +24,7 @@ import com.cpen321.modernwaiter.application.HARDCODED;
 import com.cpen321.modernwaiter.application.MainActivity;
 import com.cpen321.modernwaiter.R;
 import com.cpen321.modernwaiter.application.MenuItem;
-import com.cpen321.modernwaiter.main.bill.BillRecyclerAdapter;
+import com.cpen321.modernwaiter.ui.bill.BillRecyclerAdapter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.stripe.android.ApiResultCallback;
@@ -44,7 +44,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class StripePayment extends Fragment {
+public class StripePaymentFragment extends Fragment {
     /**
      * This example collects card payments, implementing the guide here: https://stripe.com/docs/payments/accept-a-payment-synchronously#android
      */
@@ -67,9 +67,9 @@ public class StripePayment extends Fragment {
         String amount_text;
 
         //getAmountToPay();
-        if(MainPayment.option.equals("payForAll")) option_text = "Total amount to be paid is:";
-        else if(MainPayment.option.equals("paySplitEvenly")) option_text = "Total amount to be paid by you after splitting evenly is:";
-        else if(MainPayment.option.equals("payPerItem")) option_text = "Toatl amount to be paid by you for the items you selected is:";
+        if(MainPaymentFragment.option.equals("payForAll")) option_text = "Total amount to be paid is:";
+        else if(MainPaymentFragment.option.equals("paySplitEvenly")) option_text = "Total amount to be paid by you after splitting evenly is:";
+        else if(MainPaymentFragment.option.equals("payPerItem")) option_text = "Toatl amount to be paid by you for the items you selected is:";
         else option_text = "Oops! Looks like something went wrong with your billing";
 
         loadBillRecycler();
@@ -158,7 +158,7 @@ public class StripePayment extends Fragment {
      */
     private double getAmountToPay(){
         Log.i("STRIPEPAYMENT", "INSIDE GETaMOUNTtOPAY");
-        if(MainPayment.option.equals("payPerItem")){
+        if(MainPaymentFragment.option.equals("payPerItem")){
             totalAmount = 0;
             String url = HARDCODED.URL + "order/user/" + HARDCODED.USER_ID + "?isActive=1";
             JsonArrayRequest jsonObjectRequest = new JsonArrayRequest(Request.Method.GET, url, null,
@@ -200,11 +200,11 @@ public class StripePayment extends Fragment {
             );
             MainActivity.requestQueue.add(request);
             //get the bill for the entire table
-            if(MainPayment.option.equals("payForAll")){
+            if(MainPaymentFragment.option.equals("payForAll")){
                 return totalAmount;
             }
             //get bill after splitting evenly
-            else if(MainPayment.option.equals("paySplitEvenly")){
+            else if(MainPaymentFragment.option.equals("paySplitEvenly")){
                 return totalAmount/num_users;
             }
             //it should never get here really !!

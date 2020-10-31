@@ -1,4 +1,4 @@
-package com.cpen321.modernwaiter.payment.perItem;
+package com.cpen321.modernwaiter.ui.payment.perItem;
 
 import android.view.LayoutInflater;
 import android.view.View;

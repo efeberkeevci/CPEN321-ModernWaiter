@@ -1,4 +1,4 @@
-package com.cpen321.modernwaiter.main.menu;
+package com.cpen321.modernwaiter.ui.menu;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

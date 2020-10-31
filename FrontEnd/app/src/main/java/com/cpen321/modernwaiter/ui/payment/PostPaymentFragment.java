@@ -1,4 +1,4 @@
-package com.cpen321.modernwaiter.payment;
+package com.cpen321.modernwaiter.ui.payment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,7 +13,7 @@ import com.cpen321.modernwaiter.R;
 
 import static com.cpen321.modernwaiter.application.MainActivity.tableSession;
 
-public class PostPayment extends Fragment {
+public class PostPaymentFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
