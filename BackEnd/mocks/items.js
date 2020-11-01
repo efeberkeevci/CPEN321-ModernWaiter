@@ -1,5 +1,5 @@
-const menu = 
-    [{
+const test_menu = [
+    {
         "id": 1,
         "restaurant_id": 1,
         "name": "Spicy Ahi Roll",
@@ -9,9 +9,10 @@ const menu =
         "calories": 500,
         "popularity_count": 3,
         "image": "gs://modern-waiter-47e96.appspot.com/dummy-spicy-ahi.jpg"
-    }, {
+    },
+    {
         "id": 2,
-        "restaurant_id": 1,
+        "restaurant_id": 3,
         "name": "Prawn Crunch Roll",
         "type": "Sushi",
         "cost": 16,
@@ -19,18 +20,19 @@ const menu =
         "calories": 500,
         "popularity_count": 4,
         "image": "gs://modern-waiter-47e96.appspot.com/dummy-prawn-crunch.jpg"
-    }]
-
-module.exports = function(app, con){
-    function getMenu(req, res){
-        console.log("/items/{{id}}")
-        let id = req.params.id
-        let sql_query = mysql.format("SELECT * FROM items WHERE restaurant_id = ?", [id])
-        con.query(sql_query, function(err, result){
-            if (err) {
-                res.send(err)
-            }
-            res.send(result)
-        })
     }
+]
+
+function getMenu(req, res){
+    console.log("/items/{{restaurantId}}")
+    let restaurantId = req.params.restaurantId
+    let result = []
+
+    for(var i = 0; i < test_menu.length; i++){
+        if(test_menu[i].restaurantId == restaurantId){
+            result.push(test_menu[i])
+        }
+    }
+
+    res.send(result)
 }

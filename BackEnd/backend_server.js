@@ -29,7 +29,7 @@ con.connect(function(err) {
 /*********************** REST API routes ****************************/
 
 // Routes for items
-app.get("/items/:id", items.getMenu)
+app.get("/items/:restaurantId", items.getMenu)
 
 // Routes for options
 app.get("/item-options/:id", options.getItemOptions)
