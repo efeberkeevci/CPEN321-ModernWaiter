@@ -2,7 +2,7 @@ const orders = require('../routes/orders.js')
 
 describe('checkOrder', () => {
   test('should 200', () => {
-    const req = { userId : "1", tableId : "1", restaurantId : "1", amount : "55.43", hasPaid : "0", isActive : "1"}
+    const req = {body : { userId : "1", tableId : "1", restaurantId : "1", amount : "55.43", hasPaid : "0", isActive : "1"}}
     const res = {};
 
     orders.createOrder(req, res);
