@@ -64,22 +64,6 @@ app.get("/tables/:id", tables.getTable)
 app.get("/users/:id", users.getUser)
 app.get("/users/preferences/:id", users.getUserPreferences)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // function pushNotificationsDemo(){
 //     subscribe("dti7Svc4SC6utD7GPz9ZXy:APA91bEVZQYS-PJ1OYgYqbOElQkM_BTI7Si_S3eLXOpO-oIpM155VGAJzl-FJHYFUNMMYdfg3cOvWM6bX5X-6m6k7H6QQCdZA96qEZt3lwRpE68iOmb7uVx8hfbx5SZUuy8MnnTdGArg","1")
 //     messageAccountisClosed(1)
@@ -108,5 +92,3 @@ app.get("/checkout", (req,res) =>{
 app.get('/_health', (req, res) => {
   res.status(200).send('ok')
 })
-
-module.exports = app
