@@ -71,13 +71,19 @@ function updateOrderedItemPaidStatus(req, res){
             }
             
             let item_cost = 0;
+            console.log(cost_result);
 
             try {
                 cost_result = JSON.parse(JSON.stringify(cost_result))[0]
                 item_cost = cost_result["cost"]
+                console.log("Entered try")
             } catch (err) {
                 res.status(400).send({status : false, body : "Failed to find item from provided item id"})
+                console.log("Entered catch")
             }
+
+            console.log("Proceeding")
+
 
             con.query(old_amount_query, function(err, old_amount_result){
                 if (err) {
