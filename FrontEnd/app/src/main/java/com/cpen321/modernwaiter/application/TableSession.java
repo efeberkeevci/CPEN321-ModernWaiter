@@ -91,7 +91,7 @@ public class TableSession implements SessionInterface {
     public HashMap<MenuItem, Integer> getCart() {
         return new HashMap<>(getMenuItems().stream()
                 .collect(
-                        Collectors.toMap(x -> x, MenuItem::getIntegerQuantity)
+                        Collectors.toMap(menuItem -> menuItem, MenuItem::getIntegerQuantity)
                 ));
     }
 
