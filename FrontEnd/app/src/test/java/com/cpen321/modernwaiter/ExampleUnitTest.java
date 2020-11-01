@@ -1,20 +1,15 @@
 package com.cpen321.modernwaiter;
 
 
+import androidx.test.core.app.ActivityScenario;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.filters.LargeTest;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
-
-
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.junit.Assert.*;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -26,11 +21,16 @@ import static org.junit.Assert.*;
 public class ExampleUnitTest {
 
     @Rule
-    public ActivityScenarioRule<TestActivity> activityRule =
-            new ActivityScenarioRule<>(TestActivity.class);
+    public ActivityScenarioRule<MockMainActivity> activityRule =
+            new ActivityScenarioRule<>(MockMainActivity.class);
+
+    @Before
+    public void init() {
+    }
 
     @Test
-    public void listGoesOverTheFold() {
+    public void mockActivityExist() {
 
+        ///assert(MockMainActivity.tableSession.isActive());
     }
 }

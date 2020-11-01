@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  *
  * Currently, not guaranteed to work with StripePayment since it handles callback differently
  */
-public class TestTableSession implements SessionInterface {
+public class MockTableSession implements SessionInterface {
 
     public HashMap<MenuItem, Integer> orderedItems;
     public MenuItem featureItem;

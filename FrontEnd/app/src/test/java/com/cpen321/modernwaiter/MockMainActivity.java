@@ -1,31 +1,22 @@
-package com.cpen321.modernwaiter.application;
+package com.cpen321.modernwaiter;
 
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
-import com.cpen321.modernwaiter.R;
+import com.cpen321.modernwaiter.application.MainActivity;
+import com.cpen321.modernwaiter.application.NotificationService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class MainActivity extends AppCompatActivity {
-
-    // Shopping kart
-    public static SessionInterface tableSession;
-
-    //Backend stuff
-    public static RequestQueue requestQueue;
+public class MockMainActivity extends MainActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        requestQueue = Volley.newRequestQueue(this);
-        tableSession = new TableSession(requestQueue, this);
+        tableSession = new MockTableSession();
 
         setContentView(R.layout.activity_main);
 
@@ -35,5 +26,6 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupWithNavController(navView, navController);
         NotificationService.sendToken();
+
     }
 }
