@@ -12,8 +12,7 @@ admin.initializeApp({
 });
 
 function push_notification_payment_done(orderId){
-  console.log("Sending push notification");
-  var topic = '1';
+  console.log("Sending payment done push notification");
 
   var message = {
     notification: {
@@ -36,7 +35,6 @@ function push_notification_payment_done(orderId){
 
 function push_notification_order_received(orderId){
   console.log("Sending order received push notification");
-  var topic = '1';
 
   var message = {
     notification: {
