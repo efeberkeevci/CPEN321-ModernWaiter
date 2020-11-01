@@ -1,30 +1,20 @@
 const express = require("express")
 const mysql = require('mysql')
-// const { subscribe, messageAccountisClosed } = require("./push_notification.js")
 const app = express()
 const push_notification = require("./push_notification.js")
-
-import * as items from 'routes/items';
-
-var con = mysql.createConnection({
-    host: "localhost", 
-    user: "admin", 
-    password: "modernwaitercpen321!", 
-    database: "MODERN_WAITER_DB", 
-    port: 3306, 
-    ssl:true
-})
+const sql = require("./sql_connection.js")
+const con = sql.getConnection()
 
 // Reference to the API routes
-// const items = require('./routes/items.js')(app, con)
-const options = require('./routes/options.js')(app, con)
-const orders = require('./routes/orders.js')(app, con)
-const ordered_items = require('./routes/ordered_items.js')(app, con)
-const payment = require('./routes/payment.js')(app)
-const recommendation = require('./routes/recommendation.js')(app, con)
-const restaurants = require('./routes/restaurants.js')(app, con)
-const tables = require('./routes/tables.js')(app, con)
-const users = require('./routes/users.js')(app, con)
+const items = require('./routes/items.js')
+// const options = require('./routes/options.js')
+// const orders = require('./routes/orders.js')
+// const ordered_items = require('./routes/ordered_items.js')
+// const payment = require('./routes/payment.js')
+// const recommendation = require('./routes/recommendation.js')
+// const restaurants = require('./routes/restaurants.js')
+// const tables = require('./routes/tables.js')
+// const users = require('./routes/users.js')
 
 app.use(express.json())
 
@@ -44,7 +34,7 @@ con.connect(function(err) {
  * to the restaurant with a status code of
  * 200 if successful.   
  */
-app.get("/items/:id", getMenu)
+app.get("/items/:id", items.getMenu)
 
 // function pushNotificationsDemo(){
 //     subscribe("dti7Svc4SC6utD7GPz9ZXy:APA91bEVZQYS-PJ1OYgYqbOElQkM_BTI7Si_S3eLXOpO-oIpM155VGAJzl-FJHYFUNMMYdfg3cOvWM6bX5X-6m6k7H6QQCdZA96qEZt3lwRpE68iOmb7uVx8hfbx5SZUuy8MnnTdGArg","1")

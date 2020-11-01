@@ -1,15 +1,8 @@
 const mysql = require('mysql')
+const sql = require("./../sql_connection.js")
+const con = sql.getConnection()
 
-var con = mysql.createConnection({
-    host: "localhost", 
-    user: "admin", 
-    password: "modernwaitercpen321!", 
-    database: "MODERN_WAITER_DB", 
-    port: 3306, 
-    ssl:true
-})
-
-export function getMenu(req, res){
+function getMenu(req, res){
     console.log("/items/{{id}}")
     let id = req.params.id
     let sql_query = mysql.format("SELECT * FROM items WHERE restaurant_id = ?", [id])
@@ -20,3 +13,5 @@ export function getMenu(req, res){
         res.send(result)
     })
 }
+
+module.exports = {getMenu}
