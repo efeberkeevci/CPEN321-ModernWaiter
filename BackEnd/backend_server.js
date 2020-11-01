@@ -4,6 +4,8 @@ const mysql = require('mysql')
 const app = express()
 const push_notification = require("./push_notification.js")
 
+import * as items from 'routes/items';
+
 var con = mysql.createConnection({
     host: "localhost", 
     user: "admin", 
@@ -14,7 +16,7 @@ var con = mysql.createConnection({
 })
 
 // Reference to the API routes
-const items = require('./routes/items.js')(app, con)
+// const items = require('./routes/items.js')(app, con)
 const options = require('./routes/options.js')(app, con)
 const orders = require('./routes/orders.js')(app, con)
 const ordered_items = require('./routes/ordered_items.js')(app, con)
@@ -34,6 +36,15 @@ con.connect(function(err) {
         console.log("Server started listening at %s", port)
     })
 })
+
+/**
+ * HTTP GET request to acquire items of a
+ * restaurant representing its menu. It
+ * returns a list of all the items belonging
+ * to the restaurant with a status code of
+ * 200 if successful.   
+ */
+app.get("/items/:id", getMenu)
 
 // function pushNotificationsDemo(){
 //     subscribe("dti7Svc4SC6utD7GPz9ZXy:APA91bEVZQYS-PJ1OYgYqbOElQkM_BTI7Si_S3eLXOpO-oIpM155VGAJzl-FJHYFUNMMYdfg3cOvWM6bX5X-6m6k7H6QQCdZA96qEZt3lwRpE68iOmb7uVx8hfbx5SZUuy8MnnTdGArg","1")
