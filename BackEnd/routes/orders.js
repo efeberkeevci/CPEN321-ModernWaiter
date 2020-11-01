@@ -15,7 +15,7 @@ function createOrder(req, res){
     
     con.query(sql_query, function(err, result){
         if (err) {
-            res.status(400).send(err.code, err.errno)
+            res.status(400).send({code : err.code, errno : err.errno})
         }
         res.send()
     })
