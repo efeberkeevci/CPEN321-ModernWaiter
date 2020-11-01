@@ -79,6 +79,7 @@ function updateOrderAmount(orderId, itemId) {
             throw err
         }
         cost_result = JSON.parse(JSON.stringify(cost_result))[0]
+        console.log("Cost result: " + cost_result);
         let item_cost = cost_result["cost"]
 
         con.query(old_amount_query, function(err, old_amount_result){
