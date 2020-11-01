@@ -83,7 +83,7 @@ function updateOrderAmount(orderId, itemId) {
             return { status : false, body : {errno : err.errno, code : err.code} }
         }
         
-        if(typeof cost_result === 'undefined'){
+        if(cost_result < 0){
             return false, "Failed to find item from provided item id"
         }
 
@@ -95,7 +95,7 @@ function updateOrderAmount(orderId, itemId) {
                 return { status : false, body : {errno : err.errno, code : err.code} }
             }
 
-            if(typeof old_amount_result === 'undefined'){
+            if(old_amount_result < 0){
                 return { status : false, body : "Failed to find existing amount on order" }
             }
 
