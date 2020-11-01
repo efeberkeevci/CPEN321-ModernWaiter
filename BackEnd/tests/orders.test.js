@@ -1,12 +1,12 @@
 const orders = require('../routes/orders.js')
 
 describe('checkOrder', () => {
-  test('should 200 with username from session if session data is set', () => {
+  test('should 200', () => {
     const req = mockRequest({ userId : "1", tableId : "1", restaurantId : "1", amount : "55.43", hasPaid : "0", isActive : "1"})
     const res = mockResponse();
-    
+
     orders.createOrder(req, res);
-    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.status).toEqual(200);
     expect(res.json).toEqual("");
     done()
   });
