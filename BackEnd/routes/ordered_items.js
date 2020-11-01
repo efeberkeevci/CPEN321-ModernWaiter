@@ -39,6 +39,7 @@ function addOrderedItem(req, res){
             return
         }
         let updateResponse = updateOrderAmount(orderId, itemId)
+        console.log(updateResponse)
 
         if(updateResponse.status == false){
             res.status(400).send(updateResponse.body)
@@ -92,7 +93,6 @@ function updateOrderAmount(orderId, itemId) {
             return false, "Failed to find item from provided item id"
         }
         
-
         con.query(old_amount_query, function(err, old_amount_result){
             if (err) {
                 return { status : false, body : {errno : err.errno, code : err.code} }
