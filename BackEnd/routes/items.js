@@ -11,7 +11,9 @@ module.exports = function(app, con){
      * to the restaurant with a status code of
      * 200 if successful.   
      */
-    app.get("/items/:id", (req, res) => {
+    app.get("/items/:id", getMenu)
+
+    function getMenu(req, res){
         console.log("/items/{{id}}")
         let id = req.params.id
         let sql_query = mysql.format("SELECT * FROM items WHERE restaurant_id = ?", [id])
@@ -21,5 +23,5 @@ module.exports = function(app, con){
             }
             res.send(result)
         })
-    })
+    }
 }
