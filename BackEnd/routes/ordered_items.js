@@ -3,28 +3,30 @@ const sql = require("./../sql_connection.js")
 const con = sql.getConnection()
 
 /**
- * HTTP GET request to retrieve a list of all the 
+ * Retrieves a list of all the 
  * items associated with a specific order by the
- * order Id. It returns the list with a status 
- * code of 200 if successful.
+ * order Id.
+ * @param {*} req Param includes order id
+ * @param {*} res Status code 200 if successful, returns list of ordered items
  */
 function getOrderedItems(req, res){
     console.log("/ordered-items/{{orderId}}")
     let orderId = req.params.orderId
-    let sql_query = mysql.format("SELECT * FROM ordered_items WHERE orders_id = ?", [ orderId])
+    let sql_query = mysql.format("SELECT * FROM ordered_items WHERE orders_id = ?", [orderId])
     con.query(sql_query, function(err, result){
         if (err) {
-            res.send(err)
+            res.status(400).send({code : err.code, errno : err.errno})
         }
-        res.send(result)
+        res.status(200).send(result)
     })
 }
 
 /**
- * HTTP POST request to add an item to your ordered
+ * Adds an item to your ordered
  * items. This will be used when a user adds an item
  * to their meal during their time at the restaurant.
- * It returns a status code of 200 if successful.
+ * @param {*} req Body includes orderId and itemId
+ * @param {*} res 
  */
 function addOrderedItem(req, res){
     console.log("/ordered-items")
@@ -33,10 +35,11 @@ function addOrderedItem(req, res){
     let sql_query = mysql.format("INSERT INTO ordered_items (orders_id, items_id, has_paid, is_selected) VALUES(?,?, 0, 0) ", [orderId,itemId])
     con.query(sql_query, function(err, result){
         if (err) {
-            res.send(err)
+            res.status(400).send({code : err.code, errno : err.errno})
+            return
         }
         updateOrderAmount(orderId, itemId)
-        res.send()
+        res.status(201).send()
     })
 }
 
@@ -54,7 +57,7 @@ function updateOrderedItemPaidStatus(req, res){
     let sql_query = mysql.format("UPDATE ordered_items SET has_paid = ? WHERE orders_id = ? && items_id = ?", [hasPaid, orderId, itemId])
     con.query(sql_query, function(err, result){
         if (err) {
-            res.send(err)
+            res.send({code : err.code, errno : err.errno})
         }
         res.send()
     })
