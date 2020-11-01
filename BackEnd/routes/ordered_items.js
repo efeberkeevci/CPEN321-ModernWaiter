@@ -47,34 +47,26 @@ function addOrderedItem(req, res){
                 res.status(400).send({errno : err.errno, code : err.code})
             }
             
-            let item_cost = 0;
             console.log(cost_result);
 
-            try {
-                cost_result = JSON.parse(JSON.stringify(cost_result))[0]
-                item_cost = cost_result["cost"]
-                console.log("Entered try")
-            } catch (err) {
+            if(cost_result.length == 0){
                 res.status(400).send("Failed to find item from provided item id")
-                console.log("Entered catch")
             }
 
-            console.log("Proceeding")
-
+            cost_result = JSON.parse(JSON.stringify(cost_result))[0]
+            let item_cost = cost_result["cost"]
 
             con.query(old_amount_query, function(err, old_amount_result){
                 if (err) {
                     res.status(400).send({errno : err.errno, code : err.code})
                 }
 
-                let old_amount = 0;
-
-                try {
-                    old_amount_result = JSON.parse(JSON.stringify(old_amount_result))[0]
-                    old_amount = old_amount_result["amount"]
-                } catch(err) {
+                if(old_amount_result.length == 0){
                     res.status(400).send("Failed to find existing amount on order")
                 }
+
+                old_amount_result = JSON.parse(JSON.stringify(old_amount_result))[0]
+                let old_amount = old_amount_result["amount"]
                 
                 let new_amount = old_amount + item_cost
                 let update_query = mysql.format("UPDATE orders SET amount = ? WHERE id = ?", [new_amount, orderId])
@@ -85,10 +77,10 @@ function addOrderedItem(req, res){
                         res.status(400).send({errno : err.errno, code : err.code})
                     }
                 })
+
+                res.status(201).send()
             })
         })
-
-        res.status(201).send()
     })
 }
 
