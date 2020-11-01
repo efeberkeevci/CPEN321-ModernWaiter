@@ -43,7 +43,7 @@ function addOrderedItem(req, res){
         if(updateResponse.status == false){
             res.status(400).send(updateResponse.body)
         }
-        
+
         res.status(201).send()
     })
 }
@@ -83,7 +83,7 @@ function updateOrderAmount(orderId, itemId) {
             return { status : false, body : {errno : err.errno, code : err.code} }
         }
         
-        if(cost_result == null){
+        if(typeof cost_result === 'undefined'){
             return false, "Failed to find item from provided item id"
         }
 
@@ -95,7 +95,7 @@ function updateOrderAmount(orderId, itemId) {
                 return { status : false, body : {errno : err.errno, code : err.code} }
             }
 
-            if(old_amount_result == null){
+            if(typeof old_amount_result === 'undefined'){
                 return { status : false, body : "Failed to find existing amount on order" }
             }
 
