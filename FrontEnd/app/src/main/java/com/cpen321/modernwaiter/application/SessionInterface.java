@@ -14,6 +14,7 @@ public interface SessionInterface {
     HashMap<MenuItem, Integer> getBill();
     HashMap<MenuItem, Integer> getCart();
     MenuItem getFeatureItem();
+
     void checkout();
     void updateBill();
     void add(Request request);

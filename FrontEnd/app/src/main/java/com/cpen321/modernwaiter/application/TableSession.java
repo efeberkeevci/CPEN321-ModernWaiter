@@ -146,7 +146,7 @@ public class TableSession implements SessionInterface {
         requestQueue.add(request);
     }
 
-    private void fetchMenu() {
+    public void fetchMenu() {
 
         String url = API.items + restaurantId;
 
