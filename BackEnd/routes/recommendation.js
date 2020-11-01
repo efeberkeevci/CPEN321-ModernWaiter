@@ -1,7 +1,7 @@
 const mysql = require('mysql')
 const sql = require("./../sql_connection.js")
 const con = sql.getConnection()
-var recommendation = require("./../recommendation.js");
+var recommendation = require("../recommendation_logic.js");
 
 /**
  * HTTP GET request to get a recommendation for

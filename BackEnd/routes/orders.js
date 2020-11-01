@@ -2,7 +2,6 @@ const mysql = require('mysql')
 const sql = require("./../sql_connection.js")
 const con = sql.getConnection()
 const push_notification = require("./../push_notification.js")
-const { updateOrderedItemPaidStatus } = require('./ordered_items.js')
 
 /**
  * HTTP POST request to create an order. It 
@@ -18,19 +17,7 @@ function createOrder(req, res){
         if (err) {
             res.send(err)
         }
-    res.send()
-    //push_notification.push_notification_order_received("1")
-
-    /*let order_id_query = mysql.format("SELECT id FROM orders WHERE users_id = 1 && is_active_session = 1", [users_id])
-
-    con.query(order_id_query, function(err,result2,fields){
-        if (err) {
-            res.send(err)
-        }
-        result2=JSON.parse(JSON.stringify(result2))[0]
-        let id = result2["id"]
-        res.send({"orderId" : id})
-    })*/
+        res.send()
     })
 }
 
