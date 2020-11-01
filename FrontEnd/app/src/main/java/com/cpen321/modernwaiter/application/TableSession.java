@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
     Note that we might change underlying datastructure & thats why we have
     the getter methods.
  */
-public class TableSession {
+public class TableSession implements SessionInterface {
 
     // This is a map of how many items are already ordered in the server
     // The amount of items on the cart is recorded in MenuItem.quantity
@@ -56,20 +56,38 @@ public class TableSession {
         orderedItems = new HashMap<>();
 
         fetchMenu();
-        getOrderId();
+        fetchOrderId();
+    }
+
+    @Override
+    public boolean isActive() {
+        return isActive;
+    }
+
+    @Override
+    public int getOrderId() {
+        return orderId;
+    }
+
+    @Override
+    public void endSession() {
+        isActive = false;
     }
 
     // Get the list of all items in the menu
+    @Override
     public Set<MenuItem> getMenuItems() {
         return getBill().keySet();
     }
 
     // Return a map of MenuItems to the quantity ordered in the backend
+    @Override
     public HashMap<MenuItem, Integer> getBill() {
         return orderedItems;
     }
 
     // Return a hashmap of MenuItem & Its quantity integer
+    @Override
     public HashMap<MenuItem, Integer> getCart() {
         return new HashMap<>(getMenuItems().stream()
                 .collect(
@@ -77,11 +95,13 @@ public class TableSession {
                 ));
     }
 
+    @Override
     public MenuItem getFeatureItem() {
         return featureItem;
     }
 
     // Post an order to the server for all items on the cart then remove it
+    @Override
     public void checkout() {
         // Post /ordered-item/order:id forever
         // ITEMS IN THE ORDERCART BASED ON ITS MENUITEM.QUANTITY
@@ -121,6 +141,11 @@ public class TableSession {
         }));
     }
 
+    @Override
+    public void add(Request request) {
+        requestQueue.add(request);
+    }
+
     private void fetchMenu() {
 
         String url = API.items + restaurantId;
@@ -155,7 +180,7 @@ public class TableSession {
         final String bodyJSON = new Gson().toJson(bodyFields);
         StringRequest stringRequest = new StringRequest(
                 Request.Method.POST, API.order,
-                response -> getOrderId(),
+                response -> fetchOrderId(),
 
                 error -> Log.i("Post order", error.toString())
         ) {
@@ -173,7 +198,7 @@ public class TableSession {
         requestQueue.add(stringRequest);
     }
 
-    private void getOrderId() {
+    private void fetchOrderId() {
         StringRequest stringRequest = new StringRequest(
                 Request.Method.GET, API.userOrder + userId + API.isActive,
                 response -> {
@@ -217,7 +242,7 @@ public class TableSession {
         requestQueue.add(stringRequest);
     }
 
-    public void getUserRecommendation() {
+    private void getUserRecommendation() {
         StringRequest stringRequest = new StringRequest(
                 Request.Method.GET, API.recommend + userId + "/" + restaurantId,
                 response -> {
@@ -238,7 +263,7 @@ public class TableSession {
         requestQueue.add(stringRequest);
     }
 
-    public StringRequest createPostOrder(MenuItem menuItem) {
+    private StringRequest createPostOrder(MenuItem menuItem) {
         final Map<String, String> bodyFields = new HashMap<>();
         bodyFields.put("orderId", String.valueOf(orderId));
         bodyFields.put("itemId", String.valueOf(menuItem.id));
@@ -262,7 +287,7 @@ public class TableSession {
         };
     }
 
-    public void updateMenuFragment() {
+    private void updateMenuFragment() {
         NavController navController = Navigation.findNavController(activity, R.id.nav_host_fragment);
 
         if(navController.getCurrentDestination() != null

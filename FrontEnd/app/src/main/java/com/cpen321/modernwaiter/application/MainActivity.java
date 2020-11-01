@@ -5,7 +5,6 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.android.volley.RequestQueue;
@@ -16,7 +15,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class MainActivity extends AppCompatActivity {
 
     // Shopping kart
-    public static TableSession tableSession;
+    public static SessionInterface tableSession;
 
     //Backend stuff
     public static RequestQueue requestQueue;
@@ -36,6 +35,6 @@ public class MainActivity extends AppCompatActivity {
         // menu should be considered as top level destinations.
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupWithNavController(navView, navController);
-        MyFirebaseMessagingService.sendToken();
+        NotificationService.sendToken();
     }
 }

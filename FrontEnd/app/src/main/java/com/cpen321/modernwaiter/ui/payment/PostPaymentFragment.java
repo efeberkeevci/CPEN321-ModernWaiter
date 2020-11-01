@@ -26,7 +26,7 @@ public class PostPaymentFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_post_payment, container, false);
 
         Button pay_per_item = view.findViewById(R.id.pay_again_button);
-        if (!tableSession.isActive)
+        if (!tableSession.isActive())
             pay_per_item.setVisibility(View.INVISIBLE);
 
         pay_per_item.setOnClickListener(new View.OnClickListener() {
