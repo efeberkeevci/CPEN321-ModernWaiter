@@ -2,12 +2,12 @@ const mysql = require('mysql')
 const sql = require("./../sql_connection.js")
 const con = sql.getConnection()
 const push_notification = require("./../push_notification.js")
-const { updateOrderedItemPaidStatus } = require('./ordered_items.js')
 
-/**
- * HTTP POST request to create an order. It 
- * returns a status code of 200 if successful.
- */
+ /**
+  * Creates an order
+  * @param {*} req Body includes userId, tableId, restaurantId, amount, hasPaid, isActive
+  * @param {*} res Status 200 if successful, else 400 for invalid ids or missing keys
+  */
 function createOrder(req, res){
     console.log("/orders")
     let sql_query = mysql.format("INSERT INTO orders ( users_id, tables_id, restaurant_id, amount, has_paid, is_active_session) VALUES(?,?,?,?,?,?)"
@@ -16,30 +16,18 @@ function createOrder(req, res){
     
     con.query(sql_query, function(err, result){
         if (err) {
-            res.send(err)
+            res.status(400).send({code : err.code, errno : err.errno})
         }
-    res.send()
-    //push_notification.push_notification_order_received("1")
-
-    /*let order_id_query = mysql.format("SELECT id FROM orders WHERE users_id = 1 && is_active_session = 1", [users_id])
-
-    con.query(order_id_query, function(err,result2,fields){
-        if (err) {
-            res.send(err)
-        }
-        result2=JSON.parse(JSON.stringify(result2))[0]
-        let id = result2["id"]
-        res.send({"orderId" : id})
-    })*/
+        res.status(201).send()
     })
 }
 
 /**
- * HTTP GET request to retrieve order details
- * of a specific user by their user Id. It
- * returns the details with a status code of 
- * 200 if successful.
- */
+  * Retrieve order details of a specific user by their user Id
+  * and active session status.
+  * @param {*} req Param includes user id, query includes isActive flag
+  * @param {*} res Status 200 if successful
+  */
 function getUserOrder(req, res){
     console.log("/orders/user/{{userId}}")
     let users_id = req.params.users_id
@@ -47,18 +35,18 @@ function getUserOrder(req, res){
     let sql_query = mysql.format("SELECT * FROM orders WHERE users_id = ? && is_active_session = ? ", [users_id, isActive])
     con.query(sql_query, function(err, result){
         if (err) {
-            res.send(err)
+            res.status(400).send(err)
         }
-        res.send(result)
+        res.status(200).send(result)
     })
 }
 
 /**
- * HTTP GET request to retrieve order details
- * of a specific table by its table Id. It
- * returns the details with a status code of 
- * 200 if successful.
- */
+  * Retrieve order details of a specific table by the table Id
+  * and active session status.
+  * @param {*} req Param includes user id, query includes isActive flag
+  * @param {*} res Status 200 if successful
+  */
 function getTableOrder(req, res){
     console.log("/orders/table/{{tableId}}")
     let tables_id = req.params.tables_id
@@ -66,20 +54,21 @@ function getTableOrder(req, res){
     let sql_query = mysql.format("SELECT * FROM orders WHERE tables_id = ? && is_active_session = ? ", [tables_id, isActive])
     con.query(sql_query, function(err, result){
         if (err) {
-            res.send(err)
+            res.status(400).send(err)
         }
-        res.send(result)
+        res.status(200).send(result)
     })
 }
 
 /**
- * HTTP PUT request to update the session of orders
+ * Updates the session of orders
  * at a specific table. This is used to keep track 
  * of active and inactive sessions. If a group of
  * users finish their meal, we will use this to 
- * mark the session as complete. It returns a 
- * status code of 200 if successful.
- */
+ * mark the session as complete.
+ * @param {*} req Body includes orderId and isActive flag
+ * @param {*} res Status 200 if successful, 400 if missing isActive for valid orderId
+ */ 
 function updateOrderSessionStatus(req, res){
     console.log("/orders/session")
     let orderId = req.body.orderId
@@ -87,19 +76,21 @@ function updateOrderSessionStatus(req, res){
     let sql_query = mysql.format("UPDATE orders SET is_active_session = ? WHERE id = ?", [isActive, orderId])
     con.query(sql_query, function(err, result){
         if (err) {
-            res.send(err)
+            res.status(400).send(err)
         }
-        res.send()
+        res.status(200).send()
     })
 }
 
+
 /**
- * HTTP PUT request to mark whether an entire
- * order has been paid off. This is a layer of protection
- * to ensure a user does not create a double payment
- * for an order that has been paid for already. It returns a 
- * status code of 200 if successful.
- */
+ * Marks whether an entire order has been paid off. 
+ * This is a layer of protection to ensure a user 
+ * does not create a double payment for an order 
+ * that has been paid for already.
+ * @param {*} req Body includes orderId and hasPaid flag
+ * @param {*} res Status 200 if successful, 400 if missing hasPaid for valid orderId
+ */ 
 function updateOrderPaidStatus(req, res){
     console.log("/orders/paid")
     let orderId = req.body.orderId
@@ -109,11 +100,11 @@ function updateOrderPaidStatus(req, res){
     let sql_query = mysql.format("UPDATE orders SET has_paid = ? WHERE id = ?", [hasPaid,orderId])
     con.query(sql_query, function(err, result){
         if (err) {
-            console.log(err)
-            res.send(err)
+            res.status(400).send(err)
         }
 
-        res.send()
+        res.status(200).send()
+        
         console.log("Sending payment done notification")
         push_notification.push_notification_payment_done(orderId)
     })

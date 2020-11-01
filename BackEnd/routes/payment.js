@@ -18,6 +18,29 @@ function getStripeKey(req, res){
 async function createStripePayment(req, res){
     const { paymentMethodId, paymentIntentId, currency, useStripeSdk, orderAmount } = req.body
 
+    const generateResponse = intent => {
+        // Generate a response based on the intent's status
+        switch (intent.status) {
+            case "requires_action":
+            case "requires_source_action":
+            // Card requires authentication
+            return {
+                requiresAction: true,
+                clientSecret: intent.client_secret
+            }
+            case "requires_payment_method":
+            case "requires_source":
+            // Card was not properly authenticated, suggest a new payment method
+            return {
+                error: "Your card was denied, please provide a new payment method"
+            }
+            case "succeeded":
+            // Payment is complete, authentication not required
+            // To cancel the payment after capture you will need to issue a Refund (https://stripe.com/docs/api/refunds)
+            return { clientSecret: intent.client_secret }
+        }
+    }
+
     try {
         let intent
         if (paymentMethodId) {
@@ -45,29 +68,6 @@ async function createStripePayment(req, res){
         // Handle "hard declines" e.g. insufficient funds, expired card, etc
         // See https://stripe.com/docs/declines/codes for more
         res.send({ error: e.message })
-    }
-
-    const generateResponse = intent => {
-        // Generate a response based on the intent's status
-        switch (intent.status) {
-            case "requires_action":
-            case "requires_source_action":
-            // Card requires authentication
-            return {
-                requiresAction: true,
-                clientSecret: intent.client_secret
-            }
-            case "requires_payment_method":
-            case "requires_source":
-            // Card was not properly authenticated, suggest a new payment method
-            return {
-                error: "Your card was denied, please provide a new payment method"
-            }
-            case "succeeded":
-            // Payment is complete, authentication not required
-            // To cancel the payment after capture you will need to issue a Refund (https://stripe.com/docs/api/refunds)
-            return { clientSecret: intent.client_secret }
-        }
     }
 }
 
