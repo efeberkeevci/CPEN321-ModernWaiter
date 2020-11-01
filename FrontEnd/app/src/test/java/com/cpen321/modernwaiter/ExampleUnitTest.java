@@ -1,9 +1,12 @@
 package com.cpen321.modernwaiter;
 
 
+import androidx.fragment.app.testing.FragmentScenario;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.filters.LargeTest;
+
+import com.cpen321.modernwaiter.ui.menu.MenuFragment;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -20,17 +23,12 @@ import org.junit.runners.JUnit4;
 @LargeTest
 public class ExampleUnitTest {
 
-    @Rule
-    public ActivityScenarioRule<MockMainActivity> activityRule =
-            new ActivityScenarioRule<>(MockMainActivity.class);
-
     @Before
     public void init() {
     }
 
     @Test
     public void mockActivityExist() {
-
-        ///assert(MockMainActivity.tableSession.isActive());
+        FragmentScenario.launch(MenuFragment.class);
     }
 }
