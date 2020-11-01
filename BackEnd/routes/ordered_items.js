@@ -50,7 +50,7 @@ function addOrderedItem(req, res){
             console.log(cost_result);
 
             if(cost_result.length == 0){
-                res.status(400).send("Failed to find item from provided item id")
+                res.status(400).send({message: "Failed to find item from provided item id"})
             }
 
             cost_result = JSON.parse(JSON.stringify(cost_result))[0]
@@ -62,7 +62,7 @@ function addOrderedItem(req, res){
                 }
 
                 if(old_amount_result.length == 0){
-                    res.status(400).send("Failed to find existing amount on order")
+                    res.status(400).send({message: "Failed to find existing amount on order"})
                 }
 
                 old_amount_result = JSON.parse(JSON.stringify(old_amount_result))[0]
