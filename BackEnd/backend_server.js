@@ -5,16 +5,15 @@ const push_notification = require("./push_notification.js")
 const sql = require("./sql_connection.js")
 const con = sql.getConnection()
 
-// Reference to the API routes
 const items = require('./routes/items.js')
-// const options = require('./routes/options.js')
-// const orders = require('./routes/orders.js')
-// const ordered_items = require('./routes/ordered_items.js')
-// const payment = require('./routes/payment.js')
-// const recommendation = require('./routes/recommendation.js')
-// const restaurants = require('./routes/restaurants.js')
-// const tables = require('./routes/tables.js')
-// const users = require('./routes/users.js')
+const options = require('./routes/options.js')
+const ordered_items = require('./routes/ordered_items.js')
+const orders = require('./routes/orders.js')
+const payment = require('./routes/payment.js')
+const recommendation = require('./routes/recommendation.js')
+const restaurants = require('./routes/restaurants.js')
+const tables = require('./routes/tables.js')
+const users = require('./routes/users.js')
 
 app.use(express.json())
 
@@ -27,14 +26,59 @@ con.connect(function(err) {
     })
 })
 
-/**
- * HTTP GET request to acquire items of a
- * restaurant representing its menu. It
- * returns a list of all the items belonging
- * to the restaurant with a status code of
- * 200 if successful.   
- */
+/*********************** REST API routes ****************************/
+
+// Routes for items
 app.get("/items/:id", items.getMenu)
+
+// Routes for options
+app.get("/item-options/:id", options.getItemOptions)
+app.get("/options/:id", options.getOptions)
+
+// Routes for ordered items
+app.get("/ordered-items/:orderId", ordered_items.getOrderedItems)
+app.post("/ordered-items", ordered_items.addOrderedItem)
+app.put("/ordered-items/paid", ordered_items.updateOrderedItemPaidStatus)
+
+// Routes for orders
+app.post("/orders", orders.createOrder)
+app.get("/orders/user/:users_id", orders.getUserOrder)
+app.get("/orders/table/:tables_id", orders.getTableOrder)
+app.put("/orders/session", orders.updateOrderSessionStatus)
+app.put("/orders/paid", orders.updateOrderPaidStatus)
+
+// Routes for Stripe (external API)
+app.get('/key', payment.getStripeKey)
+app.post('/pay', payment.createStripePayment)
+
+// Routes for item recommendation
+app.get("/recommendation/:userId/:restaurantId", recommendation.getItemRecommendation) 
+
+// Routes for restaurant
+app.get("/restaurants/:id", restaurants.getRestaurant)
+
+// Routes for table
+app.get("/tables/:id", tables.getTable)
+
+// Routes for user
+app.get("/users/:id", users.getUser)
+app.get("/users/preferences/:id", users.getUserPreferences)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // function pushNotificationsDemo(){
 //     subscribe("dti7Svc4SC6utD7GPz9ZXy:APA91bEVZQYS-PJ1OYgYqbOElQkM_BTI7Si_S3eLXOpO-oIpM155VGAJzl-FJHYFUNMMYdfg3cOvWM6bX5X-6m6k7H6QQCdZA96qEZt3lwRpE68iOmb7uVx8hfbx5SZUuy8MnnTdGArg","1")

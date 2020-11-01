@@ -2,23 +2,20 @@ const express = require('express')
 const env = require("dotenv").config({ path: "./.env" })
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
 
-module.exports = function(app){
-    app.use(express.json());
-    
-    /**
-     * HTTP GET request to get the stripe
-     * key required to pay for an order.
-     * Returns 200 if successful.
-     */
-    app.get('/key', (req, res) => {
-        res.send({ publishableKey: process.env.STRIPE_PUBLISHABLE_KEY })
-    })
-    
-    /**
-     * HTTP POST request to make a
-     * payment. Returns 200 if successful.
-     */
-    app.post('/pay', async(req, res) => {
+/**
+ * HTTP GET request to get the stripe
+ * key required to pay for an order.
+ * Returns 200 if successful.
+ */
+function getStripeKey(req, res){
+    res.send({ publishableKey: process.env.STRIPE_PUBLISHABLE_KEY })
+}
+
+/**
+ * HTTP POST request to make a
+ * payment. Returns 200 if successful.
+ */
+async function createStripePayment(req, res){
     const { paymentMethodId, paymentIntentId, currency, useStripeSdk, orderAmount } = req.body
 
     try {
@@ -45,11 +42,10 @@ module.exports = function(app){
         }
         res.send(generateResponse(intent))
     } catch (e) {
-            // Handle "hard declines" e.g. insufficient funds, expired card, etc
-            // See https://stripe.com/docs/declines/codes for more
-            res.send({ error: e.message })
-        }
-    })
+        // Handle "hard declines" e.g. insufficient funds, expired card, etc
+        // See https://stripe.com/docs/declines/codes for more
+        res.send({ error: e.message })
+    }
 
     const generateResponse = intent => {
         // Generate a response based on the intent's status
@@ -74,3 +70,5 @@ module.exports = function(app){
         }
     }
 }
+
+module.exports = {getStripeKey, createStripePayment}
