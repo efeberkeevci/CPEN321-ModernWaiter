@@ -32,7 +32,7 @@ import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class MyFirebaseMessagingService extends FirebaseMessagingService {
+public class NotificationService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(@NotNull RemoteMessage remoteMessage) {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
