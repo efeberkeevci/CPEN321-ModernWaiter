@@ -82,25 +82,31 @@ function updateOrderAmount(orderId, itemId) {
         if (err) {
             return { status : false, body : {errno : err.errno, code : err.code} }
         }
-        
-        if(cost_result < 0){
+
+        let item_cost = 0
+
+        try {
+            cost_result = JSON.parse(JSON.stringify(cost_result))[0]
+            item_cost = cost_result["cost"]
+        } catch (err) {
             return false, "Failed to find item from provided item id"
         }
-
-        cost_result = JSON.parse(JSON.stringify(cost_result))[0]
-        let item_cost = cost_result["cost"]
+        
 
         con.query(old_amount_query, function(err, old_amount_result){
             if (err) {
                 return { status : false, body : {errno : err.errno, code : err.code} }
             }
 
-            if(old_amount_result < 0){
+            let old_amount = 0
+
+            try{
+                old_amount_result = JSON.parse(JSON.stringify(old_amount_result))[0]
+                old_amount = old_amount_result["amount"]
+            } catch (err){
                 return { status : false, body : "Failed to find existing amount on order" }
             }
-
-            old_amount_result = JSON.parse(JSON.stringify(old_amount_result))[0]
-            let old_amount = old_amount_result["amount"]
+            
             let new_amount = old_amount + item_cost
             let update_query = mysql.format("UPDATE orders SET amount = ? WHERE id = ?", [new_amount, orderId])
 
