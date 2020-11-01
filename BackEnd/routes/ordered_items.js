@@ -63,9 +63,9 @@ function updateOrderedItemPaidStatus(req, res){
     let sql_query = mysql.format("UPDATE ordered_items SET has_paid = ? WHERE orders_id = ? && items_id = ?", [hasPaid, orderId, itemId])
     con.query(sql_query, function(err, result){
         if (err) {
-            res.send({code : err.code, errno : err.errno})
+            res.status(400).send({code : err.code, errno : err.errno})
         }
-        res.send()
+        res.status(200).send()
     })
 }
 
