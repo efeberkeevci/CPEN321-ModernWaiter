@@ -7,6 +7,7 @@ describe('checkOrder', () => {
     orders.createOrder(req, res);
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toEqual("");
+    done()
   });
 });
 

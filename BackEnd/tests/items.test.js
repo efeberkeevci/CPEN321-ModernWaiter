@@ -8,5 +8,6 @@ describe("GET /items/{{restaurantId}}", () => {
       const response = await request(app).get("/items/1");
       expect(response.body).hasAssertions();
       expect(response.statusCode).toBe(200);
+      done()
     });
   });
