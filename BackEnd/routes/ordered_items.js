@@ -39,7 +39,54 @@ function addOrderedItem(req, res){
             return
         }
         
+        let item_cost_query = mysql.format("SELECT cost FROM items WHERE id = ?", [itemId])
+        let old_amount_query = mysql. format("SELECT amount FROM orders WHERE id = ?", [orderId])
 
+        con.query(item_cost_query, function(err, cost_result){
+            if (err) {
+                res.status(400).send({errno : err.errno, code : err.code})
+            }
+            
+            let item_cost = 0;
+            console.log(cost_result);
+
+            try {
+                cost_result = JSON.parse(JSON.stringify(cost_result))[0]
+                item_cost = cost_result["cost"]
+                console.log("Entered try")
+            } catch (err) {
+                res.status(400).send("Failed to find item from provided item id")
+                console.log("Entered catch")
+            }
+
+            console.log("Proceeding")
+
+
+            con.query(old_amount_query, function(err, old_amount_result){
+                if (err) {
+                    res.status(400).send({errno : err.errno, code : err.code})
+                }
+
+                let old_amount = 0;
+
+                try {
+                    old_amount_result = JSON.parse(JSON.stringify(old_amount_result))[0]
+                    old_amount = old_amount_result["amount"]
+                } catch(err) {
+                    res.status(400).send("Failed to find existing amount on order")
+                }
+                
+                let new_amount = old_amount + item_cost
+                let update_query = mysql.format("UPDATE orders SET amount = ? WHERE id = ?", [new_amount, orderId])
+
+                con.query(update_query, function(err, result){
+                    if (err) {
+                        console.log(err)
+                        res.status(400).send({errno : err.errno, code : err.code})
+                    }
+                })
+            })
+        })
 
         res.status(201).send()
     })
@@ -61,57 +108,7 @@ function updateOrderedItemPaidStatus(req, res){
         if (err) {
             res.status(400).send({code : err.code, errno : err.errno})
         }
-
-        let item_cost_query = mysql.format("SELECT cost FROM items WHERE id = ?", [itemId])
-        let old_amount_query = mysql. format("SELECT amount FROM orders WHERE id = ?", [orderId])
-
-        con.query(item_cost_query, function(err, cost_result){
-            if (err) {
-                res.status(400).send({ status : false, body : {errno : err.errno, code : err.code}})
-            }
-            
-            let item_cost = 0;
-            console.log(cost_result);
-
-            try {
-                cost_result = JSON.parse(JSON.stringify(cost_result))[0]
-                item_cost = cost_result["cost"]
-                console.log("Entered try")
-            } catch (err) {
-                res.status(400).send({status : false, body : "Failed to find item from provided item id"})
-                console.log("Entered catch")
-            }
-
-            console.log("Proceeding")
-
-
-            con.query(old_amount_query, function(err, old_amount_result){
-                if (err) {
-                    res.status(400).send({status : false, body : {errno : err.errno, code : err.code}})
-                }
-
-                let old_amount = 0;
-
-                try {
-                    old_amount_result = JSON.parse(JSON.stringify(old_amount_result))[0]
-                    old_amount = old_amount_result["amount"]
-                } catch(err) {
-                    res.status(400).send({ status : false, body : "Failed to find existing amount on order"})
-                }
-                
-                let new_amount = old_amount + item_cost
-                let update_query = mysql.format("UPDATE orders SET amount = ? WHERE id = ?", [new_amount, orderId])
-
-                con.query(update_query, function(err, result){
-                    if (err) {
-                        console.log(err)
-                        res.status(400).send({status : false, body : {errno : err.errno, code : err.code}})
-                    }
-                })
-            })
-        })
-
-        res.status(201).send({status : true, body : ""})
+        res.status(200).send()
     })
 }
 
