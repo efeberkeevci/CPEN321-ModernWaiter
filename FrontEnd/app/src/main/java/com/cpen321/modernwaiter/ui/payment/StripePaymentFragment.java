@@ -50,7 +50,6 @@ public class StripePaymentFragment extends Fragment {
     private int totalAmount = 0;
     private Stripe stripe;
     private View view;
-    private final RequestQueue requestQueue = MainActivity.requestQueue;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -95,6 +94,7 @@ public class StripePaymentFragment extends Fragment {
         requestKey();
     }
 
+    // TODO: Move this to the TableSession
     private void requestKey() {
         // For added security, our sample app gets the publishable key from the server
 
@@ -113,7 +113,7 @@ public class StripePaymentFragment extends Fragment {
             error -> Log.i("Request Stripe Key", error.toString())
         );
 
-        tableSession.requestQueue.add(request);
+        tableSession.add(request);
     }
 
     private void pay() {
@@ -138,6 +138,7 @@ public class StripePaymentFragment extends Fragment {
         });
     }
 
+    // TODO: Move this to the TableSession
     private void sendPaymentMethod(@Nullable String paymentMethodId) {
 
         final Map<String, String> bodyFields = new HashMap<>();
@@ -174,7 +175,7 @@ public class StripePaymentFragment extends Fragment {
                         } else {
                             putPaid();
                             endSession();
-                            tableSession.isActive = false;
+                            tableSession.endSession();
                             Navigation.findNavController(view).navigate(R.id.action_navigation_stripe_to_navigation_post_payment);
                         }
                     }
@@ -192,7 +193,7 @@ public class StripePaymentFragment extends Fragment {
             }
         };
 
-        requestQueue.add(stringRequest);
+        tableSession.add(stringRequest);
     }
 
     private Map<String, String> parseResponseToMap(String response) {
@@ -222,6 +223,7 @@ public class StripePaymentFragment extends Fragment {
      * PUT request to notify backend that the amount has been paid
      * RIGHT NOW FOR PAY_FOR_ALL ONLY
      */
+    // TODO: Move this to the TableSession
     private void putPaid(){
         //PUT request to confirm that the order has been paid
         String url = API.paidOrderItems;
@@ -229,7 +231,7 @@ public class StripePaymentFragment extends Fragment {
         HashMap<MenuItem, Integer> orderedItems = tableSession.getBill();
         for( Map.Entry<MenuItem, Integer> item : orderedItems.entrySet() ) {
             Map<String,String> params = new HashMap<>();
-            params.put("orderId", String.valueOf(tableSession.orderId));
+            params.put("orderId", String.valueOf(tableSession.getOrderId()));
             params.put("itemId", String.valueOf(item.getKey().id));
             params.put("hasPaid", "1");
             JSONObject parameters = new JSONObject(params);
@@ -242,12 +244,12 @@ public class StripePaymentFragment extends Fragment {
                     }, error -> Log.i("Request put paid item", error.toString())
             );
 
-            MainActivity.requestQueue.add(jsonObjectRequest);
+            tableSession.add(jsonObjectRequest);
         }
         //PUT request for order has been paid fully
         String url_order_paid = API.paidOrder;
         Map<String,String> params = new HashMap<>();
-        params.put("orderId", String.valueOf(tableSession.orderId));
+        params.put("orderId", String.valueOf(tableSession.getOrderId()));
         params.put("hasPaid", "1");
         JSONObject parameters = new JSONObject(params);
 
@@ -259,15 +261,16 @@ public class StripePaymentFragment extends Fragment {
             }, error -> Log.i("Request put paid full", error.toString())
         );
 
-        MainActivity.requestQueue.add(jsonObjectRequest);
+        tableSession.add(jsonObjectRequest);
 
     }
 
+    // TODO: Move this to the TableSession
     private void endSession(){
         // PUT request for order has been paid fully
         String url = API.orderSession;
         final Map<String,String> params = new HashMap<>();
-        params.put("orderId", String.valueOf(tableSession.orderId));
+        params.put("orderId", String.valueOf(tableSession.getOrderId()));
         params.put("isActive", "0");
         JSONObject parameters = new JSONObject(params);
 
@@ -279,6 +282,6 @@ public class StripePaymentFragment extends Fragment {
                 }, error -> Log.i("Request end session", error.toString())
         );
 
-        MainActivity.requestQueue.add(jsonObjectRequest);
+        tableSession.add(jsonObjectRequest);
     }
 }
