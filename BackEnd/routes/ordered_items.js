@@ -39,7 +39,8 @@ function addOrderedItem(req, res){
             return
         }
         let updateResponse = updateOrderAmount(orderId, itemId)
-
+        console.log(updateResponse)
+        
         if(updateResponse.status == false){
             res.status(400).send(updateResponse.body)
         }
@@ -77,17 +78,14 @@ function updateOrderedItemPaidStatus(req, res){
 function updateOrderAmount(orderId, itemId) {
     let item_cost_query = mysql.format("SELECT cost FROM items WHERE id = ?", [itemId])
     let old_amount_query = mysql. format("SELECT amount FROM orders WHERE id = ?", [orderId])
-    let updateResponse = null;
 
     con.query(item_cost_query, function(err, cost_result){
         if (err) {
-            updateResponse = { status : false, body : {errno : err.errno, code : err.code} }
-            return
+            return { status : false, body : {errno : err.errno, code : err.code} }
         }
         
         if(cost_result < 0){
-            updateResponse = { status : false, body : "Failed to find item from provided item id" }
-            return
+            return { status : false, body : "Failed to find item from provided item id" }
         }
         
         cost_result = JSON.parse(JSON.stringify(cost_result))[0]
@@ -95,13 +93,11 @@ function updateOrderAmount(orderId, itemId) {
 
         con.query(old_amount_query, function(err, old_amount_result){
             if (err) {
-                updateResponse = { status : false, body : {errno : err.errno, code : err.code} }
-                return
+                return { status : false, body : {errno : err.errno, code : err.code} }
             }
 
             if(old_amount_result < 0){
-                updateResponse = { status : false, body : "Failed to find existing amount on order" }
-                return
+                return { status : false, body : "Failed to find existing amount on order" }
             }
 
             old_amount_result = JSON.parse(JSON.stringify(old_amount_result))[0]
@@ -112,16 +108,13 @@ function updateOrderAmount(orderId, itemId) {
             con.query(update_query, function(err, result){
                 if (err) {
                     console.log(err)
-                    updateResponse = { status : false, body : {errno : err.errno, code : err.code} }
-                    return
+                    return { status : false, body : {errno : err.errno, code : err.code} }
                 }
             })
 
-            updateResponse = {status : true, body : "" }
+            return {status : true, body : "" }
         })
     })
-
-    return updateResponse
 }
 
 module.exports = {getOrderedItems, addOrderedItem, updateOrderedItemPaidStatus}
