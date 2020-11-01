@@ -45,12 +45,14 @@ function addOrderedItem(req, res){
         con.query(item_cost_query, function(err, cost_result){
             if (err) {
                 res.status(400).send({errno : err.errno, code : err.code})
+                return
             }
             
             console.log(cost_result);
 
             if(cost_result.length == 0){
                 res.status(400).send({message: "Failed to find item from provided item id"})
+                return
             }
 
             let item_cost = 0
@@ -60,16 +62,19 @@ function addOrderedItem(req, res){
                 item_cost = cost_result["cost"]
             } catch (error) {
                 res.status(400).send({message: "Failed to find item from provided item id"})
+                return
             }
             
 
             con.query(old_amount_query, function(err, old_amount_result){
                 if (err) {
                     res.status(400).send({errno : err.errno, code : err.code})
+                    return
                 }
 
                 if (old_amount_result.length == 0){
                     res.status(400).send({message: "Failed to find existing amount on order"})
+                    return
                 }
 
                 let old_amount = 0
@@ -79,6 +84,7 @@ function addOrderedItem(req, res){
                     old_amount = old_amount_result["amount"]
                 } catch (error) {
                     res.status(400).send({message: "Failed to find existing amount on order"})
+                    return
                 }
                 
                 let new_amount = old_amount + item_cost
@@ -88,12 +94,13 @@ function addOrderedItem(req, res){
                     if (err) {
                         console.log(err)
                         res.status(400).send({errno : err.errno, code : err.code})
+                        return
                     }
                 })
 
-                res.status(201).send()
             })
         })
+        res.status(201).send()
     })
 }
 
