@@ -84,7 +84,7 @@ function updateOrderAmount(orderId, itemId) {
             return { status : false, body : {errno : err.errno, code : err.code} }
         }
 
-        let item_cost = 0
+        let item_cost = null;
 
         try {
             cost_result = JSON.parse(JSON.stringify(cost_result))[0]
@@ -98,7 +98,7 @@ function updateOrderAmount(orderId, itemId) {
                 return { status : false, body : {errno : err.errno, code : err.code} }
             }
 
-            let old_amount = 0
+            let old_amount = null;
 
             try{
                 old_amount_result = JSON.parse(JSON.stringify(old_amount_result))[0]
