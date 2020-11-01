@@ -108,10 +108,10 @@ function updateOrderedItemPaidStatus(req, res){
                         res.status(400).send({status : false, body : {errno : err.errno, code : err.code}})
                     }
                 })
-
-                res.status(201).send({status : true, body : ""})
             })
         })
+
+        res.status(201).send({status : true, body : ""})
     })
 }
 
