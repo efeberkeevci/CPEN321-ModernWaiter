@@ -35,7 +35,7 @@ function getUserOrder(req, res){
     let sql_query = mysql.format("SELECT * FROM orders WHERE users_id = ? && is_active_session = ? ", [users_id, isActive])
     con.query(sql_query, function(err, result){
         if (err) {
-            res.status(400).send(err)
+            res.status(400).send({code : err.code, errno : err.errno})
         }
         res.status(200).send(result)
     })
@@ -54,7 +54,7 @@ function getTableOrder(req, res){
     let sql_query = mysql.format("SELECT * FROM orders WHERE tables_id = ? && is_active_session = ? ", [tables_id, isActive])
     con.query(sql_query, function(err, result){
         if (err) {
-            res.status(400).send(err)
+            res.status(400).send({code : err.code, errno : err.errno})
         }
         res.status(200).send(result)
     })
@@ -76,7 +76,7 @@ function updateOrderSessionStatus(req, res){
     let sql_query = mysql.format("UPDATE orders SET is_active_session = ? WHERE id = ?", [isActive, orderId])
     con.query(sql_query, function(err, result){
         if (err) {
-            res.status(400).send(err)
+            res.status(400).send({code : err.code, errno : err.errno})
         }
         res.status(200).send()
     })
@@ -100,11 +100,11 @@ function updateOrderPaidStatus(req, res){
     let sql_query = mysql.format("UPDATE orders SET has_paid = ? WHERE id = ?", [hasPaid,orderId])
     con.query(sql_query, function(err, result){
         if (err) {
-            res.status(400).send(err)
+            res.status(400).send({code : err.code, errno : err.errno})
         }
 
         res.status(200).send()
-        
+
         console.log("Sending payment done notification")
         push_notification.push_notification_payment_done(orderId)
     })
