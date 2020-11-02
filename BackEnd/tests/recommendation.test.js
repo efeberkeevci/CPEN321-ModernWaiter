@@ -3,7 +3,7 @@ const supertest = require('supertest')
 const request = supertest(app)
 const recommendation_logic = require('../recommendation_logic')
 
-describe('Test getItemRecommendation() with mock recommendation logic', async done => {
+describe('Test getItemRecommendation() with mock recommendation logic', () => {
     it('Gets the recommended item with itemId 1', async done => {
         // Arrange
         const mock = jest.fn().mockReturnValue({itemId : 1})
