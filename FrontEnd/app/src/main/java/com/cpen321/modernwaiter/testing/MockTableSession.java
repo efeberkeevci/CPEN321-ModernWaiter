@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class MockTableSession implements SessionInterface {
 
     public HashMap<MenuItem, Integer> orderedItems = new HashMap<>(dummyOrderItem());
-    public MenuItem featureItem;
+    public int featureItemId = 1;
     public int updateBillCounter = 0;
     public int endSessionCounter = 0;
     public Request lastRequest;
@@ -60,7 +60,7 @@ public class MockTableSession implements SessionInterface {
     @Override
     public MenuItem getFeatureItem() {
         for (MenuItem menuItem : getMenuItems()) {
-            if (menuItem.id == 1) {
+            if (menuItem.id == featureItemId) {
                 return menuItem;
             }
         }
