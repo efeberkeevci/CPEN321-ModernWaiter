@@ -8,7 +8,9 @@ before_install:
 - sudo mysql -e 'CREATE USER 'admin'@'localhost' IDENTIFIED BY "modernwaitercpen321!";'
 - sudo mysql -e 'GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost';'
 - sudo mysql -e 'FLUSH PRIVILEGES;'
-- mysql -h "localhost" -u "admin" -p "modernwaitercpen321!" "MODERN_WAITER_DB" < "travis.sql"
+- mysql -u admin -p MODERN_WAITER_DB < travis.sql
+- modernwaitercpen321!
+
 script: 
 - echo 'Build is starting!'
 - cd BackEnd
