@@ -45,8 +45,7 @@ describe('Test getItemRecommendation() with mock recommendation logic', () => {
         const userId = 1
         const restaurantId = 5
         const url = `/recommendation/${userId}/${restaurantId}`
-        const expectedItemId = 5
-        const mock = jest.fn().mockReturnValue(expectedItemId)
+        const mock = jest.fn().mockReturnValue()
         recommendation_logic.getRecommendation = mock
 
         // Act
@@ -63,8 +62,7 @@ describe('Test getItemRecommendation() with mock recommendation logic', () => {
         const userId = 10
         const restaurantId = 1
         const url = `/recommendation/${userId}/${restaurantId}`
-        const expectedItemId = 5
-        const mock = jest.fn().mockReturnValue(expectedItemId)
+        const mock = jest.fn().mockReturnValue()
         recommendation_logic.getRecommendation = mock
 
         // Act
