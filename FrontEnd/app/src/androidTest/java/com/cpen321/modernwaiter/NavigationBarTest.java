@@ -26,7 +26,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.mockito.Mockito.mock;
 
 @RunWith(AndroidJUnit4.class)
-public class NavigationTest {
+public class NavigationBarTest {
     @Rule
     public ActivityScenarioRule<MainActivity> activityRule
             = new ActivityScenarioRule<>(MainActivity.class);
