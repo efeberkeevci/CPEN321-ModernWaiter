@@ -35,4 +35,16 @@ function getUserPreferences(req, res){
     });
 }
 
-module.exports = {getUser, getUserPreferences}
+function getUserName(userId){
+    let sql_query = mysql.format("SELECT username FROM users WHERE id = ?", [userId]);
+    con.query(sql_query, function(err, result){
+        if (err) {
+            console.log("Error in user name retrieval: ", err);
+        }
+        else{
+            return result;
+        }
+    });
+}
+
+module.exports = {getUser, getUserPreferences, getUserName, }
