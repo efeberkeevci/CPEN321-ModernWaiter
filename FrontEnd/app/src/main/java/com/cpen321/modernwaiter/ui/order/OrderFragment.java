@@ -42,10 +42,8 @@ public class OrderFragment extends Fragment {
 
 
         // Set the adapter
-        Context context = view.getContext();
-
         RecyclerView recyclerView = view.findViewById(R.id.order_recycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
 
         HashMap<MenuItem, Integer> billMap = MainActivity.tableSession.getCart();
 

@@ -44,11 +44,8 @@ public class BillFragment extends Fragment {
             }
         });
 
-        // Set the adapter
-        Context context = view.getContext();
-
         RecyclerView recyclerView = view.findViewById(R.id.bill_recycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
 
         HashMap<MenuItem, Integer> billMap = tableSession.getBill();
 

@@ -64,10 +64,8 @@ public class MenuFragment extends Fragment {
         });
 
         // Set the adapter
-        Context context = view.getContext();
         RecyclerView recyclerView = view.findViewById(R.id.menu_recycler);
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
 
         MenuRecyclerAdapter.OnItemClickListener listener = new MenuRecyclerAdapter.OnItemClickListener() {
             @Override

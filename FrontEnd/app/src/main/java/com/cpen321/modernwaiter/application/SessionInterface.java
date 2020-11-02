@@ -16,7 +16,7 @@ public interface SessionInterface {
     MenuItem getFeatureItem();
 
     void checkout();
-    void updateBill();
+    void fetchBill();
     void add(Request request);
 
     void endSession();
