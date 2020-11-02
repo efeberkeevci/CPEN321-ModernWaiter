@@ -1,6 +1,5 @@
 package com.cpen321.modernwaiter.ui.payment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,19 +7,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cpen321.modernwaiter.R;
-import com.cpen321.modernwaiter.application.MainActivity;
-import com.cpen321.modernwaiter.application.MenuItem;
 import com.cpen321.modernwaiter.ui.bill.BillRecyclerAdapter;
-import com.stripe.android.model.PaymentMethodCreateParams;
 import com.stripe.android.view.CardInputWidget;
 
 import java.text.DecimalFormat;
-import java.util.HashMap;
 
 import static com.cpen321.modernwaiter.application.MainActivity.tableSession;
 

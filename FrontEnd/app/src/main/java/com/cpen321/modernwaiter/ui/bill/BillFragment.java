@@ -1,6 +1,5 @@
 package com.cpen321.modernwaiter.ui.bill;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;

@@ -182,7 +182,6 @@ public class StripePaymentController {
                 Request.Method.PUT, url_order_paid, parameters,
                 response -> {
                     //on success
-                    //TODO: print some message or not
                 }, error -> Log.i("Request put paid full", error.toString())
         );
 
@@ -190,7 +189,6 @@ public class StripePaymentController {
 
     }
 
-    // TODO: Move this to the TableSession
     private void endSession(){
         // PUT request for order has been paid fully
         String url = API.orderSession;
@@ -203,7 +201,6 @@ public class StripePaymentController {
                 Request.Method.PUT, url, parameters,
                 response -> {
                     //on success
-                    //TODO: print some message or not
                 }, error -> Log.i("Request end session", error.toString())
         );
 
