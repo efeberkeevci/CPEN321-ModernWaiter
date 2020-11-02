@@ -105,7 +105,9 @@ function addOrderedItem(req, res){
 }
 
 /**
- * HTTP PUT request to mark an item as selected
+ * Request to mark an item as selected by a specific user
+ * @param {*} req Body includes orderId, itemId, userId, isSelected
+ * @param {*} res Status code 200 if successful, else 400
  */
 function updateSelectedStatus(req, res){
     console.log("/ordered-items/selected")
@@ -124,10 +126,9 @@ function updateSelectedStatus(req, res){
 }
 
 /**
- * HTTP PUT request to mark an item ordered
- * as already paid. This is to protect the user
- * from making double payments for the same item.
- * It returns a status code of 200 if successful.
+ * Request to mark an item as paid.
+ * @param {*} req Body includes orderId, itemId, hasPaid
+ * @param {*} res Status code 200 if successful, else 400
  */
 function updateOrderedItemPaidStatus(req, res){
     console.log("/ordered-items/paid")
