@@ -104,8 +104,8 @@ function push_notification_item_claimed(orderId, itemId, userId){
   console.log("Sending item claimed push notification");
   var message ={
     notification: {
-      title = "Item Claimed!",
-      body: "Item " + item_name + "is selected by " + user_name 
+      title : "Item Claimed!",
+      body : "Item " + item_name + "is selected by " + user_name 
     },
     topic:orderId
   };
