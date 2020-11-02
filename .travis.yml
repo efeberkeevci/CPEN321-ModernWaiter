@@ -5,7 +5,12 @@ services:
 node_js:
 - "12.19.0"
 before_install:
-- mysql -h "localhost" -u "admin" -p"modernwaitercpen321!" "MODERN_WAITER_DB" < "travis.sql"
+- sudo mysql -u root
+- CREATE USER 'admin'@'localhost' IDENTIFIED BY 'modernwaitercpen321!';
+- GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost';
+- FLUSH PRIVILEGES;
+- quit
+- mysql -h "localhost" -u "admin" -p "modernwaitercpen321!" "MODERN_WAITER_DB" < "travis.sql"
 script: 
 - echo 'Build is starting!'
 - cd BackEnd

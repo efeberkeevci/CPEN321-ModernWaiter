@@ -19,11 +19,6 @@
 -- Table structure for table `items`
 --
 
-
-CREATE USER 'admin'@'localhost' IDENTIFIED BY 'modernwaitercpen321!';
-GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost';
-FLUSH PRIVILEGES;
-
 CREATE DATABASE MODERN_WAITER_DB;
 USE MODERN_WAITER_DB;
 
