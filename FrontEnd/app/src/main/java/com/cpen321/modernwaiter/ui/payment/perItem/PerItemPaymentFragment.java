@@ -41,6 +41,7 @@ public class PerItemPaymentFragment extends Fragment {
                 // TODO: PERFORM CALL TO DATABASE & NOTIFY I CHOOSE OR DESELECT
 
                 perItemRecyclerAdapter.notifyDataSetChanged();
+                updateAmount();
             }
         };
 
@@ -57,13 +58,14 @@ public class PerItemPaymentFragment extends Fragment {
                 Navigation.findNavController(view).navigate(R.id.action_navigation_per_item_payment_to_stripe);
             }
         });
+        updateAmount();
 
         return view;
     }
 
     public void updateAmount() {
         amount = tableSession.getOrderList().stream()
-                .filter(menuItemBooleanPair -> !menuItemBooleanPair.selected)
+                .filter(menuItemBooleanPair -> menuItemBooleanPair.selected)
                 .reduce(0, (subtotal, menuItemBooleanPair) -> subtotal + menuItemBooleanPair.menuItem.getCost(), Integer::sum);
 
         String amountText = "Pay $" + new DecimalFormat("#.##")
