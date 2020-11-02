@@ -72,5 +72,9 @@ public class OrderRecyclerAdapter extends RecyclerView.Adapter<OrderRecyclerAdap
             quantityView = (TextView) view.findViewById(R.id.quantity);
             priceView = (TextView) view.findViewById(R.id.price);
         }
+
+        public TextView getnameView(){
+            return nameView;
+        }
     }
 }
