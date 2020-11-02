@@ -1,6 +1,7 @@
 const mysql = require('mysql')
 const sql = require("./../sql_connection.js")
 const con = sql.getConnection()
+const push_notification = require("../push_notification")
 
 /**
  * Retrieves a list of all the 
@@ -116,12 +117,15 @@ function updateSelectedStatus(req, res){
     let userId = req.body.userId
     let isSelected = req.body.isSelected
     let notIsSelected = isSelected == 1 ? 0 : 1
+    let user_name="";
+    let item_name="";
     let sql_query = mysql.format("UPDATE ordered_items SET is_selected = ?, users_id = ? WHERE orders_id = ? && items_id = ? && is_selected = ? LIMIT 1", [isSelected, userId, orderId, itemId, notIsSelected])
     con.query(sql_query, function(err, result){
         if (err) {
             res.status(400).send({code : err.code, errno : err.errno})
         }
         res.status(200).send()
+        push_notification.push_notification_item_claimed(orderId, itemId, userId);
     })
 }
 
@@ -200,5 +204,6 @@ function updateOrderedItemPaidStatus(req, res){
 
 //     return updateResponse
 // }
+
 
 module.exports = {getOrderedItems, addOrderedItem, updateSelectedStatus, updateOrderedItemPaidStatus}
