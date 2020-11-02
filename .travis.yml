@@ -1,6 +1,11 @@
 language: node_js
+sudo: enabled
+services:
+    - mysql
 node_js:
 - "12.19.0"
+before_install:
+- mysql -h "localhost" -u "admin" -p"modernwaitercpen321!" "MODERN_WAITER_DB" < "travis.sql"
 script: 
 - echo 'Build is starting!'
 - cd BackEnd

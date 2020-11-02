@@ -19,6 +19,14 @@
 -- Table structure for table `items`
 --
 
+
+CREATE USER 'admin'@'localhost' IDENTIFIED BY 'modernwaitercpen321!';
+GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost';
+FLUSH PRIVILEGES;
+
+CREATE DATABASE MODERN_WAITER_DB;
+USE MODERN_WAITER_DB;
+
 DROP TABLE IF EXISTS `items`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
