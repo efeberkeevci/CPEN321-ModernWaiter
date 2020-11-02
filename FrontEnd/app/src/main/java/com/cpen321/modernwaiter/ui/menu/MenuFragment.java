@@ -1,7 +1,11 @@
 package com.cpen321.modernwaiter.ui.menu;
 
-import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
@@ -10,12 +14,6 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
 import com.cpen321.modernwaiter.R;
 import com.cpen321.modernwaiter.application.MenuItem;
@@ -64,10 +62,8 @@ public class MenuFragment extends Fragment {
         });
 
         // Set the adapter
-        Context context = view.getContext();
         RecyclerView recyclerView = view.findViewById(R.id.menu_recycler);
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
 
         MenuRecyclerAdapter.OnItemClickListener listener = new MenuRecyclerAdapter.OnItemClickListener() {
             @Override

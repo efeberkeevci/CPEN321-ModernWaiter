@@ -83,7 +83,7 @@ public class MockTableSession implements SessionInterface {
     }
 
     @Override
-    public void updateBill() {
+    public void fetchBill() {
         updateBillCounter++;
     }
 

@@ -72,6 +72,7 @@ public class TableSession implements SessionInterface {
     @Override
     public void endSession() {
         isActive = false;
+        navigateToPostPayment();
     }
 
     // Get the list of all items in the menu
@@ -207,7 +208,7 @@ public class TableSession implements SessionInterface {
                         postOrderId();
                     } else {
                         orderId = orderResponse.get(0).id;
-                        updateBill();
+                        fetchBill();
                     }
 
                 }, error -> Log.i("Fetch order id", error.toString()));
@@ -215,7 +216,7 @@ public class TableSession implements SessionInterface {
             requestQueue.add(stringRequest);
     }
 
-    public void updateBill() {
+    public void fetchBill() {
         StringRequest stringRequest = new StringRequest(
                 Request.Method.GET, API.orderedItems + orderId,
                 response -> {
@@ -294,6 +295,15 @@ public class TableSession implements SessionInterface {
                 && navController.getCurrentDestination().getId() == R.id.navigation_menu)
 
             navController.navigate(R.id.action_navigation_menu_to_navigation_menu);
+    }
+
+    private void navigateToPostPayment() {
+        NavController navController = Navigation.findNavController(activity, R.id.nav_host_fragment);
+
+        if(navController.getCurrentDestination() != null
+                && navController.getCurrentDestination().getId() == R.id.navigation_stripe)
+
+            navController.navigate(R.id.action_navigation_stripe_to_navigation_post_payment);
     }
 
     public class OrderResponse {
