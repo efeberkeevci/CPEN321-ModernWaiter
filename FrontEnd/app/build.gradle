@@ -48,6 +48,13 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     testImplementation 'junit:junit:4.13'
+    //for navigation testing
+    def nav_version = "2.3.1"
+    androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
+
+    //for mockito
+    //testImplementation 'org.mockito:mockito-core:2.24.5'
+    androidTestImplementation 'org.mockito:mockito-android:2.24.5'
 
     implementation 'com.stripe:stripe-android:16.0.1'
 
