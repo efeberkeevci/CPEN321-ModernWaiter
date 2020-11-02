@@ -42,6 +42,7 @@ app.get("/options/:id", options.getOptions)
 app.get("/ordered-items/:orderId", ordered_items.getOrderedItems)
 app.post("/ordered-items", ordered_items.addOrderedItem)
 app.put("/ordered-items/paid", ordered_items.updateOrderedItemPaidStatus)
+app.put("/ordered-items/selected", ordered_items.updateSelectedStatus)
 
 // Routes for orders
 app.post("/orders", orders.createOrder)

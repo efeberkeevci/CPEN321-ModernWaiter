@@ -26,7 +26,7 @@ function getOrderedItems(req, res){
  * items. This will be used when a user adds an item
  * to their meal during their time at the restaurant.
  * @param {*} req Body includes orderId and itemId
- * @param {*} res 
+ * @param {*} res Status code 201 if successful, else 400 for invalid itemId or orderId
  */
 function addOrderedItem(req, res){
     console.log("/ordered-items")
@@ -105,6 +105,23 @@ function addOrderedItem(req, res){
 }
 
 /**
+ * HTTP PUT request to mark an item as selected
+ */
+function updateSelectedStatus(req, res){
+    console.log("/ordered-items/selected")
+    let orderId = req.body.orderId
+    let itemId = req.body.itemId
+    let isSelected = req.body.isSelected
+    let sql_query = mysql.format("UPDATE TOP(1) ordered_items SET is_selected = ? WHERE orders_id = ? && items_id = ?", [isSelected, orderId, itemId])
+    con.query(sql_query, function(err, result){
+        if (err) {
+            res.status(400).send({code : err.code, errno : err.errno})
+        }
+        res.status(200).send()
+    })
+}
+
+/**
  * HTTP PUT request to mark an item ordered
  * as already paid. This is to protect the user
  * from making double payments for the same item.
@@ -115,7 +132,7 @@ function updateOrderedItemPaidStatus(req, res){
     let orderId = req.body.orderId
     let itemId = req.body.itemId
     let hasPaid = req.body.hasPaid
-    let sql_query = mysql.format("UPDATE ordered_items SET has_paid = ? WHERE orders_id = ? && items_id = ?", [hasPaid, orderId, itemId])
+    let sql_query = mysql.format("UPDATE TOP(1) ordered_items SET has_paid = ? WHERE orders_id = ? && items_id = ?", [hasPaid, orderId, itemId])
     con.query(sql_query, function(err, result){
         if (err) {
             res.status(400).send({code : err.code, errno : err.errno})
@@ -180,4 +197,4 @@ function updateOrderedItemPaidStatus(req, res){
 //     return updateResponse
 // }
 
-module.exports = {getOrderedItems, addOrderedItem, updateOrderedItemPaidStatus}
+module.exports = {getOrderedItems, addOrderedItem, updateSelectedStatus, updateOrderedItemPaidStatus}
