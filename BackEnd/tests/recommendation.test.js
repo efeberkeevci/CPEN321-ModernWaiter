@@ -6,7 +6,7 @@ const recommendation_logic = require('../recommendation_logic')
 describe('Test getItemRecommendation() with mock recommendation logic', () => {
     it('Gets the recommended item with itemId 1', async done => {
         // Arrange
-        const mock = jest.fn().mockReturnValue({itemId : 1})
+        const mock = jest.fn().mockReturnValue(1)
         recommendation_logic.getRecommendation = mock
 
         // Act
