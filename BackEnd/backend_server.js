@@ -97,4 +97,4 @@ app.get('/_health', (req, res) => {
   res.status(200).send('ok')
 })
 
-module.exports = {app}
+module.exports = app
