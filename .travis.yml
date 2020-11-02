@@ -9,7 +9,7 @@ before_install:
 - sudo mysql -e 'GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost';'
 - sudo mysql -e 'FLUSH PRIVILEGES;'
 - mysql -u admin -p MODERN_WAITER_DB < travis.sql
-- modernwaitercpen321\r
+- modernwaitercpen321!\r
 script: 
 - echo 'Build is starting!'
 - cd BackEnd
