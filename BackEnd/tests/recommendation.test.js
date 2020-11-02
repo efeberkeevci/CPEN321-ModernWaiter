@@ -73,7 +73,6 @@ describe('Test getItemRecommendation() with mock recommendation logic', () => {
         // Assert
         expect(response.status).toBe(200)
         expect(response.body).toStrictEqual({})
-        done()
       })
   })
 
