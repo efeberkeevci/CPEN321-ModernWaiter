@@ -69,8 +69,8 @@ describe('Test getItemRecommendation() with mock recommendation logic', () => {
         const response = await request.get(url)
 
         // Assert
-        expect(response.status).toBe(200)
-        expect(response.body).toStrictEqual({})
+        expect(response.status).toBe(400)
+        expect(response.body).toStrictEqual({"message": "Failed to get user preference, check if userId is valid"})
       })
   })
 
