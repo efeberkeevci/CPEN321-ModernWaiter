@@ -112,7 +112,7 @@ function updateSelectedStatus(req, res){
     let orderId = req.body.orderId
     let itemId = req.body.itemId
     let isSelected = req.body.isSelected
-    let sql_query = mysql.format("UPDATE TOP(1) ordered_items SET is_selected = ? WHERE orders_id = ? && items_id = ?", [isSelected, orderId, itemId])
+    let sql_query = mysql.format("UPDATE ordered_items SET is_selected = ? WHERE orders_id = ? && items_id = ? LIMIT 1", [isSelected, orderId, itemId])
     con.query(sql_query, function(err, result){
         if (err) {
             res.status(400).send({code : err.code, errno : err.errno})
@@ -132,7 +132,7 @@ function updateOrderedItemPaidStatus(req, res){
     let orderId = req.body.orderId
     let itemId = req.body.itemId
     let hasPaid = req.body.hasPaid
-    let sql_query = mysql.format("UPDATE TOP(1) ordered_items SET has_paid = ? WHERE orders_id = ? && items_id = ?", [hasPaid, orderId, itemId])
+    let sql_query = mysql.format("UPDATE ordered_items SET has_paid = ? WHERE orders_id = ? && items_id = ? LIMIT 1", [hasPaid, orderId, itemId])
     con.query(sql_query, function(err, result){
         if (err) {
             res.status(400).send({code : err.code, errno : err.errno})
