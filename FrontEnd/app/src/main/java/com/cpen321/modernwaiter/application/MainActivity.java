@@ -10,6 +10,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.cpen321.modernwaiter.R;
+import com.cpen321.modernwaiter.testing.MockTableSession;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -25,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         requestQueue = Volley.newRequestQueue(this);
-        tableSession = new TableSession(requestQueue, this);
+        tableSession = new MockTableSession();
 
         setContentView(R.layout.activity_main);
 

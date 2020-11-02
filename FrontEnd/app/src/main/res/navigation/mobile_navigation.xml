@@ -47,6 +47,19 @@
         <action
             android:id="@+id/action_navigation_payment_to_navigation_stripe"
             app:destination="@id/navigation_stripe" />
+        <action
+            android:id="@+id/action_navigation_payment_to_per_item_payment"
+            app:destination="@id/navigation_per_item_payment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_per_item_payment"
+        android:name="com.cpen321.modernwaiter.ui.payment.perItem.PerItemPaymentFragment"
+        android:label="Stripe"
+        tools:layout="@layout/fragment_per_item_payment" >
+        <action
+            android:id="@+id/action_navigation_per_item_payment_to_stripe"
+            app:destination="@id/navigation_stripe" />
     </fragment>
 
     <fragment

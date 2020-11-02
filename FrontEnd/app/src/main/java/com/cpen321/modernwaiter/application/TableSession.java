@@ -1,6 +1,8 @@
 package com.cpen321.modernwaiter.application;
 
 import android.util.Log;
+import android.util.Pair;
+import android.view.Menu;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -10,6 +12,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.cpen321.modernwaiter.R;
+import com.cpen321.modernwaiter.ui.order.OrderItem;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -31,6 +34,7 @@ public class TableSession implements SessionInterface {
     // This is a map of how many items are already ordered in the server
     // The amount of items on the cart is recorded in MenuItem.quantity
     private final HashMap<MenuItem, Integer> orderedItems;
+    private ArrayList<OrderItem> orderList = new ArrayList<>();
 
     public final RequestQueue requestQueue;
 
@@ -55,7 +59,6 @@ public class TableSession implements SessionInterface {
 
         orderedItems = new HashMap<>();
 
-        fetchMenu();
         fetchOrderId();
     }
 
@@ -87,6 +90,11 @@ public class TableSession implements SessionInterface {
         return orderedItems;
     }
 
+
+    public ArrayList<OrderItem> getOrderList() {
+        return orderList;
+    }
+
     // Return a hashmap of MenuItem & Its quantity integer
     @Override
     public HashMap<MenuItem, Integer> getCart() {
@@ -111,11 +119,9 @@ public class TableSession implements SessionInterface {
             return;
         }
 
-        String url = API.checkout;
-
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(
-                Request.Method.GET, url,
+                Request.Method.GET, API.checkout,
                 response -> {
                     // Display the first 500 characters of the response string.
                     Log.i("MSG:",response);
@@ -163,6 +169,8 @@ public class TableSession implements SessionInterface {
                         }
                     }
 
+                    fetchBill();
+                    fetchOrderList();
                     getUserRecommendation();
                 }, error -> Log.i("Fetch Menu", error.toString()));
 
@@ -208,12 +216,12 @@ public class TableSession implements SessionInterface {
                         postOrderId();
                     } else {
                         orderId = orderResponse.get(0).id;
-                        fetchBill();
+                        fetchMenu();
                     }
 
                 }, error -> Log.i("Fetch order id", error.toString()));
 
-            requestQueue.add(stringRequest);
+        requestQueue.add(stringRequest);
     }
 
     public void fetchBill() {
@@ -225,12 +233,14 @@ public class TableSession implements SessionInterface {
                     HashMap<MenuItem, Integer> updatedBillMap = new HashMap<>();
 
                     for (OrderedItemResponse orderedItem : orderedItemResponses) {
-                        MenuItem fakeMenuItem = new MenuItem(orderedItem.items_id);
+                        if (orderedItem.has_paid == 1) {
+                            MenuItem fakeMenuItem = new MenuItem(orderedItem.items_id);
 
-                        if (updatedBillMap.containsKey(fakeMenuItem))
-                            updatedBillMap.replace(fakeMenuItem, updatedBillMap.get(fakeMenuItem) + 1);
-                        else
-                            updatedBillMap.put(fakeMenuItem, 1);
+                            if (updatedBillMap.containsKey(fakeMenuItem))
+                                updatedBillMap.replace(fakeMenuItem, updatedBillMap.get(fakeMenuItem) + 1);
+                            else
+                                updatedBillMap.put(fakeMenuItem, 1);
+                        }
                     }
 
                     for (MenuItem menuItem : updatedBillMap.keySet()) {
@@ -238,6 +248,29 @@ public class TableSession implements SessionInterface {
                     }
 
                 }, error -> Log.i("Fetch Bill", error.toString())
+        );
+
+        requestQueue.add(stringRequest);
+    }
+
+    public void fetchOrderList() {
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.GET, API.orderedItems + orderId,
+                response -> {
+                    List<OrderedItemResponse> orderedItemResponses = new Gson().fromJson(response,
+                            new TypeToken<List<OrderedItemResponse>>() {}.getType());
+                    orderList.clear();
+
+                    for (OrderedItemResponse orderedItem : orderedItemResponses) {
+                        MenuItem fakeMenuItem = new MenuItem(orderedItem.items_id);
+
+                        for (MenuItem menuItem : orderedItems.keySet()) {
+                            if (menuItem.equals(fakeMenuItem)) {
+                                orderList.add(new OrderItem(menuItem, orderedItem.is_selected == 1));
+                            }
+                        }
+                    }
+                }, error -> Log.i("Fetch order", error.toString())
         );
 
         requestQueue.add(stringRequest);
@@ -316,5 +349,7 @@ public class TableSession implements SessionInterface {
 
     public class OrderedItemResponse {
         public int items_id;
+        public int is_selected;
+        public int has_paid;
     }
 }
