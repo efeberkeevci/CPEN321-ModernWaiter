@@ -14,7 +14,6 @@ describe('Test getItemRecommendation() with mock recommendation logic', () => {
 
         // Assert
         expect(response.status).toBe(200)
-	//console.log(response.body)
         expect(response.body).toStrictEqual({"itemId": 1})
         done()
       })
