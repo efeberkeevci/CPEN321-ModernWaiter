@@ -12,14 +12,31 @@ const con = sql.getConnection()
  */
 function getTable(req, res) {    
     console.log("/tables/{{id}}");
-    let id = req.params.id;
-    let sql_query = mysql.format("SELECT * FROM tables WHERE id = ?", [id]);
+    let id = req.params.id
+    let sql_query = mysql.format("SELECT * FROM tables WHERE id = ?", [id])
     con.query(sql_query, function(err, result){
         if (err) {
-            res.status(400).send({code : err.code, errno : err.errno});
+            res.status(400).send({code : err.code, errno : err.errno})
         }
-        res.status(200).send(result);
-    });
+        res.status(200).send(result)
+    })
 }
 
+/**
+ * Adds details of a table
+ * @param {*} req Body includes tableNumber
+ * @param {*} res It returns a status code of 200 
+ * if successful, otherwise 400
+ */
+function addTable(req, res) {    
+    console.log("/tables");
+    let tableNumber = req.body.tableNumber
+    let sql_query = mysql.format("INSERT INTO tables (table_number) VALUES (?)", [tableNumber])
+    con.query(sql_query, function(err, result){
+        if (err) {
+            res.status(400).send({code : err.code, errno : err.errno})
+        }
+        res.status(200).send(result)
+    });
+}
 module.exports = {getTable}

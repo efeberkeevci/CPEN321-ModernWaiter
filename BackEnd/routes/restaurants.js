@@ -21,4 +21,24 @@ function getRestaurant(req, res){
     });
 }
 
+/**
+ * Adds a restaurant to the database
+ * @param {*} req Body with details of a restaurant
+ * @param {*} res List of items with a status code of 200 if successful, else 400
+ */
+function addRestaurant(req, res){
+    console.log("/restaurants")
+    let name = req.body.name
+    let location = req.body.location
+    let taxPercentage = req.body.taxPercentage
+    let serviceFeePercentage = req.body.serviceFeePercentage
+
+    let sql_query = mysql.format("INSERT INTO restaurant (name, location, tax_percentage, service_fee_percentage) VALUES (?, ?, ?, ?)", [name, location, taxPercentage, serviceFeePercentage])
+    con.query(sql_query, function(err, result){
+        if (err) {
+            res.status(400).send({code : err.code, errno : err.errno})
+        }
+        res.status(200).send(result)
+    })
+}
 module.exports = {getRestaurant}
