@@ -1,6 +1,15 @@
 language: node_js
+sudo: enabled
+services:
+    - mysql
 node_js:
 - "12.19.0"
+before_install:
+- sudo mysql -e 'CREATE USER 'admin'@'localhost' IDENTIFIED BY "modernwaitercpen321!";'
+- sudo mysql -e 'GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost';'
+- sudo mysql -e 'FLUSH PRIVILEGES;'
+- sudo mysql -e 'CREATE DATABASE MODERN_WAITER_DB;'
+- mysql -u admin --password=modernwaitercpen321! MODERN_WAITER_DB < travis.sql
 script: 
 - echo 'Build is starting!'
 - cd BackEnd

@@ -96,3 +96,5 @@ app.get("/checkout", (req,res) =>{
 app.get('/_health', (req, res) => {
   res.status(200).send('ok')
 })
+
+module.exports = app

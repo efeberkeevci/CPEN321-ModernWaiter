@@ -45,17 +45,23 @@ public class NotificationService extends FirebaseMessagingService {
             notificationManager.createNotificationChannel(notificationChannel);
         }
 
-        Log.d("NOTE","NEW MESSAGE");
+        Log.d("MESSAGE: ","NEW PUSH NOTIFICATION");
         super.onMessageReceived(remoteMessage);
+        String notification_title = remoteMessage.getNotification().getTitle();
+        String notification_body = remoteMessage.getNotification().getTitle();
         Notification notification = new NotificationCompat.Builder(this,"CHANNEL1")
-                .setContentTitle(remoteMessage.getNotification().getTitle())
-                .setContentText(remoteMessage.getNotification().getBody())
+                .setContentTitle(notification_title)
+                .setContentText(notification_body)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setPriority(NotificationCompat.PRIORITY_HIGH) // or NotificationCompat.PRIORITY_MAX
                 .build();
         NotificationManagerCompat manager = NotificationManagerCompat.from(getApplicationContext());
         manager.notify(123, notification);
+
+        if(notification_title == "Item Claimed!"){
+            //Call to the callback function to refresh item claim status
+        }
     }
 
 

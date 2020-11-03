@@ -1,6 +1,7 @@
 const mysql = require('mysql')
 const sql = require("./../sql_connection.js")
 const con = sql.getConnection()
+const push_notification = require("../push_notification")
 
 /**
  * Retrieves a list of all the 
@@ -105,7 +106,9 @@ function addOrderedItem(req, res){
 }
 
 /**
- * HTTP PUT request to mark an item as selected
+ * Request to mark an item as selected by a specific user
+ * @param {*} req Body includes orderId, itemId, userId, isSelected
+ * @param {*} res Status code 200 if successful, else 400
  */
 function updateSelectedStatus(req, res){
     console.log("/ordered-items/selected")
@@ -114,20 +117,22 @@ function updateSelectedStatus(req, res){
     let userId = req.body.userId
     let isSelected = req.body.isSelected
     let notIsSelected = isSelected == 1 ? 0 : 1
+    let user_name="";
+    let item_name="";
     let sql_query = mysql.format("UPDATE ordered_items SET is_selected = ?, users_id = ? WHERE orders_id = ? && items_id = ? && is_selected = ? LIMIT 1", [isSelected, userId, orderId, itemId, notIsSelected])
     con.query(sql_query, function(err, result){
         if (err) {
             res.status(400).send({code : err.code, errno : err.errno})
         }
         res.status(200).send()
+        push_notification.push_notification_item_claimed(orderId, itemId, userId);
     })
 }
 
 /**
- * HTTP PUT request to mark an item ordered
- * as already paid. This is to protect the user
- * from making double payments for the same item.
- * It returns a status code of 200 if successful.
+ * Request to mark an item as paid.
+ * @param {*} req Body includes orderId, itemId, hasPaid
+ * @param {*} res Status code 200 if successful, else 400
  */
 function updateOrderedItemPaidStatus(req, res){
     console.log("/ordered-items/paid")
@@ -143,61 +148,5 @@ function updateOrderedItemPaidStatus(req, res){
         res.status(200).send()
     })
 }
-
-// /**
-//  * Function to update the order amount when 
-//  * an item is added to the order.
-//  * @param {*} orderId Id of the order.
-//  * @param {*} itemId Id of the item.
-//  */
-// function updateOrderAmount(orderId, itemId) {
-//     let item_cost_query = mysql.format("SELECT cost FROM items WHERE id = ?", [itemId])
-//     let old_amount_query = mysql. format("SELECT amount FROM orders WHERE id = ?", [orderId])
-//     let updateResponse = null;
-
-//     con.query(item_cost_query, function(err, cost_result){
-//         if (err) {
-//             updateResponse = { status : false, body : {errno : err.errno, code : err.code} }
-//             return
-//         }
-        
-//         if(cost_result < 0){
-//             updateResponse = { status : false, body : "Failed to find item from provided item id" }
-//             return
-//         }
-        
-//         cost_result = JSON.parse(JSON.stringify(cost_result))[0]
-//         let item_cost = cost_result["cost"]
-
-//         con.query(old_amount_query, function(err, old_amount_result){
-//             if (err) {
-//                 updateResponse = { status : false, body : {errno : err.errno, code : err.code} }
-//                 return
-//             }
-
-//             if(old_amount_result < 0){
-//                 updateResponse = { status : false, body : "Failed to find existing amount on order" }
-//                 return
-//             }
-
-//             old_amount_result = JSON.parse(JSON.stringify(old_amount_result))[0]
-//             let old_amount = old_amount_result["amount"]
-//             let new_amount = old_amount + item_cost
-//             let update_query = mysql.format("UPDATE orders SET amount = ? WHERE id = ?", [new_amount, orderId])
-
-//             con.query(update_query, function(err, result){
-//                 if (err) {
-//                     console.log(err)
-//                     updateResponse = { status : false, body : {errno : err.errno, code : err.code} }
-//                     return
-//                 }
-//             })
-
-//             updateResponse = {status : true, body : "" }
-//         })
-//     })
-
-//     return updateResponse
-// }
 
 module.exports = {getOrderedItems, addOrderedItem, updateSelectedStatus, updateOrderedItemPaidStatus}
