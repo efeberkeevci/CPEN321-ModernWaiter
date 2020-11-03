@@ -10,6 +10,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.cpen321.modernwaiter.R;
+import com.cpen321.modernwaiter.testing.MockTableSession;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -34,6 +35,5 @@ public class MainActivity extends AppCompatActivity {
         // menu should be considered as top level destinations.
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupWithNavController(navView, navController);
-        NotificationService.sendToken();
     }
 }

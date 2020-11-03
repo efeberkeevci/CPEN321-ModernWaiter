@@ -1,8 +1,13 @@
 package com.cpen321.modernwaiter.testing;
 
+import android.util.Log;
+
 import com.android.volley.Request;
+import com.android.volley.toolbox.StringRequest;
+import com.cpen321.modernwaiter.application.API;
 import com.cpen321.modernwaiter.application.MenuItem;
 import com.cpen321.modernwaiter.application.SessionInterface;
+import com.cpen321.modernwaiter.ui.order.OrderItem;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -24,10 +29,14 @@ import java.util.stream.Collectors;
 public class MockTableSession implements SessionInterface {
 
     public HashMap<MenuItem, Integer> orderedItems = new HashMap<>(dummyOrderItem());
+    public ArrayList<OrderItem> orderList = new ArrayList<>();
     public int featureItemId = 1;
     public int updateBillCounter = 0;
     public int endSessionCounter = 0;
     public Request lastRequest;
+
+    public MockTableSession() {
+    }
 
     @Override
     public boolean isActive() {
@@ -68,10 +77,21 @@ public class MockTableSession implements SessionInterface {
     }
 
     @Override
+    public ArrayList<OrderItem> getOrderList() {
+        return orderList;
+    }
+
+    @Override
+    public void updateItemSelected(OrderItem orderItem) {
+    }
+
+    @Override
     public void checkout() {
         orderedItems.forEach(((menuItem, count) -> {
             if (menuItem.getIntegerQuantity() > 0) {
 
+                for (int i = 0; i < menuItem.getIntegerQuantity(); i++)
+                    orderList.add(new OrderItem(menuItem, false));
 
                 // Add those value into orderedItems
                 orderedItems.replace(menuItem, count + menuItem.getIntegerQuantity());
@@ -83,8 +103,13 @@ public class MockTableSession implements SessionInterface {
     }
 
     @Override
-    public void updateBill() {
+    public void fetchBill() {
         updateBillCounter++;
+    }
+
+    @Override
+    public void fetchOrderList() {
+
     }
 
     @Override
@@ -107,6 +132,7 @@ public class MockTableSession implements SessionInterface {
                 "    \"cost\": 16.5,\n" +
                 "    \"description\": \"ocean wise ahi tuna, mango, avocado, asparagus, cucumber, sesame soy paper, wasabi mayo, cripy yam curls\",\n" +
                 "    \"calories\": 500,\n" +
+                "    \"quantity\": 2,\n" +
                 "    \"popularity_count\": 3,\n" +
                 "    \"image\": \"gs://modern-waiter-47e96.appspot.com/dummy-spicy-ahi.jpg\"\n" +
                 "  },\n" +
@@ -118,6 +144,7 @@ public class MockTableSession implements SessionInterface {
                 "    \"cost\": 16,\n" +
                 "    \"description\": \"crispy prawn, mango, avocado, asparagus, cucumber, sesame soy paper, sriracha mayo, soy glaze\",\n" +
                 "    \"calories\": 500,\n" +
+                "    \"quantity\": 0,\n" +
                 "    \"popularity_count\": 4,\n" +
                 "    \"image\": \"gs://modern-waiter-47e96.appspot.com/dummy-prawn-crunch.jpg\"\n" +
                 "  },\n" +
@@ -129,6 +156,7 @@ public class MockTableSession implements SessionInterface {
                 "    \"cost\": 18.5,\n" +
                 "    \"description\": \"ocean wise lois lake steelhead, sustainably harvested prawns, avocado, chili, thai basil, mint, peruvian leche de tigre marinade\",\n" +
                 "    \"calories\": 750,\n" +
+                "    \"quantity\": 1,\n" +
                 "    \"popularity_count\": 2,\n" +
                 "    \"image\": \"gs://modern-waiter-47e96.appspot.com/dummy-prawn-crunch.jpg\"\n" +
                 "  }\n" +

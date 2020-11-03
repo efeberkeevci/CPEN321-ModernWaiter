@@ -1,6 +1,5 @@
 package com.cpen321.modernwaiter.ui.bill;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,11 +43,8 @@ public class BillFragment extends Fragment {
             }
         });
 
-        // Set the adapter
-        Context context = view.getContext();
-
         RecyclerView recyclerView = view.findViewById(R.id.bill_recycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
 
         HashMap<MenuItem, Integer> billMap = tableSession.getBill();
 
