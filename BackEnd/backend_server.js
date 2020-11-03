@@ -79,16 +79,17 @@ app.get("/users/preferences/:id", users.getUserPreferences)
  */
 app.post("/registrationToken", (req,res) => {
     console.log("/registrationToken")
+    let orderId = req.body.orderId
     let registrationToken = req.body.registrationToken
     console.log(registrationToken)
-	let orderId = "1"
     res.send(push_notification.subscribe(registrationToken, orderId))
 })
 
 //Informs server that the current cart is checked out
-app.get("/checkout", (req,res) =>{
+app.put("/checkout", (req,res) =>{
     console.log("Checkout received")
-    push_notification.push_notification_order_received("1")
+    let orderId = req.body.orderId
+    push_notification.push_notification_order_received(orderId)
     res.send("Success")
 })
 

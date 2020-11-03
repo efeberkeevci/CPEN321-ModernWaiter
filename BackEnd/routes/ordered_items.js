@@ -1,7 +1,7 @@
 const mysql = require('mysql')
 const sql = require("./../sql_connection.js")
 const con = sql.getConnection()
-const push_notification = require("../push_notification")
+const push_notification = require("../push_notification.js")
 
 /**
  * Retrieves a list of all the 
@@ -125,7 +125,8 @@ function updateSelectedStatus(req, res){
             res.status(400).send({code : err.code, errno : err.errno})
         }
         res.status(200).send()
-        push_notification.push_notification_item_claimed(orderId, itemId, userId);
+        push_notification.push_notification_order_received(orderId)
+        console.log(orderId + ":" + isSelected + " by " + userId + " for " + itemId);
     })
 }
 

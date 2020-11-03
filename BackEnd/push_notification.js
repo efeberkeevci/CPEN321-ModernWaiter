@@ -16,7 +16,7 @@ admin.initializeApp({
 
 
 function subscribe(registrationToken, orderId){
-    console.log("SUBSCRIBED");
+    console.log("SUBSCRIBED for " + orderId);
     // Subscribe the devices corresponding to the registration tokens to the
     // topic.
     let topic = orderId;
@@ -75,7 +75,7 @@ function push_notification_payment_done(orderId){
 }
 
 function push_notification_order_received(orderId){
-  console.log("Sending order received push notification");
+  console.log("Sending order received push notification for topic " + orderId);
 
   var message = {
     notification: {
@@ -96,19 +96,18 @@ function push_notification_order_received(orderId){
     });
 }
 
-function push_notification_item_claimed(orderId, itemId, userId){
 
-  let item_name = items.getItemName(itemId);
-  let user_name = users.getUserName(userId);
+function push_notification_item_claimed(orderId) {
+  console.log("Sending order received push notification");
 
-  console.log("Sending item claimed push notification");
-  var message ={
+  var message = {
     notification: {
-      title : "Item Claimed!",
-      body : "Item " + item_name + "is selected by " + user_name 
+      title: 'Order Received!',
+      body: 'Your order is being prepared now'
     },
     topic:orderId
   };
+
   // Send a message to devices subscribed to the provided topic.
   admin.messaging().send(message)
     .then((response) => {
