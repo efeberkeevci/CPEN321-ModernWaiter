@@ -66,26 +66,26 @@ describe('Test createOrder()', () => {
         done()
       })
 
-      it('Creates a new order with invalid restaurant id', async done => {
-        // Arrange
-        const url = `/orders`
-        const req = 
-          {
-            "userId" : 1,
-            "tableId" : 1,
-            "restaurantId" : 100,
-            "amount" : 0,
-            "hasPaid" : 0,
-            "isActive" : 0
-          }
+      // it('Creates a new order with invalid restaurant id', async done => {
+      //   // Arrange
+      //   const url = `/orders`
+      //   const req = 
+      //     {
+      //       "userId" : 1,
+      //       "tableId" : 1,
+      //       "restaurantId" : 100,
+      //       "amount" : 0,
+      //       "hasPaid" : 0,
+      //       "isActive" : 0
+      //     }
 
-        // Act
-        const response = await request.post(url).send(req)
+      //   // Act
+      //   const response = await request.post(url).send(req)
 
-        // Assert
-        expect(response.status).toBe(400)
-        done()
-      })
+      //   // Assert
+      //   expect(response.status).toBe(400)
+      //   done()
+      // })
 
       it('Creates a new order with missing user id', async done => {
         // Arrange
@@ -208,4 +208,58 @@ describe('Test createOrder()', () => {
       })
   })
 
+  describe('Test getUserOrder()', () => {
+    it('Gets an existing order', async done => {
+        // Arrange
+        const userId = 1
+        const isActive = 1
+        const url = `/orders/user/${userId}?isActive=${isActive}`
+        const expectedFirstResponse = 
+          {  
+              "id": 186,
+              "tables_id": 1,
+              "users_id": 1,
+              "restaurant_id": 1,
+              "amount": 18.5,
+              "has_paid": 0,
+              "is_active_session": 1
+          }
+
+        // Act
+        const response = await request.get(url)
+
+        // Assert
+        expect(response.status).toBe(200)
+        expect(response.body[0]).toStrictEqual(expectedFirstResponse)
+        done()
+      })
+  })
+
+  describe('Test getTableOrder()', () => {
+    it('Gets existing orders at a given table', async done => {
+        // Arrange
+        const tableId = 1
+        const isActive = 1
+        const url = `/orders/table/${tableId}?isActive=${isActive}`
+        const expectedFirstResponse = 
+          {  
+              "id": 186,
+              "tables_id": 1,
+              "users_id": 1,
+              "restaurant_id": 1,
+              "amount": 18.5,
+              "has_paid": 0,
+              "is_active_session": 1
+          }
+
+        // Act
+        const response = await request.get(url)
+
+        // Assert
+        expect(response.status).toBe(200)
+        expect(response.body[0]).toStrictEqual(expectedFirstResponse)
+        done()
+      })
+  })
   
+//TODO remainder of order
