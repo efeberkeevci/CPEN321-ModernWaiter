@@ -4,9 +4,7 @@ import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.cpen321.modernwaiter.application.MainActivity;
 import com.cpen321.modernwaiter.testing.MockMainActivity;
-import com.cpen321.modernwaiter.testing.MockTableSession;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -27,12 +25,9 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 @RunWith(AndroidJUnit4.class)
 public class MenuTest {
 
-    private MockTableSession mockTableSession;
-
     @Before
     public void createActivity() {
-        ActivityScenario<MockMainActivity> activityScenario = ActivityScenario.launch(MockMainActivity.class);
-        mockTableSession = (MockTableSession) MainActivity.tableSession;
+        ActivityScenario.launch(MockMainActivity.class);
     }
 
     @Test

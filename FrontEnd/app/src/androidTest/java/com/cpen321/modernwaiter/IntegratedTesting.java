@@ -1,55 +1,36 @@
 package com.cpen321.modernwaiter;
 
 import androidx.test.core.app.ActivityScenario;
-import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.matcher.ViewMatchers;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.cpen321.modernwaiter.application.API;
 import com.cpen321.modernwaiter.application.MainActivity;
-import com.cpen321.modernwaiter.testing.MockMainActivity;
-import com.cpen321.modernwaiter.testing.MockTableSession;
-import com.cpen321.modernwaiter.ui.order.OrderRecyclerAdapter;
-import com.stripe.android.model.Card;
-import com.stripe.android.view.CardInputWidget;
 
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.Description;
 import org.junit.runner.RunWith;
 
-import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static androidx.test.espresso.action.ViewActions.pressBack;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static java.util.EnumSet.allOf;
-import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
 public class IntegratedTesting {
 
-    private MockTableSession mockTableSession;
     @Before
-    public void changeUserAndTableId(){
+    public void changeUserAndTableId() throws InterruptedException {
         API.TABLE_ID = "2";
         API.USER_ID = "2";
-        ActivityScenario<MockMainActivity> activityScenario = ActivityScenario.launch(MockMainActivity.class);
-        mockTableSession = (MockTableSession) MainActivity.tableSession;
+        ActivityScenario.launch(MainActivity.class);
+        Thread.sleep(1000);
     }
 
     /**
@@ -82,7 +63,7 @@ public class IntegratedTesting {
         onView(withId(R.id.cardView))
                 .check(matches(isDisplayed()));
 
-        String addedItem = "Dummy Roll";
+        String addedItem = "Spicy Ahi Roll";
         /**
          * Now add this item to the cart
          */
@@ -140,14 +121,14 @@ public class IntegratedTesting {
      * cleanup : done in next test payForAll
      */
     @Test
-    public void addMenuItemAndViewBill(){
+    public void addMenuItemAndViewBill() {
         //by default on menu
 
         //click on a menu item
         onView(withId(R.id.menu_recycler))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
-        String addedItem = "Dummy Roll";
+        String addedItem = "Spicy Ahi Roll";
 
         //add item to cart
         onView(withId(R.id.incrementButton))

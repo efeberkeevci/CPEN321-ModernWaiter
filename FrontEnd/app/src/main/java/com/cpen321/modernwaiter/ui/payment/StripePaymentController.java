@@ -70,7 +70,7 @@ public class StripePaymentController {
     }
 
     public void pay(PaymentMethodCreateParams params) {
-        if (stripe == null) {
+        if (stripe == null || params == null) {
             return;
         }
 

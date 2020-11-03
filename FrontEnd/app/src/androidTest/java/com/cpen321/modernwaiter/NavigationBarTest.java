@@ -4,7 +4,6 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.cpen321.modernwaiter.application.MainActivity;
-import com.cpen321.modernwaiter.testing.MockMainActivity;
 
 import org.junit.Rule;
 import org.junit.Test;

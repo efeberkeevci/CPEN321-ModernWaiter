@@ -31,7 +31,7 @@ public class OrderCartTest {
         onView(withId(R.id.fragment_order))
                 .check(matches(isDisplayed()));
 
-        //Ckeckout
+        //Checkout
         onView(withId(R.id.checkoutButton))
                 .perform(click());
 
