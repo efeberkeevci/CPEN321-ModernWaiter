@@ -22,15 +22,20 @@ function getItemRecommendation(req, res){
             res.send(err)
         };
 
-    console.log(prefResult);
-        var preference = prefResult[0]["preferences"]
+        var preference
+
+        try {
+            preference = prefResult[0]["preferences"]
+        } catch (error) {
+            res.status(400).send({message: "Failed to get user preference, check if userId is valid"})
+            return
+        }
 
         con.query(desc_query, function(err, descResult) {
             if (err) {
                 res.send(err)
             };
 
-            console.log(JSON.stringify(descResult))
             var descriptionJsonArray = JSON.parse(JSON.stringify(descResult))
             var itemDescriptionMap = new Map()
 
@@ -38,7 +43,6 @@ function getItemRecommendation(req, res){
                 itemDescriptionMap.set(item["id"], item["description"])
             })
 
-            console.log(itemDescriptionMap)
             var itemId = recommendation.getRecommendation(preference, itemDescriptionMap)
             res.send({"itemId" : itemId})
         });

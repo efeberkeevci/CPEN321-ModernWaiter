@@ -11,12 +11,15 @@ import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import com.android.volley.Request;
+import com.android.volley.toolbox.StringRequest;
 import com.cpen321.modernwaiter.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.google.gson.Gson;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -29,9 +32,30 @@ import java.util.HashMap;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import static com.cpen321.modernwaiter.application.MainActivity.tableSession;
+
 public class NotificationService extends FirebaseMessagingService {
+
+    public static String token;
+
     @Override
     public void onMessageReceived(@NotNull RemoteMessage remoteMessage) {
+        super.onMessageReceived(remoteMessage);
+
+        String notification_title = remoteMessage.getNotification().getTitle();
+
+        if ("Item Claimed!".equals(notification_title)){
+            tableSession.fetchOrderList();
+        } else if ("Order Received!".equals(notification_title)) {
+            notifyUser(remoteMessage);
+            tableSession.fetchBill();
+            tableSession.fetchOrderList();
+        } else if ("Payment Completed!".equals(notification_title)) {
+            notifyUser(remoteMessage);
+        }
+    }
+
+    private void notifyUser(RemoteMessage remoteMessage) {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         // create channel in new versions of android
@@ -45,11 +69,12 @@ public class NotificationService extends FirebaseMessagingService {
             notificationManager.createNotificationChannel(notificationChannel);
         }
 
-        Log.d("NOTE","NEW MESSAGE");
-        super.onMessageReceived(remoteMessage);
+        Log.d("MESSAGE: ","NEW PUSH NOTIFICATION");
+        String notification_title = remoteMessage.getNotification().getTitle();
+        String notification_body = remoteMessage.getNotification().getTitle();
         Notification notification = new NotificationCompat.Builder(this,"CHANNEL1")
-                .setContentTitle(remoteMessage.getNotification().getTitle())
-                .setContentText(remoteMessage.getNotification().getBody())
+                .setContentTitle(notification_title)
+                .setContentText(notification_body)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setPriority(NotificationCompat.PRIORITY_HIGH) // or NotificationCompat.PRIORITY_MAX
@@ -58,83 +83,73 @@ public class NotificationService extends FirebaseMessagingService {
         manager.notify(123, notification);
     }
 
-
-    public static void sendToken() {
+    public static void sendToken(String orderId) {
         FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(new OnCompleteListener<String>() {
-                    @Override
-                    public void onComplete(@NonNull Task<String> task) {
-                        if (!task.isSuccessful()) {
-                            Log.w("TOKEN FAIL", "Fetching FCM registration token failed", task.getException());
-                            return;
+            .addOnCompleteListener(new OnCompleteListener<String>() {
+                @Override
+                public void onComplete(@NonNull Task<String> task) {
+                    if (!task.isSuccessful()) {
+                        Log.w("TOKEN FAIL", "Fetching FCM registration token failed", task.getException());
+                        return;
+                    }
+
+                    // Get new FCM registration token
+                    token = task.getResult();
+
+                    // Log and toast
+                    Log.d("Success", token);
+                    HashMap<String, String> post_message_body = new HashMap<>();
+                    post_message_body.put("registrationToken", token);
+                    post_message_body.put("orderId", orderId);
+
+                    final String bodyJSON = new Gson().toJson(post_message_body);
+                    StringRequest stringRequest = new StringRequest(
+                            Request.Method.POST, API.registration,
+                            response -> {
+                                Log.i("MSG:",response);
+
+                            }, error -> Log.i("Posting token:", error.toString())
+                    ) {
+                        @Override
+                        public String getBodyContentType() {
+                            return "application/json; charset=utf-8";
                         }
 
-                        // Get new FCM registration token
-                        String token = task.getResult();
+                        @Override
+                        public byte[] getBody() {
+                            return bodyJSON.getBytes();
+                        }
+                    };
 
-                        // Log and toast
-                        Log.d("Success", token);
-                        HashMap<String, String> post_message_body = new HashMap<>();
-                        post_message_body.put("registrationToken", token);
-                        Thread thread = new Thread(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                try {
-                                    performPostCall("http://52.188.158.129:3000/registrationToken", post_message_body,token);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
-
-                        thread.start();
-
-                    }
-                });
+                    tableSession.add(stringRequest);
+                }
+            });
     }
 
-    public static String performPostCall(String requestURL,
-                                         HashMap<String, String> postDataParams, String token) {
+    public static void unsubscribe(String orderId) {
+        HashMap<String, String> post_message_body = new HashMap<>();
+        post_message_body.put("registrationToken", token);
+        post_message_body.put("orderId", orderId);
 
-        URL url;
-        String response = "";
-        try {
-            url = new URL(requestURL);
+        final String bodyJSON = new Gson().toJson(post_message_body);
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.POST, API.unsubscribe,
+                response -> {
+                    Log.i("MSG:",response);
 
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setUseCaches(false);
-            connection.setDoOutput(true);
-            connection.setDoInput(true);
-
-            connection.setInstanceFollowRedirects(false);
-
-            connection.setRequestMethod("POST");
-            connection.setRequestProperty("Connection", "Keep-Alive");
-            connection.setRequestProperty("Cache-Control", "no-cache");
-            connection.setRequestProperty("Content-Type","application/json;charset=utf-8");
-            connection.setRequestProperty("Accept","application/json");
-
-            OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
-            writer.write("{\"registrationToken\":\""+token+"\"}");
-            writer.flush();
-            writer.close();
-            int responseCode = connection.getResponseCode();
-
-            if (responseCode == HttpsURLConnection.HTTP_OK) {
-                String line;
-                BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                while ((line = br.readLine()) != null) {
-                    response += line;
-                }
-            } else {
-                response = "";
-
+                }, error -> Log.i("Unsubscribe token:", error.toString())
+        ) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        return response;
+            @Override
+            public byte[] getBody() {
+                return bodyJSON.getBytes();
+            }
+        };
+
+        tableSession.add(stringRequest);
     }
 }

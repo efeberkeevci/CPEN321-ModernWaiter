@@ -1,6 +1,10 @@
 package com.cpen321.modernwaiter.testing;
 
+import android.util.Log;
+
 import com.android.volley.Request;
+import com.android.volley.toolbox.StringRequest;
+import com.cpen321.modernwaiter.application.API;
 import com.cpen321.modernwaiter.application.MenuItem;
 import com.cpen321.modernwaiter.application.SessionInterface;
 import com.cpen321.modernwaiter.ui.order.OrderItem;
@@ -74,8 +78,11 @@ public class MockTableSession implements SessionInterface {
 
     @Override
     public ArrayList<OrderItem> getOrderList() {
-        // TODO:
         return orderList;
+    }
+
+    @Override
+    public void updateItemSelected(OrderItem orderItem) {
     }
 
     @Override
@@ -98,6 +105,11 @@ public class MockTableSession implements SessionInterface {
     @Override
     public void fetchBill() {
         updateBillCounter++;
+    }
+
+    @Override
+    public void fetchOrderList() {
+
     }
 
     @Override

@@ -10,8 +10,11 @@ public class API {
     public static final String URL = "http://52.170.16.110:3000/";
 
     public static final String items = URL + "items/";
+
     public static final String userOrder = URL + "orders/user/";
     public static final String orderedItems = URL + "ordered-items/";
+    public static final String orderSelect = URL + "ordered-items/selected/";
+
     public static final String isActive = "?isActive=1";
     public static final String recommend = URL + "recommendation/";
     public static final String order = URL + "orders/";
@@ -25,4 +28,6 @@ public class API {
 
     // Notification
     public static final String checkout = URL + "checkout/";
+    public static final String registration = URL + "registrationToken/";
+    public static final String unsubscribe = URL + "unsubscribedToken/";
 }

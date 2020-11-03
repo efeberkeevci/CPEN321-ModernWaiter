@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         requestQueue = Volley.newRequestQueue(this);
-        tableSession = new MockTableSession();
+        tableSession = new TableSession(requestQueue, this);
 
         setContentView(R.layout.activity_main);
 
@@ -35,6 +35,5 @@ public class MainActivity extends AppCompatActivity {
         // menu should be considered as top level destinations.
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupWithNavController(navView, navController);
-        NotificationService.sendToken();
     }
 }

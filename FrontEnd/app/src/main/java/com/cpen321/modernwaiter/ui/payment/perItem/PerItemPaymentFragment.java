@@ -40,6 +40,7 @@ public class PerItemPaymentFragment extends Fragment {
             public void onItemClick(OrderItem item) {
                 // TODO: PERFORM CALL TO DATABASE & NOTIFY I CHOOSE OR DESELECT
 
+                tableSession.updateItemSelected(item);
                 perItemRecyclerAdapter.notifyDataSetChanged();
                 updateAmount();
             }

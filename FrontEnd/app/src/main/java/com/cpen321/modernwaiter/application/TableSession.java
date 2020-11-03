@@ -1,8 +1,6 @@
 package com.cpen321.modernwaiter.application;
 
 import android.util.Log;
-import android.util.Pair;
-import android.view.Menu;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -75,6 +73,7 @@ public class TableSession implements SessionInterface {
     @Override
     public void endSession() {
         isActive = false;
+        NotificationService.unsubscribe(String.valueOf(orderId));
         navigateToPostPayment();
     }
 
@@ -93,6 +92,35 @@ public class TableSession implements SessionInterface {
 
     public ArrayList<OrderItem> getOrderList() {
         return orderList;
+    }
+
+    @Override
+    public void updateItemSelected(OrderItem orderItem) {
+        final Map<String, String> bodyFields = new HashMap<>();
+        bodyFields.put("orderId", String.valueOf(orderId));
+        bodyFields.put("itemId", String.valueOf(orderItem.menuItem.id));
+        bodyFields.put("isSelected", String.valueOf(orderItem.selected));
+        bodyFields.put("userId", orderItem.selected ? userId : "-1");
+
+        final String bodyJSON = new Gson().toJson(bodyFields);
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.PUT, API.orderSelect,
+                response -> System.out.println("Success"),
+
+                error -> Log.i("Select Item", error.toString())
+        ) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+
+            @Override
+            public byte[] getBody() {
+                return bodyJSON.getBytes();
+            }
+        };
+
+        requestQueue.add(stringRequest);
     }
 
     // Return a hashmap of MenuItem & Its quantity integer
@@ -119,18 +147,32 @@ public class TableSession implements SessionInterface {
             return;
         }
 
-        // Request a string response from the provided URL.
+        // Notify the server that we are checking out so they can notify
+        HashMap<String, String> bodyFields = new HashMap<>();
+        bodyFields.put("orderId", String.valueOf(orderId));
+
+        final String bodyJSON = new Gson().toJson(bodyFields);
         StringRequest stringRequest = new StringRequest(
-                Request.Method.GET, API.checkout,
+                Request.Method.PUT, API.checkout,
                 response -> {
-                    // Display the first 500 characters of the response string.
                     Log.i("MSG:",response);
 
-                }, error -> Log.i("ERR:", error.toString()));
+                }, error -> Log.i("ERR:", error.toString())
+        ) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
 
-        // Add the request to the RequestQueue.
+            @Override
+            public byte[] getBody() {
+                return bodyJSON.getBytes();
+            }
+        };
+
         requestQueue.add(stringRequest);
 
+        // Make a request for each order
         orderedItems.forEach(((menuItem, count) -> {
             if (menuItem.getIntegerQuantity() > 0) {
                 StringRequest stringRequest1 = createPostOrder(menuItem);
@@ -217,6 +259,7 @@ public class TableSession implements SessionInterface {
                     } else {
                         orderId = orderResponse.get(0).id;
                         fetchMenu();
+                        NotificationService.sendToken(String.valueOf(orderId));
                     }
 
                 }, error -> Log.i("Fetch order id", error.toString()));
@@ -233,7 +276,7 @@ public class TableSession implements SessionInterface {
                     HashMap<MenuItem, Integer> updatedBillMap = new HashMap<>();
 
                     for (OrderedItemResponse orderedItem : orderedItemResponses) {
-                        if (orderedItem.has_paid == 1) {
+                        if (orderedItem.has_paid != 1) {
                             MenuItem fakeMenuItem = new MenuItem(orderedItem.items_id);
 
                             if (updatedBillMap.containsKey(fakeMenuItem))
@@ -247,6 +290,7 @@ public class TableSession implements SessionInterface {
                         orderedItems.replace(menuItem, updatedBillMap.get(menuItem));
                     }
 
+                    refreshBillFragment();
                 }, error -> Log.i("Fetch Bill", error.toString())
         );
 
@@ -262,14 +306,18 @@ public class TableSession implements SessionInterface {
                     orderList.clear();
 
                     for (OrderedItemResponse orderedItem : orderedItemResponses) {
-                        MenuItem fakeMenuItem = new MenuItem(orderedItem.items_id);
+                        if (orderedItem.has_paid != 1) {
 
-                        for (MenuItem menuItem : orderedItems.keySet()) {
-                            if (menuItem.equals(fakeMenuItem)) {
-                                orderList.add(new OrderItem(menuItem, orderedItem.is_selected == 1));
+                            MenuItem fakeMenuItem = new MenuItem(orderedItem.items_id);
+
+                            for (MenuItem menuItem : orderedItems.keySet()) {
+                                if (menuItem.equals(fakeMenuItem)) {
+                                    orderList.add(new OrderItem(menuItem, orderedItem.is_selected == 1));
+                                }
                             }
                         }
                     }
+                    refreshOrderListFragment();
                 }, error -> Log.i("Fetch order", error.toString())
         );
 
@@ -288,7 +336,7 @@ public class TableSession implements SessionInterface {
                             featureItem = menuItem;
                     }
 
-                    updateMenuFragment();
+                    refreshMenuFragment();
                 },
 
                 error -> Log.i("Fetch User recommendation", error.toString())
@@ -321,13 +369,37 @@ public class TableSession implements SessionInterface {
         };
     }
 
-    private void updateMenuFragment() {
+    private void refreshMenuFragment() {
         NavController navController = Navigation.findNavController(activity, R.id.nav_host_fragment);
 
         if(navController.getCurrentDestination() != null
                 && navController.getCurrentDestination().getId() == R.id.navigation_menu)
 
-            navController.navigate(R.id.action_navigation_menu_to_navigation_menu);
+            navController.navigate(R.id.action_navigation_refresh_menu);
+    }
+
+    private void refreshBillFragment() {
+        NavController navController = Navigation.findNavController(activity, R.id.nav_host_fragment);
+
+        if(navController.getCurrentDestination() != null) {
+            switch (navController.getCurrentDestination().getId()) {
+                case R.id.navigation_bill:
+                    navController.navigate(R.id.action_navigation_refresh_bill);
+                    break;
+                case R.id.navigation_per_item_payment:
+                    navController.navigate(R.id.action_navigation_refresh_per_item_payment);
+                    break;
+            }
+        }
+    }
+
+    private void refreshOrderListFragment() {
+        NavController navController = Navigation.findNavController(activity, R.id.nav_host_fragment);
+
+        if(navController.getCurrentDestination() != null
+                && navController.getCurrentDestination().getId() == R.id.navigation_per_item_payment)
+
+            navController.navigate(R.id.action_navigation_refresh_per_item_payment);
     }
 
     private void navigateToPostPayment() {
