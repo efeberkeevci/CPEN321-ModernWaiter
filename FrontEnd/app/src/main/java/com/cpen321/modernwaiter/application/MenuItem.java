@@ -1,5 +1,7 @@
 package com.cpen321.modernwaiter.application;
 
+import android.graphics.Bitmap;
+
 import java.text.DecimalFormat;
 
 public class MenuItem {
@@ -13,6 +15,7 @@ public class MenuItem {
     public final int popularity_count;
     public final String image;
     public String quantity;
+    public Bitmap imageBitmap;
 
     public MenuItem(int id) {
         this.id = id;

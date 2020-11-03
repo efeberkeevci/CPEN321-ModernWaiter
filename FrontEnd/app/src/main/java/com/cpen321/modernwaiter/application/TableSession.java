@@ -1,7 +1,11 @@
 package com.cpen321.modernwaiter.application;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
+import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -11,9 +15,16 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.cpen321.modernwaiter.R;
 import com.cpen321.modernwaiter.ui.order.OrderItem;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -208,12 +219,13 @@ public class TableSession implements SessionInterface {
                         if (!getMenuItems().contains(newMenuItem)) {
                             newMenuItem.quantity = "0";
                             orderedItems.put(newMenuItem, 0);
+                            fetchImage(newMenuItem.image, newMenuItem);
                         }
                     }
 
                     fetchBill();
                     fetchOrderList();
-                    getUserRecommendation();
+                    fetchUserRecommendation();
                 }, error -> Log.i("Fetch Menu", error.toString()));
 
         requestQueue.add(stringRequest);
@@ -324,7 +336,7 @@ public class TableSession implements SessionInterface {
         requestQueue.add(stringRequest);
     }
 
-    private void getUserRecommendation() {
+    private void fetchUserRecommendation() {
         StringRequest stringRequest = new StringRequest(
                 Request.Method.GET, API.recommend + userId + "/" + restaurantId,
                 response -> {
@@ -343,6 +355,29 @@ public class TableSession implements SessionInterface {
         );
 
         requestQueue.add(stringRequest);
+    }
+
+    public void fetchImage(String url, MenuItem menuItem){
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageReference = storage.getReferenceFromUrl(url);
+
+        try{
+            final File file = File.createTempFile("image", "jpg");
+            storageReference.getFile(file).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    menuItem.imageBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+                    refreshMenuFragment();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    // nothing
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private StringRequest createPostOrder(MenuItem menuItem) {

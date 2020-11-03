@@ -17,7 +17,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class FirebaseImageStorage {
-    public static void getImageFromUrl(String url, ImageView image){
+    public void getImageFromUrl(String url, ImageView image){
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageReference = storage.getReferenceFromUrl(url);
 
