@@ -5,7 +5,7 @@
 // These registration tokens come from the client FCM SDKs.
 
 var admin = require('firebase-admin');
-var serviceAccount = require("/home/modernwaiter/CPEN321-ModernWaiter/BackEnd/modern-waiter-47e96-firebase-adminsdk-exb5m-82aceb8e76.json");
+var serviceAccount = require("./modern-waiter-47e96-firebase-adminsdk-exb5m-82aceb8e76.json");
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://modern-waiter-47e96.firebaseio.com"

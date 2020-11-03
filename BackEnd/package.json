@@ -30,5 +30,6 @@
     "coveragePathIgnorePatterns": [
       "/node_modules/"
     ]
-  }
+  },
+  "test": "NODE_ENV=test jest --forceExit"
 }

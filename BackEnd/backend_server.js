@@ -20,10 +20,13 @@ app.use(express.json())
 con.connect(function(err) {
     if (err) throw err
     console.log("Connected!")
-    var server = app.listen(3000,function(){
-        var port = server.address().port
-        console.log("Server started listening at %s", port)
-    })
+
+    if (process.env.NODE_ENV !== 'test') {
+        var server = app.listen(3000,function(){
+            var port = server.address().port
+            console.log("Server started listening at %s", port)
+        })
+    }
 })
 
 /*********************** REST API routes ****************************/
@@ -39,6 +42,7 @@ app.get("/options/:id", options.getOptions)
 app.get("/ordered-items/:orderId", ordered_items.getOrderedItems)
 app.post("/ordered-items", ordered_items.addOrderedItem)
 app.put("/ordered-items/paid", ordered_items.updateOrderedItemPaidStatus)
+app.put("/ordered-items/selected", ordered_items.updateSelectedStatus)
 
 // Routes for orders
 app.post("/orders", orders.createOrder)
