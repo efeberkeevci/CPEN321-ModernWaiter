@@ -22,9 +22,9 @@ function getMenu(req, res){
 }
 
 /**
- * Adds an item to a restaurant's menu records.
- * @param {*} req Body includes restaurantId
- * @param {*} res List of items with a status code of 200 if successful, else 400.
+ * Adds an item to a restaurant's menu records
+ * @param {*} req Body with details of an item
+ * @param {*} res List of items with a status code of 200 if successful, else 400
  */
 function addToMenu(req, res){
     console.log("/items")
@@ -37,7 +37,7 @@ function addToMenu(req, res){
     let popularityCount = req.body.popularityCount
     let image = req.body.image
 
-    let sql_query = mysql.format("INSERT INTO items (restaurantId, name, type, cost, description, calories, popularityCount, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [restaurantId, name, type, cost, description, calories, popularityCount, image])
+    let sql_query = mysql.format("INSERT INTO items (restaurantId, name, type, cost, description, calories, popularity_count, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [restaurantId, name, type, cost, description, calories, popularityCount, image])
     con.query(sql_query, function(err, result){
         if (err) {
             res.status(400).send({code : err.code, errno : err.errno})
