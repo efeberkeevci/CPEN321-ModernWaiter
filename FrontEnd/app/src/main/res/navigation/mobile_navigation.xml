@@ -15,7 +15,7 @@
             app:destination="@id/navigation_order" />
 
         <action
-            android:id="@+id/action_navigation_menu_to_navigation_menu"
+            android:id="@+id/action_navigation_refresh_menu"
             app:destination="@id/navigation_menu" />
     </fragment>
 
@@ -37,6 +37,10 @@
         <action
             android:id="@+id/action_navigation_bill_to_navigation_payment"
             app:destination="@id/navigation_payment" />
+
+        <action
+            android:id="@+id/action_navigation_refresh_bill"
+            app:destination="@id/navigation_bill" />
     </fragment>
 
     <fragment
@@ -60,6 +64,10 @@
         <action
             android:id="@+id/action_navigation_per_item_payment_to_stripe"
             app:destination="@id/navigation_stripe" />
+
+        <action
+            android:id="@+id/action_navigation_refresh_per_item_payment"
+            app:destination="@id/navigation_per_item_payment" />
     </fragment>
 
     <fragment

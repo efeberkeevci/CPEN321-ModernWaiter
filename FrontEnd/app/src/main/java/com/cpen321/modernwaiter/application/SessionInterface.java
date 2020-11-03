@@ -1,6 +1,7 @@
 package com.cpen321.modernwaiter.application;
 
 import android.util.Pair;
+import android.view.Menu;
 
 import com.android.volley.Request;
 import com.cpen321.modernwaiter.ui.order.OrderItem;
@@ -20,8 +21,12 @@ public interface SessionInterface {
     MenuItem getFeatureItem();
     ArrayList<OrderItem> getOrderList();
 
+    void updateItemSelected(OrderItem orderItem);
     void checkout();
+
     void fetchBill();
+    void fetchOrderList();
+
     void add(Request request);
 
     void endSession();
