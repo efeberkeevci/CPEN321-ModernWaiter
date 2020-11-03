@@ -18,8 +18,6 @@
 --
 -- Table structure for table `items`
 --
-
-CREATE DATABASE MODERN_WAITER_DB;
 USE MODERN_WAITER_DB;
 
 DROP TABLE IF EXISTS `items`;
