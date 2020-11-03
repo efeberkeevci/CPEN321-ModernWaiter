@@ -12,6 +12,7 @@ import com.android.volley.toolbox.Volley;
 import com.cpen321.modernwaiter.R;
 import com.cpen321.modernwaiter.testing.MockTableSession;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.FirebaseApp;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FirebaseApp.initializeApp(this);
 
         requestQueue = Volley.newRequestQueue(this);
         tableSession = new TableSession(requestQueue, this);
