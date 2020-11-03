@@ -1,6 +1,7 @@
 package com.cpen321.modernwaiter.ui.payment;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -71,6 +72,9 @@ public class StripePaymentController {
 
     public void pay(PaymentMethodCreateParams params) {
         if (stripe == null || params == null) {
+            return;
+        }
+        if(params == null){
             return;
         }
 
