@@ -4,8 +4,8 @@ import com.stripe.android.model.PaymentMethodCreateParams;
 
 public class API {
     public static final String RESTAURANT_ID = "1";
-    public static final String TABLE_ID = "1";
-    public static final String USER_ID = "1";
+    public static String TABLE_ID = "1";
+    public static String USER_ID = "1";
 
     public static final String URL = "http://52.170.16.110:3000/";
 

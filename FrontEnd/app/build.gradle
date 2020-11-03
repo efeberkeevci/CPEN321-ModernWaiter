@@ -72,7 +72,6 @@ dependencies {
         exclude module: 'support-annotations'
         exclude module: 'recyclerview-v7'
     }
-
     implementation 'com.stripe:stripe-android:16.0.1'
 
     implementation 'com.google.code.gson:gson:2.8.6'
