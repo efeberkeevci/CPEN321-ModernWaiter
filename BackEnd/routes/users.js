@@ -3,10 +3,11 @@ const sql = require("./../sql_connection.js")
 const con = sql.getConnection()
 
 /**
- * HTTP GET request to get details of a 
- * user. It returns the 
+ * Gets details of a user
+ * @param {*} req Params include id
+ * @param {*} res Returns the 
  * information with a status code of 200 
- * if successful.
+ * if successful, otherwise 400
  */
 function getUser(req, res){
     console.log("/users/{{id}}");
@@ -14,14 +15,17 @@ function getUser(req, res){
     let sql_query = mysql.format("SELECT * FROM users WHERE id = ?", [id]);
     con.query(sql_query, function(err, result){
         if (err) {
-            res.send(err);
+            res.status(400).send({code : err.code, errno : err.errno});
         }
-        res.send(result);
+        res.status(200).send(result);
     });
 }
 
 /**
- * HTTP GET request to retrieve user preferences.
+ * Request to get user preferences
+ * @param {*} req Params include id
+ * @param {*} res Returns preferences with status code
+ * 200 if successful, otherwise 400
  */
 function getUserPreferences(req, res){
     console.log("/users/preferences/{{id}}");
@@ -29,9 +33,9 @@ function getUserPreferences(req, res){
     let sql_query = mysql.format("SELECT preferences FROM users WHERE id = ?", [id]);
     con.query(sql_query, function(err, result){
         if (err) {
-            res.send(err);
+            res.status(400).send({code : err.code, errno : err.errno});
         };
-        res.send(result[0]);
+        res.status(200).send(result[0]);
     });
 }
 
@@ -47,4 +51,4 @@ function getUserName(userId){
     });
 }
 
-module.exports = {getUser, getUserPreferences, getUserName, }
+module.exports = {getUser, getUserPreferences, getUserName}

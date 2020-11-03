@@ -4,11 +4,13 @@ const con = sql.getConnection()
 var recommendation = require("../recommendation_logic.js");
 
 /**
- * HTTP GET request to get a recommendation for
+ * Gets a recommendation for
  * an item at a specific restaurant unique to the
- * user. Returns the recommended item Id with a
- * status code of 200.
- */ 
+ * user.
+ * @param {*} req Params include userId and restaurantId
+ * @param {*} res Returns the recommended item Id with a
+ * status code of 200 if successful, otherwise 400
+ */
 function getItemRecommendation(req, res){
     console.log("/recommendation")
 	
@@ -19,7 +21,7 @@ function getItemRecommendation(req, res){
 
     con.query(user_query, function(err, prefResult){
         if (err) {
-            res.send(err)
+            res.status(400).send({code : err.code, errno : err.errno})
         };
 
         var preference
@@ -33,7 +35,7 @@ function getItemRecommendation(req, res){
 
         con.query(desc_query, function(err, descResult) {
             if (err) {
-                res.send(err)
+                res.status(400).send({code : err.code, errno : err.errno})
             };
 
             var descriptionJsonArray = JSON.parse(JSON.stringify(descResult))
@@ -44,7 +46,7 @@ function getItemRecommendation(req, res){
             })
 
             var itemId = recommendation.getRecommendation(preference, itemDescriptionMap)
-            res.send({"itemId" : itemId})
+            res.status(200).send({"itemId" : itemId})
         });
     });
 }

@@ -3,17 +3,19 @@ const env = require("dotenv").config({ path: "./.env" })
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
 
 /**
- * HTTP GET request to get the stripe
- * key required to pay for an order.
- * Returns 200 if successful.
+ * Gets the stripe key required to pay for
+ * an order
+ * @param {*} req 
+ * @param {*} res Publishable key with status code 200.
  */
 function getStripeKey(req, res){
     res.send({ publishableKey: process.env.STRIPE_PUBLISHABLE_KEY })
 }
 
 /**
- * HTTP POST request to make a
- * payment. Returns 200 if successful.
+ * Makes a payment via the Stripe API
+ * @param {*} req Body includes paymentMethodId, paymentIntentId, currency, useStripeSdk, orderAmount
+ * @param {*} res Status code 200 if successful, otherwise 400.
  */
 async function createStripePayment(req, res){
     const { paymentMethodId, paymentIntentId, currency, useStripeSdk, orderAmount } = req.body
