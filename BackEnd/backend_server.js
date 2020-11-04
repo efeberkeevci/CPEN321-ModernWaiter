@@ -85,6 +85,14 @@ app.post("/registrationToken", (req,res) => {
     res.send(push_notification.subscribe(registrationToken, orderId))
 })
 
+app.post("/unsubscribedToken", (req,res) => {
+    console.log("/unsubscribedToken")
+    let orderId = req.body.orderId
+    let registrationToken = req.body.registrationToken
+    console.log(registrationToken)
+    res.send(push_notification.unsubscribe(registrationToken, orderId))
+})
+
 //Informs server that the current cart is checked out
 app.put("/checkout", (req,res) =>{
     console.log("Checkout received")

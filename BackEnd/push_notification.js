@@ -102,7 +102,7 @@ function push_notification_item_claimed(orderId) {
 
   var message = {
     notification: {
-      title: 'Order Received!',
+      title: 'Item Claimed!',
       body: 'Your order is being prepared now'
     },
     topic:orderId
@@ -118,4 +118,4 @@ function push_notification_item_claimed(orderId) {
       console.log('Error sending message:', error);
     });
 }
-module.exports = {push_notification_payment_done, push_notification_order_received, push_notification_item_claimed, subscribe};
+module.exports = {push_notification_payment_done, push_notification_order_received, push_notification_item_claimed, subscribe, unsubscribe};

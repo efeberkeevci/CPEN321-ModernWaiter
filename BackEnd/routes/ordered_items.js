@@ -125,7 +125,7 @@ function updateSelectedStatus(req, res){
             res.status(400).send({code : err.code, errno : err.errno})
         }
         res.status(200).send()
-        push_notification.push_notification_order_received(orderId)
+        push_notification.push_notification_item_claimed(orderId)
         console.log(orderId + ":" + isSelected + " by " + userId + " for " + itemId);
     })
 }
