@@ -51,7 +51,7 @@ function addOrderedItem(req, res){
             
             console.log(cost_result);
 
-            if(cost_result.length == 0){
+            if(cost_result.length === 0){
                 res.status(400).send({message: "Failed to find item from provided item id"})
                 return
             }
@@ -73,7 +73,7 @@ function addOrderedItem(req, res){
                     return
                 }
 
-                if (old_amount_result.length == 0){
+                if (old_amount_result.length === 0){
                     res.status(400).send({message: "Failed to find existing amount on order"})
                     return
                 }
@@ -116,7 +116,7 @@ function updateSelectedStatus(req, res){
     let itemId = req.body.itemId
     let userId = req.body.userId
     let isSelected = req.body.isSelected
-    let notIsSelected = isSelected == 1 ? 0 : 1
+    let notIsSelected = isSelected === 1 ? 0 : 1
     let user_name="";
     let item_name="";
     let sql_query = mysql.format("UPDATE ordered_items SET is_selected = ?, users_id = ? WHERE orders_id = ? && items_id = ? && is_selected = ? LIMIT 1", [isSelected, userId, orderId, itemId, notIsSelected])
@@ -140,7 +140,7 @@ function updateOrderedItemPaidStatus(req, res){
     let orderId = req.body.orderId
     let itemId = req.body.itemId
     let hasPaid = req.body.hasPaid
-    let notHasPaid = hasPaid == 1 ? 0 : 1
+    let notHasPaid = hasPaid === 1 ? 0 : 1
     let sql_query = mysql.format("UPDATE ordered_items SET has_paid = ? WHERE orders_id = ? && items_id = ? && has_paid = ? LIMIT 1", [hasPaid, orderId, itemId, notHasPaid])
     con.query(sql_query, function(err, result){
         if (err) {
