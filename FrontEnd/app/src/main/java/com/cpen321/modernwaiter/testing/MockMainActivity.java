@@ -7,11 +7,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
-import com.android.volley.toolbox.Volley;
 import com.cpen321.modernwaiter.R;
 import com.cpen321.modernwaiter.application.MainActivity;
-import com.cpen321.modernwaiter.application.NotificationService;
-import com.cpen321.modernwaiter.application.TableSession;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MockMainActivity extends AppCompatActivity {

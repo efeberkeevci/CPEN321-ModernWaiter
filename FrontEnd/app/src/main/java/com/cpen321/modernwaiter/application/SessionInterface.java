@@ -1,8 +1,5 @@
 package com.cpen321.modernwaiter.application;
 
-import android.util.Pair;
-import android.view.Menu;
-
 import com.android.volley.Request;
 import com.cpen321.modernwaiter.ui.order.OrderItem;
 

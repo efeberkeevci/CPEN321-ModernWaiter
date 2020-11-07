@@ -1,6 +1,7 @@
 package com.cpen321.modernwaiter.ui.payment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +29,7 @@ public class StripePaymentFragment extends Fragment {
     private int totalAmount = 0;
     private StripePaymentController stripePaymentController;
     private View view;
-    Toast t;
+    private Toast t;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,6 +83,7 @@ public class StripePaymentFragment extends Fragment {
                 CardInputWidget cardInputWidget = view.findViewById(R.id.cardInputWidget);
                 if(cardInputWidget.getPaymentMethodCreateParams() == null){
                     //TODO: add a toast to ask the user to input details before pay if input is null
+                    Log.d("Alert: ", "Not implemented yet if params == null");
                 }
                 stripePaymentController.pay(cardInputWidget.getPaymentMethodCreateParams());
             }

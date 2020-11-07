@@ -58,7 +58,7 @@
 
     <fragment
         android:id="@+id/navigation_per_item_payment"
-        android:name="com.cpen321.modernwaiter.ui.payment.perItem.PerItemPaymentFragment"
+        android:name="com.cpen321.modernwaiter.ui.payment.peritem.PerItemPaymentFragment"
         android:label="Stripe"
         tools:layout="@layout/fragment_per_item_payment" >
         <action

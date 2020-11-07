@@ -1,4 +1,4 @@
-package com.cpen321.modernwaiter.ui.payment.perItem;
+package com.cpen321.modernwaiter.ui.payment.peritem;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +13,6 @@ import com.cpen321.modernwaiter.R;
 import com.cpen321.modernwaiter.ui.order.OrderItem;
 
 import java.util.ArrayList;
-
-import static com.cpen321.modernwaiter.application.MainActivity.tableSession;
 
 public class PerItemRecyclerAdapter extends RecyclerView.Adapter<PerItemRecyclerAdapter.ViewHolder> {
 

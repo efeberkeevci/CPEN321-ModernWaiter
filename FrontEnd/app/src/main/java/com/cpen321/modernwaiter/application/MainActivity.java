@@ -10,7 +10,6 @@ import androidx.navigation.ui.NavigationUI;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.cpen321.modernwaiter.R;
-import com.cpen321.modernwaiter.testing.MockTableSession;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.FirebaseApp;
 

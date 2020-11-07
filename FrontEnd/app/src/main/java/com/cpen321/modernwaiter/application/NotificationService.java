@@ -23,14 +23,7 @@ import com.google.gson.Gson;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.HashMap;
-
-import javax.net.ssl.HttpsURLConnection;
 
 import static com.cpen321.modernwaiter.application.MainActivity.tableSession;
 
@@ -104,7 +97,7 @@ public class NotificationService extends FirebaseMessagingService {
 
                     final String bodyJSON = new Gson().toJson(post_message_body);
                     StringRequest stringRequest = new StringRequest(
-                            Request.Method.POST, API.registration,
+                            Request.Method.POST, Api.registration,
                             response -> {
                                 Log.i("MSG:",response);
 
@@ -133,7 +126,7 @@ public class NotificationService extends FirebaseMessagingService {
 
         final String bodyJSON = new Gson().toJson(post_message_body);
         StringRequest stringRequest = new StringRequest(
-                Request.Method.POST, API.unsubscribe,
+                Request.Method.POST, Api.unsubscribe,
                 response -> {
                     Log.i("MSG:",response);
 

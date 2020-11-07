@@ -27,8 +27,8 @@ import static com.cpen321.modernwaiter.application.MainActivity.tableSession;
  */
 public class MenuFragment extends Fragment {
 
-    MenuRecyclerAdapter menuRecyclerAdapter;
-    View view;
+    private MenuRecyclerAdapter menuRecyclerAdapter;
+    private View view;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the

@@ -3,7 +3,6 @@ package com.cpen321.modernwaiter.application;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 

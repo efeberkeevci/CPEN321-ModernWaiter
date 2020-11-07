@@ -1,6 +1,7 @@
 package com.cpen321.modernwaiter.ui.menu;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +18,10 @@ import com.cpen321.modernwaiter.application.MenuItem;
 
 public class DetailItemFragment extends Fragment {
 
-    final MenuItem menuItem;
-    TextView quantityText;
-    final Fragment thisFragment = this;
-    final MenuRecyclerAdapter adapter;
+    private final MenuItem menuItem;
+    private TextView quantityText;
+    private final Fragment thisFragment = this;
+    private final MenuRecyclerAdapter adapter;
 
     DetailItemFragment(MenuItem menuItem, MenuRecyclerAdapter adapter) {
         this.adapter = adapter;
@@ -85,7 +86,7 @@ public class DetailItemFragment extends Fragment {
         view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    Log.d("Alert:", "Empty onclick method");
                 }
             }
         );
