@@ -29,7 +29,6 @@ public class StripePaymentFragment extends Fragment {
     private int totalAmount = 0;
     private StripePaymentController stripePaymentController;
     private View view;
-    private Toast t;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

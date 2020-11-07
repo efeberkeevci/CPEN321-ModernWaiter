@@ -97,7 +97,7 @@ public class NotificationService extends FirebaseMessagingService {
 
                     final String bodyJSON = new Gson().toJson(post_message_body);
                     StringRequest stringRequest = new StringRequest(
-                            Request.Method.POST, Api.registration,
+                            Request.Method.POST, ApiUtil.registration,
                             response -> {
                                 Log.i("MSG:",response);
 
@@ -126,7 +126,7 @@ public class NotificationService extends FirebaseMessagingService {
 
         final String bodyJSON = new Gson().toJson(post_message_body);
         StringRequest stringRequest = new StringRequest(
-                Request.Method.POST, Api.unsubscribe,
+                Request.Method.POST, ApiUtil.unsubscribe,
                 response -> {
                     Log.i("MSG:",response);
 

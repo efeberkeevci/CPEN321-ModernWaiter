@@ -2,7 +2,7 @@ package com.cpen321.modernwaiter.application;
 
 //import com.stripe.android.model.PaymentMethodCreateParams;
 
-public class Api {
+public class ApiUtil {
     public static final String RESTAURANT_ID = "1";
     public static String TABLE_ID = "1";
     public static String USER_ID = "1";

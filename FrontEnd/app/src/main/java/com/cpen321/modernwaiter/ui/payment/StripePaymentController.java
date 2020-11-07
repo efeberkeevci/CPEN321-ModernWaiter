@@ -9,7 +9,7 @@ import androidx.fragment.app.FragmentActivity;
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.cpen321.modernwaiter.application.Api;
+import com.cpen321.modernwaiter.application.ApiUtil;
 import com.cpen321.modernwaiter.application.MenuItem;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -41,7 +41,7 @@ public class StripePaymentController {
     private void requestKey() {
         // For added security, our sample app gets the publishable key from the server
         StringRequest request = new StringRequest(
-                Request.Method.GET, Api.stripeKey,
+                Request.Method.GET, ApiUtil.stripeKey,
                 response -> {
                     final Map<String, String> responseMap;
                     if (response != null) {
@@ -104,7 +104,7 @@ public class StripePaymentController {
         final String bodyJSON = new Gson().toJson(bodyFields);
 
         StringRequest stringRequest = new StringRequest(
-                Request.Method.POST, Api.stripePay,
+                Request.Method.POST, ApiUtil.stripePay,
                 response -> {
                     final Map<String, String> responseMap;
                     if (response != null) {
@@ -152,7 +152,7 @@ public class StripePaymentController {
      */
     private void putPaid() {
         //PUT request to confirm that the order has been paid
-        String url = Api.paidOrderItems;
+        String url = ApiUtil.paidOrderItems;
 
         HashMap<MenuItem, Integer> orderedItems = tableSession.getBill();
         for( Map.Entry<MenuItem, Integer> item : orderedItems.entrySet() ) {
@@ -172,7 +172,7 @@ public class StripePaymentController {
             tableSession.add(jsonObjectRequest);
         }
         //PUT request for order has been paid fully
-        String url_order_paid = Api.paidOrder;
+        String url_order_paid = ApiUtil.paidOrder;
         Map<String,String> params = new HashMap<>();
         params.put("orderId", String.valueOf(tableSession.getOrderId()));
         params.put("hasPaid", "1");
@@ -191,7 +191,7 @@ public class StripePaymentController {
 
     private void endSession(){
         // PUT request for order has been paid fully
-        String url = Api.orderSession;
+        String url = ApiUtil.orderSession;
         final Map<String,String> params = new HashMap<>();
         params.put("orderId", String.valueOf(tableSession.getOrderId()));
         params.put("isActive", "0");
