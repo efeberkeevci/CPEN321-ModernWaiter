@@ -1,9 +1,7 @@
 package com.cpen321.modernwaiter.application;
 
-import android.graphics.BitmapFactory;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -12,17 +10,10 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.cpen321.modernwaiter.R;
-import com.cpen321.modernwaiter.ui.order.OrderItem;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FileDownloadTask;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
+import com.cpen321.modernwaiter.ui.payment.peritem.PaymentItem;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,7 +32,7 @@ public class TableSession implements SessionInterface {
     // This is a map of how many items are already ordered in the server
     // The amount of items on the cart is recorded in MenuItem.quantity
     private final HashMap<MenuItem, Integer> orderedItems;
-    private ArrayList<OrderItem> orderList = new ArrayList<>();
+    private ArrayList<PaymentItem> orderList = new ArrayList<>();
 
     public final RequestQueue requestQueue;
 
@@ -57,6 +48,8 @@ public class TableSession implements SessionInterface {
     private final String restaurantId = ApiUtil.RESTAURANT_ID;
     private final String tableId = ApiUtil.TABLE_ID;
     private final String userId = ApiUtil.USER_ID;
+
+    private int userCount = 1;
 
     //creates a new session
     TableSession(RequestQueue requestQueue, AppCompatActivity activity) {
@@ -99,12 +92,17 @@ public class TableSession implements SessionInterface {
     }
 
 
-    public ArrayList<OrderItem> getOrderList() {
+    public ArrayList<PaymentItem> getOrderList() {
         return orderList;
     }
 
     @Override
-    public void updateItemSelected(OrderItem orderItem) {
+    public int getUserCount() {
+        return userCount;
+    }
+
+    @Override
+    public void updateItemSelected(PaymentItem orderItem) {
         final Map<String, String> bodyFields = new HashMap<>();
         bodyFields.put("orderId", String.valueOf(orderId));
         bodyFields.put("itemId", String.valueOf(orderItem.menuItem.id));
@@ -217,7 +215,6 @@ public class TableSession implements SessionInterface {
                         if (!getMenuItems().contains(newMenuItem)) {
                             newMenuItem.quantity = "0";
                             orderedItems.put(newMenuItem, 0);
-                            fetchImage(newMenuItem.image, newMenuItem);
                         }
                     }
 
@@ -322,7 +319,7 @@ public class TableSession implements SessionInterface {
 
                             for (MenuItem menuItem : orderedItems.keySet()) {
                                 if (menuItem.equals(fakeMenuItem)) {
-                                    orderList.add(new OrderItem(menuItem, orderedItem.is_selected == 1));
+                                    orderList.add(new PaymentItem(menuItem, orderedItem.is_selected == 1));
                                 }
                             }
                         }
@@ -353,29 +350,6 @@ public class TableSession implements SessionInterface {
         );
 
         requestQueue.add(stringRequest);
-    }
-
-    public void fetchImage(String url, MenuItem menuItem){
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageReference = storage.getReferenceFromUrl(url);
-
-        try{
-            final File file = File.createTempFile("image", "jpg");
-            storageReference.getFile(file).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                    menuItem.imageBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-                    refreshMenuFragment();
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    // nothing
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private StringRequest createPostOrder(MenuItem menuItem) {

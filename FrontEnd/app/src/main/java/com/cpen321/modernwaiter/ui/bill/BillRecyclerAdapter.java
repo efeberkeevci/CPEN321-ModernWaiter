@@ -34,6 +34,10 @@ public class BillRecyclerAdapter extends RecyclerView.Adapter<BillRecyclerAdapte
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
+    public boolean isEmpty() {
+        return itemArray.isEmpty();
+    }
+
     @NotNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

@@ -30,13 +30,6 @@ public class MenuFragment extends Fragment {
     private MenuRecyclerAdapter menuRecyclerAdapter;
     private View view;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
-    /*public MenuFragment() {
-    }*/
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

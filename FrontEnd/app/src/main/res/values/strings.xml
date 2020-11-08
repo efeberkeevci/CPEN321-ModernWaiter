@@ -6,6 +6,7 @@
     <string name="pay_for_all"> Pay for All</string>
     <string name="split_evenly">Split Evenly</string>
     <string name="pay_per_item">Pay per Item</string>
+    <string name ="go_to_menu">Go To Menu</string>
     <string name="add_item">+</string>
     <string name="remove_item">-</string>
     <!-- TODO: Remove or change this placeholder text -->

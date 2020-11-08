@@ -10,16 +10,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cpen321.modernwaiter.R;
-import com.cpen321.modernwaiter.ui.order.OrderItem;
 
 import java.util.ArrayList;
 
 public class PerItemRecyclerAdapter extends RecyclerView.Adapter<PerItemRecyclerAdapter.ViewHolder> {
 
-    private ArrayList<OrderItem> orderList;
+    private ArrayList<PaymentItem> orderList;
     private OnItemClickListener listener;
 
-    public PerItemRecyclerAdapter(ArrayList<OrderItem> orderList, OnItemClickListener listener) {
+    public PerItemRecyclerAdapter(ArrayList<PaymentItem> orderList, OnItemClickListener listener) {
         this.orderList = orderList;
         this.listener = listener;
     }
@@ -49,7 +48,7 @@ public class PerItemRecyclerAdapter extends RecyclerView.Adapter<PerItemRecycler
     public class ViewHolder extends RecyclerView.ViewHolder {
         public int index;
         public View view;
-        public OrderItem menuItemBooleanPair;
+        public PaymentItem menuItemBooleanPair;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -81,6 +80,6 @@ public class PerItemRecyclerAdapter extends RecyclerView.Adapter<PerItemRecycler
     }
 
     public interface OnItemClickListener {
-        void onItemClick(OrderItem item);
+        void onItemClick(PaymentItem item);
     }
 }

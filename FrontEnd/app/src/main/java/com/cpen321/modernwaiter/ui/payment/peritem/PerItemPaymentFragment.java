@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cpen321.modernwaiter.R;
-import com.cpen321.modernwaiter.ui.order.OrderItem;
 
 import java.text.DecimalFormat;
 
@@ -37,7 +36,7 @@ public class PerItemPaymentFragment extends Fragment {
 
         PerItemRecyclerAdapter.OnItemClickListener listener = new PerItemRecyclerAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(OrderItem item) {
+            public void onItemClick(PaymentItem item) {
                 // TODO: PERFORM CALL TO DATABASE & NOTIFY I CHOOSE OR DESELECT
 
                 tableSession.updateItemSelected(item);

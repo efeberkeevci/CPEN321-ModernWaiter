@@ -7,23 +7,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.cpen321.modernwaiter.R;
 import com.cpen321.modernwaiter.application.MenuItem;
+import com.squareup.picasso.Picasso;
 
 public class DetailItemFragment extends Fragment {
 
     private final MenuItem menuItem;
     private TextView quantityText;
     private final Fragment thisFragment = this;
-    private final MenuRecyclerAdapter adapter;
+    private final RecyclerView.Adapter adapter;
+    private Button decrementButton;
 
-    DetailItemFragment(MenuItem menuItem, MenuRecyclerAdapter adapter) {
+    public DetailItemFragment(MenuItem menuItem, RecyclerView.Adapter adapter) {
         this.adapter = adapter;
         this.menuItem = menuItem;
     }
@@ -36,9 +40,6 @@ public class DetailItemFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detail_item, container, false);
 
-        quantityText = view.findViewById(R.id.quantity);
-        updateQuantity();
-
         TextView nameTextView = view.findViewById(R.id.name);
         nameTextView.setText(menuItem.name);
 
@@ -49,7 +50,15 @@ public class DetailItemFragment extends Fragment {
         priceTextView.setText(menuItem.getPriceString());
 
         Button incrementButton = view.findViewById(R.id.incrementButton);
-        Button decrementButton = view.findViewById(R.id.decrementButton);
+        decrementButton = view.findViewById(R.id.decrementButton);
+
+        quantityText = view.findViewById(R.id.quantity);
+        updateQuantity();
+
+        ImageView imageView = view.findViewById(R.id.image);
+        Picasso.get()
+                .load(menuItem.getImageLink())
+                .into(imageView);
 
         incrementButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -74,8 +83,9 @@ public class DetailItemFragment extends Fragment {
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-                if (adapter != null)
+                if (adapter != null) {
                     adapter.notifyDataSetChanged();
+                }
 
                 fragmentTransaction.remove(thisFragment);
                 fragmentTransaction.commit();
@@ -95,6 +105,12 @@ public class DetailItemFragment extends Fragment {
     }
 
     public void updateQuantity() {
+        if ("0".equals(menuItem.quantity)) {
+            decrementButton.setVisibility(View.INVISIBLE);
+        } else {
+            decrementButton.setVisibility(View.VISIBLE);
+        }
+
         quantityText.setText(menuItem.quantity);
     }
 }

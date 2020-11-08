@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
@@ -21,6 +22,8 @@ import static com.cpen321.modernwaiter.application.MainActivity.tableSession;
 
 public class BillFragment extends Fragment {
 
+    private Toast toast;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,15 +37,6 @@ public class BillFragment extends Fragment {
         BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
         bottomNavigationView.setVisibility(View.VISIBLE);
 
-        Button startPaymentButton = view.findViewById(R.id.startPaymentButton);
-
-        startPaymentButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Navigation.findNavController(view).navigate(R.id.action_navigation_bill_to_navigation_payment);
-            }
-        });
-
         RecyclerView recyclerView = view.findViewById(R.id.bill_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
 
@@ -50,6 +44,29 @@ public class BillFragment extends Fragment {
 
         BillRecyclerAdapter billRecyclerAdapter = new BillRecyclerAdapter(billMap);
         recyclerView.setAdapter(billRecyclerAdapter);
+
+
+        Button startPaymentButton = view.findViewById(R.id.startPaymentButton);
+
+        startPaymentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (billRecyclerAdapter.isEmpty()) {
+                    if (toast != null) {
+                        toast.cancel();
+                    }
+
+                    int duration = Toast.LENGTH_SHORT;
+
+                    toast = Toast.makeText(requireActivity(), "Please order an item before payment", duration);
+                    toast.show();
+
+                    return;
+                }
+
+                Navigation.findNavController(view).navigate(R.id.action_navigation_bill_to_navigation_payment);
+            }
+        });
 
         return view;
     }

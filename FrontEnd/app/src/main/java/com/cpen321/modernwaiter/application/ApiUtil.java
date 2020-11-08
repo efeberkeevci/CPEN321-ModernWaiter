@@ -23,6 +23,8 @@ public class ApiUtil {
     public static final String paidOrder = URL + "orders/paid/";
     public static final String orderSession = URL + "orders/session/";
 
+    public static final String orderTable = URL + "orders/table/1?isActive=1";
+
     public static final String stripeKey = URL + "key/";
     public static final String stripePay = URL + "pay/";
 

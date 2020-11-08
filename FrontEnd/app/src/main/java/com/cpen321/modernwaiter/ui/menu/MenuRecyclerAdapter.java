@@ -3,12 +3,14 @@ package com.cpen321.modernwaiter.ui.menu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cpen321.modernwaiter.R;
 import com.cpen321.modernwaiter.application.MenuItem;
+import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -72,6 +74,11 @@ public class MenuRecyclerAdapter extends RecyclerView.Adapter<MenuRecyclerAdapte
 
             TextView quantityTextView = itemView.findViewById(R.id.quantity);
             quantityTextView.setText(menuItem.quantity);
+
+            ImageView imageView = itemView.findViewById(R.id.image);
+            Picasso.get()
+                    .load(menuItem.getImageLink())
+                    .into(imageView);
         }
     }
 

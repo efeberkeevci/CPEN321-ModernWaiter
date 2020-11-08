@@ -22,11 +22,11 @@ import java.util.stream.Collectors;
  */
 public class OrderRecyclerAdapter extends RecyclerView.Adapter<OrderRecyclerAdapter.ViewHolder> {
 
-    private final HashMap<MenuItem, Integer> orderMap;
     public final ArrayList<MenuItem> itemArray;
+    private final OnItemClickListener listener;
 
-    public OrderRecyclerAdapter(HashMap<MenuItem, Integer> orderMap) {
-        this.orderMap = orderMap;
+    public OrderRecyclerAdapter(HashMap<MenuItem, Integer> orderMap, OnItemClickListener listener) {
+        this.listener = listener;
 
         // Add all the items that have been ordered atleast once
         itemArray = orderMap.keySet().stream()
@@ -45,13 +45,8 @@ public class OrderRecyclerAdapter extends RecyclerView.Adapter<OrderRecyclerAdap
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-
-        MenuItem menuItem = itemArray.get(position);
-
-        holder.nameView.setText(menuItem.name);
-        holder.quantityView.setText(String.valueOf(orderMap.get(menuItem)));
-
-        holder.priceView.setText(menuItem.getTotalCartPriceString());
+        holder.menuItem = itemArray.get(position);
+        holder.bind(listener);
     }
 
     @Override
@@ -61,20 +56,34 @@ public class OrderRecyclerAdapter extends RecyclerView.Adapter<OrderRecyclerAdap
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View view;
-        public final TextView nameView;
-        public final TextView quantityView;
-        public final TextView priceView;
+        public MenuItem menuItem;
 
         public ViewHolder(View view) {
             super(view);
             this.view = view;
-            nameView = (TextView) view.findViewById(R.id.name);
-            quantityView = (TextView) view.findViewById(R.id.quantity);
-            priceView = (TextView) view.findViewById(R.id.price);
         }
 
-        public TextView getnameView(){
-            return nameView;
+        public void bind(OnItemClickListener listener) {
+            itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        listener.onItemClick(menuItem);
+                    }
+                }
+            );
+
+            TextView nameView = view.findViewById(R.id.name);
+            nameView.setText(menuItem.name);
+
+            TextView quantityView = view.findViewById(R.id.quantity);
+            quantityView.setText(menuItem.quantity);
+
+            TextView priceView = view.findViewById(R.id.price);
+            priceView.setText(menuItem.getTotalCartPriceString());
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(MenuItem item);
     }
 }
