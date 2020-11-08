@@ -32,6 +32,7 @@ function getOrderedItems(req, res){
 function addOrderedItems(req, res){
     console.log("/ordered-items/")
     let ordered_items = req.body
+    var count = 0;
 
     for(var i = 0; i < ordered_items.length; i++){
         let orderId = ordered_items[i].orderId
@@ -43,10 +44,11 @@ function addOrderedItems(req, res){
                 res.status(400).send({code : err.code, errno : err.errno})
                 return
             }
+            count++;
+            if (count == ordered_items.length - 1)
+                res.status(201).send()
         })
     }
-
-    res.status(201).send()
 }
 
 /**
