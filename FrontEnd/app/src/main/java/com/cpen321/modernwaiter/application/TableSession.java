@@ -1,9 +1,7 @@
 package com.cpen321.modernwaiter.application;
 
-import android.graphics.BitmapFactory;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -13,17 +11,9 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.cpen321.modernwaiter.R;
 import com.cpen321.modernwaiter.ui.payment.peritem.PaymentItem;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FileDownloadTask;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.squareup.picasso.Picasso;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -225,7 +215,6 @@ public class TableSession implements SessionInterface {
                         if (!getMenuItems().contains(newMenuItem)) {
                             newMenuItem.quantity = "0";
                             orderedItems.put(newMenuItem, 0);
-                            fetchImage(newMenuItem.image, newMenuItem);
                         }
                     }
 
@@ -361,10 +350,6 @@ public class TableSession implements SessionInterface {
         );
 
         requestQueue.add(stringRequest);
-    }
-
-    public void fetchImage(String url, MenuItem menuItem){
-
     }
 
     private StringRequest createPostOrder(MenuItem menuItem) {

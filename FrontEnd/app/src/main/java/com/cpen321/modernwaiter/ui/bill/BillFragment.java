@@ -22,7 +22,7 @@ import static com.cpen321.modernwaiter.application.MainActivity.tableSession;
 
 public class BillFragment extends Fragment {
 
-    Toast toast;
+    private Toast toast;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

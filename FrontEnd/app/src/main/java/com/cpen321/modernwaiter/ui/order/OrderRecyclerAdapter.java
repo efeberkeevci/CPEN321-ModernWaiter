@@ -22,13 +22,11 @@ import java.util.stream.Collectors;
  */
 public class OrderRecyclerAdapter extends RecyclerView.Adapter<OrderRecyclerAdapter.ViewHolder> {
 
-    private final HashMap<MenuItem, Integer> orderMap;
     public final ArrayList<MenuItem> itemArray;
     private final OnItemClickListener listener;
 
     public OrderRecyclerAdapter(HashMap<MenuItem, Integer> orderMap, OnItemClickListener listener) {
         this.listener = listener;
-        this.orderMap = orderMap;
 
         // Add all the items that have been ordered atleast once
         itemArray = orderMap.keySet().stream()

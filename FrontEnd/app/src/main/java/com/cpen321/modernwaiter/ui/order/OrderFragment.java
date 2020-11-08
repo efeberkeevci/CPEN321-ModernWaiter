@@ -14,11 +14,10 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.cpen321.modernwaiter.application.MainActivity;
 import com.cpen321.modernwaiter.R;
+import com.cpen321.modernwaiter.application.MainActivity;
 import com.cpen321.modernwaiter.application.MenuItem;
 import com.cpen321.modernwaiter.ui.menu.DetailItemFragment;
-import com.cpen321.modernwaiter.ui.menu.MenuRecyclerAdapter;
 
 import java.util.HashMap;
 
@@ -27,7 +26,7 @@ import static com.cpen321.modernwaiter.application.MainActivity.tableSession;
 public class OrderFragment extends Fragment {
 
     private OrderRecyclerAdapter orderRecyclerAdapter;
-    Toast toast;
+    private Toast toast;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
