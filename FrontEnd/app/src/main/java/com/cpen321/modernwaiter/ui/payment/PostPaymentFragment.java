@@ -26,8 +26,17 @@ public class PostPaymentFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_post_payment, container, false);
 
         Button pay_per_item = view.findViewById(R.id.pay_again_button);
+        Button go_to_menu = view.findViewById(R.id.go_to_menu_button);
         if (!tableSession.isActive())
             pay_per_item.setVisibility(View.INVISIBLE);
+        else go_to_menu.setVisibility(View.INVISIBLE);
+
+        go_to_menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Navigation.findNavController(view).navigate(R.id.action_navigation_post_payment_to_navigation_menu);
+            }
+        });
 
         pay_per_item.setOnClickListener(new View.OnClickListener() {
             @Override
