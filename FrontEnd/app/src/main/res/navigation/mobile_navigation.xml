@@ -88,5 +88,8 @@
         <action
             android:id="@+id/action_navigation_post_payment_to_navigation_payment"
             app:destination="@id/navigation_payment" />
+        <action
+            android:id="@+id/action_navigation_post_payment_to_navigation_menu"
+            app:destination="@id/navigation_menu" />
     </fragment>
 </navigation>

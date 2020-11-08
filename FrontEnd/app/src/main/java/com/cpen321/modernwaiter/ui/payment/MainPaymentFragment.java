@@ -40,7 +40,7 @@ public class MainPaymentFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 // TODO
-                Navigation.findNavController(view).navigate(R.id.action_navigation_payment_to_per_item_payment);
+                Navigation.findNavController(view).navigate(R.id.action_navigation_payment_to_navigation_stripe);
             }
         });
 
@@ -48,7 +48,7 @@ public class MainPaymentFragment extends Fragment {
         pay_per_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Navigation.findNavController(view).navigate(R.id.action_navigation_payment_to_navigation_stripe);
+                Navigation.findNavController(view).navigate(R.id.action_navigation_payment_to_per_item_payment);
             }
         });
         return view;
