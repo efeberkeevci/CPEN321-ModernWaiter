@@ -5,7 +5,7 @@ import android.util.Log;
 import com.android.volley.Request;
 import com.cpen321.modernwaiter.application.MenuItem;
 import com.cpen321.modernwaiter.application.SessionInterface;
-import com.cpen321.modernwaiter.ui.order.OrderItem;
+import com.cpen321.modernwaiter.ui.payment.peritem.PaymentItem;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -27,11 +27,12 @@ import java.util.stream.Collectors;
 public class MockTableSession implements SessionInterface {
 
     public HashMap<MenuItem, Integer> orderedItems = new HashMap<>(dummyOrderItem());
-    public ArrayList<OrderItem> orderList = new ArrayList<>();
+    public ArrayList<PaymentItem> orderList = new ArrayList<>();
     public int featureItemId = 1;
     public int updateBillCounter = 0;
     public int endSessionCounter = 0;
     public Request lastRequest;
+    public int userCount = 1;
 
     /*public MockTableSession() {
     }*/
@@ -75,12 +76,17 @@ public class MockTableSession implements SessionInterface {
     }
 
     @Override
-    public ArrayList<OrderItem> getOrderList() {
+    public ArrayList<PaymentItem> getOrderList() {
         return orderList;
     }
 
     @Override
-    public void updateItemSelected(OrderItem orderItem) {
+    public int getUserCount() {
+        return userCount;
+    }
+
+    @Override
+    public void updateItemSelected(PaymentItem orderItem) {
         Log.d("Alert:", "Inside updateItemSelected that doesn't do anything");
     }
 
@@ -90,7 +96,7 @@ public class MockTableSession implements SessionInterface {
             if (menuItem.getIntegerQuantity() > 0) {
 
                 for (int i = 0; i < menuItem.getIntegerQuantity(); i++)
-                    orderList.add(new OrderItem(menuItem, false));
+                    orderList.add(new PaymentItem(menuItem, false));
 
                 // Add those value into orderedItems
                 orderedItems.replace(menuItem, count + menuItem.getIntegerQuantity());

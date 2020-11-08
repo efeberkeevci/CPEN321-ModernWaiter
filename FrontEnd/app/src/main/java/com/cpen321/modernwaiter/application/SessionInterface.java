@@ -1,7 +1,7 @@
 package com.cpen321.modernwaiter.application;
 
 import com.android.volley.Request;
-import com.cpen321.modernwaiter.ui.order.OrderItem;
+import com.cpen321.modernwaiter.ui.payment.peritem.PaymentItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,9 +16,10 @@ public interface SessionInterface {
     HashMap<MenuItem, Integer> getBill();
     HashMap<MenuItem, Integer> getCart();
     MenuItem getFeatureItem();
-    ArrayList<OrderItem> getOrderList();
+    ArrayList<PaymentItem> getOrderList();
+    int getUserCount();
 
-    void updateItemSelected(OrderItem orderItem);
+    void updateItemSelected(PaymentItem orderItem);
     void checkout();
 
     void fetchBill();
