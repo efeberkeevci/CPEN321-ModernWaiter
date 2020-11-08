@@ -57,7 +57,7 @@ public class DetailItemFragment extends Fragment {
 
         ImageView imageView = view.findViewById(R.id.image);
         Picasso.get()
-                .load("https://firebasestorage.googleapis.com/v0/b/modern-waiter-47e96.appspot.com/o/dummy-ceviche.jpg?alt=media")
+                .load(menuItem.getImageLink())
                 .into(imageView);
 
         incrementButton.setOnClickListener(new View.OnClickListener() {
