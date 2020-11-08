@@ -22,6 +22,7 @@ public class DetailItemFragment extends Fragment {
     private TextView quantityText;
     private final Fragment thisFragment = this;
     private final MenuRecyclerAdapter adapter;
+    private Button decrementButton;
 
     DetailItemFragment(MenuItem menuItem, MenuRecyclerAdapter adapter) {
         this.adapter = adapter;
@@ -36,9 +37,6 @@ public class DetailItemFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detail_item, container, false);
 
-        quantityText = view.findViewById(R.id.quantity);
-        updateQuantity();
-
         TextView nameTextView = view.findViewById(R.id.name);
         nameTextView.setText(menuItem.name);
 
@@ -49,7 +47,10 @@ public class DetailItemFragment extends Fragment {
         priceTextView.setText(menuItem.getPriceString());
 
         Button incrementButton = view.findViewById(R.id.incrementButton);
-        Button decrementButton = view.findViewById(R.id.decrementButton);
+        decrementButton = view.findViewById(R.id.decrementButton);
+
+        quantityText = view.findViewById(R.id.quantity);
+        updateQuantity();
 
         incrementButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -95,6 +96,12 @@ public class DetailItemFragment extends Fragment {
     }
 
     public void updateQuantity() {
+        if ("0".equals(menuItem.quantity)) {
+            decrementButton.setVisibility(View.INVISIBLE);
+        } else {
+            decrementButton.setVisibility(View.VISIBLE);
+        }
+
         quantityText.setText(menuItem.quantity);
     }
 }
