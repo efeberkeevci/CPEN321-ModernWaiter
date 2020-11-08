@@ -1,7 +1,5 @@
 package com.cpen321.modernwaiter.application;
 
-import android.graphics.Bitmap;
-
 import java.text.DecimalFormat;
 
 public class MenuItem {
@@ -15,7 +13,6 @@ public class MenuItem {
     public final int popularity_count;
     public final String image;
     public String quantity;
-    public Bitmap imageBitmap;
 
     public MenuItem(int id) {
         this.id = id;
@@ -61,6 +58,10 @@ public class MenuItem {
         return (int) Math.round(cost * 100);
     }
 
+    public String getImageLink() {
+        return image + "?alt=media";
+    }
+
     @Override
     public int hashCode() {
         return id;
@@ -72,5 +73,4 @@ public class MenuItem {
             return ((MenuItem) o).id == id;
         return false;
     }
-
 }

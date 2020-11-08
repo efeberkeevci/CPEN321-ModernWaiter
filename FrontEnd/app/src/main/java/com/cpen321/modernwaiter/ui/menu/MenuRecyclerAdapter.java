@@ -77,7 +77,7 @@ public class MenuRecyclerAdapter extends RecyclerView.Adapter<MenuRecyclerAdapte
 
             ImageView imageView = itemView.findViewById(R.id.image);
             Picasso.get()
-                    .load("https://firebasestorage.googleapis.com/v0/b/modern-waiter-47e96.appspot.com/o/dummy-ceviche.jpg?alt=media")
+                    .load(menuItem.getImageLink())
                     .into(imageView);
         }
     }
