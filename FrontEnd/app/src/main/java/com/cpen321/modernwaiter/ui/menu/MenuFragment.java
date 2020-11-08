@@ -34,8 +34,8 @@ public class MenuFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public MenuFragment() {
-    }
+    /*public MenuFragment() {
+    }*/
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
