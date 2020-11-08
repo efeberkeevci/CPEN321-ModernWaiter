@@ -43,10 +43,10 @@ function addOrderedItems(req, res){
                 res.status(400).send({code : err.code, errno : err.errno})
                 return
             }
-        
-            res.status(201).send()
         })
     }
+
+    res.status(201).send()
 }
 
 /**
