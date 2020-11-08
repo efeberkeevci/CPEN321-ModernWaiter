@@ -216,11 +216,11 @@ describe('Test createOrder()', () => {
         const url = `/orders/user/${userId}?isActive=${isActive}`
         const expectedFirstResponse = 
           {  
-              "id": 186,
+              "id": 187,
               "tables_id": 1,
               "users_id": 1,
               "restaurant_id": 1,
-              "amount": 18.5,
+              "amount": 0,
               "has_paid": 0,
               "is_active_session": 1
           }
@@ -243,11 +243,11 @@ describe('Test createOrder()', () => {
         const url = `/orders/table/${tableId}?isActive=${isActive}`
         const expectedFirstResponse = 
           {  
-              "id": 186,
+              "id": 187,
               "tables_id": 1,
               "users_id": 1,
               "restaurant_id": 1,
-              "amount": 18.5,
+              "amount": 0,
               "has_paid": 0,
               "is_active_session": 1
           }
