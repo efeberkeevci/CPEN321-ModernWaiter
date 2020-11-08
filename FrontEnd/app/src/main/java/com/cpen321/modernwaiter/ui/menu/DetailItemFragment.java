@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.cpen321.modernwaiter.R;
 import com.cpen321.modernwaiter.application.MenuItem;
+import com.squareup.picasso.Picasso;
 
 public class DetailItemFragment extends Fragment {
 
@@ -52,6 +54,11 @@ public class DetailItemFragment extends Fragment {
 
         quantityText = view.findViewById(R.id.quantity);
         updateQuantity();
+
+        ImageView imageView = view.findViewById(R.id.image);
+        Picasso.get()
+                .load("https://firebasestorage.googleapis.com/v0/b/modern-waiter-47e96.appspot.com/o/dummy-ceviche.jpg?alt=media")
+                .into(imageView);
 
         incrementButton.setOnClickListener(new View.OnClickListener() {
                 @Override

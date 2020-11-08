@@ -20,6 +20,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
@@ -363,26 +364,7 @@ public class TableSession implements SessionInterface {
     }
 
     public void fetchImage(String url, MenuItem menuItem){
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageReference = storage.getReferenceFromUrl(url);
 
-        try{
-            final File file = File.createTempFile("image", "jpg");
-            storageReference.getFile(file).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                    menuItem.imageBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-                    refreshMenuFragment();
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    // nothing
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private StringRequest createPostOrder(MenuItem menuItem) {

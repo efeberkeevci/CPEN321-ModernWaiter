@@ -12,6 +12,7 @@ import com.android.volley.toolbox.Volley;
 import com.cpen321.modernwaiter.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.FirebaseApp;
+import com.squareup.picasso.Picasso;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
         tableSession = new TableSession(requestQueue, this);
 
         setContentView(R.layout.activity_main);
+
+        Picasso.get().setIndicatorsEnabled(true);
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
