@@ -46,7 +46,7 @@
             app:layout_constraintTop_toTopOf="@+id/x" />
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/cardView"
+            android:id="@+id/pictureCardView"
             android:layout_width="125dp"
             android:layout_height="match_parent"
             app:cardCornerRadius="10dp"
@@ -108,7 +108,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="2dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/cardView"
+            app:layout_constraintEnd_toStartOf="@id/pictureCardView"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/name"
@@ -122,7 +122,7 @@
             android:layout_marginEnd="16dp"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="@+id/name"
-            app:layout_constraintEnd_toStartOf="@id/cardView"
+            app:layout_constraintEnd_toStartOf="@id/pictureCardView"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/name"
