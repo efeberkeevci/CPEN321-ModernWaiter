@@ -214,23 +214,19 @@ describe('Test createOrder()', () => {
         const userId = 1
         const isActive = 1
         const url = `/orders/user/${userId}?isActive=${isActive}`
-        const expectedFirstResponse = 
-          {  
-              "id": 187,
-              "tables_id": 1,
-              "users_id": 1,
-              "restaurant_id": 1,
-              "amount": 0,
-              "has_paid": 0,
-              "is_active_session": 1
-          }
 
         // Act
         const response = await request.get(url)
 
         // Assert
         expect(response.status).toBe(200)
-        expect(response.body[0]).toStrictEqual(expectedFirstResponse)
+        expect(response.body[0].id).anything()
+        expect(response.body[0].tables_id).anything()
+        expect(response.body[0].users_id).anything()
+        expect(response.body[0].restaurant_id).anything()
+        expect(response.body[0].amount).anything()
+        expect(response.body[0].has_paid).anything()
+        expect(response.body[0].is_active_session).anything()
         done()
       })
   })
@@ -241,23 +237,19 @@ describe('Test createOrder()', () => {
         const tableId = 1
         const isActive = 1
         const url = `/orders/table/${tableId}?isActive=${isActive}`
-        const expectedFirstResponse = 
-          {  
-              "id": 187,
-              "tables_id": 1,
-              "users_id": 1,
-              "restaurant_id": 1,
-              "amount": 0,
-              "has_paid": 0,
-              "is_active_session": 1
-          }
 
         // Act
         const response = await request.get(url)
 
         // Assert
         expect(response.status).toBe(200)
-        expect(response.body[0]).toStrictEqual(expectedFirstResponse)
+        expect(response.body[0].id).anything()
+        expect(response.body[0].tables_id).anything()
+        expect(response.body[0].users_id).anything()
+        expect(response.body[0].restaurant_id).anything()
+        expect(response.body[0].amount).anything()
+        expect(response.body[0].has_paid).anything()
+        expect(response.body[0].is_active_session).anything()
         done()
       })
   })
