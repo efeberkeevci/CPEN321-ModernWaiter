@@ -4,7 +4,7 @@ import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.cpen321.modernwaiter.testing.MockMainActivity;
+import com.cpen321.modernwaiter.customer.testing.MockCustomerActivity;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +27,7 @@ public class MenuTest {
 
     @Before
     public void createActivity() {
-        ActivityScenario.launch(MockMainActivity.class);
+        ActivityScenario.launch(MockCustomerActivity.class);
     }
 
     @Test

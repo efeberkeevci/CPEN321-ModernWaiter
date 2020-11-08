@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.payment.peritem.PerItemPaymentFragment">
+    tools:context=".customer.ui.payment.peritem.PerItemPaymentFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/per_item_recycler"

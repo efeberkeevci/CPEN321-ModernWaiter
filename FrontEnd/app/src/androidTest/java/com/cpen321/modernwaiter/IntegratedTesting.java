@@ -4,8 +4,8 @@ import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.cpen321.modernwaiter.application.ApiUtil;
-import com.cpen321.modernwaiter.application.MainActivity;
+import com.cpen321.modernwaiter.customer.application.ApiUtil;
+import com.cpen321.modernwaiter.customer.application.CustomerActivity;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -28,7 +28,7 @@ public class IntegratedTesting {
     public void changeUserAndTableId() throws InterruptedException {
         ApiUtil.TABLE_ID = "2";
         ApiUtil.USER_ID = "2";
-        ActivityScenario.launch(MainActivity.class);
+        ActivityScenario.launch(CustomerActivity.class);
         Thread.sleep(1000);
     }
 
