@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.cpen321.modernwaiter.R;
 import com.cpen321.modernwaiter.application.MenuItem;
@@ -21,10 +22,10 @@ public class DetailItemFragment extends Fragment {
     private final MenuItem menuItem;
     private TextView quantityText;
     private final Fragment thisFragment = this;
-    private final MenuRecyclerAdapter adapter;
+    private final RecyclerView.Adapter adapter;
     private Button decrementButton;
 
-    DetailItemFragment(MenuItem menuItem, MenuRecyclerAdapter adapter) {
+    public DetailItemFragment(MenuItem menuItem, RecyclerView.Adapter adapter) {
         this.adapter = adapter;
         this.menuItem = menuItem;
     }
@@ -75,8 +76,9 @@ public class DetailItemFragment extends Fragment {
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-                if (adapter != null)
+                if (adapter != null) {
                     adapter.notifyDataSetChanged();
+                }
 
                 fragmentTransaction.remove(thisFragment);
                 fragmentTransaction.commit();
