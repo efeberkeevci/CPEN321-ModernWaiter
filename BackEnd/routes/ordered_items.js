@@ -186,11 +186,12 @@ function addOrderedItems(req, res){
                         }
                     })
 
-                    res.status(201).send()
                 })
             })
         })
     }
+
+    res.status(201).send()
 }
 
 
