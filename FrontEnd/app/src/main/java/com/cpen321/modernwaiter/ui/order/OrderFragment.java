@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
@@ -20,6 +21,8 @@ import java.util.HashMap;
 import static com.cpen321.modernwaiter.application.MainActivity.tableSession;
 
 public class OrderFragment extends Fragment {
+
+    Toast toast;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,6 +56,19 @@ public class OrderFragment extends Fragment {
         checkoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (orderRecyclerAdapter.itemArray.isEmpty()) {
+                    if (toast != null) {
+                        toast.cancel();
+                    }
+
+                    int duration = Toast.LENGTH_SHORT;
+
+                    toast = Toast.makeText(requireActivity(), "Please add item before checkout", duration);
+                    toast.show();
+
+                    return;
+                }
+
                 tableSession.checkout();
                 while (orderRecyclerAdapter.itemArray.size() != 0) {
                     orderRecyclerAdapter.itemArray.remove(0);
