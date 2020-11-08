@@ -59,7 +59,7 @@ public class IntegratedTesting {
         //check if the menu item detail view is displayed
         onView(withId(R.id.fragment_menu))
                 .check(matches(isDisplayed()));
-        onView(withId(R.id.cardView))
+        onView(withId(R.id.topCardView))
                 .check(matches(isDisplayed()));
 
         String addedItem = "Spicy Ahi Roll";
