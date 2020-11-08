@@ -1,9 +1,7 @@
 package com.cpen321.modernwaiter.application;
 
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -56,9 +54,9 @@ public class TableSession implements SessionInterface {
     public boolean isActive = true;
 
     // Testing values, change later
-    private final String restaurantId = API.RESTAURANT_ID;
-    private final String tableId = API.TABLE_ID;
-    private final String userId = API.USER_ID;
+    private final String restaurantId = ApiUtil.RESTAURANT_ID;
+    private final String tableId = ApiUtil.TABLE_ID;
+    private final String userId = ApiUtil.USER_ID;
 
     //creates a new session
     TableSession(RequestQueue requestQueue, AppCompatActivity activity) {
@@ -115,7 +113,7 @@ public class TableSession implements SessionInterface {
 
         final String bodyJSON = new Gson().toJson(bodyFields);
         StringRequest stringRequest = new StringRequest(
-                Request.Method.PUT, API.orderSelect,
+                Request.Method.PUT, ApiUtil.orderSelect,
                 response -> System.out.println("Success"),
 
                 error -> Log.i("Select Item", error.toString())
@@ -164,7 +162,7 @@ public class TableSession implements SessionInterface {
 
         final String bodyJSON = new Gson().toJson(bodyFields);
         StringRequest stringRequest = new StringRequest(
-                Request.Method.PUT, API.checkout,
+                Request.Method.PUT, ApiUtil.checkout,
                 response -> {
                     Log.i("MSG:",response);
 
@@ -208,7 +206,7 @@ public class TableSession implements SessionInterface {
 
     public void fetchMenu() {
 
-        String url = API.items + restaurantId;
+        String url = ApiUtil.items + restaurantId;
 
         StringRequest stringRequest = new StringRequest(
                 Request.Method.GET, url,
@@ -242,7 +240,7 @@ public class TableSession implements SessionInterface {
 
         final String bodyJSON = new Gson().toJson(bodyFields);
         StringRequest stringRequest = new StringRequest(
-                Request.Method.POST, API.order,
+                Request.Method.POST, ApiUtil.order,
                 response -> fetchOrderId(),
 
                 error -> Log.i("Post order", error.toString())
@@ -263,7 +261,7 @@ public class TableSession implements SessionInterface {
 
     private void fetchOrderId() {
         StringRequest stringRequest = new StringRequest(
-                Request.Method.GET, API.userOrder + userId + API.isActive,
+                Request.Method.GET, ApiUtil.userOrder + userId + ApiUtil.isActive,
                 response -> {
                     List<OrderResponse> orderResponse = new Gson().fromJson(response, new TypeToken<List<OrderResponse>>() {}.getType());
                     if (orderResponse.size() == 0) {
@@ -281,7 +279,7 @@ public class TableSession implements SessionInterface {
 
     public void fetchBill() {
         StringRequest stringRequest = new StringRequest(
-                Request.Method.GET, API.orderedItems + orderId,
+                Request.Method.GET, ApiUtil.orderedItems + orderId,
                 response -> {
                     List<OrderedItemResponse> orderedItemResponses = new Gson().fromJson(response, new TypeToken<List<OrderedItemResponse>>() {
                     }.getType());
@@ -311,7 +309,7 @@ public class TableSession implements SessionInterface {
 
     public void fetchOrderList() {
         StringRequest stringRequest = new StringRequest(
-                Request.Method.GET, API.orderedItems + orderId,
+                Request.Method.GET, ApiUtil.orderedItems + orderId,
                 response -> {
                     List<OrderedItemResponse> orderedItemResponses = new Gson().fromJson(response,
                             new TypeToken<List<OrderedItemResponse>>() {}.getType());
@@ -338,7 +336,7 @@ public class TableSession implements SessionInterface {
 
     private void fetchUserRecommendation() {
         StringRequest stringRequest = new StringRequest(
-                Request.Method.GET, API.recommend + userId + "/" + restaurantId,
+                Request.Method.GET, ApiUtil.recommend + userId + "/" + restaurantId,
                 response -> {
 
                     FeatureResponse featureResponses = new Gson().fromJson(response, FeatureResponse.class);
@@ -387,7 +385,7 @@ public class TableSession implements SessionInterface {
 
         final String bodyJSON = new Gson().toJson(bodyFields);
         return new StringRequest(
-                Request.Method.POST, API.orderedItems,
+                Request.Method.POST, ApiUtil.orderedItems,
                 response -> System.out.println("Success"),
 
                 error -> Log.i("Post order", error.toString())
@@ -423,6 +421,9 @@ public class TableSession implements SessionInterface {
                     break;
                 case R.id.navigation_per_item_payment:
                     navController.navigate(R.id.action_navigation_refresh_per_item_payment);
+                    break;
+                default:
+                    Log.d("Alert:", "In default statement");
                     break;
             }
         }

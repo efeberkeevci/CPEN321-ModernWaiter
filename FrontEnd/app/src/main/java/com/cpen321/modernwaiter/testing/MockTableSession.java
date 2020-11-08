@@ -3,8 +3,6 @@ package com.cpen321.modernwaiter.testing;
 import android.util.Log;
 
 import com.android.volley.Request;
-import com.android.volley.toolbox.StringRequest;
-import com.cpen321.modernwaiter.application.API;
 import com.cpen321.modernwaiter.application.MenuItem;
 import com.cpen321.modernwaiter.application.SessionInterface;
 import com.cpen321.modernwaiter.ui.order.OrderItem;
@@ -35,8 +33,8 @@ public class MockTableSession implements SessionInterface {
     public int endSessionCounter = 0;
     public Request lastRequest;
 
-    public MockTableSession() {
-    }
+    /*public MockTableSession() {
+    }*/
 
     @Override
     public boolean isActive() {
@@ -83,6 +81,7 @@ public class MockTableSession implements SessionInterface {
 
     @Override
     public void updateItemSelected(OrderItem orderItem) {
+        Log.d("Alert:", "Inside updateItemSelected that doesn't do anything");
     }
 
     @Override
@@ -107,9 +106,9 @@ public class MockTableSession implements SessionInterface {
         updateBillCounter++;
     }
 
-    @Override
+   @Override
     public void fetchOrderList() {
-
+        Log.d("Alert:", "Inside fetchOrderList that doesn't do anything");
     }
 
     @Override

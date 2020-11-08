@@ -2,10 +2,9 @@ package com.cpen321.modernwaiter;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.contrib.RecyclerViewActions;
-import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.cpen321.modernwaiter.application.API;
+import com.cpen321.modernwaiter.application.ApiUtil;
 import com.cpen321.modernwaiter.application.MainActivity;
 
 import org.junit.Before;
@@ -27,8 +26,8 @@ public class IntegratedTesting {
 
     @Before
     public void changeUserAndTableId() throws InterruptedException {
-        API.TABLE_ID = "2";
-        API.USER_ID = "2";
+        ApiUtil.TABLE_ID = "2";
+        ApiUtil.USER_ID = "2";
         ActivityScenario.launch(MainActivity.class);
         Thread.sleep(1000);
     }
@@ -92,7 +91,7 @@ public class IntegratedTesting {
 
         //check that added item is displayed
         // Attempt to scroll to an item that contains the special text.
-        onView(ViewMatchers.withId(R.id.order_recycler))
+        onView(withId(R.id.order_recycler))
                 // scrollTo will fail the test if no item matches.
                 .perform(RecyclerViewActions.scrollTo(
                         hasDescendant(withText(addedItem))
@@ -155,7 +154,7 @@ public class IntegratedTesting {
                 .check(matches(isDisplayed()));
 
         //check that item is added to the bill
-        onView(ViewMatchers.withId(R.id.bill_recycler))
+        onView(withId(R.id.bill_recycler))
                     // scrollTo will fail the test if no item matches.
                     .perform(RecyclerViewActions.scrollTo(
                             hasDescendant((withText(addedItem)))

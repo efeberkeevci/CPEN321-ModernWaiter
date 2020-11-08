@@ -70,13 +70,13 @@ function jensenShannonDivergenceCalculator(sampleA, sampleB){
   
       m = (p + q)/2
   
-      if(p != 0){
+      if(p !== 0){
         plogp_m = p * (Math.log(p/m)/Math.log(2))
       } else {
         plogp_m = 0
       }
   
-      if(q != 0){
+      if(q !== 0){
         qlogq_m = q * (Math.log(q/m)/Math.log(2))
       } else {
         qlogq_m = 0

@@ -18,7 +18,11 @@ function getStripeKey(req, res){
  * @param {*} res Status code 200 if successful, otherwise 400.
  */
 async function createStripePayment(req, res){
-    const { paymentMethodId, paymentIntentId, currency, useStripeSdk, orderAmount } = req.body
+    let paymentMethodId = req.body.paymentMethodId
+    let paymentIntentId = req.body.paymentIntentId
+    let currency = req.body.currency
+    let useStripeSdk = req.body.useStripeSdk
+    let orderAmount = req.body.orderAmount
 
     const generateResponse = intent => {
         // Generate a response based on the intent's status

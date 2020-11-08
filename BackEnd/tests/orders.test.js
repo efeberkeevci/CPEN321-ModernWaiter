@@ -66,26 +66,26 @@ describe('Test createOrder()', () => {
         done()
       })
 
-      // it('Creates a new order with invalid restaurant id', async done => {
-      //   // Arrange
-      //   const url = `/orders`
-      //   const req = 
-      //     {
-      //       "userId" : 1,
-      //       "tableId" : 1,
-      //       "restaurantId" : 100,
-      //       "amount" : 0,
-      //       "hasPaid" : 0,
-      //       "isActive" : 0
-      //     }
+      it('Creates a new order with invalid restaurant id', async done => {
+        // Arrange
+        const url = `/orders`
+        const req = 
+          {
+            "userId" : 1,
+            "tableId" : 1,
+            "restaurantId" : 100,
+            "amount" : 0,
+            "hasPaid" : 0,
+            "isActive" : 0
+          }
 
-      //   // Act
-      //   const response = await request.post(url).send(req)
+        // Act
+        const response = await request.post(url).send(req)
 
-      //   // Assert
-      //   expect(response.status).toBe(400)
-      //   done()
-      // })
+        // Assert
+        expect(response.status).toBe(400)
+        done()
+      })
 
       it('Creates a new order with missing user id', async done => {
         // Arrange

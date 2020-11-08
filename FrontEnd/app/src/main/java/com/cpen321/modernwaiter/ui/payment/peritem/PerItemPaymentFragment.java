@@ -1,6 +1,6 @@
-package com.cpen321.modernwaiter.ui.payment.perItem;
+package com.cpen321.modernwaiter.ui.payment.peritem;
 
-import android.graphics.Color;
+//import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,8 +21,7 @@ import static com.cpen321.modernwaiter.application.MainActivity.tableSession;
 
 public class PerItemPaymentFragment extends Fragment {
 
-    PerItemRecyclerAdapter perItemRecyclerAdapter;
-    private int amount;
+    private PerItemRecyclerAdapter perItemRecyclerAdapter;
     private View view;
 
     @Override
@@ -66,7 +65,7 @@ public class PerItemPaymentFragment extends Fragment {
     }
 
     public void updateAmount() {
-        amount = tableSession.getOrderList().stream()
+        int amount = tableSession.getOrderList().stream()
                 .filter(menuItemBooleanPair -> menuItemBooleanPair.selected)
                 .reduce(0, (subtotal, menuItemBooleanPair) -> subtotal + menuItemBooleanPair.menuItem.getCost(), Integer::sum);
 
