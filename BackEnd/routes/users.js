@@ -33,7 +33,7 @@ function addUser(req, res){
     let username = req.body.username
     let email = req.body.email
     let preferences = req.body.preferences
-    let createdAt = req.body.createdAt // might delete 
+    let createdAt = (new Date()).getTime(); 
 
     let sql_query = mysql.format("INSERT INTO users (username, email, preferences, createdAt) VALUES (?, ?, ?, ?)", [username, email, preferences, createdAt])
     con.query(sql_query, function(err, result){
@@ -94,4 +94,4 @@ function getUserName(userId){
     })
 }
 
-module.exports = {getUser, getUserPreferences, getUserName}
+module.exports = {getUser, addUser, getUserPreferences, getUserName}
