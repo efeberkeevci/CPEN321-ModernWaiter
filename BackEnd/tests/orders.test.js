@@ -253,5 +253,4 @@ describe('Test createOrder()', () => {
         done()
       })
   })
-  
-//TODO remainder of order
+
