@@ -156,7 +156,8 @@ CREATE TABLE 'orders' (
   KEY 'orders_tables_id_fk' ('tables_id'),
   KEY 'orders_users_id_fk' ('users_id'),
   CONSTRAINT 'orders_tables_id_fk' FOREIGN KEY ('tables_id') REFERENCES 'tables' ('id'),
-  CONSTRAINT 'orders_users_id_fk' FOREIGN KEY ('users_id') REFERENCES 'users' ('id')
+  CONSTRAINT 'orders_users_id_fk' FOREIGN KEY ('users_id') REFERENCES 'users' ('id'),
+  CONSTRAINT 'orders_restaurant_id_fk' FOREIGN KEY ('restaurant_id') REFERENCES 'restaurant' ('id')
 ) ENGINE=InnoDB AUTO_INCREMENT=301 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
