@@ -10,8 +10,13 @@ const con = sql.getConnection()
  * @param {*} res List of items with a status code of 200 if successful, else 400.
  */
 function getMenu(req, res){
-    console.log("/items/{{restaurantId}}")
-    let restaurantId = req.params.restaurantId
+    console.log("GET /items/{{restaurantId}}")
+    let restaurantId = parseInt(req.params.restaurantId)
+
+    if (isNaN(restaurantId)){
+        res.status(400).send("Invalid restaurant id type, must be an integer")
+    }
+
     let sql_query = mysql.format("SELECT * FROM items WHERE restaurant_id = ?", [restaurantId])
     con.query(sql_query, function(err, result){
         if (err) {
@@ -27,15 +32,19 @@ function getMenu(req, res){
  * @param {*} res List of items with a status code of 200 if successful, else 400
  */
 function addToMenu(req, res){
-    console.log("/items")
+    console.log("POST /items")
     let restaurantId = req.body.restaurantId
     let name = req.body.name
     let type = req.body.type
-    let cost = req.body.cost
+    let cost = parseFloat(req.body.cost)
     let description = req.body.description
-    let calories = req.body.calories
-    let popularityCount = req.body.popularityCount
+    let calories = parseFloat(req.body.calories)
+    let popularityCount = parseInt(req.body.popularityCount)
     let image = req.body.image
+
+    if (isNaN(cost) || isNaN(calories) || isNaN(popularityCount)){
+        res.status(400).send("Invalid request body - cost and calories must be doubles, popularity count must be an integer")
+    }
 
     let sql_query = mysql.format("INSERT INTO items (restaurantId, name, type, cost, description, calories, popularity_count, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [restaurantId, name, type, cost, description, calories, popularityCount, image])
     con.query(sql_query, function(err, result){

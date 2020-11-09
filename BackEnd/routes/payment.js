@@ -9,6 +9,7 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
  * @param {*} res Publishable key with status code 200.
  */
 function getStripeKey(req, res){
+    console.log("GET /key")
     res.send({ publishableKey: process.env.STRIPE_PUBLISHABLE_KEY })
 }
 
@@ -18,11 +19,17 @@ function getStripeKey(req, res){
  * @param {*} res Status code 200 if successful, otherwise 400.
  */
 async function createStripePayment(req, res){
+    console.log("POST /pay")
+
     let paymentMethodId = req.body.paymentMethodId
     let paymentIntentId = req.body.paymentIntentId
     let currency = req.body.currency
     let useStripeSdk = req.body.useStripeSdk
-    let orderAmount = req.body.orderAmount
+    let orderAmount = parseFloat(req.body.orderAmount)
+
+    if(isNaN(orderAmount)){
+        res.status(400).send("Invalid order amount type - must be a double") 
+    }
 
     const generateResponse = intent => {
         // Generate a response based on the intent's status

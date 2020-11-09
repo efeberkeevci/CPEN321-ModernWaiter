@@ -10,8 +10,13 @@ const con = sql.getConnection()
  * 200 if successful, otherwise 400
  */
 function getRestaurant(req, res){
-    console.log("/restaurants/{{id}}");
-    let id = req.params.id;
+    console.log("GET /restaurants/{{id}}");
+
+    let id = parseInt(req.params.id)
+    if (isNaN(id)){
+        res.status(400).send("Invalid id type, must be an integer")
+    }
+
     let sql_query = mysql.format("SELECT * FROM restaurant WHERE id = ?", [id]);
     con.query(sql_query, function(err, result){
         if (err) {
@@ -27,11 +32,16 @@ function getRestaurant(req, res){
  * @param {*} res List of items with a status code of 200 if successful, else 400
  */
 function addRestaurant(req, res){
-    console.log("/restaurants")
+    console.log("POST /restaurants")
+    let taxPercentage = parseFloat(req.body.taxPercentage)
+    let serviceFeePercentage = parseFloat(req.body.serviceFeePercentage)
+
+    if (isNaN(taxPercentage) || isNaN(serviceFeePercentage)){
+        res.status(400).send("Invalid percentages type, must be a double")
+    }
+
     let name = req.body.name
     let location = req.body.location
-    let taxPercentage = req.body.taxPercentage
-    let serviceFeePercentage = req.body.serviceFeePercentage
 
     let sql_query = mysql.format("INSERT INTO restaurant (name, location, tax_percentage, service_fee_percentage) VALUES (?, ?, ?, ?)", [name, location, taxPercentage, serviceFeePercentage])
     con.query(sql_query, function(err, result){

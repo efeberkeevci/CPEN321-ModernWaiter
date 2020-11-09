@@ -9,10 +9,20 @@ const push_notification = require("./../push_notification.js")
   * @param {*} res Status 200 if successful, else 400 for invalid ids or missing keys
   */
 function createOrder(req, res){
-    console.log("/orders")
-    let sql_query = mysql.format("INSERT INTO orders ( users_id, tables_id, restaurant_id, amount, has_paid, is_active_session) VALUES(?,?,?,?,?,?)"
-    ,[req.body.userId, req.body.tableId, req.body.restaurantId,
-    req.body.amount, req.body.hasPaid, req.body.isActive])
+    console.log("POST /orders")
+    let userId = parseInt(req.body.userId)
+    let tableId = parseInt(req.body.tableId)
+    let restaurantId = parseInt(req.body.restaurantId)
+    let amount = parseFloat(req.body.amount)
+
+    if (isNaN(userId) || isNaN(tableId) || isNaN(restaurantId) || isNaN(amount)){
+        res.status(400).send("Invalid request body - user, table and restaurant ids must be integers, amount must be a double")
+    }
+
+    let hasPaid = req.body.hasPaid
+    let isActive = req.body.isActive
+
+    let sql_query = mysql.format("INSERT INTO orders ( users_id, tables_id, restaurant_id, amount, has_paid, is_active_session) VALUES(?,?,?,?,?,?)", [userId, tableId, restaurantId, amount, hasPaid, isActive])
     
     con.query(sql_query, function(err, result){
         if (err) {
@@ -29,8 +39,13 @@ function createOrder(req, res){
   * @param {*} res Status 200 if successful
   */
 function getUserOrder(req, res){
-    console.log("/orders/user/{{userId}}")
-    let users_id = req.params.users_id
+    console.log("GET /orders/user/{{userId}}")
+    
+    let users_id = parseInt(req.params.users_id)
+    if (isNaN(users_id)){
+        res.status(400).send("Invalid user id type, must be an integer")
+    }
+
     let isActive = req.query.isActive
     let sql_query = mysql.format("SELECT * FROM orders WHERE users_id = ? && is_active_session = ? ", [users_id, isActive])
     con.query(sql_query, function(err, result){
@@ -48,8 +63,13 @@ function getUserOrder(req, res){
   * @param {*} res Status 200 if successful
   */
 function getTableOrder(req, res){
-    console.log("/orders/table/{{tableId}}")
-    let tables_id = req.params.tables_id
+    console.log("GET /orders/table/{{tableId}}")
+
+    let tables_id = parseInt(req.params.tables_id)
+    if (isNaN(tables_id)){
+        res.status(400).send("Invalid table id type, must be an integer")
+    }
+
     let isActive = req.query.isActive
     let sql_query = mysql.format("SELECT * FROM orders WHERE tables_id = ? && is_active_session = ? ", [tables_id, isActive])
     con.query(sql_query, function(err, result){
@@ -70,8 +90,13 @@ function getTableOrder(req, res){
  * @param {*} res Status 200 if successful, 400 if missing isActive for valid orderId
  */ 
 function updateOrderSessionStatus(req, res){
-    console.log("/orders/session")
-    let orderId = req.body.orderId
+    console.log("PUT /orders/session")
+
+    let orderId = parseInt(req.params.orderId)
+    if (isNaN(orderId)){
+        res.status(400).send("Invalid order id type, must be an integer")
+    }
+
     let isActive = req.body.isActive
     let sql_query = mysql.format("UPDATE orders SET is_active_session = ? WHERE id = ?", [isActive, orderId])
     con.query(sql_query, function(err, result){
@@ -92,8 +117,13 @@ function updateOrderSessionStatus(req, res){
  * @param {*} res Status 200 if successful, 400 if missing hasPaid for valid orderId
  */ 
 function updateOrderPaidStatus(req, res){
-    console.log("/orders/paid")
-    let orderId = req.body.orderId
+    console.log("PUT /orders/paid")
+
+    let orderId = parseInt(req.params.orderId)
+    if (isNaN(orderId)){
+        res.status(400).send("Invalid order id type, must be an integer")
+    }
+
     let hasPaid = req.body.hasPaid
     console.log(orderId,hasPaid)
     console.log("In the order closed part")

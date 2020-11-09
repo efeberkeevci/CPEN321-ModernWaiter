@@ -1,5 +1,4 @@
 const mysql = require('mysql')
-const { use } = require('../backend_server.js')
 const sql = require("./../sql_connection.js")
 const con = sql.getConnection()
 
@@ -10,15 +9,39 @@ const con = sql.getConnection()
  * information with a status code of 200 
  * if successful, otherwise 400
  */
-function getUser(req, res){
-    console.log("/users/{{id}}")
-    let id = req.params.id
+function getUserById(req, res){
+    console.log("GET /users/{{id}}")
+
+    let id = parseInt(req.params.id)
+    if (isNaN(id)){
+        res.status(400).send("Invalid id type, must be an integer")
+    }
+    
     let sql_query = mysql.format("SELECT * FROM users WHERE id = ?", [id])
     con.query(sql_query, function(err, result){
         if (err) {
             res.status(400).send({code : err.code, errno : err.errno})
         }
-        res.status(200).send(result)
+        res.status(200).send(result[0])
+    })
+}
+
+/**
+ * Gets details of a user
+ * @param {*} req Params include google id
+ * @param {*} res Returns the 
+ * information with a status code of 200 
+ * if successful, otherwise 400
+ */
+function getUserByGoogleId(req, res){
+    console.log("GET /users/google/{{googleId}}")
+    let googleId = req.params.googleId
+    let sql_query = mysql.format("SELECT * FROM users WHERE google_id = ?", [googleId])
+    con.query(sql_query, function(err, result){
+        if (err) {
+            res.status(400).send({code : err.code, errno : err.errno})
+        }
+        res.status(200).send(result[0])
     })
 }
 
@@ -29,18 +52,18 @@ function getUser(req, res){
  * if successful, otherwise 400
  */
 function addUser(req, res){
-    console.log("/users")
+    console.log("POST /users")
     let username = req.body.username
     let email = req.body.email
-    let preferences = req.body.preferences
-    let createdAt = req.body.createdAt // might delete 
+    let googleId = req.body.googleId
+    let preferences = req.body.preferences 
 
-    let sql_query = mysql.format("INSERT INTO users (username, email, preferences, createdAt) VALUES (?, ?, ?, ?)", [username, email, preferences, createdAt])
+    let sql_query = mysql.format("INSERT INTO users (username, email, preferences, google_id) VALUES (?, ?, ?, ?)", [username, email, preferences, googleId])
     con.query(sql_query, function(err, result){
         if (err) {
-            res.status(400).send({code : err.code, errno : err.errno})
+            res.status(400).send(err)
         }
-        res.status(200).send(result)
+        res.status(200).send()
     })
 }
 
@@ -51,8 +74,13 @@ function addUser(req, res){
  * 200 if successful, otherwise 400
  */
 function getUserPreferences(req, res){
-    console.log("/users/preferences/{{id}}")
-    let id = req.params.id
+    console.log("GET /users/preferences/{{id}}")
+
+    let id = parseInt(req.params.id)
+    if (isNaN(id)){
+        res.status(400).send("Invalid id type, must be an integer")
+    }
+
     let sql_query = mysql.format("SELECT preferences FROM users WHERE id = ?", [id])
     con.query(sql_query, function(err, result){
         if (err) {
@@ -69,8 +97,13 @@ function getUserPreferences(req, res){
  * if successful, otherwise 400
  */
 function updateUserPreferences(req, res){
-    console.log("/users")
-    let userId = req.body.userId
+    console.log("PUT /users")
+
+    let userId = parseInt(req.body.userId)
+    if(isNaN(userId)){
+        res.status(400).send("Invalid user id type, must be an integer")
+    }
+
     let preferences = req.body.preferences
 
     let sql_query = mysql.format("UPDATE users SET preferences = ? WHERE id = ?", [preferences, userId])
@@ -78,7 +111,7 @@ function updateUserPreferences(req, res){
         if (err) {
             res.status(400).send({code : err.code, errno : err.errno})
         }
-        res.status(200).send(result)
+        res.status(200).send()
     })
 }
 
@@ -94,4 +127,4 @@ function getUserName(userId){
     })
 }
 
-module.exports = {getUser, getUserPreferences, getUserName}
+module.exports = {getUserById, getUserByGoogleId, addUser, getUserPreferences, updateUserPreferences, getUserName}

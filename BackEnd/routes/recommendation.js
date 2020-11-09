@@ -12,10 +12,15 @@ var recommendation = require("../recommendation_logic.js");
  * status code of 200 if successful, otherwise 400
  */
 function getItemRecommendation(req, res){
-    console.log("/recommendation")
-	
-	let users_id = req.params.userId
-	let restaurant_id = req.params.restaurantId
+    console.log("GET /recommendation")
+    
+    let users_id = parseInt(req.params.users_id)
+    let restaurant_id = parseInt(req.params.restaurant_id)
+    
+    if (isNaN(users_id) || isNaN(restaurant_id)){
+        res.status(400).send("Invalid user and restaurant id types, must be an integer")
+    }
+
     let user_query = mysql.format("SELECT preferences FROM users WHERE id = ?", [users_id])
     let desc_query = mysql.format("SELECT id, description FROM items WHERE restaurant_id = ?", [restaurant_id])
 

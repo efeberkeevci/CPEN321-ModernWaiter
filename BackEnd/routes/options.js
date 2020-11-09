@@ -11,8 +11,13 @@ const con = sql.getConnection()
  * @param {*} res List of ids with status code 200 if successful, otherwise 400
  */
 function getItemOptions(req, res){
-    console.log("/item-options/{{id}}")
-    let id = req.params.id
+    console.log("GET /item-options/{{id}}")
+
+    let id = parseInt(req.params.id)
+    if (isNaN(id)){
+        res.status(400).send("Invalid id type, must be an integer")
+    }
+
     let sql_query = mysql.format("SELECT * FROM items_options WHERE items_id = ?", [id])
     con.query(sql_query, function(err, result) {
         if (err) {
@@ -29,8 +34,13 @@ function getItemOptions(req, res){
  * @param {*} res List of options with status code 200, otherwise 400
  */
 function getOptions(req, res){
-    console.log("/options/{{id}}")
-    let id = req.params.id
+    console.log("GET /options/{{id}}")
+
+    let id = parseInt(req.params.id)
+    if (isNaN(id)){
+        res.status(400).send("Invalid id type, must be an integer")
+    }
+    
     let sql_query = mysql.format("SELECT * FROM options WHERE id = ?", [id])
     con.query(sql_query, function(err, result) {
         if (err) {
