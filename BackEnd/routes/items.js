@@ -12,6 +12,11 @@ const con = sql.getConnection()
 function getMenu(req, res){
     console.log("/items/{{restaurantId}}")
     let restaurantId = req.params.restaurantId
+
+    if (typeof(restaurantId) != 'number'){
+        res.status(400).send("Invalid restaurant id type, must be an integer")
+    }
+
     let sql_query = mysql.format("SELECT * FROM items WHERE restaurant_id = ?", [restaurantId])
     con.query(sql_query, function(err, result){
         if (err) {
