@@ -9,10 +9,10 @@
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE=`+00:00` */;
+/*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE=`NO_AUTO_VALUE_ON_ZERO` */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
@@ -46,7 +46,7 @@ CREATE TABLE `items` (
 
 LOCK TABLES `items` WRITE;
 /*!40000 ALTER TABLE `items` DISABLE KEYS */;
-INSERT INTO `items` VALUES (1,1,`Spicy Ahi Roll`,`Sushi`,16.5,`ocean wise ahi tuna, mango, avocado, asparagus, cucumber, sesame soy paper, wasabi mayo, cripy yam curls`,500,3,`gs://modern-waiter-47e96.appspot.com/dummy-spicy-ahi.jpg`),(2,1,`Prawn Crunch Roll`,`Sushi`,16,`crispy prawn, mango, avocado, asparagus, cucumber, sesame soy paper, sriracha mayo, soy glaze`,500,4,`gs://modern-waiter-47e96.appspot.com/dummy-prawn-crunch.jpg`),(3,1,`Ceviche`,`Appetizers`,18.5,`ocean wise lois lake steelhead, sustainably harvested prawns, avocado, chili, thai basil, mint, peruvian leche de tigre marinade`,750,2,`gs://modern-waiter-47e96.appspot.com/dummy-prawn-crunch.jpg`),(4,1,`Mini crispy chicken sandwiches`,`Appetizers`,16,`spicy panko-crusted chicken, swiss cheese, sambal mayo, lettuce, tomato, pickle, onion`,1100,5,`gs://modern-waiter-47e96.appspot.com/dummy-mini-crispy.jpg`),(5,1,`Modern bowl`,`Bowls`,21.5,`tabbouleh, pineapple salsa, broccoli, tomatoes, cucumber, fresh greens, jasmine rice, miso carrot ginger sauce, chicken`,450,3,`gs://modern-waiter-47e96.appspot.com/dummy-modern-bowl.jpg`),(6,1,`Tuna poke bowl`,`Bowls`,20.5,`sesame ginger ocean wise, ahi, jasmine rice, mango, cucumber, mango, cucumber, avocado, edamane, radish, crispy, tempura`,800,4,`gs://modern-waiter-47e96.appspot.com/dummy-tuna-bowl.jpg`);
+INSERT INTO `items` VALUES (1,1,'Spicy Ahi Roll','Sushi',16.5,'ocean wise ahi tuna, mango, avocado, asparagus, cucumber, sesame soy paper, wasabi mayo, cripy yam curls',500,3,'gs://modern-waiter-47e96.appspot.com/dummy-spicy-ahi.jpg'),(2,1,'Prawn Crunch Roll','Sushi',16,'crispy prawn, mango, avocado, asparagus, cucumber, sesame soy paper, sriracha mayo, soy glaze',500,4,'gs://modern-waiter-47e96.appspot.com/dummy-prawn-crunch.jpg'),(3,1,'Ceviche','Appetizers',18.5,'ocean wise lois lake steelhead, sustainably harvested prawns, avocado, chili, thai basil, mint, peruvian leche de tigre marinade',750,2,'gs://modern-waiter-47e96.appspot.com/dummy-prawn-crunch.jpg'),(4,1,'Mini crispy chicken sandwiches','Appetizers',16,'spicy panko-crusted chicken, swiss cheese, sambal mayo, lettuce, tomato, pickle, onion',1100,5,'gs://modern-waiter-47e96.appspot.com/dummy-mini-crispy.jpg'),(5,1,'Modern bowl','Bowls',21.5,'tabbouleh, pineapple salsa, broccoli, tomatoes, cucumber, fresh greens, jasmine rice, miso carrot ginger sauce, chicken',450,3,'gs://modern-waiter-47e96.appspot.com/dummy-modern-bowl.jpg'),(6,1,'Tuna poke bowl','Bowls',20.5,'sesame ginger ocean wise, ahi, jasmine rice, mango, cucumber, mango, cucumber, avocado, edamane, radish, crispy, tempura',800,4,'gs://modern-waiter-47e96.appspot.com/dummy-tuna-bowl.jpg');
 /*!40000 ALTER TABLE `items` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -101,7 +101,7 @@ CREATE TABLE `options` (
 
 LOCK TABLES `options` WRITE;
 /*!40000 ALTER TABLE `options` DISABLE KEYS */;
-INSERT INTO `options` VALUES (1,`avocado`,1.5),(2,`wasabi mayo`,1),(3,`mango`,0),(4,`pickle`,0),(5,`onion`,0),(6,`radish`,0),(7,`jasmine rice`,2),(8,``,0);
+INSERT INTO `options` VALUES (1,'avocado',1.5),(2,'wasabi mayo',1),(3,'mango',0),(4,'pickle',0),(5,'onion',0),(6,'radish',0),(7,'jasmine rice',2),(8,'',0);
 /*!40000 ALTER TABLE `options` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -116,9 +116,9 @@ CREATE TABLE `ordered_items` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `orders_id` int(11) NOT NULL,
   `items_id` int(11) NOT NULL,
-  `has_paid` tinyint(1) NOT NULL DEFAULT `0`,
-  `is_selected` tinyint(1) NOT NULL DEFAULT `0`,
-  `users_id` int(11) DEFAULT `-1`,
+  `has_paid` tinyint(1) NOT NULL DEFAULT '0',
+  `is_selected` tinyint(1) NOT NULL DEFAULT '0',
+  `users_id` int(11) DEFAULT '-1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `ordered_items_id_uindex` (`id`),
   KEY `ordered_items_orders_id_fk` (`orders_id`),
@@ -149,15 +149,14 @@ CREATE TABLE `orders` (
   `users_id` int(11) NOT NULL,
   `restaurant_id` int(11) NOT NULL,
   `amount` double NOT NULL,
-  `has_paid` tinyint(1) NOT NULL DEFAULT `0`,
-  `is_active_session` tinyint(1) NOT NULL DEFAULT `0`,
+  `has_paid` tinyint(1) NOT NULL DEFAULT '0',
+  `is_active_session` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `orders_id_uindex` (`id`),
   KEY `orders_tables_id_fk` (`tables_id`),
   KEY `orders_users_id_fk` (`users_id`),
   CONSTRAINT `orders_tables_id_fk` FOREIGN KEY (`tables_id`) REFERENCES `tables` (`id`),
-  CONSTRAINT `orders_users_id_fk` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`),
-  CONSTRAINT `orders_restaurant_id_fk` FOREIGN KEY (`restaurant_id`) REFERENCES `restaurant` (`id`)
+  CONSTRAINT `orders_users_id_fk` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=301 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -195,7 +194,7 @@ CREATE TABLE `restaurant` (
 
 LOCK TABLES `restaurant` WRITE;
 /*!40000 ALTER TABLE `restaurant` DISABLE KEYS */;
-INSERT INTO `restaurant` VALUES (1,`Cactus Club`,`Vancouver`,12,0);
+INSERT INTO `restaurant` VALUES (1,'Cactus Club','Vancouver',12,0);
 /*!40000 ALTER TABLE `restaurant` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -250,7 +249,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,`tawsifh`,`t@gmail.com`,`mango cucumber tuna`,`2020-10-24 14:46:32`),(2,`efe`,`e@gmail.com`,`ginger prawn ahi mango`,`2020-06-23 14:46:56`);
+INSERT INTO `users` VALUES (1,'tawsifh','t@gmail.com','mango cucumber tuna','2020-10-24 14:46:32'),(2,'efe','e@gmail.com','ginger prawn ahi mango','2020-06-23 14:46:56');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
