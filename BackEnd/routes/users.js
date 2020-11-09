@@ -10,10 +10,29 @@ const con = sql.getConnection()
  * information with a status code of 200 
  * if successful, otherwise 400
  */
-function getUser(req, res){
+function getUserById(req, res){
     console.log("/users/{{id}}")
     let id = req.params.id
     let sql_query = mysql.format("SELECT * FROM users WHERE id = ?", [id])
+    con.query(sql_query, function(err, result){
+        if (err) {
+            res.status(400).send({code : err.code, errno : err.errno})
+        }
+        res.status(200).send(result)
+    })
+}
+
+/**
+ * Gets details of a user
+ * @param {*} req Params include google id
+ * @param {*} res Returns the 
+ * information with a status code of 200 
+ * if successful, otherwise 400
+ */
+function getUserByGoogleId(req, res){
+    console.log("/users/google/{{googleId}}")
+    let googleId = req.params.googleId
+    let sql_query = mysql.format("SELECT * FROM users WHERE google_id = ?", [googleId])
     con.query(sql_query, function(err, result){
         if (err) {
             res.status(400).send({code : err.code, errno : err.errno})
@@ -94,4 +113,4 @@ function getUserName(userId){
     })
 }
 
-module.exports = {getUser, addUser, getUserPreferences, updateUserPreferences, getUserName}
+module.exports = {getUserById, getUserByGoogleId, addUser, getUserPreferences, updateUserPreferences, getUserName}

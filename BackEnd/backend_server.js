@@ -66,7 +66,8 @@ app.get("/tables/:id", tables.getTable)
 
 // Routes for user
 app.post("/users", users.addUser)
-app.get("/users/:id", users.getUser)
+app.get("/users/:id", users.getUserById)
+app.get("/users/google/:googleId", users.getUserByGoogleId)
 app.get("/users/preferences/:id", users.getUserPreferences)
 app.put("/users/preferences", users.updateUserPreferences)
 
