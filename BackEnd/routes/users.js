@@ -94,4 +94,4 @@ function getUserName(userId){
     })
 }
 
-module.exports = {getUser, addUser, getUserPreferences, getUserName}
+module.exports = {getUser, addUser, getUserPreferences, updateUserPreferences, getUserName}
