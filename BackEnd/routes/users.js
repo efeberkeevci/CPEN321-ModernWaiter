@@ -32,15 +32,15 @@ function addUser(req, res){
     console.log("/users")
     let username = req.body.username
     let email = req.body.email
-    let preferences = req.body.preferences
-    let createdAt = (new Date()).getTime(); 
+    let googleId = req.body.googleId
+    let preferences = req.body.preferences 
 
-    let sql_query = mysql.format("INSERT INTO users (username, email, preferences, createdAt) VALUES (?, ?, ?, ?)", [username, email, preferences, createdAt])
+    let sql_query = mysql.format("INSERT INTO users (username, email, preferences, google_id) VALUES (?, ?, ?, ?)", [username, email, preferences, googleId])
     con.query(sql_query, function(err, result){
         if (err) {
-            res.status(400).send({code : err.code, errno : err.errno})
+            res.status(400).send(err)
         }
-        res.status(200).send(result)
+        res.status(200).send()
     })
 }
 
