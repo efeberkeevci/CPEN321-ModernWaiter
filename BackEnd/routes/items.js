@@ -11,9 +11,9 @@ const con = sql.getConnection()
  */
 function getMenu(req, res){
     console.log("/items/{{restaurantId}}")
-    let restaurantId = req.params.restaurantId
+    let restaurantId = parseInt(req.params.restaurantId)
 
-    if (typeof(restaurantId) != 'number'){
+    if (isNaN(restaurantId)){
         res.status(400).send("Invalid restaurant id type, must be an integer")
     }
 
