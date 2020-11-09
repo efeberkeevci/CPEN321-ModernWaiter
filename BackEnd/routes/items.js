@@ -36,11 +36,15 @@ function addToMenu(req, res){
     let restaurantId = req.body.restaurantId
     let name = req.body.name
     let type = req.body.type
-    let cost = req.body.cost
+    let cost = parseFloat(req.body.cost)
     let description = req.body.description
-    let calories = req.body.calories
-    let popularityCount = req.body.popularityCount
+    let calories = parseFloat(req.body.calories)
+    let popularityCount = parseInt(req.body.popularityCount)
     let image = req.body.image
+
+    if (isNaN(cost) || isNaN(calories) || isNaN(popularityCount)){
+        res.status(400).send("Invalid request body - cost and calories must be doubles, popularity count must be an integer")
+    }
 
     let sql_query = mysql.format("INSERT INTO items (restaurantId, name, type, cost, description, calories, popularity_count, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [restaurantId, name, type, cost, description, calories, popularityCount, image])
     con.query(sql_query, function(err, result){

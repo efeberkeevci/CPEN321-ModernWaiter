@@ -12,7 +12,12 @@ const con = sql.getConnection()
  */
 function getTable(req, res) {    
     console.log("/tables/{{id}}");
-    let id = req.params.id
+
+    let id = parseInt(req.params.id)
+    if (isNaN(id)){
+        res.status(400).send("Invalid id type, must be an integer")
+    }
+
     let sql_query = mysql.format("SELECT * FROM tables WHERE id = ?", [id])
     con.query(sql_query, function(err, result){
         if (err) {
@@ -30,7 +35,12 @@ function getTable(req, res) {
  */
 function addTable(req, res) {    
     console.log("/tables");
-    let tableNumber = req.body.tableNumber
+    
+    let tableNumber = parseInt(req.body.tableNumber)
+    if(isNaN(tableNumber)){
+        res.status(400).send("Invalid table number type, must be an integer")
+    }
+
     let sql_query = mysql.format("INSERT INTO tables (table_number) VALUES (?)", [tableNumber])
     con.query(sql_query, function(err, result){
         if (err) {

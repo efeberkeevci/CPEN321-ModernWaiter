@@ -12,7 +12,12 @@ const con = sql.getConnection()
  */
 function getItemOptions(req, res){
     console.log("/item-options/{{id}}")
-    let id = req.params.id
+
+    let id = parseInt(req.params.id)
+    if (isNaN(id)){
+        res.status(400).send("Invalid id type, must be an integer")
+    }
+
     let sql_query = mysql.format("SELECT * FROM items_options WHERE items_id = ?", [id])
     con.query(sql_query, function(err, result) {
         if (err) {
@@ -30,7 +35,12 @@ function getItemOptions(req, res){
  */
 function getOptions(req, res){
     console.log("/options/{{id}}")
-    let id = req.params.id
+    
+    let id = parseInt(req.params.id)
+    if (isNaN(id)){
+        res.status(400).send("Invalid id type, must be an integer")
+    }
+    
     let sql_query = mysql.format("SELECT * FROM options WHERE id = ?", [id])
     con.query(sql_query, function(err, result) {
         if (err) {
