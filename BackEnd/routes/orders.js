@@ -9,7 +9,7 @@ const push_notification = require("./../push_notification.js")
   * @param {*} res Status 200 if successful, else 400 for invalid ids or missing keys
   */
 function createOrder(req, res){
-    console.log("/orders")
+    console.log("POST /orders")
     let userId = parseInt(req.body.userId)
     let tableId = parseInt(req.body.tableId)
     let restaurantId = parseInt(req.body.restaurantId)
@@ -39,7 +39,7 @@ function createOrder(req, res){
   * @param {*} res Status 200 if successful
   */
 function getUserOrder(req, res){
-    console.log("/orders/user/{{userId}}")
+    console.log("GET /orders/user/{{userId}}")
     
     let users_id = parseInt(req.params.users_id)
     if (isNaN(users_id)){
@@ -63,7 +63,7 @@ function getUserOrder(req, res){
   * @param {*} res Status 200 if successful
   */
 function getTableOrder(req, res){
-    console.log("/orders/table/{{tableId}}")
+    console.log("GET /orders/table/{{tableId}}")
 
     let tables_id = parseInt(req.params.tables_id)
     if (isNaN(tables_id)){
@@ -90,7 +90,7 @@ function getTableOrder(req, res){
  * @param {*} res Status 200 if successful, 400 if missing isActive for valid orderId
  */ 
 function updateOrderSessionStatus(req, res){
-    console.log("/orders/session")
+    console.log("PUT /orders/session")
 
     let orderId = parseInt(req.params.orderId)
     if (isNaN(orderId)){
@@ -117,7 +117,7 @@ function updateOrderSessionStatus(req, res){
  * @param {*} res Status 200 if successful, 400 if missing hasPaid for valid orderId
  */ 
 function updateOrderPaidStatus(req, res){
-    console.log("/orders/paid")
+    console.log("PUT /orders/paid")
 
     let orderId = parseInt(req.params.orderId)
     if (isNaN(orderId)){

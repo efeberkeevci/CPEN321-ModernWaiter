@@ -11,7 +11,7 @@ const con = sql.getConnection()
  * @param {*} res List of ids with status code 200 if successful, otherwise 400
  */
 function getItemOptions(req, res){
-    console.log("/item-options/{{id}}")
+    console.log("GET /item-options/{{id}}")
 
     let id = parseInt(req.params.id)
     if (isNaN(id)){
@@ -34,8 +34,8 @@ function getItemOptions(req, res){
  * @param {*} res List of options with status code 200, otherwise 400
  */
 function getOptions(req, res){
-    console.log("/options/{{id}}")
-    
+    console.log("GET /options/{{id}}")
+
     let id = parseInt(req.params.id)
     if (isNaN(id)){
         res.status(400).send("Invalid id type, must be an integer")

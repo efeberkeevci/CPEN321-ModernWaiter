@@ -10,7 +10,7 @@ const con = sql.getConnection()
  * if successful, otherwise 400
  */
 function getUserById(req, res){
-    console.log("/users/{{id}}")
+    console.log("GET /users/{{id}}")
 
     let id = parseInt(req.params.id)
     if (isNaN(id)){
@@ -34,7 +34,7 @@ function getUserById(req, res){
  * if successful, otherwise 400
  */
 function getUserByGoogleId(req, res){
-    console.log("/users/google/{{googleId}}")
+    console.log("GET /users/google/{{googleId}}")
     let googleId = req.params.googleId
     let sql_query = mysql.format("SELECT * FROM users WHERE google_id = ?", [googleId])
     con.query(sql_query, function(err, result){
@@ -52,7 +52,7 @@ function getUserByGoogleId(req, res){
  * if successful, otherwise 400
  */
 function addUser(req, res){
-    console.log("/users")
+    console.log("POST /users")
     let username = req.body.username
     let email = req.body.email
     let googleId = req.body.googleId
@@ -74,7 +74,7 @@ function addUser(req, res){
  * 200 if successful, otherwise 400
  */
 function getUserPreferences(req, res){
-    console.log("/users/preferences/{{id}}")
+    console.log("GET /users/preferences/{{id}}")
 
     let id = parseInt(req.params.id)
     if (isNaN(id)){
@@ -97,7 +97,7 @@ function getUserPreferences(req, res){
  * if successful, otherwise 400
  */
 function updateUserPreferences(req, res){
-    console.log("/users")
+    console.log("PUT /users")
 
     let userId = parseInt(req.body.userId)
     if(isNaN(userId)){

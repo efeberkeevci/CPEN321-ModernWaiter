@@ -12,7 +12,7 @@ var recommendation = require("../recommendation_logic.js");
  * status code of 200 if successful, otherwise 400
  */
 function getItemRecommendation(req, res){
-    console.log("/recommendation")
+    console.log("GET /recommendation")
     
     let users_id = parseInt(req.params.users_id)
     let restaurant_id = parseInt(req.params.restaurant_id)

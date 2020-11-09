@@ -10,7 +10,7 @@ const con = sql.getConnection()
  * 200 if successful, otherwise 400
  */
 function getRestaurant(req, res){
-    console.log("/restaurants/{{id}}");
+    console.log("GET /restaurants/{{id}}");
 
     let id = parseInt(req.params.id)
     if (isNaN(id)){
@@ -32,7 +32,7 @@ function getRestaurant(req, res){
  * @param {*} res List of items with a status code of 200 if successful, else 400
  */
 function addRestaurant(req, res){
-    console.log("/restaurants")
+    console.log("POST /restaurants")
     let taxPercentage = parseFloat(req.body.taxPercentage)
     let serviceFeePercentage = parseFloat(req.body.serviceFeePercentage)
 

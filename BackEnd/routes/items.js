@@ -10,7 +10,7 @@ const con = sql.getConnection()
  * @param {*} res List of items with a status code of 200 if successful, else 400.
  */
 function getMenu(req, res){
-    console.log("/items/{{restaurantId}}")
+    console.log("GET /items/{{restaurantId}}")
     let restaurantId = parseInt(req.params.restaurantId)
 
     if (isNaN(restaurantId)){
@@ -32,7 +32,7 @@ function getMenu(req, res){
  * @param {*} res List of items with a status code of 200 if successful, else 400
  */
 function addToMenu(req, res){
-    console.log("/items")
+    console.log("POST /items")
     let restaurantId = req.body.restaurantId
     let name = req.body.name
     let type = req.body.type

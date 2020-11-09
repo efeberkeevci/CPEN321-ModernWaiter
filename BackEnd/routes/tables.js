@@ -11,7 +11,7 @@ const con = sql.getConnection()
  * if successful, otherwise 400
  */
 function getTable(req, res) {    
-    console.log("/tables/{{id}}");
+    console.log("GET /tables/{{id}}");
 
     let id = parseInt(req.params.id)
     if (isNaN(id)){
@@ -34,8 +34,8 @@ function getTable(req, res) {
  * if successful, otherwise 400
  */
 function addTable(req, res) {    
-    console.log("/tables");
-    
+    console.log("POST /tables");
+
     let tableNumber = parseInt(req.body.tableNumber)
     if(isNaN(tableNumber)){
         res.status(400).send("Invalid table number type, must be an integer")

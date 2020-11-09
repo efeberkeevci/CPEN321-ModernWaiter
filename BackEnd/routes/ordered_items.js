@@ -11,7 +11,7 @@ const push_notification = require("../push_notification.js")
  * @param {*} res Status code 200 if successful, returns list of ordered items
  */
 function getOrderedItems(req, res){
-    console.log("/ordered-items/{{orderId}}")
+    console.log("GET /ordered-items/{{orderId}}")
 
     let orderId = parseInt(req.params.orderId)
     if (isNaN(orderId)){
@@ -35,7 +35,7 @@ function getOrderedItems(req, res){
  * @param {*} res Status code 201 if successful, else 400 for any invalid itemId or orderId
  */
 function addOrderedItems(req, res){
-    console.log("/ordered-items/")
+    console.log("POST /ordered-items/")
     let ordered_items = req.body
     var count = 0;
 
@@ -66,7 +66,7 @@ function addOrderedItems(req, res){
  * @param {*} res Status code 200 if successful, else 400
  */
 function updateSelectedStatus(req, res){
-    console.log("/ordered-items/selected")
+    console.log("PUT /ordered-items/selected")
     let orderId = parseInt(req.body.orderId)
     let itemId = parseInt(req.body.itemId)
     let userId = parseInt(req.body.userId)
@@ -94,7 +94,7 @@ function updateSelectedStatus(req, res){
  * @param {*} res Status code 200 if successful, else 400
  */
 function updateOrderedItemPaidStatus(req, res){
-    console.log("/ordered-items/paid")
+    console.log("PUT /ordered-items/paid")
     let orderId = parseInt(req.body.orderId)
     let itemId = parseInt(req.body.itemId)
 
