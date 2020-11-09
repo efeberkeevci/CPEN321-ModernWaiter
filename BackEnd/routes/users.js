@@ -18,7 +18,7 @@ function getUserById(req, res){
         if (err) {
             res.status(400).send({code : err.code, errno : err.errno})
         }
-        res.status(200).send(result)
+        res.status(200).send(result[0])
     })
 }
 
@@ -37,7 +37,7 @@ function getUserByGoogleId(req, res){
         if (err) {
             res.status(400).send({code : err.code, errno : err.errno})
         }
-        res.status(200).send(result)
+        res.status(200).send(result[0])
     })
 }
 
