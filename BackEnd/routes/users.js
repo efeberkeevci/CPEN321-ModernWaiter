@@ -12,7 +12,7 @@ const con = sql.getConnection()
 function getUserById(req, res){
     console.log("GET /users/{{id}}")
 
-    let id = parseInt(req.params.id)
+    let id = parseInt(req.params.id,10)
     if (isNaN(id)){
         res.status(400).send("Invalid id type, must be an integer")
     }
@@ -76,7 +76,7 @@ function addUser(req, res){
 function getUserPreferences(req, res){
     console.log("GET /users/preferences/{{id}}")
 
-    let id = parseInt(req.params.id)
+    let id = parseInt(req.params.id,10)
     if (isNaN(id)){
         res.status(400).send("Invalid id type, must be an integer")
     }
@@ -99,7 +99,7 @@ function getUserPreferences(req, res){
 function updateUserPreferences(req, res){
     console.log("PUT /users")
 
-    let userId = parseInt(req.body.userId)
+    let userId = parseInt(req.body.userId,10)
     if(isNaN(userId)){
         res.status(400).send("Invalid user id type, must be an integer")
     }

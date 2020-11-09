@@ -11,7 +11,7 @@ const con = sql.getConnection()
  */
 function getMenu(req, res){
     console.log("GET /items/{{restaurantId}}")
-    let restaurantId = parseInt(req.params.restaurantId)
+    let restaurantId = parseInt(req.params.restaurantId,10)
 
     if (isNaN(restaurantId)){
         res.status(400).send("Invalid restaurant id type, must be an integer")
@@ -39,7 +39,7 @@ function addToMenu(req, res){
     let cost = parseFloat(req.body.cost)
     let description = req.body.description
     let calories = parseFloat(req.body.calories)
-    let popularityCount = parseInt(req.body.popularityCount)
+    let popularityCount = parseInt(req.body.popularityCount,10)
     let image = req.body.image
 
     if (isNaN(cost) || isNaN(calories) || isNaN(popularityCount)){

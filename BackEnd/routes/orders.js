@@ -10,9 +10,9 @@ const push_notification = require("./../push_notification.js")
   */
 function createOrder(req, res){
     console.log("POST /orders")
-    let userId = parseInt(req.body.userId)
-    let tableId = parseInt(req.body.tableId)
-    let restaurantId = parseInt(req.body.restaurantId)
+    let userId = parseInt(req.body.userId,10)
+    let tableId = parseInt(req.body.tableId,10)
+    let restaurantId = parseInt(req.body.restaurantId,10)
     let amount = parseFloat(req.body.amount)
 
     if (isNaN(userId) || isNaN(tableId) || isNaN(restaurantId) || isNaN(amount)){
@@ -41,7 +41,7 @@ function createOrder(req, res){
 function getUserOrder(req, res){
     console.log("GET /orders/user/{{userId}}")
     
-    let users_id = parseInt(req.params.users_id)
+    let users_id = parseInt(req.params.users_id,10)
     if (isNaN(users_id)){
         res.status(400).send("Invalid user id type, must be an integer")
     }
@@ -65,7 +65,7 @@ function getUserOrder(req, res){
 function getTableOrder(req, res){
     console.log("GET /orders/table/{{tableId}}")
 
-    let tables_id = parseInt(req.params.tables_id)
+    let tables_id = parseInt(req.params.tables_id,10)
     if (isNaN(tables_id)){
         res.status(400).send("Invalid table id type, must be an integer")
     }
@@ -92,7 +92,7 @@ function getTableOrder(req, res){
 function updateOrderSessionStatus(req, res){
     console.log("PUT /orders/session")
 
-    let orderId = parseInt(req.params.orderId)
+    let orderId = parseInt(req.params.orderId,10)
     if (isNaN(orderId)){
         res.status(400).send("Invalid order id type, must be an integer")
     }
@@ -119,7 +119,7 @@ function updateOrderSessionStatus(req, res){
 function updateOrderPaidStatus(req, res){
     console.log("PUT /orders/paid")
 
-    let orderId = parseInt(req.params.orderId)
+    let orderId = parseInt(req.params.orderId,10)
     if (isNaN(orderId)){
         res.status(400).send("Invalid order id type, must be an integer")
     }

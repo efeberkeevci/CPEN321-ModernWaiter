@@ -13,7 +13,7 @@ const push_notification = require("../push_notification.js")
 function getOrderedItems(req, res){
     console.log("GET /ordered-items/{{orderId}}")
 
-    let orderId = parseInt(req.params.orderId)
+    let orderId = parseInt(req.params.orderId,10)
     if (isNaN(orderId)){
         res.status(400).send("Invalid order id type, must be an integer")
     }
@@ -40,8 +40,8 @@ function addOrderedItems(req, res){
     var count = 0;
 
     for(var i = 0; i < ordered_items.length; i++){
-        let orderId = parseInt(ordered_items[i].orderId)
-        let itemId = parseInt(ordered_items[i].itemId)
+        let orderId = parseInt(ordered_items[i].orderId,10)
+        let itemId = parseInt(ordered_items[i].itemId,10)
 
         if (isNaN(orderId) || isNaN(itemId)){
             res.status(400).send("Invalid request body - order and item ids must be integers")
@@ -67,9 +67,9 @@ function addOrderedItems(req, res){
  */
 function updateSelectedStatus(req, res){
     console.log("PUT /ordered-items/selected")
-    let orderId = parseInt(req.body.orderId)
-    let itemId = parseInt(req.body.itemId)
-    let userId = parseInt(req.body.userId)
+    let orderId = parseInt(req.body.orderId,10)
+    let itemId = parseInt(req.body.itemId,10)
+    let userId = parseInt(req.body.userId,10)
 
     if (isNaN(orderId) || isNaN(itemId) || isNaN(userId)){
         res.status(400).send("Invalid request body - order, item and user ids must be integers")
@@ -95,8 +95,8 @@ function updateSelectedStatus(req, res){
  */
 function updateOrderedItemPaidStatus(req, res){
     console.log("PUT /ordered-items/paid")
-    let orderId = parseInt(req.body.orderId)
-    let itemId = parseInt(req.body.itemId)
+    let orderId = parseInt(req.body.orderId,10)
+    let itemId = parseInt(req.body.itemId,10)
 
     if (isNaN(orderId) || isNaN(itemId)){
         res.status(400).send("Invalid request body - order and item ids must be integers")
