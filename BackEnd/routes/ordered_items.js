@@ -44,7 +44,8 @@ function addOrderedItems(req, res){
         let itemId = parseInt(ordered_items[i].itemId,10)
 
         if (isNaN(orderId) || isNaN(itemId)){
-            res.status(400).send("Invalid request body - order and item ids must be integers")
+            res.status(400).send("Invalid request body - order and item ids must be integers");
+            return;
         }
         
         let sql_query = mysql.format("INSERT INTO ordered_items (orders_id, items_id, has_paid, is_selected) VALUES(?, ?, 0, 0) ", [orderId,itemId])
@@ -55,7 +56,8 @@ function addOrderedItems(req, res){
             }
             count++;
             if (count == ordered_items.length - 1)
-                res.status(201).send()
+                res.status(201).send();
+                return;
         })
     }
 }
@@ -72,7 +74,8 @@ function updateSelectedStatus(req, res){
     let userId = parseInt(req.body.userId,10)
 
     if (isNaN(orderId) || isNaN(itemId) || isNaN(userId)){
-        res.status(400).send("Invalid request body - order, item and user ids must be integers")
+        res.status(400).send("Invalid request body - order, item and user ids must be integers");
+        return;
     }
 
     let isSelected = req.body.isSelected
@@ -80,11 +83,13 @@ function updateSelectedStatus(req, res){
     let sql_query = mysql.format("UPDATE ordered_items SET is_selected = ?, users_id = ? WHERE orders_id = ? && items_id = ? && is_selected = ? LIMIT 1", [isSelected, userId, orderId, itemId, notIsSelected])
     con.query(sql_query, function(err, result){
         if (err) {
-            res.status(400).send({code : err.code, errno : err.errno})
+            res.status(400).send({code : err.code, errno : err.errno});
+            return;
         }
         res.status(200).send()
         push_notification.push_notification_item_claimed(orderId)
         console.log(orderId + ":" + isSelected + " by " + userId + " for " + itemId);
+        return;
     })
 }
 
@@ -99,7 +104,8 @@ function updateOrderedItemPaidStatus(req, res){
     let itemId = parseInt(req.body.itemId,10)
 
     if (isNaN(orderId) || isNaN(itemId)){
-        res.status(400).send("Invalid request body - order and item ids must be integers")
+        res.status(400).send("Invalid request body - order and item ids must be integers");
+        return;
     }
 
     let hasPaid = req.body.hasPaid
@@ -107,9 +113,11 @@ function updateOrderedItemPaidStatus(req, res){
     let sql_query = mysql.format("UPDATE ordered_items SET has_paid = ? WHERE orders_id = ? && items_id = ? && has_paid = ? LIMIT 1", [hasPaid, orderId, itemId, notHasPaid])
     con.query(sql_query, function(err, result){
         if (err) {
-            res.status(400).send({code : err.code, errno : err.errno})
+            res.status(400).send({code : err.code, errno : err.errno});
+            return;
         }
-        res.status(200).send()
+        res.status(200).send();
+        return;
     })
 }
 
