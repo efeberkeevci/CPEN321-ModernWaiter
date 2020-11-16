@@ -33,6 +33,12 @@ describe("Test getOrderedItems()", ()=>{
         //Assert
         //TODO: What to do for the case query returns 400 although valid
         expect(res.statusCode).toEqual(200)
+        expect(typeof response.body[0].id).toBe('number')
+        expect(typeof response.body[0].orders_id).toBe('number')
+        expect(typeof response.body[0].items_id).toBe('number')
+        expect(typeof response.body[0].has_paid).toBe('number')
+        expect(typeof response.body[0].is_selected).toBe('number')
+        expect(typeof response.body[0].users_id).toBe('number')
         done()
     })
 
@@ -42,9 +48,9 @@ describe("Test addOrderedItems()",()=>{
 
 })
 
-describe("Test updateSelectedStatus()",() =>[
+describe("Test updateSelectedStatus()",() =>{
 
-])
+})
 
 describe("Test updateOrderedItemPaidStatus()", () =>{
 
