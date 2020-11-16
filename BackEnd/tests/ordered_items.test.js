@@ -34,6 +34,8 @@ describe("Test getOrderedItems()", ()=>{
         //TODO: What to do for the case query returns 400 although valid
         expect(res.statusCode).toEqual(200)
         done()
+    })
+
 })
 
 describe("Test addOrderedItems()",()=>{
