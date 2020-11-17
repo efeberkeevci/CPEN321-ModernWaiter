@@ -7,7 +7,7 @@ const { addOrderedItems, getOrderedItems } = require('../../routes/ordered_items
 const { getStripeKey, createStripePayment } = require('../../routes/payment')
 const request = supertest(app)
 
-var userId = 3
+var userId = 2
 var restaurantId = 1
 var tableId = 4
 var amount = 51
