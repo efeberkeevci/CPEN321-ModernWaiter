@@ -1,7 +1,7 @@
 const app = require('../../backend_server')
 const supertest = require('supertest')
 const { getUserOrder } = require('../../routes/orders')
-const { get, addToMenu } = require('../../routes/restaurant')
+const { getRestaurant } = require('../../routes/restaurants')
 const { getRecommendation } = require('../../recommendation_logic')
 const { addOrderedItems, getOrderedItems } = require('../../routes/ordered_items')
 const { getStripeKey, createStripePayment } = require('../../routes/payment')
