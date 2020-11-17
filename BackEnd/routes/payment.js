@@ -28,6 +28,8 @@ async function createStripePayment(req, res){
     let currency = req.body.currency
     let useStripeSdk = req.body.useStripeSdk
     let orderAmount = parseFloat(req.body.orderAmount)
+    console.log(req.body.orderId)
+    let orderId = parseInt(req.body.orderId,10)
 
     if(isNaN(orderAmount)){
         res.status(400).send("Invalid order amount type - must be a double") ;
@@ -80,6 +82,8 @@ async function createStripePayment(req, res){
         // After confirm, if the PaymentIntent's status is succeeded, fulfill the order.
         }
         res.send(generateResponse(intent));
+        console.log("Sending payment done notification for orderId: " + orderId);
+        push_notification_payment_done(orderId)
         return;
     } catch (e) {
         // Handle "hard declines" e.g. insufficient funds, expired card, etc

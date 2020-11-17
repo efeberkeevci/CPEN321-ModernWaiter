@@ -4,7 +4,7 @@ const request = supertest(app)
 
 //TODO: Check if written down is the right way to
 //Tests for GET /ordered-items/{{orderId}}
-describe("Test getOrderedItems()", ()=>{
+describe("Test getOrderedItems()", () =>{
 
     it("Testing Invalid orderId type", async done=> {
         //Arrange
@@ -67,17 +67,16 @@ describe("Test addOrderedItems()", () => {
     })
 
     it("Test Valid request body", async done=> {
-
         //Arrange
         let req_body =
             [
                 {
                     "orderId"  : 1,
-                    "itemsId"  : 1
+                    "itemId"  : 1
                 },
                 {
                     "orderId"  : 2,
-                    "itemsId"  : 1
+                    "itemId"  : 1
                 }
             ]
          
