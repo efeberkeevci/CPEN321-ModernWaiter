@@ -154,17 +154,15 @@ public class TableSession implements SessionInterface {
             return;
         }
 
-        // Notify the server that we are checking out so they can notify
-        HashMap<String, String> bodyFields = new HashMap<>();
-        bodyFields.put("orderId", String.valueOf(orderId));
+        ArrayList<PostMenuItem> postMenuItems = new ArrayList<>();
 
         // Make a request for each order
         orderedItems.forEach(((menuItem, count) -> {
             if (menuItem.getIntegerQuantity() > 0) {
-                StringRequest stringRequest1 = createPostOrder(menuItem);
+                PostMenuItem postMenuItem = new PostMenuItem(orderId, menuItem.id);
 
                 for (int i = 0; i < Integer.parseInt(menuItem.quantity); i++) {
-                    requestQueue.add(stringRequest1);
+                    postMenuItems.add(postMenuItem);
                 }
 
                 // Add those value into orderedItems
@@ -175,10 +173,9 @@ public class TableSession implements SessionInterface {
             menuItem.quantity = "0";
         }));
 
-
-        final String bodyJSON = new Gson().toJson(bodyFields);
+        final String bodyJSON = new Gson().toJson(postMenuItems);
         StringRequest stringRequest = new StringRequest(
-                Request.Method.PUT, ApiUtil.checkout,
+                Request.Method.POST, ApiUtil.orderedItems,
                 response -> {
                     Log.i("MSG:",response);
 
@@ -433,5 +430,15 @@ public class TableSession implements SessionInterface {
         public int items_id;
         public int is_selected;
         public int has_paid;
+    }
+
+    public class PostMenuItem {
+        public int orderId;
+        public int itemId;
+
+        public PostMenuItem(int orderId, int itemId) {
+            this.orderId = orderId;
+            this.itemId = itemId;
+        }
     }
 }
