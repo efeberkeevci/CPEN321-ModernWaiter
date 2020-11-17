@@ -129,8 +129,10 @@ public class StripePaymentController {
                             stripe.handleNextActionForPayment(context, paymentIntentClientSecret);
                         } else {
                             putPaid();
-                            endSession();
-                            tableSession.endSession();
+
+                            //TODO: End Session is unused
+                            //endSession();
+                            //tableSession.endSession();
                         }
                     }
                 },
