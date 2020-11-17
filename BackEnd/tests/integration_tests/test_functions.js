@@ -1,10 +1,10 @@
-const app = require('../backend_server')
+const app = require('../../backend_server')
 const supertest = require('supertest')
-const { getUserOrder } = require('../routes/orders')
-const { getMenu } = require('../routes/items')
-const { getRecommendation } = require('../recommendation_logic')
-const { addOrderedItems, getOrderedItems } = require('../routes/ordered_items')
-const { getStripeKey, createStripePayment } = require('../routes/payment')
+const { getUserOrder } = require('../../routes/orders')
+const { getMenu } = require('../../routes/items')
+const { getRecommendation } = require('../../recommendation_logic')
+const { addOrderedItems, getOrderedItems } = require('../../routes/ordered_items')
+const { getStripeKey, createStripePayment } = require('../../routes/payment')
 const request = supertest(app)
 
 var userId = 3
@@ -13,38 +13,6 @@ var tableId = 4
 var amount = 51
 var orderId
 var menu
-
-describe("Integration test 1: ", () => {
-    it("Setting up a customer table", async done => {
-        await testCreateOrder()
-        await testGetUserOrder()
-        await testGetMenu()
-        await testGetRecommendation()
-        done()
-    })
-})
-
-describe("Integration test 2: ", () => {
-    it("Adding items to cart", async done => {
-        await testAddOrderedItems()
-        done()
-    })
-})
-
-describe("Integration test 3: ", () => {
-    it("View bill", async done => {
-        await testGetOrderedItems()
-        done()
-    })
-})
-
-describe("Integration test 4: ", () => {
-    it("Pay for all the items", async done => {
-        await testGetStripeKey()
-        await testCreateStripePayment()
-        done()
-    })
-})
 
 async function testCreateOrder() {
     // Arrange
