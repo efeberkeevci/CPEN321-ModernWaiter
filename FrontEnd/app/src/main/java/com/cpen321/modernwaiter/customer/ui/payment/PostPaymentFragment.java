@@ -27,14 +27,16 @@ public class PostPaymentFragment extends Fragment {
 
         Button pay_per_item = view.findViewById(R.id.pay_again_button);
         Button go_to_menu = view.findViewById(R.id.go_to_menu_button);
-        if (tableSession.getOrderList().isEmpty())
-            go_to_menu.setVisibility(View.INVISIBLE);
-        else pay_per_item.setVisibility(View.INVISIBLE);
+
+        // TODO: Removed tha bodging
+        //if (tableSession.getOrderList().isEmpty())
+         //   go_to_menu.setVisibility(View.INVISIBLE);
+        //else pay_per_item.setVisibility(View.INVISIBLE);
+        pay_per_item.setVisibility(View.INVISIBLE);
 
         go_to_menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: START A NEW ACTIVITY
                 Navigation.findNavController(view).navigate(R.id.action_navigation_post_payment_to_navigation_menu);
             }
         });

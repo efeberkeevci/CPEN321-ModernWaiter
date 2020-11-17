@@ -24,12 +24,10 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
  */
 
 public class MenuTest {
-
     @Before
     public void createActivity() {
         ActivityScenario.launch(MockCustomerActivity.class);
     }
-
     @Test
     public void checkMenuDisplay(){
 
@@ -38,26 +36,21 @@ public class MenuTest {
                 .check(matches(isDisplayed()));
         onView(withId(R.id.feature_description))
                 .check(matches(isDisplayed()));
-
         //check that the menu items list is displayed
         onView(withId(R.id.menu_recycler))
                 .check(matches(isDisplayed()));
-
         //check that the viewCart button is displayed
         onView(withId(R.id.viewCartButton))
                 .check(matches(withText("View Cart")));
     }
-
     @Test
     public void checkMenuItemDetail(){
         //make sure that recycler view is displayed
         onView(withId(R.id.menu_recycler))
                 .check(matches(isDisplayed()));
-
         //click on a menu item
         onView(withId(R.id.menu_recycler))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-
         //check if the menu item detail view is displayed
         onView(withId(R.id.fragment_menu))
                 .check(matches(isDisplayed()));

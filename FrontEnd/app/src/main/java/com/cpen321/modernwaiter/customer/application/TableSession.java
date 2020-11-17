@@ -17,6 +17,7 @@ import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -40,6 +41,7 @@ public class TableSession implements SessionInterface {
     private MenuItem featureItem;
 
     public int orderId = -1;
+    private final HashSet<Integer> users = new HashSet<>();
 
     private final AppCompatActivity activity;
 
@@ -98,8 +100,7 @@ public class TableSession implements SessionInterface {
 
     @Override
     public int getUserCount() {
-        int userCount = 1;
-        return userCount;
+        return users.size();
     }
 
     @Override
@@ -283,6 +284,7 @@ public class TableSession implements SessionInterface {
                     HashMap<MenuItem, Integer> updatedBillMap = new HashMap<>();
 
                     for (OrderedItemResponse orderedItem : orderedItemResponses) {
+                        users.add(orderedItem.users_id);
                         if (orderedItem.has_paid != 1) {
 
                             MenuItem fakeMenuItem = new MenuItem(orderedItem.items_id);
@@ -301,8 +303,10 @@ public class TableSession implements SessionInterface {
                     }
                     Collections.sort(orderList);
 
-                    for (MenuItem menuItem : updatedBillMap.keySet()) {
-                        orderedItems.replace(menuItem, updatedBillMap.get(menuItem));
+                    for (MenuItem menuItem : getBill().keySet()) {
+                        if (updatedBillMap.containsKey(menuItem))
+                            orderedItems.replace(menuItem, updatedBillMap.get(menuItem));
+                        else orderedItems.replace(menuItem, 0);
                     }
 
                     refreshBillFragment();
@@ -392,6 +396,7 @@ public class TableSession implements SessionInterface {
         public int items_id;
         public int is_selected;
         public int has_paid;
+        public int users_id;
     }
 
     public class PostMenuItem {

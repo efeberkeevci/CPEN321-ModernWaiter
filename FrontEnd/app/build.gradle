@@ -82,7 +82,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.squareup.picasso:picasso:2.71828'
-    compileOnly 'com.google.android.wearable:wearable:2.6.0'
+    compileOnly 'com.google.android.wearable:wearable:2.8.1'
+    //for uidevice to test notifications
+    androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
