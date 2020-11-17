@@ -8,7 +8,7 @@ const { getStripeKey, createStripePayment } = require('../../routes/payment')
 const request = supertest(app)
 
 var userId = 2
-var restaurantId = 1
+var restaurantId = 2
 var tableId = 4
 var amount = 51
 var orderId
