@@ -37,7 +37,7 @@ function getOrderedItems(req, res){
 function addOrderedItems(req, res){
     console.log("POST /ordered-items/")
     let ordered_items = req.body
-    var count = 0;
+
 
     for(var i = 0; i < ordered_items.length; i++){
         let orderId = parseInt(ordered_items[i].orderId,10)
@@ -54,12 +54,12 @@ function addOrderedItems(req, res){
                 res.status(400).send({code : err.code, errno : err.errno})
                 return
             }
-            count++;
-            if (count == ordered_items.length - 1)
-                res.status(201).send();
-                return;
         })
     }
+    let orderId = parseInt(ordered_items[0].orderId,10)
+
+    push_notification.push_notification_order_received(orderId)
+    res.status(201).send();
 }
 
 /**
