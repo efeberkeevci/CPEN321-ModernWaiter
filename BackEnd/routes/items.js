@@ -14,15 +14,18 @@ function getMenu(req, res){
     let restaurantId = parseInt(req.params.restaurantId,10)
 
     if (isNaN(restaurantId)){
-        res.status(400).send("Invalid restaurant id type, must be an integer")
+        res.status(400).send("Invalid restaurant id type, must be an integer");
+        return;
     }
 
     let sql_query = mysql.format("SELECT * FROM items WHERE restaurant_id = ?", [restaurantId])
     con.query(sql_query, function(err, result){
         if (err) {
-            res.status(400).send({code : err.code, errno : err.errno})
+            res.status(400).send({code : err.code, errno : err.errno});
+            return;
         }
-        res.status(200).send(result)
+        res.status(200).send(result);
+        return;
     })
 }
 
@@ -43,15 +46,18 @@ function addToMenu(req, res){
     let image = req.body.image
 
     if (isNaN(cost) || isNaN(calories) || isNaN(popularityCount)){
-        res.status(400).send("Invalid request body - cost and calories must be doubles, popularity count must be an integer")
+        res.status(400).send("Invalid request body - cost and calories must be doubles, popularity count must be an integer");
+        return;
     }
 
     let sql_query = mysql.format("INSERT INTO items (restaurantId, name, type, cost, description, calories, popularity_count, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [restaurantId, name, type, cost, description, calories, popularityCount, image])
     con.query(sql_query, function(err, result){
         if (err) {
-            res.status(400).send({code : err.code, errno : err.errno})
+            res.status(400).send({code : err.code, errno : err.errno});
+            return;
         }
-        res.status(200).send(result)
+        res.status(200).send(result);
+        return;
     })
 }
 

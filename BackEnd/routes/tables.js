@@ -15,15 +15,18 @@ function getTable(req, res) {
 
     let id = parseInt(req.params.id,10)
     if (isNaN(id)){
-        res.status(400).send("Invalid id type, must be an integer")
+        res.status(400).send("Invalid id type, must be an integer");
+        return;
     }
 
     let sql_query = mysql.format("SELECT * FROM tables WHERE id = ?", [id])
     con.query(sql_query, function(err, result){
         if (err) {
-            res.status(400).send({code : err.code, errno : err.errno})
+            res.status(400).send({code : err.code, errno : err.errno});
+            return;
         }
-        res.status(200).send(result)
+        res.status(200).send(result);
+        return;
     })
 }
 
@@ -38,15 +41,18 @@ function addTable(req, res) {
 
     let tableNumber = parseInt(req.body.tableNumber,10)
     if(isNaN(tableNumber)){
-        res.status(400).send("Invalid table number type, must be an integer")
+        res.status(400).send("Invalid table number type, must be an integer");
+        return;
     }
 
     let sql_query = mysql.format("INSERT INTO tables (table_number) VALUES (?)", [tableNumber])
     con.query(sql_query, function(err, result){
         if (err) {
-            res.status(400).send({code : err.code, errno : err.errno})
+            res.status(400).send({code : err.code, errno : err.errno});
+            return;
         }
-        res.status(200).send(result)
+        res.status(200).send(result);
+        return;
     });
 }
 module.exports = {getTable}
