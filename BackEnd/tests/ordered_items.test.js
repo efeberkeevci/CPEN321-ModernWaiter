@@ -6,8 +6,7 @@ const request = supertest(app)
 //Tests for GET /ordered-items/{{orderId}}
 describe("Test getOrderedItems()", ()=>{
 
-    test("Testing Invalid orderId type", async done=>{
-
+    it("Testing Invalid orderId type", async done=> {
         //Arrange
         let param = "Invalid orderId of wrong data type"
         let path = "/ordered-items/"
@@ -20,8 +19,7 @@ describe("Test getOrderedItems()", ()=>{
         done()
     })
     
-    test("Testing valid orderId type", async done=>{
-
+    it("Testing valid orderId type", async done=> {
         //Arrange
         let param = "1"
         let path = "/ordered-items/"
@@ -40,46 +38,48 @@ describe("Test getOrderedItems()", ()=>{
         expect(typeof res.body[0].users_id).toBe('number')
         done()
     })
-
 })
 
-describe("Test addOrderedItems()",()=>{
-    test("Test Invalid request body", async done=>{
-
+describe("Test addOrderedItems()", () => {
+    it("Test Invalid request body", async done=> {
         //Arrange
         let req_body =
-                [
-                    {"orderId" : "invalid orderId type",
-                     "itemsId"  : "1"
-                    },
-                    {"orderId" : "2",
-                     "itemsId"  : "invalid type"
-                    }
-                ]
+            [
+                {
+                    "orderId" : "invalid orderId type",
+                    "itemsId"  : "1"
+                },
+                {
+                    "orderId" : "2",
+                    "itemsId"  : "invalid type"
+                }
+            ]
         
-        let path = "/ordered-items/"
+        let path = "/ordered-items"
 
         //Act
         const res = await request.post(path).send(req_body)
 
         //Assert
-        expect(res.statusCode).toEqual(400)
+        expect(res.status).toBe(400)
+        expect(res.text).toStrictEqual("Invalid request body - order and item ids must be integers")
         done()
     })
 
-    test("Test Valid request body", async done=>{
+    it("Test Valid request body", async done=> {
 
         //Arrange
-        let req_body =[
-            {
-                "orderId"  : 1,
-                "itemsId"  : 1
-            },
-            {
-                "orderId"  : 2,
-                "itemsId"  : 1
-            },
-        ]
+        let req_body =
+            [
+                {
+                    "orderId"  : 1,
+                    "itemsId"  : 1
+                },
+                {
+                    "orderId"  : 2,
+                    "itemsId"  : 1
+                }
+            ]
          
         let path = "/ordered-items/"
 
@@ -87,22 +87,24 @@ describe("Test addOrderedItems()",()=>{
         const res = await request.post(path).send(req_body)
 
         //Assert
-        expect(res.statusCode).toEqual(201)
+        expect(res.status).toBe(201)
+        expect(res.body).toStrictEqual({})
         done()  
     })
 })
 
-describe("Test updateSelectedStatus()",() =>{
-    test("Test Invalid request body", async done=>{
+describe("Test updateSelectedStatus()",() => {
+    it("Test Invalid request body", async done=> {
 
         //Arrange
         let req_body =
-                [
-                    {"orderId" : "invalid orderId type",
-                     "itemsId"  : "1",
-                     "userId"  : 1
-                    }
-                ]
+            [
+                {
+                    "orderId" : "invalid orderId type",
+                    "itemsId"  : "1",
+                    "userId"  : 1
+                }
+            ]
         
         let path = "/ordered-items/selected"
 
@@ -110,20 +112,21 @@ describe("Test updateSelectedStatus()",() =>{
         const res = await request.put(path).send(req_body)
 
         //Assert
-        expect(res.statusCode).toEqual(400)
+        expect(res.status).toBe(400)
+        expect(res.text).toStrictEqual("Invalid request body - order, item and user ids must be integers")
         done()
     })
 
-    test("Test Valid request body", async done=>{
+    it("Test Valid request body", async done=>{
 
         //Arrange
-        let req_body =[
+        let req_body =
             {
                 "orderId" : 1,
-                "itemsId"  : 1,
-                "userId"  : 1
+                "itemId" : 1,
+                "isSelected" : 1,
+                "userId" : 1
             }
-        ]
          
         let path = "/ordered-items/selected"
 
@@ -131,24 +134,29 @@ describe("Test updateSelectedStatus()",() =>{
         const res = await request.put(path).send(req_body)
 
         //Assert
-        expect(res.statusCode).toEqual(201)
+        expect(res.status).toBe(200)
+        expect(res.body).toStrictEqual({})
         done()  
     })
 })
 
-describe("Test updateOrderedItemPaidStatus()", () =>{
-    test("Test Invalid request body", async done=>{
+describe("Test updateOrderedItemPaidStatus()", () => {
+    it("Test Invalid request body", async done=>{
 
         //Arrange
         let req_body =
-                [
-                    {"orderId" : "invalid orderId type",
-                     "itemsId"  : "1"
-                    },
-                    {"orderId" : "2",
-                     "itemsId"  : "invalid type"
-                    }
-                ]
+            [
+                {
+                    "orderId" : "invalid orderId type",
+                    "itemId"  : "1",
+                    "hasPaid" : 1
+                },
+                {
+                    "orderId" : "2",
+                    "itemId"  : "invalid type",
+                    "hasPaid" : 1
+                }
+            ]
         
         let path = "/ordered-items/paid"
 
@@ -156,31 +164,27 @@ describe("Test updateOrderedItemPaidStatus()", () =>{
         const res = await request.put(path).send(req_body)
 
         //Assert
-        expect(res.statusCode).toEqual(400)
+        expect(res.status).toBe(400)
         done()
     })
 
-    test("Test Valid request body", async done=>{
+    it("Test valid request body", async done=> {
 
         //Arrange
-        let req_body =[
+        let req_body =
             {
                 "orderId"  : 1,
-                "itemsId"  : 1
-            },
-            {
-                "orderId"  : 2,
-                "itemsId"  : 1
-            },
-        ]
-         
+                "itemId"  : 1,
+                "hasPaid" : 1
+            }
+
         let path = "/ordered-items/paid"
 
         //Act
         const res = await request.put(path).send(req_body)
 
         //Assert
-        expect(res.statusCode).toEqual(201)
+        expect(res.status).toBe(201)
         done()  
     })
 })
