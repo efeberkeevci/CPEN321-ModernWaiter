@@ -29,21 +29,26 @@ async function testGetRestaurant() {
 
     // Assert
     expect(response.status).toBe(200)
-
+    /*
+    expect(response.body[response.body.length-1].location).toStrictEqual(location)
+    expect(response.body[response.body.length-1].name).toStrictEqual(name)
+    expect(response.body[response.body.length-1].tax_percentage).toStrictEqual(tax_percentage)
+    expect(String(response.body[response.body.length-1].service_fee_percentage)).toStrictEqual(String(service_fee_percentage))
+    */
 }
 
 async function testAddRestaurant() {
     // Arrange
     const url = `/restaurants`
     const req_body = {
-        "taxPercantage" : 12,
-        "serviceFeePercentage": 0,
+        "taxPercantage" : "12",
+        "serviceFeePercentage": "0",
         "name" : "Best Restaurant",
         "location" : "Calgary"
     }
 
     // Act
-    const response = await (await request.post(url)).setEncoding(req_body)
+    const response = await request.post(url).send(req_body)
 
     // Assert
     expect(response.status).toBe(200)
