@@ -52,11 +52,14 @@ public class TableSession implements SessionInterface {
     private final String tableId = ApiUtil.TABLE_ID;
     private final String userId = ApiUtil.USER_ID;
 
+    private final String userGoogleId;
+
     //creates a new session
-    TableSession(RequestQueue requestQueue, AppCompatActivity activity) {
+    TableSession(RequestQueue requestQueue, AppCompatActivity activity, String googleId) {
         //Make request to server to retrieve menu items to display
         this.activity = activity;
         this.requestQueue = requestQueue;
+        this.userGoogleId = googleId;
 
         orderedItems = new HashMap<>();
 
