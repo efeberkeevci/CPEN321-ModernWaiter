@@ -44,7 +44,6 @@ public class StripePaymentFragment extends Fragment {
 
         view = inflater.inflate(R.layout.fragment_stripe, container, false);
 
-
         paymentMode = getArguments().getString("mode");
 
         Log.d("Payment mode", paymentMode);
