@@ -41,7 +41,7 @@ async function testAddRestaurant() {
     // Arrange
     const url = `/restaurants`
     const req_body = {
-        "taxPercantage" : "12",
+        "taxPercentage" : "12",
         "serviceFeePercentage": "0",
         "name" : "Best Restaurant",
         "location" : "Calgary"
