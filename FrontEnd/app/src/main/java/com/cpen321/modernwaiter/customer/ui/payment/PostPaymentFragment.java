@@ -27,9 +27,9 @@ public class PostPaymentFragment extends Fragment {
 
         Button pay_per_item = view.findViewById(R.id.pay_again_button);
         Button go_to_menu = view.findViewById(R.id.go_to_menu_button);
-        if (!tableSession.isActive())
-            pay_per_item.setVisibility(View.INVISIBLE);
-        else go_to_menu.setVisibility(View.INVISIBLE);
+        if (tableSession.getOrderList().isEmpty())
+            go_to_menu.setVisibility(View.INVISIBLE);
+        else pay_per_item.setVisibility(View.INVISIBLE);
 
         go_to_menu.setOnClickListener(new View.OnClickListener() {
             @Override

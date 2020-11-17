@@ -22,7 +22,6 @@ public interface SessionInterface {
     void updateItemSelected(PaymentItem orderItem);
     void checkout();
 
-    void fetchBill();
     void fetchOrderList();
 
     void add(Request request);

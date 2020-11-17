@@ -41,9 +41,9 @@ public class NotificationService extends FirebaseMessagingService {
             tableSession.fetchOrderList();
         } else if ("Order Received!".equals(notification_title)) {
             notifyUser(remoteMessage);
-            tableSession.fetchBill();
             tableSession.fetchOrderList();
         } else if ("Payment Completed!".equals(notification_title)) {
+            tableSession.fetchOrderList();
             notifyUser(remoteMessage);
         }
     }

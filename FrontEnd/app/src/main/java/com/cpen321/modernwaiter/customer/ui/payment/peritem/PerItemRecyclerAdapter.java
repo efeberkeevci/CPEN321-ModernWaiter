@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cpen321.modernwaiter.R;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 public class PerItemRecyclerAdapter extends RecyclerView.Adapter<PerItemRecyclerAdapter.ViewHolder> {
 
