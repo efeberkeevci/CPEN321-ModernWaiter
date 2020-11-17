@@ -168,8 +168,9 @@ public class StripePaymentController {
 
                     }, error -> Log.i("Request put paid item", error.toString())
             );
-
-            tableSession.add(jsonObjectRequest);
+            for (int i = 0; i < item.getValue(); i++) {
+                tableSession.add(jsonObjectRequest);
+            }
         }
         //PUT request for order has been paid fully
         String url_order_paid = ApiUtil.paidOrder;
