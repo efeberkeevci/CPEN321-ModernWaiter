@@ -304,14 +304,17 @@ public class TableSession implements SessionInterface {
         StringRequest stringRequest = new StringRequest(
                 Request.Method.GET, ApiUtil.userOrder + userId + ApiUtil.isActive,
                 response -> {
-                    List<OrderResponse> orderResponse = new Gson().fromJson(response, new TypeToken<List<OrderResponse>>() {}.getType());
-                    if (orderResponse.size() == 0) {
-                        postOrderId();
-                    } else {
-                        orderId = orderResponse.get(0).id;
-                        fetchMenu();
-                        NotificationService.sendToken(String.valueOf(orderId));
+                    List<OrderResponse> orderResponses = new Gson().fromJson(response, new TypeToken<List<OrderResponse>>() {}.getType());
+
+                    for (OrderResponse orderResponse : orderResponses) {
+                        if (orderResponse.restaurant_id.equals(orderResponse.restaurant_id)) {
+                            orderId = orderResponse.id;
+                            fetchMenu();
+                            NotificationService.sendToken(String.valueOf(orderId));
+                            return;
+                        }
                     }
+                    postOrderId();
 
                 }, error -> Log.i("Fetch order id", error.toString()));
 
@@ -429,6 +432,7 @@ public class TableSession implements SessionInterface {
 
     public class OrderResponse {
         public int id;
+        public String restaurant_id;
     }
 
     public class FeatureResponse {
