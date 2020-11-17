@@ -29,10 +29,10 @@ function getItemRecommendation(req, res){
     let desc_query = mysql.format("SELECT id, description FROM items WHERE restaurant_id = ?", [restaurant_id])
 
     con.query(user_query, function(err, prefResult){
-        if (err) {
-            res.status(400).send({code : err.code, errno : err.errno});
-            return;
-        };
+        // if (err) {
+        //     res.status(400).send({code : err.code, errno : err.errno});
+        //     return;
+        // }
 
         var preference
 
@@ -44,10 +44,10 @@ function getItemRecommendation(req, res){
         }
 
         con.query(desc_query, function(err, descResult) {
-            if (err) {
-                res.status(400).send({code : err.code, errno : err.errno});
-                return;
-            };
+            // if (err) {
+            //     res.status(400).send({code : err.code, errno : err.errno});
+            //     return;
+            // };
 
             var descriptionJsonArray = JSON.parse(JSON.stringify(descResult))
             var itemDescriptionMap = new Map()

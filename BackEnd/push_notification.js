@@ -103,8 +103,7 @@ function push_notification_item_claimed(orderId) {
 
   var message = {
     notification: {
-      title: 'Order Received!',
-      body: 'Your order is being prepared now'
+      title: 'Item Claimed!'
     }
   };
 

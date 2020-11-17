@@ -11,6 +11,7 @@ public class ApiUtil {
 
     public static final String items = URL + "items/";
 
+    public static final String health = URL + "_health";
     public static final String userOrder = URL + "orders/user/";
     public static final String orderedItems = URL + "ordered-items/";
     public static final String orderSelect = URL + "ordered-items/selected/";
