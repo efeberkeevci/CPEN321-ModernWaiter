@@ -21,7 +21,7 @@ describe("Integration test 6: ", () => {
 
 async function testGetRestaurant() {
     // Arrange
-    const url = `/items/${restaurantId}`
+    const url = `/restaurants/${restaurantId}`
 
     // Act
     const response = await request.get(url)
