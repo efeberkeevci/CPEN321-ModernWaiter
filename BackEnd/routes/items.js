@@ -73,4 +73,4 @@ function getItemName(itemId){
     });
 }
 
-module.exports = {getMenu, getItemName}
+module.exports = {getMenu, addToMenu, getItemName}
