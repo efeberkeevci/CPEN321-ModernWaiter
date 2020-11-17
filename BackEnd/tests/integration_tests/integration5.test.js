@@ -6,16 +6,15 @@ const { getRecommendation } = require('../../recommendation_logic')
 const { addOrderedItems, getOrderedItems } = require('../../routes/ordered_items')
 const { getStripeKey, createStripePayment } = require('../../routes/payment')
 const request = supertest(app)
-const{ testGetMenu } = require("./test_functions")
 
 let restaurantId = 1
 let name = "testItem" 
 let type = "sushi"
-let cost = 12.50
+let cost = "12.50"
 let description = "abc" 
-let calories = 123
-let popularityCount = 0
-let image = "" 
+let calories = "123"
+let popularityCount = "0"
+let image = "./asdsdlkfnasjkşdnfşasjknfkjsnefkjasnecsdvjnaşjrsnvşsjdvncs.jpg" 
 
 async function testAddToMenu() {
     //Arrange
@@ -38,7 +37,6 @@ async function testAddToMenu() {
 
     //Assert
     expect(res.status).toBe(200)
-    expect(res.body.clientSecret).toStrictEqual(expect.anything())
 }
 
 async function testGetMenuLatestItem() {
@@ -51,7 +49,6 @@ async function testGetMenuLatestItem() {
     // Assert
     expect(response.status).toBe(200)
 
-    
     expect(response.body[response.body.length-1].id).toStrictEqual(expect.anything())
     expect(response.body[response.body.length-1].restaurant_id).toStrictEqual(restaurantId)
     expect(response.body[response.body.length-1].name).toStrictEqual(name)

@@ -20,7 +20,7 @@ app.use(express.json())
 con.connect(function(err) {
     if (err) throw err
     console.log("Connected!")
-    
+
     if (process.env.NODE_ENV !== 'test') {
         var server = app.listen(3000,function(){
             var port = server.address().port
@@ -33,6 +33,7 @@ con.connect(function(err) {
 
 // Routes for items
 app.get("/items/:restaurantId", items.getMenu)
+app.get("/items", items.addToMenu)
 
 // Routes for options
 app.get("/item-options/:id", options.getItemOptions)
