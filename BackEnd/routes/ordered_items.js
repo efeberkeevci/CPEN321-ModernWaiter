@@ -13,7 +13,7 @@ const push_notification = require("../push_notification.js")
 function getOrderedItems(req, res){
     console.log("GET /ordered-items/{{orderId}}")
 
-    let orderId = parseInt(req.params.orderId)
+    let orderId = parseInt(req.params.orderId,10)
     if (isNaN(orderId)){
         res.status(400).send("Invalid order id type, must be an integer")
     }
@@ -40,11 +40,12 @@ function addOrderedItems(req, res){
     var count = 0;
 
     for(var i = 0; i < ordered_items.length; i++){
-        let orderId = parseInt(ordered_items[i].orderId)
-        let itemId = parseInt(ordered_items[i].itemId)
+        let orderId = parseInt(ordered_items[i].orderId,10)
+        let itemId = parseInt(ordered_items[i].itemId,10)
 
         if (isNaN(orderId) || isNaN(itemId)){
-            res.status(400).send("Invalid request body - order and item ids must be integers")
+            res.status(400).send("Invalid request body - order and item ids must be integers");
+            return;
         }
         
         let sql_query = mysql.format("INSERT INTO ordered_items (orders_id, items_id, has_paid, is_selected) VALUES(?, ?, 0, 0) ", [orderId,itemId])
@@ -55,7 +56,8 @@ function addOrderedItems(req, res){
             }
             count++;
             if (count == ordered_items.length - 1)
-                res.status(201).send()
+                res.status(201).send();
+                return;
         })
     }
 }
@@ -67,12 +69,13 @@ function addOrderedItems(req, res){
  */
 function updateSelectedStatus(req, res){
     console.log("PUT /ordered-items/selected")
-    let orderId = parseInt(req.body.orderId)
-    let itemId = parseInt(req.body.itemId)
-    let userId = parseInt(req.body.userId)
+    let orderId = parseInt(req.body.orderId,10)
+    let itemId = parseInt(req.body.itemId,10)
+    let userId = parseInt(req.body.userId,10)
 
     if (isNaN(orderId) || isNaN(itemId) || isNaN(userId)){
-        res.status(400).send("Invalid request body - order, item and user ids must be integers")
+        res.status(400).send("Invalid request body - order, item and user ids must be integers");
+        return;
     }
 
     let isSelected = req.body.isSelected
@@ -80,11 +83,13 @@ function updateSelectedStatus(req, res){
     let sql_query = mysql.format("UPDATE ordered_items SET is_selected = ?, users_id = ? WHERE orders_id = ? && items_id = ? && is_selected = ? LIMIT 1", [isSelected, userId, orderId, itemId, notIsSelected])
     con.query(sql_query, function(err, result){
         if (err) {
-            res.status(400).send({code : err.code, errno : err.errno})
+            res.status(400).send({code : err.code, errno : err.errno});
+            return;
         }
         res.status(200).send()
         push_notification.push_notification_item_claimed(orderId)
         console.log(orderId + ":" + isSelected + " by " + userId + " for " + itemId);
+        return;
     })
 }
 
@@ -95,11 +100,12 @@ function updateSelectedStatus(req, res){
  */
 function updateOrderedItemPaidStatus(req, res){
     console.log("PUT /ordered-items/paid")
-    let orderId = parseInt(req.body.orderId)
-    let itemId = parseInt(req.body.itemId)
+    let orderId = parseInt(req.body.orderId,10)
+    let itemId = parseInt(req.body.itemId,10)
 
     if (isNaN(orderId) || isNaN(itemId)){
-        res.status(400).send("Invalid request body - order and item ids must be integers")
+        res.status(400).send("Invalid request body - order and item ids must be integers");
+        return;
     }
 
     let hasPaid = req.body.hasPaid
@@ -107,9 +113,11 @@ function updateOrderedItemPaidStatus(req, res){
     let sql_query = mysql.format("UPDATE ordered_items SET has_paid = ? WHERE orders_id = ? && items_id = ? && has_paid = ? LIMIT 1", [hasPaid, orderId, itemId, notHasPaid])
     con.query(sql_query, function(err, result){
         if (err) {
-            res.status(400).send({code : err.code, errno : err.errno})
+            res.status(400).send({code : err.code, errno : err.errno});
+            return;
         }
-        res.status(200).send()
+        res.status(200).send();
+        return;
     })
 }
 

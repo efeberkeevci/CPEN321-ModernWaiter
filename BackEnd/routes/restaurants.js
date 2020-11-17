@@ -12,7 +12,7 @@ const con = sql.getConnection()
 function getRestaurant(req, res){
     console.log("GET /restaurants/{{id}}");
 
-    let id = parseInt(req.params.id)
+    let id = parseInt(req.params.id,10)
     if (isNaN(id)){
         res.status(400).send("Invalid id type, must be an integer")
     }

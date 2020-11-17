@@ -13,7 +13,7 @@ const con = sql.getConnection()
 function getItemOptions(req, res){
     console.log("GET /item-options/{{id}}")
 
-    let id = parseInt(req.params.id)
+    let id = parseInt(req.params.id,10)
     if (isNaN(id)){
         res.status(400).send("Invalid id type, must be an integer")
     }
@@ -36,7 +36,7 @@ function getItemOptions(req, res){
 function getOptions(req, res){
     console.log("GET /options/{{id}}")
 
-    let id = parseInt(req.params.id)
+    let id = parseInt(req.params.id,10)
     if (isNaN(id)){
         res.status(400).send("Invalid id type, must be an integer")
     }
