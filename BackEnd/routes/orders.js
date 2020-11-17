@@ -103,8 +103,8 @@ function updateOrderSessionStatus(req, res){
 
     let orderId = parseInt(req.params.orderId,10)
     if (isNaN(orderId)){
-        res.status(400).send("Invalid order id type, must be an integer");
-        return;
+        res.status(400).send("Invalid order id type, must be an integer")
+        return
     }
 
     let isActive = req.body.isActive

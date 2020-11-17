@@ -2,6 +2,7 @@ const app = require('../backend_server')
 const supertest = require('supertest')
 const request = supertest(app)
 
+//TODO: Check if written down is the right way to
 //Tests for GET /ordered-items/{{orderId}}
 describe("Test getOrderedItems()", ()=>{
 
@@ -46,17 +47,63 @@ describe("Test addOrderedItems()",()=>{
     test("Test Invalid request body", async done=>{
 
         //Arrange
-        let req_body ={ 
-            "body":
+        let req_body =
                 [
                     {"orderId" : "invalid orderId type",
-                     "itemId"  : "1"
+                     "itemsId"  : "1"
                     },
                     {"orderId" : "2",
-                     "itemId"  : "invalid type"
-                    },
+                     "itemsId"  : "invalid type"
+                    }
                 ]
-        }
+        
+        let path = "/ordered-items/"
+
+        //Act
+        const res = await request.post(path).send(req_body)
+
+        //Assert
+        expect(res.statusCode).toEqual(400)
+        done()
+    })
+
+    test("Test Valid request body", async done=>{
+
+        //Arrange
+        let req_body =[
+            {
+                "orderId"  : 1,
+                "itemsId"  : 1
+            },
+            {
+                "orderId"  : 2,
+                "itemsId"  : 1
+            },
+        ]
+         
+        let path = "/ordered-items/"
+
+        //Act
+        const res = await request.post(path).send(req_body)
+
+        //Assert
+        expect(res.statusCode).toEqual(201)
+        done()  
+    })
+})
+
+describe("Test updateSelectedStatus()",() =>{
+    test("Test Invalid request body", async done=>{
+
+        //Arrange
+        let req_body =
+                [
+                    {"orderId" : "invalid orderId type",
+                     "itemsId"  : "1",
+                     "userId"  : 1
+                    }
+                ]
+        
         let path = "/ordered-items/selected"
 
         //Act
@@ -64,33 +111,76 @@ describe("Test addOrderedItems()",()=>{
 
         //Assert
         expect(res.statusCode).toEqual(400)
+        done()
     })
 
     test("Test Valid request body", async done=>{
 
         //Arrange
-        let req_body ={ 
-            "body":
-                [
-                    {"orderId" : "1",
-                     "itemId"  : "1"
-                    }
-                ]
-        }
+        let req_body =[
+            {
+                "orderId" : 1,
+                "itemsId"  : 1,
+                "userId"  : 1
+            }
+        ]
+         
         let path = "/ordered-items/selected"
 
         //Act
         const res = await request.put(path).send(req_body)
 
         //Assert
-        expect(res.statusCode).toEqual(200)
+        expect(res.statusCode).toEqual(201)
+        done()  
     })
 })
 
-describe("Test updateSelectedStatus()",() =>{
-
-})
-
 describe("Test updateOrderedItemPaidStatus()", () =>{
+    test("Test Invalid request body", async done=>{
 
+        //Arrange
+        let req_body =
+                [
+                    {"orderId" : "invalid orderId type",
+                     "itemsId"  : "1"
+                    },
+                    {"orderId" : "2",
+                     "itemsId"  : "invalid type"
+                    }
+                ]
+        
+        let path = "/ordered-items/paid"
+
+        //Act
+        const res = await request.put(path).send(req_body)
+
+        //Assert
+        expect(res.statusCode).toEqual(400)
+        done()
+    })
+
+    test("Test Valid request body", async done=>{
+
+        //Arrange
+        let req_body =[
+            {
+                "orderId"  : 1,
+                "itemsId"  : 1
+            },
+            {
+                "orderId"  : 2,
+                "itemsId"  : 1
+            },
+        ]
+         
+        let path = "/ordered-items/paid"
+
+        //Act
+        const res = await request.put(path).send(req_body)
+
+        //Assert
+        expect(res.statusCode).toEqual(201)
+        done()  
+    })
 })

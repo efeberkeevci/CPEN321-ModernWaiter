@@ -14,15 +14,18 @@ function getUserById(req, res){
 
     let id = parseInt(req.params.id,10)
     if (isNaN(id)){
-        res.status(400).send("Invalid id type, must be an integer")
+        res.status(400).send("Invalid id type, must be an integer");
+        return;
     }
     
     let sql_query = mysql.format("SELECT * FROM users WHERE id = ?", [id])
     con.query(sql_query, function(err, result){
         if (err) {
-            res.status(400).send({code : err.code, errno : err.errno})
+            res.status(400).send({code : err.code, errno : err.errno});
+            return;
         }
-        res.status(200).send(result[0])
+        res.status(200).send(result[0]);
+        return;
     })
 }
 
@@ -39,9 +42,11 @@ function getUserByGoogleId(req, res){
     let sql_query = mysql.format("SELECT * FROM users WHERE google_id = ?", [googleId])
     con.query(sql_query, function(err, result){
         if (err) {
-            res.status(400).send({code : err.code, errno : err.errno})
+            res.status(400).send({code : err.code, errno : err.errno});
+            return;
         }
-        res.status(200).send(result[0])
+        res.status(200).send(result[0]);
+        return;
     })
 }
 
@@ -61,9 +66,11 @@ function addUser(req, res){
     let sql_query = mysql.format("INSERT INTO users (username, email, preferences, google_id) VALUES (?, ?, ?, ?)", [username, email, preferences, googleId])
     con.query(sql_query, function(err, result){
         if (err) {
-            res.status(400).send(err)
+            res.status(400).send(err);
+            return;
         }
-        res.status(200).send()
+        res.status(200).send();
+        return;
     })
 }
 
@@ -78,15 +85,18 @@ function getUserPreferences(req, res){
 
     let id = parseInt(req.params.id,10)
     if (isNaN(id)){
-        res.status(400).send("Invalid id type, must be an integer")
+        res.status(400).send("Invalid id type, must be an integer");
+        return;
     }
 
     let sql_query = mysql.format("SELECT preferences FROM users WHERE id = ?", [id])
     con.query(sql_query, function(err, result){
         if (err) {
-            res.status(400).send({code : err.code, errno : err.errno})
+            res.status(400).send({code : err.code, errno : err.errno});
+            return;
         }
-        res.status(200).send(result[0])
+        res.status(200).send(result[0]);
+        return;
     })
 }
 
@@ -101,7 +111,8 @@ function updateUserPreferences(req, res){
 
     let userId = parseInt(req.body.userId,10)
     if(isNaN(userId)){
-        res.status(400).send("Invalid user id type, must be an integer")
+        res.status(400).send("Invalid user id type, must be an integer");
+        return;
     }
 
     let preferences = req.body.preferences
@@ -109,9 +120,11 @@ function updateUserPreferences(req, res){
     let sql_query = mysql.format("UPDATE users SET preferences = ? WHERE id = ?", [preferences, userId])
     con.query(sql_query, function(err, result){
         if (err) {
-            res.status(400).send({code : err.code, errno : err.errno})
+            res.status(400).send({code : err.code, errno : err.errno});
+            return;
         }
-        res.status(200).send()
+        res.status(200).send();
+        return;
     })
 }
 
