@@ -14,7 +14,7 @@ let cost = "12.50"
 let description = "abc" 
 let calories = "123"
 let popularityCount = "0"
-let image = "./asdsdlkfnasjkşdnfşasjknfkjsnefkjasnecsdvjnaşjrsnvşsjdvncs.jpg" 
+let image = "" 
 
 async function testAddToMenu() {
     //Arrange
