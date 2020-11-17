@@ -176,3 +176,6 @@ async function testCreateStripePayment() {
     expect(res.status).toBe(200)
     expect(res.body.clientSecret).toStrictEqual(expect.anything())
 }
+module.exports = {testCreateOrder, testGetUserOrder, testGetMenu, 
+    testGetRecommendation, testAddOrderedItems, testGetOrderedItems, 
+    testGetStripeKey, testCreateStripePayment}
