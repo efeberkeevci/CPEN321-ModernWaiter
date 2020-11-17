@@ -216,7 +216,6 @@ public class TableSession implements SessionInterface {
                         }
                     }
 
-                    fetchBill();
                     fetchOrderList();
                     fetchUserRecommendation();
                 }, error -> Log.i("Fetch Menu", error.toString()));
@@ -272,36 +271,6 @@ public class TableSession implements SessionInterface {
         requestQueue.add(stringRequest);
     }
 
-    public void fetchBill() {
-        StringRequest stringRequest = new StringRequest(
-                Request.Method.GET, ApiUtil.orderedItems + orderId,
-                response -> {
-                    List<OrderedItemResponse> orderedItemResponses = new Gson().fromJson(response, new TypeToken<List<OrderedItemResponse>>() {
-                    }.getType());
-                    HashMap<MenuItem, Integer> updatedBillMap = new HashMap<>();
-
-                    for (OrderedItemResponse orderedItem : orderedItemResponses) {
-                        if (orderedItem.has_paid != 1) {
-                            MenuItem fakeMenuItem = new MenuItem(orderedItem.items_id);
-
-                            if (updatedBillMap.containsKey(fakeMenuItem))
-                                updatedBillMap.replace(fakeMenuItem, updatedBillMap.get(fakeMenuItem) + 1);
-                            else
-                                updatedBillMap.put(fakeMenuItem, 1);
-                        }
-                    }
-
-                    for (MenuItem menuItem : updatedBillMap.keySet()) {
-                        orderedItems.replace(menuItem, updatedBillMap.get(menuItem));
-                    }
-
-                    refreshBillFragment();
-                }, error -> Log.i("Fetch Bill", error.toString())
-        );
-
-        requestQueue.add(stringRequest);
-    }
-
     public void fetchOrderList() {
         StringRequest stringRequest = new StringRequest(
                 Request.Method.GET, ApiUtil.orderedItems + orderId,
@@ -309,6 +278,8 @@ public class TableSession implements SessionInterface {
                     List<OrderedItemResponse> orderedItemResponses = new Gson().fromJson(response,
                             new TypeToken<List<OrderedItemResponse>>() {}.getType());
                     orderList.clear();
+
+                    HashMap<MenuItem, Integer> updatedBillMap = new HashMap<>();
 
                     for (OrderedItemResponse orderedItem : orderedItemResponses) {
                         if (orderedItem.has_paid != 1) {
@@ -320,9 +291,20 @@ public class TableSession implements SessionInterface {
                                     orderList.add(new PaymentItem(menuItem, orderedItem.is_selected == 1));
                                 }
                             }
+
+                            if (updatedBillMap.containsKey(fakeMenuItem))
+                                updatedBillMap.replace(fakeMenuItem, updatedBillMap.get(fakeMenuItem) + 1);
+                            else
+                                updatedBillMap.put(fakeMenuItem, 1);
                         }
                     }
                     Collections.sort(orderList);
+
+                    for (MenuItem menuItem : updatedBillMap.keySet()) {
+                        orderedItems.replace(menuItem, updatedBillMap.get(menuItem));
+                    }
+
+                    refreshBillFragment();
                     refreshOrderListFragment();
                 }, error -> Log.i("Fetch order", error.toString())
         );

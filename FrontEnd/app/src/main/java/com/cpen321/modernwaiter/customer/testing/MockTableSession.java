@@ -108,11 +108,6 @@ public class MockTableSession implements SessionInterface {
     }
 
     @Override
-    public void fetchBill() {
-        updateBillCounter++;
-    }
-
-   @Override
     public void fetchOrderList() {
         Log.d("Alert:", "Inside fetchOrderList that doesn't do anything");
     }
