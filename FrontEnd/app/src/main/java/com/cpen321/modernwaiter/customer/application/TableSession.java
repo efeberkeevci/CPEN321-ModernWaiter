@@ -11,6 +11,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.cpen321.modernwaiter.R;
 import com.cpen321.modernwaiter.customer.ui.payment.peritem.PaymentItem;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -50,21 +51,20 @@ public class TableSession implements SessionInterface {
     // Testing values, change later
     private final String restaurantId = ApiUtil.RESTAURANT_ID;
     private final String tableId = ApiUtil.TABLE_ID;
-    private final String userId = ApiUtil.USER_ID;
+    private String userId;
 
-    private final String userGoogleId;
+    private final GoogleSignInAccount googleAccount;
 
     //creates a new session
-    TableSession(RequestQueue requestQueue, AppCompatActivity activity, String googleId) {
+    TableSession(RequestQueue requestQueue, AppCompatActivity activity, GoogleSignInAccount googleAccount) {
         //Make request to server to retrieve menu items to display
         this.activity = activity;
         this.requestQueue = requestQueue;
-        this.userGoogleId = googleId;
+        this.googleAccount = googleAccount;
 
         orderedItems = new HashMap<>();
 
         fetchUserId();
-        fetchOrderId();
     }
 
     @Override
@@ -208,10 +208,44 @@ public class TableSession implements SessionInterface {
 
     public void fetchUserId() {
         StringRequest stringRequest = new StringRequest(
-                Request.Method.GET, ApiUtil.getUserId + userGoogleId,
+                Request.Method.GET, ApiUtil.usersGoogle + googleAccount.getId(),
                 response -> {
-                    Log.i("Fetch user Id", response);
+                    if (response.equals("")) {
+                        postUserId();
+                    } else {
+                        UserResponse userResponse = new Gson().fromJson(response, new TypeToken<UserResponse>() {}.getType());
+                        userId = userResponse.id;
+                        fetchOrderId();
+                    }
                 }, error -> Log.i("Fetch user Id", error.toString()));
+
+        requestQueue.add(stringRequest);
+    }
+
+    public void postUserId() {
+        final Map<String, String> bodyFields = new HashMap<>();
+        bodyFields.put("username", googleAccount.getDisplayName());
+        bodyFields.put("email", googleAccount.getEmail());
+        bodyFields.put("googleId", googleAccount.getId());
+        bodyFields.put("preferences", "");
+
+        final String bodyJSON = new Gson().toJson(bodyFields);
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.POST, ApiUtil.users,
+                response -> fetchUserId(),
+
+                error -> Log.i("Post user", error.toString())
+        ) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+
+            @Override
+            public byte[] getBody() {
+                return bodyJSON.getBytes();
+            }
+        };
 
         requestQueue.add(stringRequest);
     }
@@ -416,5 +450,9 @@ public class TableSession implements SessionInterface {
             this.orderId = orderId;
             this.itemId = itemId;
         }
+    }
+
+    public class UserResponse {
+        public String id;
     }
 }

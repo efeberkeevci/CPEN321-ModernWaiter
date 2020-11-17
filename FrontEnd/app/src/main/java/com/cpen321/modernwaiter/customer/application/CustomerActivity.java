@@ -41,7 +41,7 @@ public class CustomerActivity extends AppCompatActivity {
         } else {
             account = GoogleSignIn.getLastSignedInAccount(this);
 
-            startSession(account.getId());
+            startSession(account);
         }
     }
 
@@ -55,9 +55,9 @@ public class CustomerActivity extends AppCompatActivity {
         }
     }
 
-    void startSession(String customerId) {
+    void startSession(GoogleSignInAccount account) {
         requestQueue = Volley.newRequestQueue(this);
-        tableSession = new TableSession(requestQueue, this, customerId);
+        tableSession = new TableSession(requestQueue, this, account);
 
         setContentView(R.layout.activity_main);
 
@@ -91,7 +91,7 @@ public class CustomerActivity extends AppCompatActivity {
             if (account == null) {
                 signInGoogle();
             } else {
-                startSession(account.getId());
+                startSession(account);
             }
 
         } catch (ApiException e) {
