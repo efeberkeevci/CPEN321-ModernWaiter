@@ -303,8 +303,10 @@ public class TableSession implements SessionInterface {
                     }
                     Collections.sort(orderList);
 
-                    for (MenuItem menuItem : updatedBillMap.keySet()) {
-                        orderedItems.replace(menuItem, updatedBillMap.get(menuItem));
+                    for (MenuItem menuItem : getBill().keySet()) {
+                        if (updatedBillMap.containsKey(menuItem))
+                            orderedItems.replace(menuItem, updatedBillMap.get(menuItem));
+                        else orderedItems.replace(menuItem, 0);
                     }
 
                     refreshBillFragment();
