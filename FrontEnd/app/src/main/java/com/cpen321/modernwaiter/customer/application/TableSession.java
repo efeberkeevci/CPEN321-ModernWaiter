@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -321,6 +322,7 @@ public class TableSession implements SessionInterface {
                             }
                         }
                     }
+                    Collections.sort(orderList);
                     refreshOrderListFragment();
                 }, error -> Log.i("Fetch order", error.toString())
         );
