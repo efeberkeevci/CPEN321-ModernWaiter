@@ -73,8 +73,9 @@ public class TableSession implements SessionInterface {
 
     @Override
     public void endSession() {
-        isActive = false;
-        NotificationService.unsubscribe(String.valueOf(orderId));
+        // TODO: REACTITVATE THIS
+        //isActive = false;
+        //NotificationService.unsubscribe(String.valueOf(orderId));
         navigateToPostPayment();
     }
 
