@@ -2,11 +2,9 @@ const app = require('../backend_server')
 const supertest = require('supertest')
 const request = supertest(app)
 
-//TODO: Check if written down is the right way to
-//Tests for GET /ordered-items/{{orderId}}
 describe("Test getOrderedItems()", () =>{
 
-    it("Testing Invalid orderId type", async done=> {
+    it("Testing Invalid order id type", async done=> {
         //Arrange
         let param = "Invalid orderId of wrong data type"
         let path = "/ordered-items/"
@@ -28,7 +26,6 @@ describe("Test getOrderedItems()", () =>{
         const res = await request.get(path+param)
 
         //Assert
-        //TODO: What to do for the case query returns 400 although valid
         expect(res.statusCode).toEqual(200)
         expect(typeof res.body[0].id).toBe('number')
         expect(typeof res.body[0].orders_id).toBe('number')
@@ -41,17 +38,17 @@ describe("Test getOrderedItems()", () =>{
 })
 
 describe("Test addOrderedItems()", () => {
-    it("Test Invalid request body", async done=> {
+    it("Test invalid order id", async done=> {
         //Arrange
         let req_body =
             [
                 {
                     "orderId" : "invalid orderId type",
-                    "itemsId"  : "1"
+                    "itemId"  : "1"
                 },
                 {
                     "orderId" : "2",
-                    "itemsId"  : "invalid type"
+                    "itemId"  : "1"
                 }
             ]
         
@@ -66,7 +63,32 @@ describe("Test addOrderedItems()", () => {
         done()
     })
 
-    it("Test Valid request body", async done=> {
+    it("Test invalid items id", async done=> {
+        //Arrange
+        let req_body =
+            [
+                {
+                    "orderId" : "2",
+                    "itemId"  : "1"
+                },
+                {
+                    "orderId" : "2",
+                    "itemId"  : "invalid type"
+                }
+            ]
+        
+        let path = "/ordered-items"
+
+        //Act
+        const res = await request.post(path).send(req_body)
+
+        //Assert
+        expect(res.status).toBe(400)
+        expect(res.text).toStrictEqual("Invalid request body - order and item ids must be integers")
+        done()
+    })
+
+    it("Test valid request body", async done=> {
         //Arrange
         let req_body =
             [
@@ -93,15 +115,16 @@ describe("Test addOrderedItems()", () => {
 })
 
 describe("Test updateSelectedStatus()",() => {
-    it("Test Invalid request body", async done=> {
+    it("Test invalid order id", async done=> {
 
         //Arrange
         let req_body =
             [
                 {
                     "orderId" : "invalid orderId type",
-                    "itemsId"  : "1",
-                    "userId"  : 1
+                    "itemId"  : 1,
+                    "userId"  : 1,
+                    "isSelected" : 1
                 }
             ]
         
@@ -116,7 +139,55 @@ describe("Test updateSelectedStatus()",() => {
         done()
     })
 
-    it("Test Valid request body", async done=>{
+    it("Test invalid item id", async done=> {
+
+        //Arrange
+        let req_body =
+            [
+                {
+                    "orderId" : 1,
+                    "itemId"  : "invalid itemId type",
+                    "userId"  : 1,
+                    "isSelected" : 1
+                }
+            ]
+        
+        let path = "/ordered-items/selected"
+
+        //Act
+        const res = await request.put(path).send(req_body)
+
+        //Assert
+        expect(res.status).toBe(400)
+        expect(res.text).toStrictEqual("Invalid request body - order, item and user ids must be integers")
+        done()
+    })
+
+    it("Test invalid user id", async done=> {
+
+        //Arrange
+        let req_body =
+            [
+                {
+                    "orderId" : 1,
+                    "itemId"  : 1,
+                    "userId"  : "invalid userId type",
+                    "isSelected" : 1
+                }
+            ]
+        
+        let path = "/ordered-items/selected"
+
+        //Act
+        const res = await request.put(path).send(req_body)
+
+        //Assert
+        expect(res.status).toBe(400)
+        expect(res.text).toStrictEqual("Invalid request body - order, item and user ids must be integers")
+        done()
+    })
+
+    it("Test valid request body", async done=>{
 
         //Arrange
         let req_body =
@@ -140,8 +211,7 @@ describe("Test updateSelectedStatus()",() => {
 })
 
 describe("Test updateOrderedItemPaidStatus()", () => {
-    it("Test Invalid request body", async done=>{
-
+    it("Test invalid order id", async done=> {
         //Arrange
         let req_body =
             [
@@ -149,7 +219,24 @@ describe("Test updateOrderedItemPaidStatus()", () => {
                     "orderId" : "invalid orderId type",
                     "itemId"  : "1",
                     "hasPaid" : 1
-                },
+                }
+            ]
+        
+        let path = "/ordered-items/paid"
+
+        //Act
+        const res = await request.put(path).send(req_body)
+
+        //Assert
+        expect(res.status).toBe(400)
+        done()
+    })
+
+    it("Test invalid item id", async done=>{
+
+        //Arrange
+        let req_body =
+            [
                 {
                     "orderId" : "2",
                     "itemId"  : "invalid type",
