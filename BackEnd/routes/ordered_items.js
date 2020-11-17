@@ -15,15 +15,18 @@ function getOrderedItems(req, res){
 
     let orderId = parseInt(req.params.orderId,10)
     if (isNaN(orderId)){
-        res.status(400).send("Invalid order id type, must be an integer")
+        res.status(400).send("Invalid order id type, must be an integer");
+        return;
     }
 
     let sql_query = mysql.format("SELECT * FROM ordered_items WHERE orders_id = ?", [orderId])
     con.query(sql_query, function(err, result){
         if (err) {
-            res.status(400).send({code : err.code, errno : err.errno})
+            res.status(400).send({code : err.code, errno : err.errno});
+            return;
         }
-        res.status(200).send(result)
+        res.status(200).send(result);
+        return;
     })
 }
 
