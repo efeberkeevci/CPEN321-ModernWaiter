@@ -2,7 +2,7 @@ package com.cpen321.modernwaiter.customer.ui.payment.peritem;
 
 import com.cpen321.modernwaiter.customer.application.MenuItem;
 
-public class PaymentItem {
+public class PaymentItem implements Comparable<PaymentItem> {
     public MenuItem menuItem;
     public boolean selected;
 
@@ -13,5 +13,19 @@ public class PaymentItem {
 
     public void setSelected(boolean selected) {
         this.selected = selected;
+    }
+
+    @Override
+    public int compareTo(PaymentItem o) {
+        if (!menuItem.name.equals(o.menuItem.name)) {
+            return menuItem.name.compareTo(o.menuItem.name);
+        }
+        if (selected == o.selected) {
+            return 0;
+        }
+        if (selected) {
+            return -1;
+        }
+        return 1;
     }
 }

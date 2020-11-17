@@ -31,7 +31,9 @@ public class MainPaymentFragment extends Fragment {
         pay_for_all.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Navigation.findNavController(view).navigate(R.id.action_navigation_payment_to_navigation_stripe);
+                Bundle bundle = new Bundle();
+                bundle.putString("mode", "pay_all");
+                Navigation.findNavController(view).navigate(R.id.action_navigation_payment_to_navigation_stripe, bundle);
             }
         });
 
@@ -39,8 +41,9 @@ public class MainPaymentFragment extends Fragment {
         split_evenly.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO
-                Navigation.findNavController(view).navigate(R.id.action_navigation_payment_to_navigation_stripe);
+                Bundle bundle = new Bundle();
+                bundle.putString("mode", "split_even");
+                Navigation.findNavController(view).navigate(R.id.action_navigation_payment_to_navigation_stripe, bundle);
             }
         });
 

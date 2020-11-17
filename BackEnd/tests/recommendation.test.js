@@ -59,7 +59,7 @@ describe('Test getItemRecommendation() with mock recommendation logic', () => {
 
       it('Gets the recommended item with invalid user and valid restaurant', async done => {
         // Arrange
-        const userId = 10
+        const userId = 100
         const restaurantId = 1
         const url = `/recommendation/${userId}/${restaurantId}`
         const mock = jest.fn().mockReturnValue()
@@ -71,7 +71,41 @@ describe('Test getItemRecommendation() with mock recommendation logic', () => {
         // Assert
         expect(response.status).toBe(400)
         expect(response.body).toStrictEqual({"message": "Failed to get user preference, check if userId is valid"})
-	done()
+	      done()
+      })
+
+      it('Gets the recommended item with incorrect user type and valid restaurant', async done => {
+        // Arrange
+        const userId = "abcd"
+        const restaurantId = 1
+        const url = `/recommendation/${userId}/${restaurantId}`
+        const mock = jest.fn().mockReturnValue()
+        recommendation_logic.getRecommendation = mock
+
+        // Act
+        const response = await request.get(url)
+
+        // Assert
+        expect(response.status).toBe(400)
+        expect(response.text).toStrictEqual("Invalid user and restaurant id types, must be an integer")
+	      done()
+      })
+
+      it('Gets the recommended item with valid user and incorrect restaurant type', async done => {
+        // Arrange
+        const userId = 1
+        const restaurantId = "abcd"
+        const url = `/recommendation/${userId}/${restaurantId}`
+        const mock = jest.fn().mockReturnValue()
+        recommendation_logic.getRecommendation = mock
+
+        // Act
+        const response = await request.get(url)
+
+        // Assert
+        expect(response.status).toBe(400)
+        expect(response.text).toStrictEqual("Invalid user and restaurant id types, must be an integer")
+	      done()
       })
   })
 

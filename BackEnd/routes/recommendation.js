@@ -14,22 +14,25 @@ var recommendation = require("../recommendation_logic.js");
 function getItemRecommendation(req, res){
     console.log("GET /recommendation")
     
-    let users_id = parseInt(req.params.users_id,10)
-    let restaurant_id = parseInt(req.params.restaurant_id,10)
+    let users_id = parseInt(req.params.userId,10)
+    let restaurant_id = parseInt(req.params.restaurantId,10)
     
     if (isNaN(users_id) || isNaN(restaurant_id)){
         res.status(400).send("Invalid user and restaurant id types, must be an integer");
         return;
     }
 
+    console.log("User: " + users_id)
+    console.log("Restaurant: " + restaurant_id)
+
     let user_query = mysql.format("SELECT preferences FROM users WHERE id = ?", [users_id])
     let desc_query = mysql.format("SELECT id, description FROM items WHERE restaurant_id = ?", [restaurant_id])
 
     con.query(user_query, function(err, prefResult){
-        if (err) {
-            res.status(400).send({code : err.code, errno : err.errno});
-            return;
-        };
+        // if (err) {
+        //     res.status(400).send({code : err.code, errno : err.errno});
+        //     return;
+        // }
 
         var preference
 
@@ -41,10 +44,10 @@ function getItemRecommendation(req, res){
         }
 
         con.query(desc_query, function(err, descResult) {
-            if (err) {
-                res.status(400).send({code : err.code, errno : err.errno});
-                return;
-            };
+            // if (err) {
+            //     res.status(400).send({code : err.code, errno : err.errno});
+            //     return;
+            // };
 
             var descriptionJsonArray = JSON.parse(JSON.stringify(descResult))
             var itemDescriptionMap = new Map()

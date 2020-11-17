@@ -45,6 +45,7 @@ function getUserOrder(req, res){
     console.log("GET /orders/user/{{userId}}")
     
     let users_id = parseInt(req.params.users_id,10)
+
     if (isNaN(users_id)){
         res.status(400).send("Invalid user id type, must be an integer");
         return;
@@ -53,10 +54,10 @@ function getUserOrder(req, res){
     let isActive = req.query.isActive
     let sql_query = mysql.format("SELECT * FROM orders WHERE users_id = ? && is_active_session = ? ", [users_id, isActive])
     con.query(sql_query, function(err, result){
-        if (err) {
-            res.status(400).send({code : err.code, errno : err.errno});
-            return;
-        }
+        // if (err) {
+        //     res.status(400).send({code : err.code, errno : err.errno});
+        //     return;
+        // }
         res.status(200).send(result)
         return;
     })
@@ -101,7 +102,7 @@ function getTableOrder(req, res){
 function updateOrderSessionStatus(req, res){
     console.log("PUT /orders/session")
 
-    let orderId = parseInt(req.params.orderId,10)
+    let orderId = parseInt(req.body.orderId,10)
     if (isNaN(orderId)){
         res.status(400).send("Invalid order id type, must be an integer")
         return
@@ -110,10 +111,10 @@ function updateOrderSessionStatus(req, res){
     let isActive = req.body.isActive
     let sql_query = mysql.format("UPDATE orders SET is_active_session = ? WHERE id = ?", [isActive, orderId])
     con.query(sql_query, function(err, result){
-        if (err) {
-            res.status(400).send({code : err.code, errno : err.errno});
-            return;
-        }
+        // if (err) {
+        //     res.status(400).send({code : err.code, errno : err.errno});
+        //     return;
+        // }
         res.status(200).send();
         return;
     })
@@ -131,7 +132,7 @@ function updateOrderSessionStatus(req, res){
 function updateOrderPaidStatus(req, res){
     console.log("PUT /orders/paid")
 
-    let orderId = parseInt(req.params.orderId,10)
+    let orderId = parseInt(req.body.orderId,10)
     if (isNaN(orderId)){
         res.status(400).send("Invalid order id type, must be an integer");
         return;
@@ -142,10 +143,10 @@ function updateOrderPaidStatus(req, res){
     console.log("In the order closed part")
     let sql_query = mysql.format("UPDATE orders SET has_paid = ? WHERE id = ?", [hasPaid,orderId])
     con.query(sql_query, function(err, result){
-        if (err) {
-            res.status(400).send({code : err.code, errno : err.errno});
-            return;
-        }
+        // if (err) {
+        //     res.status(400).send({code : err.code, errno : err.errno});
+        //     return;
+        // }
 
         res.status(200).send();
 

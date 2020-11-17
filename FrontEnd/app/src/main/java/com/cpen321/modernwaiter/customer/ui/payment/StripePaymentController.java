@@ -21,18 +21,22 @@ import com.stripe.android.model.PaymentMethodCreateParams;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.cpen321.modernwaiter.customer.application.CustomerActivity.tableSession;
 
 public class StripePaymentController {
 
     private Stripe stripe;
-    private FragmentActivity context;
-    private int totalAmount;
+    private final FragmentActivity context;
+    private final int totalAmount;
+    private final String mode;
 
-    StripePaymentController(FragmentActivity context, int totalAmount) {
+    StripePaymentController(FragmentActivity context, int totalAmount, String mode) {
+        this.mode = mode;
         this.context = context;
         this.totalAmount = totalAmount;
         requestKey();
@@ -125,7 +129,8 @@ public class StripePaymentController {
                             stripe.handleNextActionForPayment(context, paymentIntentClientSecret);
                         } else {
                             putPaid();
-                            endSession();
+                            //TODO: End Session is unused
+                            //endSession();
                             tableSession.endSession();
                         }
                     }
@@ -154,11 +159,15 @@ public class StripePaymentController {
         //PUT request to confirm that the order has been paid
         String url = ApiUtil.paidOrderItems;
 
-        HashMap<MenuItem, Integer> orderedItems = tableSession.getBill();
-        for( Map.Entry<MenuItem, Integer> item : orderedItems.entrySet() ) {
+        ArrayList<MenuItem> orderedItems = tableSession.getOrderList().stream()
+                                            .filter(paymentItem -> (!mode.equals("per_item") || !paymentItem.selected ))
+                                            .map(paymentItem -> paymentItem.menuItem)
+                                            .collect(Collectors.toCollection(ArrayList::new));
+
+        for( MenuItem item : orderedItems ) {
             Map<String,String> params = new HashMap<>();
             params.put("orderId", String.valueOf(tableSession.getOrderId()));
-            params.put("itemId", String.valueOf(item.getKey().id));
+            params.put("itemId", String.valueOf(item.id));
             params.put("hasPaid", "1");
             JSONObject parameters = new JSONObject(params);
 
@@ -172,21 +181,23 @@ public class StripePaymentController {
             tableSession.add(jsonObjectRequest);
         }
         //PUT request for order has been paid fully
-        String url_order_paid = ApiUtil.paidOrder;
-        Map<String,String> params = new HashMap<>();
-        params.put("orderId", String.valueOf(tableSession.getOrderId()));
-        params.put("hasPaid", "1");
-        JSONObject parameters = new JSONObject(params);
+        if (mode.equals("pay_all")) {
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.PUT, url_order_paid, parameters,
-                response -> {
-                    //on success
-                }, error -> Log.i("Request put paid full", error.toString())
-        );
+            String url_order_paid = ApiUtil.paidOrder;
+            Map<String, String> params = new HashMap<>();
+            params.put("orderId", String.valueOf(tableSession.getOrderId()));
+            params.put("hasPaid", "1");
+            JSONObject parameters = new JSONObject(params);
 
-        tableSession.add(jsonObjectRequest);
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                    Request.Method.PUT, url_order_paid, parameters,
+                    response -> {
+                        //on success
+                    }, error -> Log.i("Request put paid full", error.toString())
+            );
 
+            tableSession.add(jsonObjectRequest);
+        }
     }
 
     private void endSession(){

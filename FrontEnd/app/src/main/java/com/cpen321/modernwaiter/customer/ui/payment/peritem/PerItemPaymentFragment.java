@@ -55,7 +55,9 @@ public class PerItemPaymentFragment extends Fragment {
         payButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Navigation.findNavController(view).navigate(R.id.action_navigation_per_item_payment_to_stripe);
+                Bundle bundle = new Bundle();
+                bundle.putString("mode", "per_item");
+                Navigation.findNavController(view).navigate(R.id.action_navigation_per_item_payment_to_stripe, bundle);
             }
         });
         updateAmount();
