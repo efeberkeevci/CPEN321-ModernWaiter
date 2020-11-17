@@ -6,14 +6,15 @@ const { getRecommendation } = require('../../recommendation_logic')
 const { addOrderedItems, getOrderedItems } = require('../../routes/ordered_items')
 const { getStripeKey, createStripePayment } = require('../../routes/payment')
 const request = supertest(app)
-const{testCreateOrder, testGetUserOrder, testGetMenu, 
-    testGetRecommendation, testAddOrderedItems, testGetOrderedItems, 
-    testGetStripeKey, testCreateStripePayment} = require("./test_functions")
+const{ testGetStripeKey, testCreateStripePayment} = require("./test_functions")
 
-describe("Integration test 2: ", () => {
-    it("Adding items to cart", async done => {
-        await testAddOrderedItems()
+
+describe("Integration test 4: ", () => {
+    it("Pay for all the items", async done => {
+        await testGetStripeKey()
+        await testCreateStripePayment()
         done()
     })
 })
+
 
