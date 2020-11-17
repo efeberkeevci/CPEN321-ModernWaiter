@@ -33,7 +33,7 @@ con.connect(function(err) {
 
 // Routes for items
 app.get("/items/:restaurantId", items.getMenu)
-app.get("/items", items.addToMenu)
+app.post("/items", items.addToMenu)
 
 // Routes for options
 app.get("/item-options/:id", options.getItemOptions)
