@@ -53,10 +53,10 @@ async function testGetMenuLatestItem() {
     expect(response.body[response.body.length-1].restaurant_id).toStrictEqual(restaurantId)
     expect(response.body[response.body.length-1].name).toStrictEqual(name)
     expect(response.body[response.body.length-1].type).toStrictEqual(type)
-    expect(response.body[response.body.length-1].cost).toStrictEqual(String(cost))
+    expect(String(response.body[response.body.length-1].cost)).toStrictEqual(String(cost))
     expect(response.body[response.body.length-1].description).toStrictEqual(description)
-    expect(response.body[response.body.length-1].calories).toStrictEqual(String(calories))
-    expect(response.body[response.body.length-1].popularity_count).toStrictEqual(String(popularity_count))
+    expect(String(response.body[response.body.length-1].calories)).toStrictEqual(String(calories))
+    expect(String(response.body[response.body.length-1].popularity_count)).toStrictEqual(String(popularity_count))
     expect(response.body[response.body.length-1].image).toStrictEqual(image)
 
 }
