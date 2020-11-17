@@ -11,6 +11,7 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
 function getStripeKey(req, res){
     console.log("GET /key")
     res.send({ publishableKey: process.env.STRIPE_PUBLISHABLE_KEY })
+    return
 }
 
 /**
@@ -28,7 +29,8 @@ async function createStripePayment(req, res){
     let orderAmount = parseFloat(req.body.orderAmount)
 
     if(isNaN(orderAmount)){
-        res.status(400).send("Invalid order amount type - must be a double") 
+        res.status(400).send("Invalid order amount type - must be a double") ;
+        return;
     }
 
     const generateResponse = intent => {
@@ -76,11 +78,13 @@ async function createStripePayment(req, res){
         intent = await stripe.paymentIntents.confirm(paymentIntentId)
         // After confirm, if the PaymentIntent's status is succeeded, fulfill the order.
         }
-        res.send(generateResponse(intent))
+        res.send(generateResponse(intent));
+        return;
     } catch (e) {
         // Handle "hard declines" e.g. insufficient funds, expired card, etc
         // See https://stripe.com/docs/declines/codes for more
-        res.send({ error: e.message })
+        res.send({ error: e.message });
+        return;
     }
 }
 

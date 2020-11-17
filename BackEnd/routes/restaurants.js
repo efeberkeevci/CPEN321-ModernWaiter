@@ -12,17 +12,20 @@ const con = sql.getConnection()
 function getRestaurant(req, res){
     console.log("GET /restaurants/{{id}}");
 
-    let id = parseInt(req.params.id)
+    let id = parseInt(req.params.id,10)
     if (isNaN(id)){
-        res.status(400).send("Invalid id type, must be an integer")
+        res.status(400).send("Invalid id type, must be an integer");
+        return;
     }
 
     let sql_query = mysql.format("SELECT * FROM restaurant WHERE id = ?", [id]);
     con.query(sql_query, function(err, result){
         if (err) {
             res.status(400).send({code : err.code, errno : err.errno});
+            return;
         }
         res.status(200).send(result);
+        return;
     });
 }
 
@@ -37,7 +40,8 @@ function addRestaurant(req, res){
     let serviceFeePercentage = parseFloat(req.body.serviceFeePercentage)
 
     if (isNaN(taxPercentage) || isNaN(serviceFeePercentage)){
-        res.status(400).send("Invalid percentages type, must be a double")
+        res.status(400).send("Invalid percentages type, must be a double");
+        return;
     }
 
     let name = req.body.name
@@ -46,9 +50,11 @@ function addRestaurant(req, res){
     let sql_query = mysql.format("INSERT INTO restaurant (name, location, tax_percentage, service_fee_percentage) VALUES (?, ?, ?, ?)", [name, location, taxPercentage, serviceFeePercentage])
     con.query(sql_query, function(err, result){
         if (err) {
-            res.status(400).send({code : err.code, errno : err.errno})
+            res.status(400).send({code : err.code, errno : err.errno});
+            return;
         }
-        res.status(200).send(result)
+        res.status(200).send(result);
+        return;
     })
 }
 module.exports = {getRestaurant}
