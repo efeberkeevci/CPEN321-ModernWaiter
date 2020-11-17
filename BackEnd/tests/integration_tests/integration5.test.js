@@ -7,7 +7,7 @@ const { addOrderedItems, getOrderedItems } = require('../../routes/ordered_items
 const { getStripeKey, createStripePayment } = require('../../routes/payment')
 const request = supertest(app)
 
-let restaurantId = 1
+let restaurantId = 2
 let name = "testItem" 
 let type = "sushi"
 let cost = "12.5"
