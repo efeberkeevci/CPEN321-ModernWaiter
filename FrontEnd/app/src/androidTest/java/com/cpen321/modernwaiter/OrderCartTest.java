@@ -2,7 +2,7 @@ package com.cpen321.modernwaiter;
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
-import com.cpen321.modernwaiter.application.MainActivity;
+import com.cpen321.modernwaiter.customer.application.CustomerActivity;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -15,8 +15,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 public class OrderCartTest {
     @Rule
-    public ActivityScenarioRule<MainActivity> activityRule
-            = new ActivityScenarioRule<>(MainActivity.class);
+    public ActivityScenarioRule<CustomerActivity> activityRule
+            = new ActivityScenarioRule<>(CustomerActivity.class);
     @Test
     public void testCartButtons(){
 

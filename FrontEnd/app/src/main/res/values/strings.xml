@@ -6,7 +6,7 @@
     <string name="pay_for_all"> Pay for All</string>
     <string name="split_evenly">Split Evenly</string>
     <string name="pay_per_item">Pay per Item</string>
-    <string name ="go_to_menu">Go To Menu</string>
+    <string name="go_to_menu">Go To Menu</string>
     <string name="add_item">+</string>
     <string name="remove_item">-</string>
     <!-- TODO: Remove or change this placeholder text -->
@@ -33,4 +33,10 @@ Phasellus eget tincidunt ante. Mauris nec convallis urna, at volutpat turpis. Do
 Nullam ligula massa, pretium commodo tortor non, suscipit faucibus arcu. Phasellus blandit vestibulum magna, ut consequat libero finibus ac. Aliquam non est risus. Phasellus id nisi malesuada nisi faucibus cursus a at metus. Nunc venenatis pharetra accumsan. Aliquam sit amet tempor orci, nec feugiat arcu. Curabitur velit velit, viverra eget purus ac, porttitor maximus ipsum. Etiam venenatis ultrices diam, hendrerit volutpat leo mattis at.
 
 Proin vel imperdiet lorem. Nulla facilisi. Curabitur sagittis nibh et cursus suscipit. Etiam aliquam scelerisque augue, id eleifend sapien fringilla sit amet. Sed id urna orci. Nunc ac nisi posuere, dictum turpis a, suscipit purus. Vestibulum finibus eu nulla ac mattis. Praesent vulputate, eros ut hendrerit rutrum, mauris sapien finibus orci, quis placerat ante mi a sapien. Maecenas ac nibh velit. Cras euismod, eros non venenatis gravida, eros ligula blandit dolor, et facilisis justo dui ut tortor. Suspendisse libero tellus, lacinia in dignissim a, maximus at libero. Pellentesque a orci et sapien fringilla cursus at id erat. Fusce nibh tortor, vulputate pellentesque fringilla at, cursus eu enim. Donec dapibus cursus magna, in bibendum neque fermentum non. </string>
+    <string name="title_activity_barcode">BarcodeActivity</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="hello_world">Hello Square World!</string>
 </resources>

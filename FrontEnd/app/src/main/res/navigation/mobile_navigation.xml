@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_menu"
-        android:name="com.cpen321.modernwaiter.ui.menu.MenuFragment"
+        android:name="com.cpen321.modernwaiter.customer.ui.menu.MenuFragment"
         android:label="@string/title_menu"
         tools:layout="@layout/fragment_menu" >
         <action
@@ -21,7 +21,7 @@
 
     <fragment
         android:id="@+id/navigation_order"
-        android:name="com.cpen321.modernwaiter.ui.order.OrderFragment"
+        android:name="com.cpen321.modernwaiter.customer.ui.order.OrderFragment"
         android:label="Order"
         tools:layout="@layout/fragment_order" >
         <action
@@ -31,7 +31,7 @@
 
     <fragment
         android:id="@+id/navigation_bill"
-        android:name="com.cpen321.modernwaiter.ui.bill.BillFragment"
+        android:name="com.cpen321.modernwaiter.customer.ui.bill.BillFragment"
         android:label="Bill"
         tools:layout="@layout/fragment_bill" >
         <action
@@ -45,7 +45,7 @@
 
     <fragment
         android:id="@+id/navigation_payment"
-        android:name="com.cpen321.modernwaiter.ui.payment.MainPaymentFragment"
+        android:name="com.cpen321.modernwaiter.customer.ui.payment.MainPaymentFragment"
         android:label="Payment"
         tools:layout="@layout/fragment_payment" >
         <action
@@ -58,7 +58,7 @@
 
     <fragment
         android:id="@+id/navigation_per_item_payment"
-        android:name="com.cpen321.modernwaiter.ui.payment.peritem.PerItemPaymentFragment"
+        android:name="com.cpen321.modernwaiter.customer.ui.payment.peritem.PerItemPaymentFragment"
         android:label="Stripe"
         tools:layout="@layout/fragment_per_item_payment" >
         <action
@@ -72,7 +72,7 @@
 
     <fragment
         android:id="@+id/navigation_stripe"
-        android:name="com.cpen321.modernwaiter.ui.payment.StripePaymentFragment"
+        android:name="com.cpen321.modernwaiter.customer.ui.payment.StripePaymentFragment"
         android:label="Stripe"
         tools:layout="@layout/fragment_stripe" >
         <action
@@ -82,7 +82,7 @@
 
     <fragment
         android:id="@+id/navigation_post_payment"
-        android:name="com.cpen321.modernwaiter.ui.payment.PostPaymentFragment"
+        android:name="com.cpen321.modernwaiter.customer.ui.payment.PostPaymentFragment"
         android:label="Stripe"
         tools:layout="@layout/fragment_post_payment" >
         <action
