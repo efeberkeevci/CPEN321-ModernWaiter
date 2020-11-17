@@ -19,7 +19,7 @@ function subscribe(registrationToken, orderId){
     console.log("SUBSCRIBED for " + orderId);
     // Subscribe the devices corresponding to the registration tokens to the
     // topic.
-    let topic = orderId;
+    let topic = orderId.toString()
     admin.messaging().subscribeToTopic(registrationToken, topic)
         .then(function(response) {
         // See the MessagingTopicManagementResponse reference documentation
@@ -37,34 +37,34 @@ function subscribe(registrationToken, orderId){
 // These registration tokens come from the client FCM SDKs.
 
 function unsubscribe(registrationToken, orderId){
-    let topic = orderId;
-    // Unsubscribe the devices corresponding to the registration tokens from
-    // the topic.
-    admin.messaging().unsubscribeFromTopic(registrationTokens, topic)
-        .then(function(response) {
-        // See the MessagingTopicManagementResponse reference documentation
-        // for the contents of response.
-        console.log('Successfully unsubscribed from topic:', response);
-        })
-        .catch(function(error) {
-        console.log('Error unsubscribing from topic:', error);
-        });
+  let topic = orderId.toString()
+  // Unsubscribe the devices corresponding to the registration tokens from
+  // the topic.
+  admin.messaging().unsubscribeFromTopic(registrationToken, topic)
+      .then(function(response) {
+      // See the MessagingTopicManagementResponse reference documentation
+      // for the contents of response.
+      console.log('Successfully unsubscribed from topic:', response);
+      })
+      .catch(function(error) {
+      console.log('Error unsubscribing from topic:', error);
+      });
     
 }
 
 function push_notification_payment_done(orderId){
   console.log("Sending payment done push notification");
+  let topic = orderId.toString()
 
   var message = {
     notification: {
       title: 'Payment Completed!',
       body: 'All items are paid.'
-    },
-    topic:orderId
+    }
   };
 
   // Send a message to devices subscribed to the provided topic.
-  admin.messaging().send(message)
+  admin.messaging().sendToTopic(topic, message)
     .then((response) => {
       // Response is a message ID string.
       console.log('Successfully sent message:', response);
@@ -76,17 +76,17 @@ function push_notification_payment_done(orderId){
 
 function push_notification_order_received(orderId){
   console.log("Sending order received push notification for topic " + orderId);
+  let topic = orderId.toString()
 
   var message = {
     notification: {
       title: 'Order Received!',
       body: 'Your order is being prepared now'
-    },
-    topic:orderId
+    }
   };
 
   // Send a message to devices subscribed to the provided topic.
-  admin.messaging().send(message)
+  admin.messaging().sendToTopic(topic, message)
     .then((response) => {
       // Response is a message ID string.
       console.log('Successfully sent message:', response);
@@ -99,17 +99,17 @@ function push_notification_order_received(orderId){
 
 function push_notification_item_claimed(orderId) {
   console.log("Sending order received push notification");
+  let topic = orderId.toString()
 
   var message = {
     notification: {
-      title: 'Item Claimed!',
+      title: 'Order Received!',
       body: 'Your order is being prepared now'
-    },
-    topic:orderId
+    }
   };
 
   // Send a message to devices subscribed to the provided topic.
-  admin.messaging().send(message)
+  admin.messaging().sendToTopic(topic, message)
     .then((response) => {
       // Response is a message ID string.
       console.log('Successfully sent message:', response);

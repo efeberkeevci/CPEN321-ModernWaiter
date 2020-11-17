@@ -2,6 +2,7 @@ const mysql = require('mysql')
 const sql = require("./../sql_connection.js")
 const con = sql.getConnection()
 const push_notification = require("../push_notification.js")
+const { push_notification_payment_done } = require('../push_notification.js')
 
 /**
  * Retrieves a list of all the 
@@ -15,18 +16,18 @@ function getOrderedItems(req, res){
 
     let orderId = parseInt(req.params.orderId,10)
     if (isNaN(orderId)){
-        res.status(400).send("Invalid order id type, must be an integer");
-        return;
+        res.status(400).send("Invalid order id type, must be an integer")
+        return
     }
 
     let sql_query = mysql.format("SELECT * FROM ordered_items WHERE orders_id = ?", [orderId])
     con.query(sql_query, function(err, result){
         if (err) {
-            res.status(400).send({code : err.code, errno : err.errno});
-            return;
+            res.status(400).send({code : err.code, errno : err.errno})
+            return
         }
-        res.status(200).send(result);
-        return;
+        res.status(200).send(result)
+        return
     })
 }
 
@@ -47,8 +48,8 @@ function addOrderedItems(req, res){
         let itemId = parseInt(ordered_items[i].itemId,10)
 
         if (isNaN(orderId) || isNaN(itemId)){
-            res.status(400).send("Invalid request body - order and item ids must be integers");
-            return;
+            res.status(400).send("Invalid request body - order and item ids must be integers")
+            return
         }
         
         let sql_query = mysql.format("INSERT INTO ordered_items (orders_id, items_id, has_paid, is_selected) VALUES(?, ?, 0, 0) ", [orderId,itemId])
@@ -62,7 +63,7 @@ function addOrderedItems(req, res){
     let orderId = parseInt(ordered_items[0].orderId,10)
 
     push_notification.push_notification_order_received(orderId)
-    res.status(201).send();
+    res.status(201).send()
 }
 
 /**
@@ -77,8 +78,8 @@ function updateSelectedStatus(req, res){
     let userId = parseInt(req.body.userId,10)
 
     if (isNaN(orderId) || isNaN(itemId) || isNaN(userId)){
-        res.status(400).send("Invalid request body - order, item and user ids must be integers");
-        return;
+        res.status(400).send("Invalid request body - order, item and user ids must be integers")
+        return
     }
 
     let isSelected = req.body.isSelected
@@ -86,13 +87,13 @@ function updateSelectedStatus(req, res){
     let sql_query = mysql.format("UPDATE ordered_items SET is_selected = ?, users_id = ? WHERE orders_id = ? && items_id = ? && is_selected = ? LIMIT 1", [isSelected, userId, orderId, itemId, notIsSelected])
     con.query(sql_query, function(err, result){
         if (err) {
-            res.status(400).send({code : err.code, errno : err.errno});
-            return;
+            res.status(400).send({code : err.code, errno : err.errno})
+            return
         }
         res.status(200).send()
         push_notification.push_notification_item_claimed(orderId)
-        console.log(orderId + ":" + isSelected + " by " + userId + " for " + itemId);
-        return;
+        console.log(orderId + ":" + isSelected + " by " + userId + " for " + itemId)
+        return
     })
 }
 
@@ -107,8 +108,8 @@ function updateOrderedItemPaidStatus(req, res){
     let itemId = parseInt(req.body.itemId,10)
 
     if (isNaN(orderId) || isNaN(itemId)){
-        res.status(400).send("Invalid request body - order and item ids must be integers");
-        return;
+        res.status(400).send("Invalid request body - order and item ids must be integers")
+        return
     }
 
     let hasPaid = req.body.hasPaid
@@ -116,11 +117,12 @@ function updateOrderedItemPaidStatus(req, res){
     let sql_query = mysql.format("UPDATE ordered_items SET has_paid = ? WHERE orders_id = ? && items_id = ? && has_paid = ? LIMIT 1", [hasPaid, orderId, itemId, notHasPaid])
     con.query(sql_query, function(err, result){
         if (err) {
-            res.status(400).send({code : err.code, errno : err.errno});
-            return;
+            res.status(400).send({code : err.code, errno : err.errno})
+            return
         }
-        res.status(201).send();
-        return;
+        res.status(201).send()
+        push_notification_payment_done(orderId)
+        return
     })
 }
 
