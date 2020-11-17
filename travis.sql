@@ -18,7 +18,6 @@
 --
 -- Table structure for table `items`
 --
-USE MODERN_WAITER_DB;
 
 DROP TABLE IF EXISTS `items`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -262,4 +261,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-11-02  7:46:02
+-- Dump completed on 2020-11-17 12:20:54

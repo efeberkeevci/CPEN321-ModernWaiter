@@ -150,8 +150,7 @@ function updateOrderPaidStatus(req, res){
 
         res.status(200).send();
 
-        console.log("Sending payment done notification");
-        push_notification.push_notification_payment_done(orderId);
+
         return;
     })
 }

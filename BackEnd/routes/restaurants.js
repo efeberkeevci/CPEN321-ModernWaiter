@@ -57,4 +57,4 @@ function addRestaurant(req, res){
         return;
     })
 }
-module.exports = {getRestaurant}
+module.exports = {getRestaurant, addRestaurant}

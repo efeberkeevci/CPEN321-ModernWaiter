@@ -50,9 +50,10 @@ function addToMenu(req, res){
         return;
     }
 
-    let sql_query = mysql.format("INSERT INTO items (restaurantId, name, type, cost, description, calories, popularity_count, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [restaurantId, name, type, cost, description, calories, popularityCount, image])
+    let sql_query = mysql.format("INSERT INTO items (restaurant_id, name, type, cost, description, calories, popularity_count, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [restaurantId, name, type, cost, description, calories, popularityCount, image])
     con.query(sql_query, function(err, result){
         if (err) {
+            
             res.status(400).send({code : err.code, errno : err.errno});
             return;
         }
@@ -73,4 +74,4 @@ function getItemName(itemId){
     });
 }
 
-module.exports = {getMenu, getItemName}
+module.exports = {getMenu, addToMenu, getItemName}

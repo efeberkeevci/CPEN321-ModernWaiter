@@ -46,10 +46,10 @@ function addOrderedItems(req, res){
         // let orderId = ordered_items[i].orderId
         // let itemId = ordered_items[i].itemId
         let orderId = parseInt(ordered_items[i].orderId,10)
-        let itemId = parseInt(ordered_items[i].itemsId,10)
+        let itemId = parseInt(ordered_items[i].itemId,10)
 
         if (isNaN(orderId) || isNaN(itemId)){
-            res.status(400).send("Invalid request body - order and item ids must be integers");
+            res.status(400).send("Invalid request body - order and item ids must be integers")
             return;
         }
         
@@ -62,7 +62,6 @@ function addOrderedItems(req, res){
         })
     }
     let orderId = parseInt(ordered_items[0].orderId,10)
-
     push_notification.push_notification_order_received(orderId)
     res.status(201).send()
 }
