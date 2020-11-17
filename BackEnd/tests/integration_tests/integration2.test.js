@@ -12,6 +12,8 @@ const{testCreateOrder, testGetUserOrder, testGetMenu,
 
 describe("Integration test 2: ", () => {
     it("Adding items to cart", async done => {
+        await testCreateOrder()
+        await testGetUserOrder()
         await testAddOrderedItems()
         done()
     })
