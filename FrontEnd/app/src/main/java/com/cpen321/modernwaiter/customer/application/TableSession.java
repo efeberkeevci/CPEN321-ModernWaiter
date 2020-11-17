@@ -63,6 +63,7 @@ public class TableSession implements SessionInterface {
 
         orderedItems = new HashMap<>();
 
+        fetchUserId();
         fetchOrderId();
     }
 
@@ -205,12 +206,19 @@ public class TableSession implements SessionInterface {
         requestQueue.add(request);
     }
 
-    public void fetchMenu() {
-
-        String url = ApiUtil.items + restaurantId;
-
+    public void fetchUserId() {
         StringRequest stringRequest = new StringRequest(
-                Request.Method.GET, url,
+                Request.Method.GET, ApiUtil.getUserId + userGoogleId,
+                response -> {
+                    Log.i("Fetch user Id", response);
+                }, error -> Log.i("Fetch user Id", error.toString()));
+
+        requestQueue.add(stringRequest);
+    }
+
+    public void fetchMenu() {
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.GET, ApiUtil.items + restaurantId,
                 response -> {
                     ArrayList<MenuItem> newMenuItems = new Gson().fromJson(response, new TypeToken<List<MenuItem>>() {}.getType());
 
@@ -321,8 +329,6 @@ public class TableSession implements SessionInterface {
     }
 
     private void fetchUserRecommendation() {
-
-
         StringRequest stringRequest = new StringRequest(
                 Request.Method.GET, ApiUtil.recommend + userId + "/" + restaurantId,
                 response -> {

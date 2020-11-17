@@ -9,6 +9,8 @@ public class ApiUtil {
 
     public static final String URL = "http://52.170.16.110:3000/";
 
+    public static final String getUserId = URL + "users/google/";
+
     public static final String items = URL + "items/";
 
     public static final String health = URL + "_health";
