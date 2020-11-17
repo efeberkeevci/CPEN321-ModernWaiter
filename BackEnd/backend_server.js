@@ -61,6 +61,7 @@ app.get("/recommendation/:userId/:restaurantId", recommendation.getItemRecommend
 
 // Routes for restaurant
 app.get("/restaurants/:id", restaurants.getRestaurant)
+app.post("/restaurants", restaurants.addRestaurant)
 
 // Routes for table
 app.get("/tables/:id", tables.getTable)
