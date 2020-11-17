@@ -21,12 +21,20 @@ con.connect(function(err) {
     if (err) throw err
     console.log("Connected!")
 
+    
+    var server = app.listen(3000,function(){
+        var port = server.address().port
+        console.log("Server started listening at %s", port)
+    })
+    
+    /*
     if (process.env.NODE_ENV !== 'test') {
         var server = app.listen(3000,function(){
             var port = server.address().port
             console.log("Server started listening at %s", port)
         })
     }
+    */
 })
 
 /*********************** REST API routes ****************************/
