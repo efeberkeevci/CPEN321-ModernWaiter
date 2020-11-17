@@ -1,6 +1,7 @@
 const express = require('express')
 const env = require("dotenv").config({ path: "./.env" })
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
+const { push_notification_payment_done } = require('../push_notification.js')
 
 /**
  * Gets the stripe key required to pay for

@@ -2,7 +2,6 @@ const mysql = require('mysql')
 const sql = require("./../sql_connection.js")
 const con = sql.getConnection()
 const push_notification = require("../push_notification.js")
-const { push_notification_payment_done } = require('../push_notification.js')
 
 /**
  * Retrieves a list of all the 
@@ -82,11 +81,14 @@ function updateSelectedStatus(req, res){
         return
     }
 
-    let isSelected = req.body.isSelected
+    let isSelected = parseInt(req.body.isSelected === 'true' ? 1 : 0)
+    console.log(req.body.isSelected)
+    console.log(isSelected)
     let notIsSelected = isSelected === 1 ? 0 : 1
-    let sql_query = mysql.format("UPDATE ordered_items SET is_selected = ?, users_id = ? WHERE orders_id = ? && items_id = ? && is_selected = ? LIMIT 1", [isSelected, userId, orderId, itemId, notIsSelected])
+    let sql_query = mysql.format("UPDATE ordered_items SET is_selected = ?, users_id = ? WHERE orders_id = ? && items_id = ? && is_selected = ? && has_paid = 0 LIMIT 1", [isSelected, userId, orderId, itemId, notIsSelected])
     con.query(sql_query, function(err, result){
         if (err) {
+            console.log(err)
             res.status(400).send({code : err.code, errno : err.errno})
             return
         }
@@ -103,7 +105,6 @@ function updateSelectedStatus(req, res){
  * @param {*} res Status code 200 if successful, else 400
  */
 function updateOrderedItemPaidStatus(req, res){
-    console.log("PUT /ordered-items/paid")
     let orderId = parseInt(req.body.orderId,10)
     let itemId = parseInt(req.body.itemId,10)
 
@@ -112,8 +113,10 @@ function updateOrderedItemPaidStatus(req, res){
         return
     }
 
-    let hasPaid = req.body.hasPaid
+    let hasPaid = parseInt(req.body.hasPaid)
     let notHasPaid = hasPaid === 1 ? 0 : 1
+    console.log("PUT /ordered-items/paid" + " for item: " + itemId + " in order: " + orderId + " to status: " + hasPaid)
+
     let sql_query = mysql.format("UPDATE ordered_items SET has_paid = ? WHERE orders_id = ? && items_id = ? && has_paid = ? LIMIT 1", [hasPaid, orderId, itemId, notHasPaid])
     con.query(sql_query, function(err, result){
         if (err) {
@@ -121,7 +124,6 @@ function updateOrderedItemPaidStatus(req, res){
             return
         }
         res.status(201).send()
-        push_notification_payment_done(orderId)
         return
     })
 }
