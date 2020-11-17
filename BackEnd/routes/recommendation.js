@@ -14,16 +14,16 @@ var recommendation = require("../recommendation_logic.js");
 function getItemRecommendation(req, res){
     console.log("GET /recommendation")
     
-    // let users_id = parseInt(req.params.users_id,10)
-    // let restaurant_id = parseInt(req.params.restaurant_id,10)
+    let users_id = parseInt(req.params.userId,10)
+    let restaurant_id = parseInt(req.params.restaurantId,10)
     
-    let users_id = req.params.users_id
-    let restaurant_id = req.params.restaurant_id
-    
-    // if (isNaN(users_id) || isNaN(restaurant_id)){
-    //     res.status(400).send("Invalid user and restaurant id types, must be an integer");
-    //     return;
-    // }
+    if (isNaN(users_id) || isNaN(restaurant_id)){
+        res.status(400).send("Invalid user and restaurant id types, must be an integer");
+        return;
+    }
+
+    console.log("User: " + users_id)
+    console.log("Restaurant: " + restaurant_id)
 
     let user_query = mysql.format("SELECT preferences FROM users WHERE id = ?", [users_id])
     let desc_query = mysql.format("SELECT id, description FROM items WHERE restaurant_id = ?", [restaurant_id])
