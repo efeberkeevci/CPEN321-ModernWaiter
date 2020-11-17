@@ -106,7 +106,7 @@ public class TableSession implements SessionInterface {
         final Map<String, String> bodyFields = new HashMap<>();
         bodyFields.put("orderId", String.valueOf(orderId));
         bodyFields.put("itemId", String.valueOf(orderItem.menuItem.id));
-        bodyFields.put("isSelected", String.valueOf(orderItem.selected));
+        bodyFields.put("isSelected", String.valueOf(orderItem.selected ));
         bodyFields.put("userId", orderItem.selected ? userId : "-1");
 
         final String bodyJSON = new Gson().toJson(bodyFields);
