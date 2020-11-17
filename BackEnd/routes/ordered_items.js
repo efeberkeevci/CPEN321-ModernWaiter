@@ -43,13 +43,15 @@ function addOrderedItems(req, res){
 
 
     for(var i = 0; i < ordered_items.length; i++){
-        let orderId = parseInt(ordered_items[i].orderId,10)
-        let itemId = parseInt(ordered_items[i].itemId,10)
+        let orderId = ordered_items[i].orderId
+        let itemId = ordered_items[i].itemId
+//         let orderId = parseInt(ordered_items[i].orderId,10)
+//         let itemId = parseInt(ordered_items[i].itemId,10)
 
-        if (isNaN(orderId) || isNaN(itemId)){
-            res.status(400).send("Invalid request body - order and item ids must be integers")
-            return
-        }
+//         if (isNaN(orderId) || isNaN(itemId)){
+//             res.status(400).send("Invalid request body - order and item ids must be integers");
+//             return;
+//         }
         
         let sql_query = mysql.format("INSERT INTO ordered_items (orders_id, items_id, has_paid, is_selected) VALUES(?, ?, 0, 0) ", [orderId,itemId])
         con.query(sql_query, function(err, result){

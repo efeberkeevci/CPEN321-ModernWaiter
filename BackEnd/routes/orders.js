@@ -45,6 +45,7 @@ function getUserOrder(req, res){
     console.log("GET /orders/user/{{userId}}")
     
     let users_id = parseInt(req.params.users_id,10)
+
     if (isNaN(users_id)){
         res.status(400).send("Invalid user id type, must be an integer");
         return;
