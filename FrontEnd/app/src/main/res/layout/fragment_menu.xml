@@ -55,7 +55,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-
             <View
                 android:id="@+id/horizontal_line"
                 android:layout_width="match_parent"
@@ -70,9 +69,13 @@
 
             <TextView
                 android:id="@+id/feature_name"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:text="@string/dotdotdot"
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:textSize="24sp"

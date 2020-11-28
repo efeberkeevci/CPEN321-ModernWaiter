@@ -35,7 +35,7 @@ public class IntegratedTesting {
 
     private final static String NOTIFICATION_TITLE = "Order Received!";
     private final static String NOTIFICATION_TEXT = "Order Received";
-    private final static int TIMEOUT = 3000;
+    private final static int TIMEOUT = 50000;
 
     @Before
     public void changeUserAndTableId() throws InterruptedException {
@@ -209,7 +209,6 @@ public class IntegratedTesting {
         } catch(Exception e){
             Assert.fail("***********Could not add item to the table order*************\n" + e.getMessage());
         }
-        payForAll();
     }
 
     /**TODO: write this test
@@ -220,13 +219,11 @@ public class IntegratedTesting {
 
         //by default on menu
         try {
-            UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+
             try {
                 //click on a menu item
                 onView(withId(R.id.menu_recycler))
                         .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-
-                String addedItem = "Dummy Roll";
 
                 //add item to cart
                 onView(withId(R.id.incrementButton))
@@ -248,12 +245,14 @@ public class IntegratedTesting {
                 Assert.fail("Something wrong with display");
             }
             try {
+                UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
                 device.openNotification();
                 device.wait(Until.hasObject(By.text(NOTIFICATION_TITLE)), TIMEOUT);
                 UiObject2 title = device.findObject(By.text(NOTIFICATION_TITLE));
                 UiObject2 text = device.findObject(By.text(NOTIFICATION_TEXT));
                 assertEquals(NOTIFICATION_TITLE, title.getText());
                 assertEquals(NOTIFICATION_TEXT, text.getText());
+                title.click();
             }
             catch(Exception e){
                 Assert.fail("Something wrong with device");
@@ -262,9 +261,12 @@ public class IntegratedTesting {
         catch(Exception e){
             Assert.fail("************Did not receive any notification regarding order********\n" +e.getMessage());
         }
-        payForAll();
     }
 
+
+    /**
+     * Pay for all
+     */
     /**
      * view bill
      * initiate payment
@@ -273,11 +275,24 @@ public class IntegratedTesting {
      * pay
      * check if successful
      */
+    @Test
     public void payForAll(){
 
-        //by default on menu
+        onView(withId(R.id.menu_recycler))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+
+        //add item to cart
+        onView(withId(R.id.incrementButton))
+                .perform(click());
+
+        //now go back to menu
+        onView(withId(R.id.exitButton))
+                .perform(click());
         //click view cart
         onView(withId(R.id.viewCartButton))
+                .perform(click());
+        //click on checkout
+        onView(withId(R.id.checkoutButton))
                 .perform(click());
 
         //click on view bill
@@ -303,25 +318,17 @@ public class IntegratedTesting {
         onView(withId(R.id.pay_for_all))
                 .perform(click());
 
-        //check that on stripe payment
-        onView(withId(R.id.payButton))
-                .check(matches(isDisplayed()));
-
-        //click on pay
-        onView(withId(R.id.payButton))
-                .perform(click());
 
         //input payment details
-        String creditCardNumber = "4242" + "4242" + "4242" + "4242";
-        String date = "05/22";
+        /*String creditCardNumber = "4242" + "4242" + "4242" + "4242";
+        String date = "424";
         String cv = "012";
-        String postal = "V3Z 8C7";
-        //check that the widget is displayed
-        onView(withId(R.id.cardInputWidget))
-                .check(matches(isDisplayed()));
+        String postal = "123";
+        String info = creditCardNumber+date+cv;
         //input details
         onView(withId(R.id.cardInputWidget))
-                .perform(typeText(creditCardNumber+date+cv+postal), closeSoftKeyboard());
+                .perform(typeText(info), closeSoftKeyboard());
+
         //press pay
         onView(withId(R.id.payButton))
                 .perform(click());
@@ -330,12 +337,10 @@ public class IntegratedTesting {
         onView(withId(R.id.textView2))
                 .check(matches(isDisplayed()));
         onView(withId(R.id.textView2))
-                .check(matches(withText(R.string.thank_you_post_payment)));
+                .check(matches(withText(R.string.thank_you_post_payment)));*/
     }
 
-    /**
-     * Pay for all
-     */
+
 
 
 }
