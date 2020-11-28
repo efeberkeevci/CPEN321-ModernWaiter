@@ -14,22 +14,21 @@ function createOrder(req, res){
     let tableId = parseInt(req.body.tableId,10)
     let restaurantId = parseInt(req.body.restaurantId,10)
     let amount = parseFloat(req.body.amount)
+    let hasPaid = parseInt(req.body.hasPaid)
+    let isActive = parseInt(req.body.isActive)
 
     if (isNaN(userId) || isNaN(tableId) || isNaN(restaurantId) || isNaN(amount)){
-        res.status(400).send("Invalid request body - user, table and restaurant ids must be integers, amount must be a double");
+        res.status(400).send("Invalid request body - user, table, restaurant ids, and hasPaid and isActive must be integers, amount must be a double");
         return;
     }
-
-    let hasPaid = req.body.hasPaid
-    let isActive = req.body.isActive
 
     let sql_query = mysql.format("INSERT INTO orders ( users_id, tables_id, restaurant_id, amount, has_paid, is_active_session) VALUES(?,?,?,?,?,?)", [userId, tableId, restaurantId, amount, hasPaid, isActive])
     
     con.query(sql_query, function(err, result){
-        if (err) {
-            res.status(400).send({code : err.code, errno : err.errno});
-            return;
-        }
+        // if (err) {
+        //     res.status(400).send({code : err.code, errno : err.errno});
+        //     return;
+        // }
         res.status(201).send()
         return;
     })
@@ -45,13 +44,13 @@ function getUserOrder(req, res){
     console.log("GET /orders/user/{{userId}}")
     
     let users_id = parseInt(req.params.users_id,10)
+    let isActive = parseInt(req.query.isActive)
 
-    if (isNaN(users_id)){
-        res.status(400).send("Invalid user id type, must be an integer");
+    if (isNaN(users_id) || isNaN(isActive)){
+        res.status(400).send("Invalid users_id or isActive type, must be an integer");
         return;
     }
 
-    let isActive = req.query.isActive
     let sql_query = mysql.format("SELECT * FROM orders WHERE users_id = ? && is_active_session = ? ", [users_id, isActive])
     con.query(sql_query, function(err, result){
         // if (err) {
@@ -73,12 +72,13 @@ function getTableOrder(req, res){
     console.log("GET /orders/table/{{tableId}}")
 
     let tables_id = parseInt(req.params.tables_id,10)
-    if (isNaN(tables_id)){
-        res.status(400).send("Invalid table id type, must be an integer");
+    let isActive = parseInt(req.query.isActive)
+
+    if (isNaN(tables_id) || isNaN(isActive)){
+        res.status(400).send("Invalid tables_id or isActive type, must be an integer");
         return;
     }
 
-    let isActive = req.query.isActive
     let sql_query = mysql.format("SELECT * FROM orders WHERE tables_id = ? && is_active_session = ? ", [tables_id, isActive])
     con.query(sql_query, function(err, result){
         // if (err) {
@@ -103,12 +103,13 @@ function updateOrderSessionStatus(req, res){
     console.log("PUT /orders/session")
 
     let orderId = parseInt(req.body.orderId,10)
-    if (isNaN(orderId)){
-        res.status(400).send("Invalid order id type, must be an integer")
+    let isActive = parseInt(req.body.isActive)
+
+    if (isNaN(orderId) || isNaN(isActive)){
+        res.status(400).send("Invalid orderId or isActive type, must be an integer")
         return
     }
 
-    let isActive = req.body.isActive
     let sql_query = mysql.format("UPDATE orders SET is_active_session = ? WHERE id = ?", [isActive, orderId])
     con.query(sql_query, function(err, result){
         // if (err) {
@@ -133,14 +134,13 @@ function updateOrderPaidStatus(req, res){
     console.log("PUT /orders/paid")
 
     let orderId = parseInt(req.body.orderId,10)
-    if (isNaN(orderId)){
-        res.status(400).send("Invalid order id type, must be an integer");
+    let hasPaid = parseInt(req.body.hasPaid)
+
+    if (isNaN(orderId) || isNaN(hasPaid)){
+        res.status(400).send("Invalid orderId or isActive type, must be an integer");
         return;
     }
 
-    let hasPaid = req.body.hasPaid
-    console.log(orderId,hasPaid)
-    console.log("In the order closed part")
     let sql_query = mysql.format("UPDATE orders SET has_paid = ? WHERE id = ?", [hasPaid,orderId])
     con.query(sql_query, function(err, result){
         // if (err) {

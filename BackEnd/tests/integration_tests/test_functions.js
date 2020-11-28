@@ -17,10 +17,12 @@ let calories = "123"
 let popularityCount = "0"
 let image = "" 
 var userId
-var username
-var email
-var googleId
-var preferences
+
+var timestamp = new Date().getTime()
+var username = "Integration_test" + timestamp
+var googleId = "dummy_google" + timestamp
+var email = "integration_test_user" + timestamp + "@gmail.com"
+var preferences = "chicken"
 
 var dummyString = "dummy"
 
@@ -394,20 +396,10 @@ async function testUpdateUserPreferences() {
     preferences = "mango cucumber tuna spicy"
 }
 
-/* Invalid cases functions */
-async function testGetRecommendationInvalid() {
-    // Arrange
-    const url = `/recommendation/${dummyString}/${dummyString}`
-
-    // Act
-    const response = await request.get(url)
-
-    // Assert
-    expect(response.status).toBe(400)
-}
-
-module.exports = {testCreateOrder, testPaidStatusDone, testGetUserOrder, testGetMenu, 
+module.exports = {
+    testCreateOrder, testPaidStatusDone, testGetUserOrder, testGetMenu, 
     testGetRecommendation, testAddOrderedItems, testGetOrderedItems, testOrderedItemPaid,
-    testGetStripeKey, testCreateStripePayment, testGetTableOrder, testTableSessionDone, testOrderedItemSelected,
-    testCreateUser, testGetUserByGoogleId, testGetUserByUserId, testGetUserPreferences, testUpdateUserPreferences,
-    testAddToMenu, testGetMenuLatestItem, testGetRecommendationInvalid}
+    testGetStripeKey, testCreateStripePayment, testGetTableOrder, testTableSessionDone, 
+    testOrderedItemSelected, testCreateUser, testGetUserByGoogleId, testGetUserByUserId, 
+    testGetUserPreferences, testUpdateUserPreferences, testAddToMenu, testGetMenuLatestItem
+}
