@@ -34,14 +34,14 @@ function getItemRecommendation(req, res){
         //     return;
         // }
 
-        var preference
+        var preference = prefResult[0]["preferences"]
 
-        try {
-            preference = prefResult[0]["preferences"]
-        } catch (error) {
-            res.status(400).send({message: "Failed to get user preference, check if userId is valid"});
-            return;
-        }
+        // try {
+        //     preference = prefResult[0]["preferences"]
+        // } catch (error) {
+        //     res.status(400).send({message: "Failed to get user preference, check if userId is valid"});
+        //     return;
+        // }
 
         con.query(desc_query, function(err, descResult) {
             // if (err) {

@@ -6,7 +6,6 @@ const sql = require("./sql_connection.js")
 const con = sql.getConnection()
 
 const items = require('./routes/items.js')
-const options = require('./routes/options.js')
 const ordered_items = require('./routes/ordered_items.js')
 const orders = require('./routes/orders.js')
 const payment = require('./routes/payment.js')
@@ -34,10 +33,6 @@ con.connect(function(err) {
 // Routes for items
 app.get("/items/:restaurantId", items.getMenu)
 app.post("/items", items.addToMenu)
-
-// Routes for options
-app.get("/item-options/:id", options.getItemOptions)
-app.get("/options/:id", options.getOptions)
 
 // Routes for ordered items
 app.get("/ordered-items/:orderId", ordered_items.getOrderedItems)

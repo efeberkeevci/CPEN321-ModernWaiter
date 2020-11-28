@@ -83,8 +83,6 @@ function updateSelectedStatus(req, res){
     }
 
     let isSelected = parseInt(req.body.isSelected === 'true' ? 1 : 0)
-    console.log(req.body.isSelected)
-    console.log(isSelected)
     let notIsSelected = isSelected === 1 ? 0 : 1
     let sql_query = mysql.format("UPDATE ordered_items SET is_selected = ?, users_id = ? WHERE orders_id = ? && items_id = ? && is_selected = ? && has_paid = 0 LIMIT 1", [isSelected, userId, orderId, itemId, notIsSelected])
     con.query(sql_query, function(err, result){

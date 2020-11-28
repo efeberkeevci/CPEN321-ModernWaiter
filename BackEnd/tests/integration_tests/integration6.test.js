@@ -1,15 +1,9 @@
 const app = require('../../backend_server')
 const supertest = require('supertest')
-const { getUserOrder } = require('../../routes/orders')
-const { getRestaurant } = require('../../routes/restaurants')
-const { getRecommendation } = require('../../recommendation_logic')
-const { addOrderedItems, getOrderedItems } = require('../../routes/ordered_items')
-const { getStripeKey, createStripePayment } = require('../../routes/payment')
-const { testGetMenu } = require('./test_functions')
 const request = supertest(app)
+const { testGetMenu } = require('./test_functions')
 
 //Test to get restaurant, get restaurant menu, 
-let restaurantId
 
 describe("Integration test 6: ", () => {
     it("Test to add a restaurant, verify added restaurant, get restaurant menu", async done => {
@@ -22,7 +16,7 @@ describe("Integration test 6: ", () => {
 
 async function testGetRestaurant() {
     // Arrange
-    const url = `/restaurants/${restaurantId}`
+    const url = `/restaurants/2`
 
     // Act
     const response = await request.get(url)
