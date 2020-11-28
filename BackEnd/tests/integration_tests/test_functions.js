@@ -253,6 +253,25 @@ async function testOrderedItemSelected(){
     expect(res.status).toBe(200)
 }
 
+async function testOrderedItemDeselected(){
+    //Arrange
+    let req_body =
+        {
+            "orderId" : orderId,
+            "itemId" : 1,
+            "isSelected" : 0,
+            "userId" : userId
+        }
+    
+    let url = "/ordered-items/selected"
+
+    //Act
+    const res = await request.put(url).send(req_body)
+
+    //Assert
+    expect(res.status).toBe(200)
+}
+
 async function testOrderedItemPaid(){
     //Arrange
     let req_body =
@@ -260,6 +279,24 @@ async function testOrderedItemPaid(){
             "orderId" : orderId,
             "itemId" : 1,
             "hasPaid" : 1
+        }
+    
+    let url = "/ordered-items/paid"
+
+    //Act
+    const res = await request.put(url).send(req_body)
+
+    //Assert
+    expect(res.status).toBe(201)
+}
+
+async function testOrderedItemUnpaid(){
+    //Arrange
+    let req_body =
+        {
+            "orderId" : orderId,
+            "itemId" : 1,
+            "hasPaid" : 0
         }
     
     let url = "/ordered-items/paid"
@@ -401,5 +438,6 @@ module.exports = {
     testGetRecommendation, testAddOrderedItems, testGetOrderedItems, testOrderedItemPaid,
     testGetStripeKey, testCreateStripePayment, testGetTableOrder, testTableSessionDone, 
     testOrderedItemSelected, testCreateUser, testGetUserByGoogleId, testGetUserByUserId, 
-    testGetUserPreferences, testUpdateUserPreferences, testAddToMenu, testGetMenuLatestItem
+    testGetUserPreferences, testUpdateUserPreferences, testAddToMenu, testGetMenuLatestItem,
+    testOrderedItemUnpaid, testOrderedItemDeselected
 }

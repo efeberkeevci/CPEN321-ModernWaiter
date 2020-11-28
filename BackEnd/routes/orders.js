@@ -18,19 +18,15 @@ function createOrder(req, res){
     let isActive = parseInt(req.body.isActive)
 
     if (isNaN(userId) || isNaN(tableId) || isNaN(restaurantId) || isNaN(amount)){
-        res.status(400).send("Invalid request body - user, table, restaurant ids, and hasPaid and isActive must be integers, amount must be a double");
-        return;
+        res.status(400).send("Invalid request body - user, table, restaurant ids, and hasPaid and isActive must be integers, amount must be a double")
+        return
     }
 
     let sql_query = mysql.format("INSERT INTO orders ( users_id, tables_id, restaurant_id, amount, has_paid, is_active_session) VALUES(?,?,?,?,?,?)", [userId, tableId, restaurantId, amount, hasPaid, isActive])
     
     con.query(sql_query, function(err, result){
-        // if (err) {
-        //     res.status(400).send({code : err.code, errno : err.errno});
-        //     return;
-        // }
         res.status(201).send()
-        return;
+        return
     })
 }
 
@@ -48,17 +44,13 @@ function getUserOrder(req, res){
 
     if (isNaN(users_id) || isNaN(isActive)){
         res.status(400).send("Invalid users_id or isActive type, must be an integer");
-        return;
+        return
     }
 
     let sql_query = mysql.format("SELECT * FROM orders WHERE users_id = ? && is_active_session = ? ", [users_id, isActive])
     con.query(sql_query, function(err, result){
-        // if (err) {
-        //     res.status(400).send({code : err.code, errno : err.errno});
-        //     return;
-        // }
         res.status(200).send(result)
-        return;
+        return
     })
 }
 
@@ -74,19 +66,15 @@ function getTableOrder(req, res){
     let tables_id = parseInt(req.params.tables_id,10)
     let isActive = parseInt(req.query.isActive)
 
-    if (isNaN(tables_id) || isNaN(isActive)){
-        res.status(400).send("Invalid tables_id or isActive type, must be an integer");
-        return;
+    if (isNaN(tables_id) || isNaN(isActive)) {
+        res.status(400).send("Invalid tables_id or isActive type, must be an integer")
+        return
     }
 
     let sql_query = mysql.format("SELECT * FROM orders WHERE tables_id = ? && is_active_session = ? ", [tables_id, isActive])
-    con.query(sql_query, function(err, result){
-        // if (err) {
-        //     res.status(400).send({code : err.code, errno : err.errno});
-        //     return;
-        // }
+    con.query(sql_query, function(err, result) {
         res.status(200).send(result);
-        return;
+        return
     })
 }
 
@@ -102,7 +90,7 @@ function getTableOrder(req, res){
 function updateOrderSessionStatus(req, res){
     console.log("PUT /orders/session")
 
-    let orderId = parseInt(req.body.orderId,10)
+    let orderId = parseInt(req.body.orderId)
     let isActive = parseInt(req.body.isActive)
 
     if (isNaN(orderId) || isNaN(isActive)){
@@ -112,12 +100,8 @@ function updateOrderSessionStatus(req, res){
 
     let sql_query = mysql.format("UPDATE orders SET is_active_session = ? WHERE id = ?", [isActive, orderId])
     con.query(sql_query, function(err, result){
-        // if (err) {
-        //     res.status(400).send({code : err.code, errno : err.errno});
-        //     return;
-        // }
-        res.status(200).send();
-        return;
+        res.status(200).send()
+        return
     })
 }
 
@@ -133,25 +117,18 @@ function updateOrderSessionStatus(req, res){
 function updateOrderPaidStatus(req, res){
     console.log("PUT /orders/paid")
 
-    let orderId = parseInt(req.body.orderId,10)
+    let orderId = parseInt(req.body.orderId)
     let hasPaid = parseInt(req.body.hasPaid)
 
     if (isNaN(orderId) || isNaN(hasPaid)){
-        res.status(400).send("Invalid orderId or isActive type, must be an integer");
-        return;
+        res.status(400).send("Invalid orderId or isActive type, must be an integer")
+        return
     }
 
     let sql_query = mysql.format("UPDATE orders SET has_paid = ? WHERE id = ?", [hasPaid,orderId])
-    con.query(sql_query, function(err, result){
-        // if (err) {
-        //     res.status(400).send({code : err.code, errno : err.errno});
-        //     return;
-        // }
-
-        res.status(200).send();
-
-
-        return;
+    con.query(sql_query, function(err, result) {
+        res.status(200).send()
+        return
     })
 }
 

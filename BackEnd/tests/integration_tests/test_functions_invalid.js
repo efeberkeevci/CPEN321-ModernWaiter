@@ -92,62 +92,44 @@ async function testGetTableOrderInvalid() {
 //     menu = response.body
 // }
 
-// async function testGetRecommendation() {
-//     // Arrange
-//     const url = `/recommendation/${userId}/${restaurantId}`
 
-//     // Act
-//     const response = await request.get(url)
-
-//     // Assert
-//     expect(response.status).toBe(200)
-//     expect(response.body.itemId).toStrictEqual(expect.anything())
-// }
-
-// async function testAddOrderedItems() {
-//     //Arrange
-//     let req_body =
-//         [
-//             {
-//                 "orderId"  : orderId,
-//                 "itemId"  : 1
-//             },
-//             {
-//                 "orderId"  : orderId,
-//                 "itemId"  : 2
-//             },
-//             {
-//                 "orderId"  : orderId,
-//                 "itemId"  : 3
-//             }
-//         ]
+async function testAddOrderedItemsInvalid() {
+    //Arrange
+    let req_body =
+        [
+            {
+                "orderId"  : dummyString,
+                "itemId"  : dummyString
+            },
+            {
+                "orderId"  : dummyString,
+                "itemId"  : dummyString
+            },
+            {
+                "orderId"  : dummyString,
+                "itemId"  : dummyString
+            }
+        ]
  
-//     let url = "/ordered-items/"
+    let url = "/ordered-items/"
 
-//     //Act
-//     const res = await request.post(url).send(req_body)
+    //Act
+    const res = await request.post(url).send(req_body)
 
-//     //Assert
-//     expect(res.status).toBe(201)
-//     expect(res.body).toStrictEqual({})
-// }
+    //Assert
+    expect(res.status).toBe(400)
+}
 
-// async function testGetOrderedItems() {
-//     //Arrange
-//     let url = "/ordered-items/"
+async function testGetOrderedItemsInvalid() {
+    //Arrange
+    let url = "/ordered-items/"
     
-//     //Act
-//     const res = await request.get(url + orderId)
+    //Act
+    const res = await request.get(url + dummyString)
 
-//     //Assert
-//     expect(res.status).toBe(200)
-//     expect(typeof res.body[0].id).toBe('number')
-//     expect(typeof res.body[0].orders_id).toBe('number')
-//     expect(typeof res.body[0].items_id).toBe('number')
-//     expect(typeof res.body[0].has_paid).toBe('number')
-//     expect(typeof res.body[0].is_selected).toBe('number')
-//     expect(typeof res.body[0].users_id).toBe('number')
-// }
+    //Assert
+    expect(res.status).toBe(400)
+}
 
 // async function testGetStripeKey() {
 //     //Arrange
@@ -198,6 +180,7 @@ async function testTableSessionDoneInvalid(){
     //Assert
     expect(res.status).toBe(400)
 }
+
 async function testPaidStatusDoneInvalid(){
     //Arrange
     let req_body =
@@ -215,42 +198,42 @@ async function testPaidStatusDoneInvalid(){
     expect(res.status).toBe(400)
 }
 
-// async function testOrderedItemSelected(){
-//     //Arrange
-//     let req_body =
-//         {
-//             "orderId" : orderId,
-//             "itemId" : 1,
-//             "isSelected" : 1,
-//             "userId" : userId
-//         }
+async function testOrderedItemSelectedInvalid(){
+    //Arrange
+    let req_body =
+        {
+            "orderId" : dummyString,
+            "itemId" : dummyString,
+            "isSelected" : dummyString,
+            "userId" : dummyString
+        }
     
-//     let url = "/ordered-items/selected"
+    let url = "/ordered-items/selected"
 
-//     //Act
-//     const res = await request.put(url).send(req_body)
+    //Act
+    const res = await request.put(url).send(req_body)
 
-//     //Assert
-//     expect(res.status).toBe(200)
-// }
+    //Assert
+    expect(res.status).toBe(400)
+}
 
-// async function testOrderedItemPaid(){
-//     //Arrange
-//     let req_body =
-//         {
-//             "orderId" : orderId,
-//             "itemId" : 1,
-//             "hasPaid" : 1
-//         }
+async function testOrderedItemPaidInvalid(){
+    //Arrange
+    let req_body =
+        {
+            "orderId" : dummyString,
+            "itemId" : dummyString,
+            "hasPaid" : dummyString
+        }
     
-//     let url = "/ordered-items/paid"
+    let url = "/ordered-items/paid"
 
-//     //Act
-//     const res = await request.put(url).send(req_body)
+    //Act
+    const res = await request.put(url).send(req_body)
 
-//     //Assert
-//     expect(res.status).toBe(201)
-// }
+    //Assert
+    expect(res.status).toBe(400)
+}
 
 // async function testAddToMenu() {
 //     //Arrange
@@ -416,5 +399,6 @@ module.exports = {
     // testOrderedItemSelected, testCreateUser, testGetUserByGoogleId, testGetUserByUserId, 
     // testGetUserPreferences, testUpdateUserPreferences, testAddToMenu, testGetMenuLatestItem, 
     testCreateOrderInvalid, testGetRecommendationInvalid, testGetUserOrderInvalid, testGetTableOrderInvalid,
-    testTableSessionDoneInvalid, testPaidStatusDoneInvalid
+    testTableSessionDoneInvalid, testPaidStatusDoneInvalid, testAddOrderedItemsInvalid, testGetOrderedItemsInvalid, 
+    testOrderedItemSelectedInvalid, testOrderedItemPaidInvalid
 }

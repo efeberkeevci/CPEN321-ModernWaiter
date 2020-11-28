@@ -1,9 +1,10 @@
 const { 
-    testTableSessionDone, testPaidStatusDone, testOrderedItemSelected, testOrderedItemPaid, 
-    testGetUserOrder, testAddOrderedItems, testGetStripeKey, testCreateStripePayment, testCreateOrder
+    testTableSessionDone, testPaidStatusDone, testOrderedItemSelected, testOrderedItemDeselected, 
+    testOrderedItemPaid, testOrderedItemUnpaid, testGetUserOrder, testAddOrderedItems, 
+    testGetStripeKey, testCreateStripePayment, testCreateOrder
 } = require("./test_functions")
 
-const { testTableSessionDoneInvalid, testPaidStatusDoneInvalid } = require("./test_functions_invalid")
+const { testTableSessionDoneInvalid, testPaidStatusDoneInvalid, testOrderedItemSelectedInvalid, testOrderedItemPaidInvalid } = require("./test_functions_invalid")
 
 
 describe("Integration test 4: ", () => {
@@ -38,6 +39,29 @@ describe("Integration test 4: ", () => {
         await testPaidStatusDoneInvalid()
         done()
     })
+
+    it("Pay for individual items but fail to update paid and session statuses", async done => {
+        await testCreateOrder()
+        await testGetUserOrder()
+        await testAddOrderedItems()
+        await testGetStripeKey()
+        await testCreateStripePayment()
+        await testOrderedItemSelectedInvalid()
+        await testOrderedItemPaidInvalid()
+        done()
+    })
+
+    it("Not paying for an item and deselecting it", async done => {
+        await testCreateOrder()
+        await testGetUserOrder()
+        await testAddOrderedItems()
+        await testGetStripeKey()
+        await testCreateStripePayment()
+        await testOrderedItemDeselected()
+        await testOrderedItemUnpaid()
+        done()
+    })
+    
 })
 
 
