@@ -36,11 +36,6 @@ public class CustomerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         FirebaseApp.initializeApp(this);
 
-        Intent qr_scanner_intent = new Intent(this, BarcodeActivity.class);
-        startActivity(qr_scanner_intent);
-
-        /*
-
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         if (account == null) {
             signInGoogle();
@@ -49,8 +44,6 @@ public class CustomerActivity extends AppCompatActivity {
 
             startSession(account);
         }
-
-        */
     }
 
     @Override
@@ -60,6 +53,8 @@ public class CustomerActivity extends AppCompatActivity {
         if (requestCode == 1) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
+            Intent qr_scanner_intent = new Intent(this, BarcodeActivity.class);
+            startActivity(qr_scanner_intent);
         }
     }
 
