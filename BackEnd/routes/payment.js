@@ -32,25 +32,18 @@ async function createStripePayment(req, res){
     let orderId = parseInt(req.body.orderId,10)
 
     if(isNaN(orderAmount)){
-        res.status(400).send("Invalid order amount type - must be a double") ;
-        return;
+        res.status(400).send("Invalid order amount type - must be a double") 
+        return
     }
 
     const generateResponse = intent => {
         // Generate a response based on the intent's status
         switch (intent.status) {
             case "requires_action":
-            case "requires_source_action":
             // Card requires authentication
             return {
                 requiresAction: true,
                 clientSecret: intent.client_secret
-            }
-            case "requires_payment_method":
-            case "requires_source":
-            // Card was not properly authenticated, suggest a new payment method
-            return {
-                error: "Your card was denied, please provide a new payment method"
             }
             case "succeeded":
             // Payment is complete, authentication not required
@@ -60,9 +53,7 @@ async function createStripePayment(req, res){
     }
 
     try {
-        let intent
-        if (paymentMethodId) {
-            
+        let intent            
         // Create new PaymentIntent with a PaymentMethod ID from the client.
         intent = await stripe.paymentIntents.create({
             amount: orderAmount,
@@ -74,22 +65,15 @@ async function createStripePayment(req, res){
             // to take advantage of new authentication features in mobile SDKs
             use_stripe_sdk: useStripeSdk,
         })
-        // After create, if the PaymentIntent's status is succeeded, fulfill the order.
-        } else if (paymentIntentId) {
-        // Confirm the PaymentIntent to finalize payment after handling a required action
-        // on the client.
-        intent = await stripe.paymentIntents.confirm(paymentIntentId)
-        // After confirm, if the PaymentIntent's status is succeeded, fulfill the order.
-        }
-        res.send(generateResponse(intent));
-        console.log("Sending payment done notification for orderId: " + orderId);
+        res.send(generateResponse(intent))
+        console.log("Sending payment done notification for orderId: " + orderId)
         push_notification_payment_done(orderId)
-        return;
+        return
     } catch (e) {
         // Handle "hard declines" e.g. insufficient funds, expired card, etc
         // See https://stripe.com/docs/declines/codes for more
-        res.send({ error: e.message });
-        return;
+        res.send({ error: e.message })
+        return
     }
 }
 

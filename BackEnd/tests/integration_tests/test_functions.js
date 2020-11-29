@@ -6,13 +6,14 @@ const request = supertest(app)
 var userId = 2
 var restaurantId = 2
 var tableId = 4
+var tableNumber = 15
 var amount = 51
 var orderId
 var menu
 let name = "testItem" 
 let type = "sushi"
 let cost = "12.5"
-let description = "abc" 
+let description = "chicken chicken chicken spice mango cucumber" 
 let calories = "123"
 let popularityCount = "0"
 let image = "" 
@@ -200,6 +201,27 @@ async function testCreateStripePayment() {
     expect(res.body.clientSecret).toStrictEqual(expect.anything())
 }
 
+async function testCreateStripePaymentRequiresAuth() {
+    //Arrange
+    let req_body =
+        {
+            "paymentMethodId" : "pm_card_authenticationRequired",
+            "paymentIntendId" : null,
+            "currency" : "cad",
+            "useStripeSdk" : true,
+            "orderAmount" : (amount * 100)
+        }
+ 
+    let url = "/pay"
+
+    //Act
+    const res = await request.post(url).send(req_body)
+
+    //Assert
+    expect(res.status).toBe(200)
+    expect(res.body.clientSecret).toStrictEqual(expect.anything())
+}
+
 async function testTableSessionDone(){
     //Arrange
     let req_body =
@@ -240,7 +262,7 @@ async function testOrderedItemSelected(){
         {
             "orderId" : orderId,
             "itemId" : 1,
-            "isSelected" : 1,
+            "isSelected" : "1",
             "userId" : userId
         }
     
@@ -259,7 +281,7 @@ async function testOrderedItemDeselected(){
         {
             "orderId" : orderId,
             "itemId" : 1,
-            "isSelected" : 0,
+            "isSelected" : "0",
             "userId" : userId
         }
     
@@ -467,11 +489,71 @@ async function testAddRestaurant() {
     expect(response.status).toBe(200)
 }
 
+async function testGetTable() {
+    // Arrange
+    const url = `/tables/${tableId}`
+
+    // Act
+    const response = await request.get(url)
+
+    // Assert
+    expect(response.status).toBe(200)
+}
+
+async function testAddTable() {
+    // Arrange
+    const url = `/tables`
+    const req_body = 
+        {
+            "tableNumber" : tableNumber
+        }
+
+    // Act
+    const response = await request.post(url).send(req_body)
+
+    // Assert
+    expect(response.status).toBe(200)
+}
+
+async function testTokenRegistration() {
+    // Arrange
+    const url = `/registrationToken`
+    const req_body = 
+        {
+            "orderId" : 1,
+            "registrationToken" : dummyString
+        }
+
+    // Act
+    const response = await request.post(url).send(req_body)
+
+    // Assert
+    expect(response.status).toBe(200)
+}
+
+async function testUnsubscribeToken() {
+    // Arrange
+    const url = `/unsubscribedToken`
+    const req_body = 
+        {
+            "orderId" : 1,
+            "registrationToken" : dummyString
+        }
+
+    // Act
+    const response = await request.post(url).send(req_body)
+
+    // Assert
+    expect(response.status).toBe(200)
+}
+
 module.exports = {
     testCreateOrder, testPaidStatusDone, testGetUserOrder, testGetMenu, 
     testGetRecommendation, testAddOrderedItems, testGetOrderedItems, testOrderedItemPaid,
     testGetStripeKey, testCreateStripePayment, testGetTableOrder, testTableSessionDone, 
     testOrderedItemSelected, testCreateUser, testGetUserByGoogleId, testGetUserByUserId, 
     testGetUserPreferences, testUpdateUserPreferences, testAddToMenu, testGetMenuLatestItem,
-    testOrderedItemUnpaid, testOrderedItemDeselected, testGetRestaurant, testAddRestaurant
+    testOrderedItemUnpaid, testOrderedItemDeselected, testGetRestaurant, testAddRestaurant,
+    testGetTable, testAddTable, testCreateStripePaymentRequiresAuth, testTokenRegistration,
+    testUnsubscribeToken
 }

@@ -1,7 +1,7 @@
 const mysql = require('mysql')
 const sql = require("./../sql_connection.js")
 const con = sql.getConnection()
-var recommendation = require("../recommendation_logic.js");
+var recommendation = require("../recommendation_logic.js")
 
 /**
  * Gets a recommendation for
@@ -29,7 +29,14 @@ function getItemRecommendation(req, res){
     let desc_query = mysql.format("SELECT id, description FROM items WHERE restaurant_id = ?", [restaurant_id])
 
     con.query(user_query, function(err, prefResult){
-        var preference = prefResult[0]["preferences"]
+        var preference
+
+        try {
+            preference = prefResult[0]["preferences"]
+        } catch (error) {
+            res.status(400).send({message: "Failed to get user preference, check if userId is valid"})
+            return
+        }
 
         con.query(desc_query, function(err, descResult) {
             var descriptionJsonArray = JSON.parse(JSON.stringify(descResult))

@@ -60,6 +60,7 @@ app.post("/restaurants", restaurants.addRestaurant)
 
 // Routes for table
 app.get("/tables/:id", tables.getTable)
+app.post("/tables", tables.addTable)
 
 // Routes for user
 app.post("/users", users.addUser)
@@ -67,11 +68,6 @@ app.get("/users/:id", users.getUserById)
 app.get("/users/google/:googleId", users.getUserByGoogleId)
 app.get("/users/preferences/:id", users.getUserPreferences)
 app.put("/users/preferences", users.updateUserPreferences)
-
-// function pushNotificationsDemo(){
-//     subscribe("dti7Svc4SC6utD7GPz9ZXy:APA91bEVZQYS-PJ1OYgYqbOElQkM_BTI7Si_S3eLXOpO-oIpM155VGAJzl-FJHYFUNMMYdfg3cOvWM6bX5X-6m6k7H6QQCdZA96qEZt3lwRpE68iOmb7uVx8hfbx5SZUuy8MnnTdGArg","1")
-//     messageAccountisClosed(1)
-// }
 
 /**
  * HTTP POST request to register token for
@@ -91,19 +87,6 @@ app.post("/unsubscribedToken", (req,res) => {
     let registrationToken = req.body.registrationToken
     console.log(registrationToken)
     res.send(push_notification.unsubscribe(registrationToken, orderId))
-})
-
-//Informs server that the current cart is checked out
-app.put("/checkout", (req,res) =>{
-    console.log("Checkout received")
-    let orderId = req.body.orderId
-    push_notification.push_notification_order_received(orderId)
-    res.send("Success")
-})
-
-/* HTTP GET request for health check */
-app.get('/_health', (req, res) => {
-  res.status(200).send('ok')
 })
 
 module.exports = app

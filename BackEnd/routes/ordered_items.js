@@ -64,7 +64,7 @@ function updateSelectedStatus(req, res){
     let orderId = parseInt(req.body.orderId)
     let itemId = parseInt(req.body.itemId)
     let userId = parseInt(req.body.userId)
-    let isSelected = parseInt(req.body.isSelected === 1 ? 1 : 0)
+    let isSelected = parseInt(req.body.isSelected === "1" ? 1 : 0)
 
     if (isNaN(orderId) || isNaN(itemId) || isNaN(userId) || isNaN(isSelected)){
         res.status(400).send("Invalid request body - order, item and user ids and isSelected must be integers")

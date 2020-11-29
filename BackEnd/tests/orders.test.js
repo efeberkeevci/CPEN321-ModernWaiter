@@ -29,7 +29,7 @@ describe('Test createOrder()', () => {
         const url = `/orders`
         const req = 
           {
-            "userId" : 100,
+            "userId" : 9999999,
             "tableId" : 1,
             "restaurantId" : 1,
             "amount" : 0,
@@ -51,7 +51,7 @@ describe('Test createOrder()', () => {
         const req = 
           {
             "userId" : 1,
-            "tableId" : 100,
+            "tableId" : 9999999,
             "restaurantId" : 1,
             "amount" : 0,
             "hasPaid" : 0,
@@ -73,7 +73,7 @@ describe('Test createOrder()', () => {
           {
             "userId" : 1,
             "tableId" : 1,
-            "restaurantId" : 100,
+            "restaurantId" : 9999999,
             "amount" : 0,
             "hasPaid" : 0,
             "isActive" : 0
@@ -241,7 +241,7 @@ describe('Test createOrder()', () => {
 
         // Assert
         expect(response.status).toBe(400)
-        expect(response.text).toStrictEqual("Invalid user id type, must be an integer")
+        expect(response.text).toStrictEqual("Invalid users_id or isActive type, must be an integer")
         done()
       })
 
@@ -294,7 +294,7 @@ describe('Test createOrder()', () => {
 
         // Assert
         expect(response.status).toBe(400)
-        expect(response.text).toStrictEqual("Invalid table id type, must be an integer")
+        expect(response.text).toStrictEqual("Invalid tables_id or isActive type, must be an integer")
         done()
       })
   })
@@ -328,7 +328,7 @@ describe('Test createOrder()', () => {
 
         // Assert
         expect(response.status).toBe(400)
-        expect(response.text).toStrictEqual("Invalid order id type, must be an integer")
+        expect(response.text).toStrictEqual("Invalid orderId or isActive type, must be an integer")
         done()
       })
   })
@@ -362,7 +362,7 @@ describe('Test createOrder()', () => {
 
         // Assert
         expect(response.status).toBe(400)
-        expect(response.text).toStrictEqual("Invalid order id type, must be an integer")
+        expect(response.text).toStrictEqual("Invalid orderId or isActive type, must be an integer")
         done()
       })
   })

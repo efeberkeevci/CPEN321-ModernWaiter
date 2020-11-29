@@ -135,7 +135,7 @@ describe("Test updateSelectedStatus()",() => {
 
         //Assert
         expect(res.status).toBe(400)
-        expect(res.text).toStrictEqual("Invalid request body - order, item and user ids must be integers")
+        expect(res.text).toStrictEqual("Invalid request body - order, item and user ids and isSelected must be integers")
         done()
     })
 
@@ -159,7 +159,7 @@ describe("Test updateSelectedStatus()",() => {
 
         //Assert
         expect(res.status).toBe(400)
-        expect(res.text).toStrictEqual("Invalid request body - order, item and user ids must be integers")
+        expect(res.text).toStrictEqual("Invalid request body - order, item and user ids and isSelected must be integers")
         done()
     })
 
@@ -183,18 +183,40 @@ describe("Test updateSelectedStatus()",() => {
 
         //Assert
         expect(res.status).toBe(400)
-        expect(res.text).toStrictEqual("Invalid request body - order, item and user ids must be integers")
+        expect(res.text).toStrictEqual("Invalid request body - order, item and user ids and isSelected must be integers")
         done()
     })
 
-    it("Test valid request body", async done=>{
+    it("Test valid request body - select", async done=>{
 
         //Arrange
         let req_body =
             {
                 "orderId" : 1,
                 "itemId" : 1,
-                "isSelected" : 1,
+                "isSelected" : "1",
+                "userId" : 1
+            }
+         
+        let path = "/ordered-items/selected"
+
+        //Act
+        const res = await request.put(path).send(req_body)
+
+        //Assert
+        expect(res.status).toBe(200)
+        expect(res.body).toStrictEqual({})
+        done()  
+    })
+
+    it("Test valid request body - deselect", async done=>{
+
+        //Arrange
+        let req_body =
+            {
+                "orderId" : 1,
+                "itemId" : 1,
+                "isSelected" : "0",
                 "userId" : 1
             }
          
@@ -254,7 +276,7 @@ describe("Test updateOrderedItemPaidStatus()", () => {
         done()
     })
 
-    it("Test valid request body", async done=> {
+    it("Test valid request body - paid", async done=> {
 
         //Arrange
         let req_body =
@@ -262,6 +284,26 @@ describe("Test updateOrderedItemPaidStatus()", () => {
                 "orderId"  : 1,
                 "itemId"  : 1,
                 "hasPaid" : 1
+            }
+
+        let path = "/ordered-items/paid"
+
+        //Act
+        const res = await request.put(path).send(req_body)
+
+        //Assert
+        expect(res.status).toBe(201)
+        done()  
+    })
+
+    it("Test valid request body - not paid", async done=> {
+
+        //Arrange
+        let req_body =
+            {
+                "orderId"  : 1,
+                "itemId"  : 1,
+                "hasPaid" : 0
             }
 
         let path = "/ordered-items/paid"

@@ -26,26 +26,6 @@ var preferences = "chicken"
 
 var dummyString = "dummy"
 
-// async function testCreateOrder() {
-//     // Arrange
-//     const url = `/orders`
-//     const req = 
-//         {
-//             "userId" : userId,
-//             "tableId" : tableId,
-//             "restaurantId" : restaurantId,
-//             "amount" : 0,
-//             "hasPaid" : 0,
-//             "isActive" : 1
-//         }
-
-//     // Act
-//     const response = await request.post(url).send(req)
-
-//     // Assert
-//     expect(response.status).toBe(201)
-// }
-
 async function testGetUserOrderInvalid() {
     // Arrange
     const isActive = 1
@@ -119,38 +99,45 @@ async function testGetOrderedItemsInvalid() {
     expect(res.status).toBe(400)
 }
 
-// async function testGetStripeKey() {
-//     //Arrange
-//     let url = "/key"
-    
-//     //Act
-//     const res = await request.get(url)
-
-//     //Assert
-//     expect(res.status).toEqual(200)
-//     expect(res.body.publishableKey).toStrictEqual(expect.anything())
-// }
-
-// async function testCreateStripePayment() {
-//     //Arrange
-//     let req_body =
-//         {
-//             "paymentMethodId" : "pm_card_visa",
-//             "paymentIntendId" : null,
-//             "currency" : "cad",
-//             "useStripeSdk" : true,
-//             "orderAmount" : (amount * 100)
-//         }
+async function testCreateStripePaymentInvalidAmount() {
+    //Arrange
+    let req_body =
+        {
+            "paymentMethodId" : "pm_card_visa",
+            "paymentIntendId" : null,
+            "currency" : "cad",
+            "useStripeSdk" : true,
+            "orderAmount" : dummyString
+        }
  
-//     let url = "/pay"
+    let url = "/pay"
 
-//     //Act
-//     const res = await request.post(url).send(req_body)
+    //Act
+    const res = await request.post(url).send(req_body)
 
-//     //Assert
-//     expect(res.status).toBe(200)
-//     expect(res.body.clientSecret).toStrictEqual(expect.anything())
-// }
+    //Assert
+    expect(res.status).toBe(400)
+}
+
+async function testCreateStripePaymentIncorrectCVC() {
+    //Arrange
+    let req_body =
+        {
+            "paymentMethodId" : "pm_card_cvcCheckFail",
+            "paymentIntendId" : null,
+            "currency" : "cad",
+            "useStripeSdk" : true,
+            "orderAmount" : (amount * 100)
+        }
+ 
+    let url = "/pay"
+
+    //Act
+    const res = await request.post(url).send(req_body)
+
+    //Assert
+    expect(res.status).toBe(200)
+}
 
 async function testTableSessionDoneInvalid(){
     //Arrange
@@ -266,27 +253,6 @@ async function testAddToMenuInvalidAlt() {
     expect(res.status).toBe(400)
 }
 
-// async function testGetMenuLatestItem() {
-//     // Arrange
-//     const url = `/items/${restaurantId}`
-
-//     // Act
-//     const response = await request.get(url)
-
-//     // Assert
-//     expect(response.status).toBe(200)
-
-//     expect(response.body[response.body.length-1].id).toStrictEqual(expect.anything())
-//     expect(response.body[response.body.length-1].restaurant_id).toStrictEqual(restaurantId)
-//     expect(response.body[response.body.length-1].name).toStrictEqual(name)
-//     expect(response.body[response.body.length-1].type).toStrictEqual(type)
-//     expect(String(response.body[response.body.length-1].cost)).toStrictEqual(String(cost))
-//     expect(response.body[response.body.length-1].description).toStrictEqual(description)
-//     expect(String(response.body[response.body.length-1].calories)).toStrictEqual(String(calories))
-//     expect(String(response.body[response.body.length-1].popularity_count)).toStrictEqual(String(popularityCount))
-//     expect(response.body[response.body.length-1].image).toStrictEqual(image)
-// }
-
 async function testCreateUserInvalid() {
     // Arrange
     const url = `/users`
@@ -379,9 +345,40 @@ async function testCreateOrderInvalid() {
     expect(response.status).toBe(400)
 }
 
+async function testCreateOrderInvalidAlt() {
+    // Arrange
+    const url = `/orders`
+    const req = 
+        {
+            "userId" : 99999999,
+            "tableId" : tableId,
+            "restaurantId" : restaurantId,
+            "amount" : 0,
+            "hasPaid" : 0,
+            "isActive" : 1
+        }
+
+    // Act
+    const response = await request.post(url).send(req)
+
+    // Assert
+    expect(response.status).toBe(400)
+}
+
 async function testGetRecommendationInvalid() {
     // Arrange
     const url = `/recommendation/${dummyString}/${dummyString}`
+
+    // Act
+    const response = await request.get(url)
+
+    // Assert
+    expect(response.status).toBe(400)
+}
+
+async function testGetRecommendationInvalidAlt() {
+    // Arrange
+    const url = `/recommendation/999999/${restaurantId}`
 
     // Act
     const response = await request.get(url)
@@ -434,16 +431,69 @@ async function testAddRestaurantInvalidAlt() {
     expect(response.status).toBe(400)
 }
 
+async function testGetTableInvalid() {
+    // Arrange
+    const url = `/tables/${dummyString}`
+
+    // Act
+    const response = await request.get(url)
+
+    // Assert
+    expect(response.status).toBe(400)
+}
+
+async function testAddTableInvalid() {
+    // Arrange
+    const url = `/tables`
+    const req_body = 
+        {
+            "tableNumber" : dummyString
+        }
+
+    // Act
+    const response = await request.post(url).send(req_body)
+
+    // Assert
+    expect(response.status).toBe(400)
+}
+
+async function testTokenRegistrationInvalid() {
+    // Arrange
+    const url = `/registrationToken`
+    const req_body = 
+        {
+            "orderId" : 1
+        }
+
+    // Act
+    const response = await request.post(url).send(req_body)
+
+    // Assert
+    expect(response.status).toBe(500)
+}
+
+async function testUnsubscribeTokenInvalid() {
+    // Arrange
+    const url = `/unsubscribedToken`
+    const req_body = 
+        {
+            "orderId" : 1
+        }
+
+    // Act
+    const response = await request.post(url).send(req_body)
+
+    // Assert
+    expect(response.status).toBe(500)
+}
+
 module.exports = {
-    // testCreateOrder, testPaidStatusDone, testGetUserOrder, testGetMenu, 
-    // testGetRecommendation, testAddOrderedItems, testGetOrderedItems, testOrderedItemPaid,
-    // testGetStripeKey, testCreateStripePayment, testGetTableOrder, testTableSessionDone, 
-    // testOrderedItemSelected, testCreateUser, testGetUserByGoogleId, testGetUserByUserId, 
-    // testGetUserPreferences, testUpdateUserPreferences, testAddToMenu, testGetMenuLatestItem, 
     testCreateOrderInvalid, testGetRecommendationInvalid, testGetUserOrderInvalid, testGetTableOrderInvalid,
     testTableSessionDoneInvalid, testPaidStatusDoneInvalid, testAddOrderedItemsInvalid, testGetOrderedItemsInvalid, 
     testOrderedItemSelectedInvalid, testOrderedItemPaidInvalid, testGetRestaurantInvalid, testAddRestaurantInvalid,
     testAddRestaurantInvalidAlt, testGetMenuInvalid, testAddToMenuInvalid, testAddToMenuInvalidAlt,
     testCreateUserInvalid, testGetUserByUserIdInvalid, testGetUserPreferencesInvalid, testUpdateUserPreferencesInvalid,
-    testUpdateUserPreferencesInvalidAlt
+    testUpdateUserPreferencesInvalidAlt, testGetTableInvalid, testAddTableInvalid, testCreateStripePaymentIncorrectCVC,
+    testCreateStripePaymentInvalidAmount, testTokenRegistrationInvalid, testUnsubscribeTokenInvalid, testGetRecommendationInvalidAlt,
+    testCreateOrderInvalidAlt
 }

@@ -25,6 +25,10 @@ function createOrder(req, res){
     let sql_query = mysql.format("INSERT INTO orders ( users_id, tables_id, restaurant_id, amount, has_paid, is_active_session) VALUES(?,?,?,?,?,?)", [userId, tableId, restaurantId, amount, hasPaid, isActive])
     
     con.query(sql_query, function(err, result){
+        if (err) {
+            res.status(400).send({code : err.code, errno : err.errno});
+            return;
+        }
         res.status(201).send()
         return
     })
@@ -43,7 +47,7 @@ function getUserOrder(req, res){
     let isActive = parseInt(req.query.isActive)
 
     if (isNaN(users_id) || isNaN(isActive)){
-        res.status(400).send("Invalid users_id or isActive type, must be an integer");
+        res.status(400).send("Invalid users_id or isActive type, must be an integer")
         return
     }
 
@@ -73,7 +77,7 @@ function getTableOrder(req, res){
 
     let sql_query = mysql.format("SELECT * FROM orders WHERE tables_id = ? && is_active_session = ? ", [tables_id, isActive])
     con.query(sql_query, function(err, result) {
-        res.status(200).send(result);
+        res.status(200).send(result)
         return
     })
 }
