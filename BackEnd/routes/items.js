@@ -14,18 +14,18 @@ function getMenu(req, res){
     let restaurantId = parseInt(req.params.restaurantId,10)
 
     if (isNaN(restaurantId)){
-        res.status(400).send("Invalid restaurant id type, must be an integer");
-        return;
+        res.status(400).send("Invalid restaurant id type, must be an integer")
+        return
     }
 
     let sql_query = mysql.format("SELECT * FROM items WHERE restaurant_id = ?", [restaurantId])
     con.query(sql_query, function(err, result){
-        if (err) {
-            res.status(400).send({code : err.code, errno : err.errno});
-            return;
-        }
-        res.status(200).send(result);
-        return;
+        // if (err) {
+        //     res.status(400).send({code : err.code, errno : err.errno})
+        //     return
+        // }
+        res.status(200).send(result)
+        return
     })
 }
 
@@ -46,32 +46,31 @@ function addToMenu(req, res){
     let image = req.body.image
 
     if (isNaN(cost) || isNaN(calories) || isNaN(popularityCount)){
-        res.status(400).send("Invalid request body - cost and calories must be doubles, popularity count must be an integer");
-        return;
+        res.status(400).send("Invalid request body - cost and calories must be doubles, popularity count must be an integer")
+        return
     }
 
     let sql_query = mysql.format("INSERT INTO items (restaurant_id, name, type, cost, description, calories, popularity_count, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [restaurantId, name, type, cost, description, calories, popularityCount, image])
     con.query(sql_query, function(err, result){
         if (err) {
-            
-            res.status(400).send({code : err.code, errno : err.errno});
-            return;
+            res.status(400).send({code : err.code, errno : err.errno})
+            return
         }
-        res.status(200).send(result);
-        return;
+        res.status(200).send(result)
+        return
     })
 }
 
-function getItemName(itemId){
-    let sql_query = mysql.format("SELECT name FROM items WHERE id = ?", [itemId]);
-    con.query(sql_query, function(err, result){
-        if (err) {
-            console.log("Error in item name retrieval: ", err);
-        }
-        else{
-            return result;
-        }
-    });
-}
+// function getItemName(itemId){
+//     let sql_query = mysql.format("SELECT name FROM items WHERE id = ?", [itemId])
+//     con.query(sql_query, function(err, result){
+//         if (err) {
+//             console.log("Error in item name retrieval: ", err)
+//         }
+//         else{
+//             return result
+//         }
+//     })
+// }
 
-module.exports = {getMenu, addToMenu, getItemName}
+module.exports = {getMenu, addToMenu} //getItemName

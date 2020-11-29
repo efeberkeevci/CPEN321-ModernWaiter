@@ -18,9 +18,7 @@ function jensenShannonDivergenceCalculator(sampleA, sampleB){
         preferenceMap.set(item, 1)
       }
   
-      if(allWords[item] == null){
-        allWords.push(item)
-      }
+      allWords.push(item)
     })
   
     // Creates a frequency map for sampleB.
@@ -32,9 +30,7 @@ function jensenShannonDivergenceCalculator(sampleA, sampleB){
         descriptionMap.set(item, 1)
       }
   
-        if(allWords[item] == null){
-        allWords.push(item)
-      }
+      allWords.push(item)
     })
   
     // Creates a set of unique words from both samples.
