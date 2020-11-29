@@ -40,4 +40,12 @@ public class BarcodeActivity extends AppCompatActivity {
         }
     }
 
+    public void setTableId(int tableId) {
+        //TODO: SET THE TABLE ID
+    }
+
+    public void setRestaurantId(int restaurantId) {
+        //TODO: SET THE RESTAURANT ID
+    }
+
 }
