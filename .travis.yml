@@ -13,4 +13,5 @@ before_install:
 script: 
 - echo 'Build is starting!'
 - cd BackEnd
+- npm install -g jest
 - npm test
