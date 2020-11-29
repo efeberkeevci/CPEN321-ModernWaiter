@@ -26,5 +26,9 @@ public interface SessionInterface {
 
     void add(Request request);
 
+    String getUsernameFromId(int id);
+
+    int getUserId();
+
     void endSession();
 }

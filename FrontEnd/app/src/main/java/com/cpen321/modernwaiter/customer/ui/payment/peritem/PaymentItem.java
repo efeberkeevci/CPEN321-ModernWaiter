@@ -2,13 +2,25 @@ package com.cpen321.modernwaiter.customer.ui.payment.peritem;
 
 import com.cpen321.modernwaiter.customer.application.MenuItem;
 
-public class PaymentItem implements Comparable<PaymentItem> {
-    public MenuItem menuItem;
-    public boolean selected;
+import static com.cpen321.modernwaiter.customer.application.CustomerActivity.tableSession;
 
-    public PaymentItem(MenuItem menuItem, boolean selected) {
+public class PaymentItem implements Comparable<PaymentItem> {
+    public final MenuItem menuItem;
+    public boolean selected;
+    public final int userId;
+
+    public PaymentItem(MenuItem menuItem, boolean selected, int userId) {
         this.menuItem = menuItem;
         this.selected = selected;
+        this.userId = userId;
+    }
+
+    public String getUsername() {
+        return tableSession.getUsernameFromId(userId);
+    }
+
+    public boolean selectedByCurrentUser() {
+        return tableSession.getUserId() == userId;
     }
 
     public void setSelected(boolean selected) {
@@ -21,7 +33,7 @@ public class PaymentItem implements Comparable<PaymentItem> {
             return menuItem.name.compareTo(o.menuItem.name);
         }
         if (selected == o.selected) {
-            return 0;
+            return getUsername().compareTo(o.getUsername());
         }
         if (selected) {
             return -1;

@@ -34,9 +34,6 @@ public class BillFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_bill, container, false);
 
-        BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
-        bottomNavigationView.setVisibility(View.VISIBLE);
-
         RecyclerView recyclerView = view.findViewById(R.id.bill_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
 

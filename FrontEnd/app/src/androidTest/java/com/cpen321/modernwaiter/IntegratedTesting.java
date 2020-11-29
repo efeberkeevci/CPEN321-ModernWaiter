@@ -9,8 +9,6 @@ import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject2;
 import androidx.test.uiautomator.Until;
 
-
-import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.cpen321.modernwaiter.customer.application.ApiUtil;
 import com.cpen321.modernwaiter.customer.application.CustomerActivity;
@@ -21,8 +19,6 @@ import org.junit.Test;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -65,7 +61,6 @@ public class IntegratedTesting {
      */
     @Test
     public void addMenuItemToOrder(){
-        try {
             //view menu as default (start_destination)
             onView(withId(R.id.fragment_menu))
                     .check(matches(isDisplayed()));
@@ -138,11 +133,6 @@ public class IntegratedTesting {
                     .perform(click());
 
             Assert.assertTrue( true);
-        }
-        catch(Exception e){
-            Assert.fail("************Could not add menu item to order*************\n" + e.getMessage());
-        }
-
     }
 
     /**
@@ -156,7 +146,6 @@ public class IntegratedTesting {
         //by default on menu
 
         //click on a menu item
-        try {
             onView(withId(R.id.menu_recycler))
                     .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
@@ -205,10 +194,6 @@ public class IntegratedTesting {
                     ));
 
             Assert.assertTrue( true);
-
-        } catch(Exception e){
-            Assert.fail("***********Could not add item to the table order*************\n" + e.getMessage());
-        }
     }
 
     /**TODO: write this test
@@ -255,7 +240,7 @@ public class IntegratedTesting {
                 title.click();
             }
             catch(Exception e){
-                Assert.fail("Something wrong with device");
+                Assert.fail("Something wrong with device" + e.getMessage());
             }
         }
         catch(Exception e){
@@ -339,8 +324,4 @@ public class IntegratedTesting {
         onView(withId(R.id.textView2))
                 .check(matches(withText(R.string.thank_you_post_payment)));*/
     }
-
-
-
-
 }

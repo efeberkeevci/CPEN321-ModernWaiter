@@ -67,7 +67,7 @@ public class PerItemPaymentFragment extends Fragment {
 
     public void updateAmount() {
         int amount = tableSession.getOrderList().stream()
-                .filter(menuItemBooleanPair -> menuItemBooleanPair.selected)
+                .filter(PaymentItem::selectedByCurrentUser)
                 .reduce(0, (subtotal, menuItemBooleanPair) -> subtotal + menuItemBooleanPair.menuItem.getCost(), Integer::sum);
 
         String amountText = "Pay $" + new DecimalFormat("#.##")

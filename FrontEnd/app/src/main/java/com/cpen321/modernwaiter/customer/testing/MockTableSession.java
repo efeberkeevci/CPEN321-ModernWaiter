@@ -96,7 +96,7 @@ public class MockTableSession implements SessionInterface {
             if (menuItem.getIntegerQuantity() > 0) {
 
                 for (int i = 0; i < menuItem.getIntegerQuantity(); i++)
-                    orderList.add(new PaymentItem(menuItem, false));
+                    orderList.add(new PaymentItem(menuItem, false, 13));
 
                 // Add those value into orderedItems
                 orderedItems.replace(menuItem, count + menuItem.getIntegerQuantity());
@@ -115,6 +115,16 @@ public class MockTableSession implements SessionInterface {
     @Override
     public void add(Request request) {
         lastRequest = request;
+    }
+
+    @Override
+    public String getUsernameFromId(int id) {
+        return "Bob";
+    }
+
+    @Override
+    public int getUserId() {
+        return 1;
     }
 
     @Override

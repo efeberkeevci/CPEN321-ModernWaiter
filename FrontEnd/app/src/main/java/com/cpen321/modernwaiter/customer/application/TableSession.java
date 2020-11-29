@@ -9,6 +9,7 @@ import androidx.navigation.Navigation;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
+import com.cpen321.modernwaiter.BuildConfig;
 import com.cpen321.modernwaiter.R;
 import com.cpen321.modernwaiter.customer.ui.payment.peritem.PaymentItem;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -42,7 +43,6 @@ public class TableSession implements SessionInterface {
     private MenuItem featureItem;
 
     public int orderId = -1;
-    private final HashSet<Integer> users = new HashSet<>();
 
     private final AppCompatActivity activity;
 
@@ -51,7 +51,9 @@ public class TableSession implements SessionInterface {
     // Testing values, change later
     private final String restaurantId = ApiUtil.RESTAURANT_ID;
     private final String tableId = ApiUtil.TABLE_ID;
-    private String userId;
+    private int userId;
+
+    private final HashMap<Integer, String> customerIdToName = new HashMap<>();
 
     private final GoogleSignInAccount googleAccount;
 
@@ -63,6 +65,8 @@ public class TableSession implements SessionInterface {
         this.googleAccount = googleAccount;
 
         orderedItems = new HashMap<>();
+
+        customerIdToName.put(-1, "Not selected");
 
         fetchUserId();
     }
@@ -104,7 +108,7 @@ public class TableSession implements SessionInterface {
 
     @Override
     public int getUserCount() {
-        return users.size();
+        return customerIdToName.keySet().size();
     }
 
     @Override
@@ -112,8 +116,8 @@ public class TableSession implements SessionInterface {
         final Map<String, String> bodyFields = new HashMap<>();
         bodyFields.put("orderId", String.valueOf(orderId));
         bodyFields.put("itemId", String.valueOf(orderItem.menuItem.id));
-        bodyFields.put("isSelected", String.valueOf(orderItem.selected ));
-        bodyFields.put("userId", orderItem.selected ? userId : "-1");
+        bodyFields.put("isSelected", orderItem.selected ? "1" : "0");
+        bodyFields.put("userId", orderItem.selected ? "" + userId : "-1");
 
         final String bodyJSON = new Gson().toJson(bodyFields);
         StringRequest stringRequest = new StringRequest(
@@ -272,7 +276,7 @@ public class TableSession implements SessionInterface {
 
     private void postOrderId() {
         final Map<String, String> bodyFields = new HashMap<>();
-        bodyFields.put("userId", userId);
+        bodyFields.put("userId", "" + userId);
         bodyFields.put("tableId", tableId);
         bodyFields.put("restaurantId", restaurantId);
         bodyFields.put("amount", "0");
@@ -302,17 +306,22 @@ public class TableSession implements SessionInterface {
 
     private void fetchOrderId() {
         StringRequest stringRequest = new StringRequest(
-                Request.Method.GET, ApiUtil.userOrder + userId + ApiUtil.isActive,
+                Request.Method.GET, ApiUtil.orderTable + tableId + ApiUtil.isActive,
                 response -> {
-                    List<OrderResponse> orderResponses = new Gson().fromJson(response, new TypeToken<List<OrderResponse>>() {}.getType());
+                    List<OrderResponse> orderResponses = new Gson().fromJson(response, new TypeToken<List<OrderResponse>>() {
+                    }.getType());
 
-                    for (OrderResponse orderResponse : orderResponses) {
-                        if (orderResponse.restaurant_id.equals(orderResponse.restaurant_id)) {
-                            orderId = orderResponse.id;
-                            fetchMenu();
-                            NotificationService.sendToken(String.valueOf(orderId));
-                            return;
+                    if (orderResponses.size() != 0) {
+                        OrderResponse currentOrder = orderResponses.get(orderResponses.size() - 1);
+                        if (BuildConfig.DEBUG && !(currentOrder.restaurant_id.equals(ApiUtil.RESTAURANT_ID))) {
+                            throw new AssertionError("Restaurant ID invalid");
                         }
+
+                        orderId = currentOrder.id;
+
+                        fetchMenu();
+                        NotificationService.sendToken(String.valueOf(orderId));
+                        return;
                     }
                     postOrderId();
 
@@ -332,14 +341,19 @@ public class TableSession implements SessionInterface {
                     HashMap<MenuItem, Integer> updatedBillMap = new HashMap<>();
 
                     for (OrderedItemResponse orderedItem : orderedItemResponses) {
-                        users.add(orderedItem.users_id);
+                        // Put the username into our customer list
+                        if (!customerIdToName.containsKey(orderedItem.users_id)) {
+                            customerIdToName.put(orderedItem.users_id, "Loading...");
+                            fetchUserInfo(orderedItem.users_id);
+                        }
+
                         if (orderedItem.has_paid != 1) {
 
                             MenuItem fakeMenuItem = new MenuItem(orderedItem.items_id);
 
                             for (MenuItem menuItem : orderedItems.keySet()) {
                                 if (menuItem.equals(fakeMenuItem)) {
-                                    orderList.add(new PaymentItem(menuItem, orderedItem.is_selected == 1));
+                                    orderList.add(new PaymentItem(menuItem, orderedItem.is_selected == 1, orderedItem.users_id));
                                 }
                             }
 
@@ -365,6 +379,22 @@ public class TableSession implements SessionInterface {
         requestQueue.add(stringRequest);
     }
 
+    public void fetchUserInfo(int userId) {
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.GET, ApiUtil.users + userId,
+                response -> {
+                    if (response.equals("")) {
+                        Log.i("Fetch user info", "No user found for this id");
+                    } else {
+                        UserResponse userResponse = new Gson().fromJson(response, new TypeToken<UserResponse>() {}.getType());
+                        customerIdToName.replace(userId, userResponse.username);
+                        refreshOrderListFragment();
+                    }
+                }, error -> Log.i("Fetch user info", error.toString()));
+
+        requestQueue.add(stringRequest);
+    }
+
     private void fetchUserRecommendation() {
         StringRequest stringRequest = new StringRequest(
                 Request.Method.GET, ApiUtil.recommend + userId + "/" + restaurantId,
@@ -384,6 +414,14 @@ public class TableSession implements SessionInterface {
         );
 
         requestQueue.add(stringRequest);
+    }
+
+    public String getUsernameFromId(int id) {
+        return customerIdToName.get(id);
+    }
+
+    public int getUserId() {
+        return userId;
     }
 
     private void refreshMenuFragment() {
@@ -457,6 +495,7 @@ public class TableSession implements SessionInterface {
     }
 
     public class UserResponse {
-        public String id;
+        public String username;
+        public int id;
     }
 }

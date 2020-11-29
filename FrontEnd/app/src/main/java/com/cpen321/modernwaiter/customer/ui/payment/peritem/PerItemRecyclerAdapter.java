@@ -12,8 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cpen321.modernwaiter.R;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 
 public class PerItemRecyclerAdapter extends RecyclerView.Adapter<PerItemRecyclerAdapter.ViewHolder> {
 
@@ -36,7 +34,7 @@ public class PerItemRecyclerAdapter extends RecyclerView.Adapter<PerItemRecycler
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.menuItemBooleanPair = orderList.get(position);
+        holder.paymentItem = orderList.get(position);
         holder.bind(listener);
         holder.index = position;
     }
@@ -50,7 +48,7 @@ public class PerItemRecyclerAdapter extends RecyclerView.Adapter<PerItemRecycler
     public class ViewHolder extends RecyclerView.ViewHolder {
         public int index;
         public View view;
-        public PaymentItem menuItemBooleanPair;
+        public PaymentItem paymentItem;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -59,20 +57,25 @@ public class PerItemRecyclerAdapter extends RecyclerView.Adapter<PerItemRecycler
 
         public void bind(OnItemClickListener listener) {
             TextView nameTextView = view.findViewById(R.id.name);
-            nameTextView.setText(menuItemBooleanPair.menuItem.name);
+            nameTextView.setText(paymentItem.menuItem.name);
+
+            TextView usernameTextView = view.findViewById(R.id.user);
+            usernameTextView.setText(paymentItem.getUsername());
 
             TextView priceTextView = view.findViewById(R.id.price);
-            priceTextView.setText(String.valueOf(menuItemBooleanPair.menuItem.cost));
+            priceTextView.setText(String.valueOf(paymentItem.menuItem.cost));
 
             CheckBox checkBox = view.findViewById(R.id.checkbox);
-            checkBox.setChecked(menuItemBooleanPair.selected);
+            checkBox.setChecked(paymentItem.selected);
+
+            checkBox.setEnabled(paymentItem.selectedByCurrentUser() || !paymentItem.selected);
 
             checkBox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (checkBox.isChecked() != menuItemBooleanPair.selected) {
-                        menuItemBooleanPair.setSelected(checkBox.isChecked());
-                        listener.onItemClick(menuItemBooleanPair);
+                    if (checkBox.isChecked() != paymentItem.selected) {
+                        paymentItem.setSelected(checkBox.isChecked());
+                        listener.onItemClick(paymentItem);
                     }
                 }
             });
