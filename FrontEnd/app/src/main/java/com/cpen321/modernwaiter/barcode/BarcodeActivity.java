@@ -12,6 +12,8 @@ import com.google.zxing.integration.android.IntentResult;
 
 public class BarcodeActivity extends AppCompatActivity {
 
+    //In order to use barcode scan using webcam of pc is recommended because it is not possible with the android emulator mock camera
+    //In order to do this go to Tools>AVD Manager>Edit your device of choice>show advanced settings>camera>front->webcam0 and back->webcam0
 
     @Override
     public void onCreate(Bundle state) {
@@ -29,12 +31,13 @@ public class BarcodeActivity extends AppCompatActivity {
             if(result.getContents() == null) {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                //TODO: Extract restaurant_Id from result.getContents() and pass this to the activity which calls the menu and switch to menu view
+                //TODO: Extract table_Id from result.getContents() and pass this to the activity which creates an active session for that user in that table_id
+                //Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
-
 
 }
