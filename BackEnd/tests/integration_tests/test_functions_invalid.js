@@ -392,6 +392,50 @@ async function testGetRecommendationInvalid() {
     expect(response.status).toBe(400)
 }
 
+
+async function testGetRestaurantInvalid() {
+    // Arrange
+    const url = `/restaurants/${dummyString}`
+
+    // Act
+    const response = await request.get(url)
+
+    // Assert
+    expect(response.status).toBe(400)
+}
+
+async function testAddRestaurantInvalid() {
+    // Arrange
+    const url = `/restaurants`
+    const req_body = {
+        "taxPercentage" : dummyString,
+        "serviceFeePercentage": dummyString,
+        "name" : dummyString,
+        "location" : dummyString
+    }
+
+    // Act
+    const response = await request.post(url).send(req_body)
+
+    // Assert
+    expect(response.status).toBe(400)
+}
+
+async function testAddRestaurantInvalidAlt() {
+    // Arrange
+    const url = `/restaurants`
+    const req_body = {
+        "taxPercentage" : 5,
+        "serviceFeePercentage": 5,
+    }
+
+    // Act
+    const response = await request.post(url).send(req_body)
+
+    // Assert
+    expect(response.status).toBe(400)
+}
+
 module.exports = {
     // testCreateOrder, testPaidStatusDone, testGetUserOrder, testGetMenu, 
     // testGetRecommendation, testAddOrderedItems, testGetOrderedItems, testOrderedItemPaid,
@@ -400,5 +444,6 @@ module.exports = {
     // testGetUserPreferences, testUpdateUserPreferences, testAddToMenu, testGetMenuLatestItem, 
     testCreateOrderInvalid, testGetRecommendationInvalid, testGetUserOrderInvalid, testGetTableOrderInvalid,
     testTableSessionDoneInvalid, testPaidStatusDoneInvalid, testAddOrderedItemsInvalid, testGetOrderedItemsInvalid, 
-    testOrderedItemSelectedInvalid, testOrderedItemPaidInvalid
+    testOrderedItemSelectedInvalid, testOrderedItemPaidInvalid, testGetRestaurantInvalid, testAddRestaurantInvalid,
+    testAddRestaurantInvalidAlt
 }

@@ -433,11 +433,45 @@ async function testUpdateUserPreferences() {
     preferences = "mango cucumber tuna spicy"
 }
 
+async function testGetRestaurant() {
+    // Arrange
+    const url = `/restaurants/2`
+
+    // Act
+    const response = await request.get(url)
+
+    // Assert
+    expect(response.status).toBe(200)
+    /*
+    expect(response.body[response.body.length-1].location).toStrictEqual(location)
+    expect(response.body[response.body.length-1].name).toStrictEqual(name)
+    expect(response.body[response.body.length-1].tax_percentage).toStrictEqual(tax_percentage)
+    expect(String(response.body[response.body.length-1].service_fee_percentage)).toStrictEqual(String(service_fee_percentage))
+    */
+}
+
+async function testAddRestaurant() {
+    // Arrange
+    const url = `/restaurants`
+    const req_body = {
+        "taxPercentage" : "12",
+        "serviceFeePercentage": "0",
+        "name" : "Best Restaurant",
+        "location" : "Calgary"
+    }
+
+    // Act
+    const response = await request.post(url).send(req_body)
+
+    // Assert
+    expect(response.status).toBe(200)
+}
+
 module.exports = {
     testCreateOrder, testPaidStatusDone, testGetUserOrder, testGetMenu, 
     testGetRecommendation, testAddOrderedItems, testGetOrderedItems, testOrderedItemPaid,
     testGetStripeKey, testCreateStripePayment, testGetTableOrder, testTableSessionDone, 
     testOrderedItemSelected, testCreateUser, testGetUserByGoogleId, testGetUserByUserId, 
     testGetUserPreferences, testUpdateUserPreferences, testAddToMenu, testGetMenuLatestItem,
-    testOrderedItemUnpaid, testOrderedItemDeselected
+    testOrderedItemUnpaid, testOrderedItemDeselected, testGetRestaurant, testAddRestaurant
 }

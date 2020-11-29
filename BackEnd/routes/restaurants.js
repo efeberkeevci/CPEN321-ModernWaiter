@@ -20,10 +20,6 @@ function getRestaurant(req, res){
 
     let sql_query = mysql.format("SELECT * FROM restaurant WHERE id = ?", [id]);
     con.query(sql_query, function(err, result){
-        if (err) {
-            res.status(400).send({code : err.code, errno : err.errno});
-            return;
-        }
         res.status(200).send(result);
         return;
     });
