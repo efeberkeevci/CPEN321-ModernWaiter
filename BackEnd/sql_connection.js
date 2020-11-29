@@ -6,7 +6,7 @@ function getConnection(){
         host: process.env.HOST, 
         user: process.env.DBUSER, 
         password: process.env.PASSWORD, 
-        database: process.env.DATABASE, 
+        database: (process.env.NODE_ENV !== 'test') ? process.env.DATABASE : process.env.TESTDATABASE, 
         port: process.env.PORT, 
         ssl:true
     })

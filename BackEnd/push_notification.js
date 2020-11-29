@@ -24,7 +24,7 @@ function subscribe(registrationToken, orderId){
         .then(function(response) {
         // See the MessagingTopicManagementResponse reference documentation
         // for the contents of response.
-        console.log('Successfully subscribed to topic:', response);
+        console.log('Successfully subscribed to topic: ' + topic, response);
         return "Succesfully added user to push notifications list";
         })
         .catch(function(error) {
