@@ -75,6 +75,7 @@ dependencies {
         exclude module: 'recyclerview-v7'
     }
     implementation 'com.stripe:stripe-android:16.0.1'
+    implementation 'me.dm7.barcodescanner:zxing:1.9'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.android.volley:volley:1.1.1'
     implementation platform('com.google.firebase:firebase-bom:25.12.0')
@@ -85,6 +86,9 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.squareup.picasso:picasso:2.71828'
     compileOnly 'com.google.android.wearable:wearable:2.8.1'
+    //For Qr code scanner
+    implementation 'com.journeyapps:zxing-android-embedded:4.1.0'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
     //for uidevice to test notifications
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
 }

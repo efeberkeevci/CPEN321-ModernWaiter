@@ -12,6 +12,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.cpen321.modernwaiter.R;
+import com.cpen321.modernwaiter.barcode.BarcodeActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -35,6 +36,11 @@ public class CustomerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         FirebaseApp.initializeApp(this);
 
+        Intent qr_scanner_intent = new Intent(this, BarcodeActivity.class);
+        startActivity(qr_scanner_intent);
+
+        /*
+
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         if (account == null) {
             signInGoogle();
@@ -43,6 +49,8 @@ public class CustomerActivity extends AppCompatActivity {
 
             startSession(account);
         }
+
+        */
     }
 
     @Override
