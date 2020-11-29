@@ -43,7 +43,7 @@ function addOrderedItems(req, res){
 
         if (isNaN(orderId) || isNaN(itemId)){
             res.status(400).send("Invalid request body - order and item ids must be integers")
-            return;
+            return
         }
         
         let sql_query = mysql.format("INSERT INTO ordered_items (orders_id, items_id, has_paid, is_selected) VALUES(?, ?, 0, 0) ", [orderId,itemId])

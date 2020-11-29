@@ -1,20 +1,23 @@
 const { testCreateUser, testGetUserByGoogleId, testGetUserByUserId, testUpdateUserPreferences, testGetUserPreferences } = require('./test_functions')
+const { testCreateUserInvalid, testGetUserByUserIdInvalid, testGetUserPreferencesInvalid, testUpdateUserPreferencesInvalid, testUpdateUserPreferencesInvalidAlt} = require('./test_functions_invalid')
 
 describe("Integration test 7: ", () => {
     it("Set up a new user", async done => {
-
-        timestamp = new Date().getTime()
-        username = "Integration_test" + timestamp
-        googleId = "dummy_google" + timestamp
-        email = "integration_test_user" + timestamp + "@gmail.com"
-        preferences = "chicken"
-
         await testCreateUser()
         await testGetUserByGoogleId()
         await testGetUserByUserId()
         await testGetUserPreferences()
         await testUpdateUserPreferences()
         await testGetUserPreferences()
+        done()
+    })
+
+    it("Fail to setup a new user", async done => {
+        await testCreateUserInvalid()
+        await testGetUserByUserIdInvalid()
+        await testGetUserPreferencesInvalid()
+        await testUpdateUserPreferencesInvalid()
+        await testUpdateUserPreferencesInvalidAlt()
         done()
     })
 })

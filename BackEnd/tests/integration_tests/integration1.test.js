@@ -1,5 +1,4 @@
 const { testCreateOrder, testGetUserOrder, testGetMenu, testGetRecommendation, testGetTableOrder } = require("./test_functions")
-
 const { testCreateOrderInvalid, testGetRecommendationInvalid, testGetUserOrderInvalid, testGetTableOrderInvalid } = require("./test_functions_invalid")
 
 describe("Integration test 1: ", () => {

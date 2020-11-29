@@ -287,86 +287,76 @@ async function testAddToMenuInvalidAlt() {
 //     expect(response.body[response.body.length-1].image).toStrictEqual(image)
 // }
 
-// async function testCreateUser() {
-//     // Arrange
-//     const url = `/users`
-//     const req_body = 
-//         {
-//             "username" : username,
-//             "email" : email,
-//             "googleId" : googleId,
-//             "preferences" : preferences
-//         }
+async function testCreateUserInvalid() {
+    // Arrange
+    const url = `/users`
+    const req_body = 
+        {
+            "username" : username,
+            "email" : email
+        }
 
-//     // Act
-//     const response = await request.post(url).send(req_body)
+    // Act
+    const response = await request.post(url).send(req_body)
+    const response2 = await request.post(url).send(req_body) // constraint violation due to duplicate username/email
 
-//     // Assert
-//     expect(response.status).toBe(200)
-// }
+    // Assert
+    expect(response2.status).toBe(400)
+}
 
-// async function testGetUserByGoogleId() {
-//     // Arrange
-//     const url = `/users/google/${googleId}`
+async function testGetUserByUserIdInvalid() {
+    // Arrange
+    const url = `/users/${dummyString}`
 
-//     // Act
-//     const response = await request.get(url)
+    // Act
+    const response = await request.get(url)
 
-//     // Assert
-//     expect(response.status).toBe(200)
-//     expect(response.body.username).toStrictEqual(username)
-//     expect(response.body.email).toStrictEqual(email)
-//     expect(response.body.google_id).toStrictEqual(googleId)
-//     expect(response.body.preferences).toStrictEqual(preferences)
-//     expect(response.body.username).toStrictEqual(username)
+    // Assert
+    expect(response.status).toBe(400)
+}
 
-//     userId = response.body.id
-// }
+async function testGetUserPreferencesInvalid() {
+    // Arrange
+    const url = `/users/preferences/${dummyString}`
 
-// async function testGetUserByUserId() {
-//     // Arrange
-//     const url = `/users/${userId}`
+    // Act
+    const response = await request.get(url)
 
-//     // Act
-//     const response = await request.get(url)
+    // Assert
+    expect(response.status).toBe(400)
+}
 
-//     // Assert
-//     expect(response.status).toBe(200)
-//     expect(response.body.username).toStrictEqual(username)
-//     expect(response.body.email).toStrictEqual(email)
-//     expect(response.body.google_id).toStrictEqual(googleId)
-//     expect(response.body.preferences).toStrictEqual(preferences)
-//     expect(response.body.username).toStrictEqual(username)
-// }
+async function testUpdateUserPreferencesInvalid() {
+    // Arrange
+    const url = `/users/preferences/`
+    const req_body = 
+        {
+            "userId" : dummyString,
+            "preferences" : dummyString
+        }
 
-// async function testGetUserPreferences() {
-//     // Arrange
-//     const url = `/users/preferences/${userId}`
+    // Act
+    const response = await request.put(url).send(req_body)
 
-//     // Act
-//     const response = await request.get(url)
+    // Assert
+    expect(response.status).toBe(400)
+}
 
-//     // Assert
-//     expect(response.status).toBe(200)
-//     expect(response.body.preferences).toStrictEqual(preferences)
-// }
+async function testUpdateUserPreferencesInvalidAlt() {
+    // Arrange
+    const url = `/users/preferences/`
+    const req_body = 
+        {
+            "userId" : userId,
+            "preferences" : null
+        }
 
-// async function testUpdateUserPreferences() {
-//     // Arrange
-//     const url = `/users/preferences/`
-//     const req_body = 
-//         {
-//             "userId" : userId,
-//             "preferences" : "mango cucumber tuna spicy"
-//         }
+    // Act
+    const response = await request.put(url).send(req_body)
 
-//     // Act
-//     const response = await request.put(url).send(req_body)
-
-//     // Assert
-//     expect(response.status).toBe(200)
-//     preferences = "mango cucumber tuna spicy"
-// }
+    // Assert
+    expect(response.status).toBe(400)
+}
 
 /* Invalid cases functions */
 async function testCreateOrderInvalid() {
@@ -453,5 +443,7 @@ module.exports = {
     testCreateOrderInvalid, testGetRecommendationInvalid, testGetUserOrderInvalid, testGetTableOrderInvalid,
     testTableSessionDoneInvalid, testPaidStatusDoneInvalid, testAddOrderedItemsInvalid, testGetOrderedItemsInvalid, 
     testOrderedItemSelectedInvalid, testOrderedItemPaidInvalid, testGetRestaurantInvalid, testAddRestaurantInvalid,
-    testAddRestaurantInvalidAlt, testGetMenuInvalid, testAddToMenuInvalid, testAddToMenuInvalidAlt
+    testAddRestaurantInvalidAlt, testGetMenuInvalid, testAddToMenuInvalid, testAddToMenuInvalidAlt,
+    testCreateUserInvalid, testGetUserByUserIdInvalid, testGetUserPreferencesInvalid, testUpdateUserPreferencesInvalid,
+    testUpdateUserPreferencesInvalidAlt
 }
