@@ -70,28 +70,16 @@ async function testGetTableOrderInvalid() {
     expect(response.status).toBe(400)
 }
 
-// async function testGetMenu() {
-//     // Arrange
-//     const url = `/items/${restaurantId}`
+async function testGetMenuInvalid() {
+    // Arrange
+    const url = `/items/${dummyString}`
 
-//     // Act
-//     const response = await request.get(url)
+    // Act
+    const response = await request.get(url)
 
-//     // Assert
-//     expect(response.status).toBe(200)
-//     expect(response.body[0].id).toStrictEqual(expect.anything())
-//     expect(response.body[0].restaurant_id).toStrictEqual(restaurantId)
-//     expect(response.body[0].name).toStrictEqual(expect.anything())
-//     expect(response.body[0].type).toStrictEqual(expect.anything())
-//     expect(response.body[0].cost).toStrictEqual(expect.anything())
-//     expect(response.body[0].description).toStrictEqual(expect.anything())
-//     expect(response.body[0].calories).toStrictEqual(expect.anything())
-//     expect(response.body[0].popularity_count).toStrictEqual(expect.anything())
-//     expect(response.body[0].image).toStrictEqual(expect.anything())
-
-//     menu = response.body
-// }
-
+    // Assert
+    expect(response.status).toBe(400)
+}
 
 async function testAddOrderedItemsInvalid() {
     //Arrange
@@ -235,28 +223,48 @@ async function testOrderedItemPaidInvalid(){
     expect(res.status).toBe(400)
 }
 
-// async function testAddToMenu() {
-//     //Arrange
-//     let req_body =
-//         {
-//             "restaurantId" : restaurantId ,
-//             "name" : name ,
-//             "type" : type,
-//             "cost" : cost,
-//             "description" : description ,
-//             "calories" : calories,
-//             "popularityCount" : popularityCount,
-//             "image" : image 
-//         }
+async function testAddToMenuInvalid() {
+    //Arrange
+    let req_body =
+        {
+            "restaurantId" : dummyString ,
+            "name" : name ,
+            "type" : type,
+            "cost" : dummyString,
+            "description" : description ,
+            "calories" : dummyString,
+            "popularityCount" : dummyString,
+            "image" : image 
+        }
  
-//     let url = "/items"
+    let url = "/items"
 
-//     //Act
-//     const res = await request.post(url).send(req_body)
+    //Act
+    const res = await request.post(url).send(req_body)
 
-//     //Assert
-//     expect(res.status).toBe(200)
-// }
+    //Assert
+    expect(res.status).toBe(400)
+}
+
+async function testAddToMenuInvalidAlt() {
+    //Arrange
+    let req_body =
+        {
+            "restaurantId" : restaurantId ,
+            "cost" : cost,
+            "description" : description ,
+            "calories" : calories,
+            "popularityCount" : popularityCount,
+        }
+ 
+    let url = "/items"
+
+    //Act
+    const res = await request.post(url).send(req_body)
+
+    //Assert
+    expect(res.status).toBe(400)
+}
 
 // async function testGetMenuLatestItem() {
 //     // Arrange
@@ -445,5 +453,5 @@ module.exports = {
     testCreateOrderInvalid, testGetRecommendationInvalid, testGetUserOrderInvalid, testGetTableOrderInvalid,
     testTableSessionDoneInvalid, testPaidStatusDoneInvalid, testAddOrderedItemsInvalid, testGetOrderedItemsInvalid, 
     testOrderedItemSelectedInvalid, testOrderedItemPaidInvalid, testGetRestaurantInvalid, testAddRestaurantInvalid,
-    testAddRestaurantInvalidAlt
+    testAddRestaurantInvalidAlt, testGetMenuInvalid, testAddToMenuInvalid, testAddToMenuInvalidAlt
 }

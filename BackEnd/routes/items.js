@@ -20,10 +20,10 @@ function getMenu(req, res){
 
     let sql_query = mysql.format("SELECT * FROM items WHERE restaurant_id = ?", [restaurantId])
     con.query(sql_query, function(err, result){
-        if (err) {
-            res.status(400).send({code : err.code, errno : err.errno});
-            return;
-        }
+        // if (err) {
+        //     res.status(400).send({code : err.code, errno : err.errno});
+        //     return;
+        // }
         res.status(200).send(result);
         return;
     })
@@ -53,7 +53,6 @@ function addToMenu(req, res){
     let sql_query = mysql.format("INSERT INTO items (restaurant_id, name, type, cost, description, calories, popularity_count, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [restaurantId, name, type, cost, description, calories, popularityCount, image])
     con.query(sql_query, function(err, result){
         if (err) {
-            
             res.status(400).send({code : err.code, errno : err.errno});
             return;
         }
@@ -62,16 +61,16 @@ function addToMenu(req, res){
     })
 }
 
-function getItemName(itemId){
-    let sql_query = mysql.format("SELECT name FROM items WHERE id = ?", [itemId]);
-    con.query(sql_query, function(err, result){
-        if (err) {
-            console.log("Error in item name retrieval: ", err);
-        }
-        else{
-            return result;
-        }
-    });
-}
+// function getItemName(itemId){
+//     let sql_query = mysql.format("SELECT name FROM items WHERE id = ?", [itemId]);
+//     con.query(sql_query, function(err, result){
+//         if (err) {
+//             console.log("Error in item name retrieval: ", err);
+//         }
+//         else{
+//             return result;
+//         }
+//     });
+// }
 
-module.exports = {getMenu, addToMenu, getItemName}
+module.exports = {getMenu, addToMenu} //getItemName
