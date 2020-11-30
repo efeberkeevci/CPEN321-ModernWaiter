@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import static java.lang.Integer.parseInt;
+
 public class BarcodeActivity extends AppCompatActivity {
 
     //In order to use barcode scan using webcam of pc is recommended because it is not possible with the android emulator mock camera
@@ -20,7 +22,9 @@ public class BarcodeActivity extends AppCompatActivity {
         super.onCreate(state);
         Log.d("MESSAGE:", "In barcode activity");
         IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.setPrompt("Scan a barcode");
         integrator.setOrientationLocked(false);
+        integrator.setDesiredBarcodeFormats(integrator.QR_CODE);
         integrator.initiateScan();    }
 
     // Get the results:
@@ -31,9 +35,11 @@ public class BarcodeActivity extends AppCompatActivity {
             if(result.getContents() == null) {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
-                //TODO: Extract restaurant_Id from result.getContents() and pass this to the activity which calls the menu and switch to menu view
-                //TODO: Extract table_Id from result.getContents() and pass this to the activity which creates an active session for that user in that table_id
-                //Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                //Extract restaurant_Id from result.getContents() and pass this to the activity which calls the menu and switch to menu view
+                setRestaurantId(parseInt(result.getContents().split(",",0)[0]));
+                //Extract table_Id from result.getContents() and pass this to the activity which creates an active session for that user in that table_id
+                setTableId(parseInt(result.getContents().split(",",0)[1]));
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
@@ -42,10 +48,13 @@ public class BarcodeActivity extends AppCompatActivity {
 
     public void setTableId(int tableId) {
         //TODO: SET THE TABLE ID
+            Log.d("Table_Id", Integer.toString(tableId));
     }
 
     public void setRestaurantId(int restaurantId) {
         //TODO: SET THE RESTAURANT ID
+        Log.d("Restaurant_Id", Integer.toString(restaurantId));
+
     }
 
 }

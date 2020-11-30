@@ -35,15 +35,20 @@ public class CustomerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FirebaseApp.initializeApp(this);
+        getQRCodeInformation();
+
+        /*
 
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         if (account == null) {
             signInGoogle();
         } else {
             account = GoogleSignIn.getLastSignedInAccount(this);
-
+            getQRCodeInformation();
             startOrderingSession(account);
         }
+
+         */
     }
 
 
@@ -107,6 +112,7 @@ public class CustomerActivity extends AppCompatActivity {
     }
 
     private void getQRCodeInformation() {
+        Log.d("Note", "starting qr code scan");
         Intent qr_scanner_intent = new Intent(this, BarcodeActivity.class);
         startActivity(qr_scanner_intent);
     }
