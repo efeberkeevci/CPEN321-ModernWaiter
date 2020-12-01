@@ -22,6 +22,8 @@ import org.junit.Test;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -315,7 +317,7 @@ public class IntegratedTesting {
 
 
         //input payment details
-        /*String creditCardNumber = "4242" + "4242" + "4242" + "4242";
+        String creditCardNumber = "4242" + "4242" + "4242" + "4242";
         String date = "424";
         String cv = "012";
         String postal = "123";
@@ -332,6 +334,6 @@ public class IntegratedTesting {
         onView(withId(R.id.textView2))
                 .check(matches(isDisplayed()));
         onView(withId(R.id.textView2))
-                .check(matches(withText(R.string.thank_you_post_payment)));*/
+                .check(matches(withText(R.string.thank_you_post_payment)));
     }
 }
