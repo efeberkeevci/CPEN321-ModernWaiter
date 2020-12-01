@@ -100,7 +100,7 @@ public class CustomerActivity extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(this);
         tableSession = new TableSession(requestQueue, this, account);
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_customer);
 
         Picasso.get().setIndicatorsEnabled(true);
 
