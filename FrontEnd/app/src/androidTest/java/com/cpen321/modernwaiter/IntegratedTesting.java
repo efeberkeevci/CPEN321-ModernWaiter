@@ -296,11 +296,11 @@ public class IntegratedTesting {
                 .perform(click());
 
         //check that on payment options page
-        onView(withId(R.id.pay_for_all))
+        onView(withId(R.id.barcode_button))
                 .check(matches(isDisplayed()));
 
         //click on pay_for_all
-        onView(withId(R.id.pay_for_all))
+        onView(withId(R.id.barcode_button))
                 .perform(click());
 
 

@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.cpen321.modernwaiter.MainActivity;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -40,6 +41,12 @@ public class BarcodeActivity extends AppCompatActivity {
                 setRestaurantId(parseInt(result.getContents().split(",",0)[0]));
                 //Extract table_Id from result.getContents() and pass this to the activity which creates an active session for that user in that table_id
                 setTableId(parseInt(result.getContents().split(",",0)[1]));
+
+                Intent intent = new Intent();
+                intent.putExtra("restaurantId", result.getContents().split(",",0)[0]);
+                intent.putExtra("tableId", result.getContents().split(",",0)[1]);
+
+                setResult(MainActivity.BARCODE_ACTIVITY_CODE, intent);
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);

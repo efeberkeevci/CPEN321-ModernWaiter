@@ -1,5 +1,6 @@
 package com.cpen321.modernwaiter.customer.application;
 
+import android.os.Bundle;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,14 +13,12 @@ import com.android.volley.toolbox.StringRequest;
 import com.cpen321.modernwaiter.BuildConfig;
 import com.cpen321.modernwaiter.R;
 import com.cpen321.modernwaiter.customer.ui.payment.peritem.PaymentItem;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -49,20 +48,23 @@ public class TableSession implements SessionInterface {
     public boolean isActive = true;
 
     // Testing values, change later
-    private final String restaurantId = ApiUtil.RESTAURANT_ID;
-    private final String tableId = ApiUtil.TABLE_ID;
+    private final String restaurantId;
+    private final String tableId;
     private int userId;
 
     private final HashMap<Integer, String> customerIdToName = new HashMap<>();
 
-    private final GoogleSignInAccount googleAccount;
+    private final Bundle accountBundle;
 
     //creates a new session
-    TableSession(RequestQueue requestQueue, AppCompatActivity activity, GoogleSignInAccount googleAccount) {
+    TableSession(RequestQueue requestQueue, AppCompatActivity activity, Bundle accountBundle) {
         //Make request to server to retrieve menu items to display
         this.activity = activity;
         this.requestQueue = requestQueue;
-        this.googleAccount = googleAccount;
+        this.accountBundle = accountBundle;
+
+        restaurantId = accountBundle.getString("restaurantId");
+        tableId = accountBundle.getString("tableId");
 
         orderedItems = new HashMap<>();
 
@@ -212,7 +214,7 @@ public class TableSession implements SessionInterface {
 
     public void fetchUserId() {
         StringRequest stringRequest = new StringRequest(
-                Request.Method.GET, ApiUtil.usersGoogle + googleAccount.getId(),
+                Request.Method.GET, ApiUtil.usersGoogle + accountBundle.getString("googleId"),
                 response -> {
                     if (response.equals("")) {
                         postUserId();
@@ -228,9 +230,9 @@ public class TableSession implements SessionInterface {
 
     public void postUserId() {
         final Map<String, String> bodyFields = new HashMap<>();
-        bodyFields.put("username", googleAccount.getDisplayName());
-        bodyFields.put("email", googleAccount.getEmail());
-        bodyFields.put("googleId", googleAccount.getId());
+        bodyFields.put("username", accountBundle.getString("googleName"));
+        bodyFields.put("email", accountBundle.getString("googleEmail"));
+        bodyFields.put("googleId", accountBundle.getString("googleId"));
         bodyFields.put("preferences", "");
 
         final String bodyJSON = new Gson().toJson(bodyFields);

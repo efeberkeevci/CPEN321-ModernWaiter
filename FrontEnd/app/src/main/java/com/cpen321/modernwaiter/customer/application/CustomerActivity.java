@@ -35,74 +35,13 @@ public class CustomerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FirebaseApp.initializeApp(this);
-        getQRCodeInformation();
-
-        /*
-
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        if (account == null) {
-            signInGoogle();
-        } else {
-            account = GoogleSignIn.getLastSignedInAccount(this);
-            getQRCodeInformation();
-            startOrderingSession(account);
-        }
-
-         */
-    }
-
-
-    private void signInGoogle() {
-        setContentView(R.layout.activity_login);
-
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("1031633982947-6dqn2p8mginechhj7ekn3n231tcsif9e.apps.googleusercontent.com")
-                .requestEmail()
-                .build();
-        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, gso);
-
-        Intent signInIntent = googleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, 1);
-
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 1) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            handleSignInResult(task);
-        }
-    }
-
-    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
-        try {
-            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-
-            if (account == null) {
-                signInGoogle();
-            } else {
-                getQRCodeInformation();
-                startOrderingSession(account);
-            }
-
-        } catch (ApiException e) {
-            // The ApiException status code indicates the detailed failure reason.
-            // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Log.w("Customer Activity", "signInResult:failed code=" + e.getStatusCode());
-        }
-    }
 
 
 
-    private void startOrderingSession(GoogleSignInAccount account) {
         requestQueue = Volley.newRequestQueue(this);
-        tableSession = new TableSession(requestQueue, this, account);
+        tableSession = new TableSession(requestQueue, this, getIntent().getExtras());
 
         setContentView(R.layout.activity_customer);
-
-        Picasso.get().setIndicatorsEnabled(true);
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
@@ -110,11 +49,4 @@ public class CustomerActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupWithNavController(navView, navController);
     }
-
-    private void getQRCodeInformation() {
-        Log.d("Note", "starting qr code scan");
-        Intent qr_scanner_intent = new Intent(this, BarcodeActivity.class);
-        startActivity(qr_scanner_intent);
-    }
-
 }
