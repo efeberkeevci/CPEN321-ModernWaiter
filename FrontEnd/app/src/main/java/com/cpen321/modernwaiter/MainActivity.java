@@ -53,14 +53,11 @@ public class MainActivity extends AppCompatActivity {
             signInGoogle();
         } else {
             account = GoogleSignIn.getLastSignedInAccount(this);
+            fetchUserId();
         }
-
-        fetchUserId();
     }
 
     private void signInGoogle() {
-        setContentView(R.layout.activity_login);
-
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken("1031633982947-6dqn2p8mginechhj7ekn3n231tcsif9e.apps.googleusercontent.com")
                 .requestEmail()
@@ -69,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
 
         Intent signInIntent = googleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, GOOGLE_SIGN_IN_ACTIVITY_CODE);
-
     }
 
     @Override
@@ -95,10 +91,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
-            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+            account = completedTask.getResult(ApiException.class);
 
             if (account == null) {
                 signInGoogle();
+            } else {
+                fetchUserId();
             }
 
         } catch (ApiException e) {
@@ -154,6 +152,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupButtons() {
         Button startDemoButton = findViewById(R.id.demo_button);
+        while (startDemoButton == null) {
+            startDemoButton = findViewById(R.id.demo_button);
+        }
         startDemoButton.setVisibility(View.VISIBLE);
         startDemoButton.setOnClickListener(a -> {
             Intent customerActivityIntent = new Intent(this, CustomerActivity.class);
