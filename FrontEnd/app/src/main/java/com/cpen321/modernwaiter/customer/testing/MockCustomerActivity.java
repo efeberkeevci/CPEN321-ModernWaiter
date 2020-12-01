@@ -15,7 +15,7 @@ public class MockCustomerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_customer);
 
         CustomerActivity.tableSession = new MockTableSession();
 

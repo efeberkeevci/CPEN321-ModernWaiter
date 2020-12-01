@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.cpen321.modernwaiter.R;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainPaymentFragment extends Fragment {
     @Override
@@ -24,7 +23,7 @@ public class MainPaymentFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_payment, container, false);
 
-        Button pay_for_all = view.findViewById(R.id.pay_for_all);
+        Button pay_for_all = view.findViewById(R.id.barcode_button);
         pay_for_all.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -34,7 +33,7 @@ public class MainPaymentFragment extends Fragment {
             }
         });
 
-        Button split_evenly = view.findViewById(R.id.split_evenly);
+        Button split_evenly = view.findViewById(R.id.option_button);
         split_evenly.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -44,7 +43,7 @@ public class MainPaymentFragment extends Fragment {
             }
         });
 
-        Button pay_per_item = view.findViewById(R.id.pay_per_item);
+        Button pay_per_item = view.findViewById(R.id.demo_button);
         pay_per_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
