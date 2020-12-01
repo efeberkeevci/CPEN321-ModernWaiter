@@ -20,4 +20,8 @@
         <item name="elevationOverlayEnabled">false</item>
     </style>
 
+    <style name="MaterialRedButton"
+        parent="Widget.MaterialComponents.Button">
+        <item name="colorPrimary">@color/red</item>
+    </style>
 </resources>
