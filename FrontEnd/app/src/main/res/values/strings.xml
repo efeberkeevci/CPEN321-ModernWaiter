@@ -48,4 +48,6 @@ Proin vel imperdiet lorem. Nulla facilisi. Curabitur sagittis nibh et cursus sus
     <string name="choice_text">CHOICE 1 </string>
     <string name="proceed_to_menu">Proceed to menu</string>
     <string name="loading_user_information">Loading User Information...</string>
+    <string name="calorie_count">Calorie:</string>
+    <string name="food_type">Type:</string>
 </resources>
