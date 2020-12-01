@@ -85,10 +85,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.squareup.picasso:picasso:2.71828'
-    compileOnly 'com.google.android.wearable:wearable:2.8.1'
     //For Qr code scanner
     implementation 'com.journeyapps:zxing-android-embedded:4.1.0'
-    implementation 'androidx.appcompat:appcompat:1.0.2'
     //for uidevice to test notifications
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
 }
