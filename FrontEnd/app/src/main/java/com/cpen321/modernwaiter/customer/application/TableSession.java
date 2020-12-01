@@ -15,15 +15,16 @@ import com.android.volley.toolbox.StringRequest;
 import com.cpen321.modernwaiter.BuildConfig;
 import com.cpen321.modernwaiter.R;
 import com.cpen321.modernwaiter.customer.ui.payment.peritem.PaymentItem;
+
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.material.chip.Chip;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
