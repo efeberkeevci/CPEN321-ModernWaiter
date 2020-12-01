@@ -37,8 +37,6 @@ public class CustomerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         FirebaseApp.initializeApp(this);
 
-
-
         requestQueue = Volley.newRequestQueue(this);
         tableSession = new TableSession(requestQueue, this, getIntent().getExtras());
 

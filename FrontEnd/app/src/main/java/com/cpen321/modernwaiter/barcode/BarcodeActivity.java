@@ -47,6 +47,7 @@ public class BarcodeActivity extends AppCompatActivity {
                 intent.putExtra("tableId", result.getContents().split(",",0)[1]);
 
                 setResult(MainActivity.BARCODE_ACTIVITY_CODE, intent);
+                finish();
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);

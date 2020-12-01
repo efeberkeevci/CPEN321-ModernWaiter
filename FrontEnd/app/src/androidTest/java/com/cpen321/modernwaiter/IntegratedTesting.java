@@ -1,8 +1,11 @@
 package com.cpen321.modernwaiter;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.test.InstrumentationRegistry;
 
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
@@ -35,9 +38,16 @@ public class IntegratedTesting {
 
     @Before
     public void changeUserAndTableId() throws InterruptedException {
-        ApiUtil.TABLE_ID = "2";
-        ApiUtil.USER_ID = "2";
-        ActivityScenario.launch(CustomerActivity.class);
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), CustomerActivity.class);
+
+        Bundle bundle = new Bundle();
+        bundle.putInt("userId", 2);
+        bundle.putString("restaurantId", ApiUtil.RESTAURANT_ID);
+        bundle.putString("tableId", "2");
+
+        intent.putExtras(bundle);
+
+        ActivityScenario.launch(intent);
         Thread.sleep(1000);
     }
 
@@ -261,7 +271,7 @@ public class IntegratedTesting {
      * check if successful
      */
     @Test
-    public void payForAll(){
+    public void payForAll() throws InterruptedException {
 
         onView(withId(R.id.menu_recycler))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));

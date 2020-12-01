@@ -4,6 +4,7 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
 
 import com.cpen321.modernwaiter.customer.application.CustomerActivity;
+import com.cpen321.modernwaiter.customer.testing.MockCustomerActivity;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -17,8 +18,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 public class NavigationBarTest {
     @Rule
-    public ActivityScenarioRule<CustomerActivity> activityRule
-            = new ActivityScenarioRule<>(CustomerActivity.class);
+    public ActivityScenarioRule<MockCustomerActivity> activityRule
+            = new ActivityScenarioRule<>(MockCustomerActivity.class);
 
     @Test
     public void testNavigation() {

@@ -65,12 +65,13 @@ public class TableSession implements SessionInterface {
 
         restaurantId = accountBundle.getString("restaurantId");
         tableId = accountBundle.getString("tableId");
+        userId = accountBundle.getInt("userId");
 
         orderedItems = new HashMap<>();
 
         customerIdToName.put(-1, "Not selected");
 
-        fetchUserId();
+        fetchOrderId();
     }
 
     @Override
@@ -212,50 +213,6 @@ public class TableSession implements SessionInterface {
         requestQueue.add(request);
     }
 
-    public void fetchUserId() {
-        StringRequest stringRequest = new StringRequest(
-                Request.Method.GET, ApiUtil.usersGoogle + accountBundle.getString("googleId"),
-                response -> {
-                    if (response.equals("")) {
-                        postUserId();
-                    } else {
-                        UserResponse userResponse = new Gson().fromJson(response, new TypeToken<UserResponse>() {}.getType());
-                        userId = userResponse.id;
-                        fetchOrderId();
-                    }
-                }, error -> Log.i("Fetch user Id", error.toString()));
-
-        requestQueue.add(stringRequest);
-    }
-
-    public void postUserId() {
-        final Map<String, String> bodyFields = new HashMap<>();
-        bodyFields.put("username", accountBundle.getString("googleName"));
-        bodyFields.put("email", accountBundle.getString("googleEmail"));
-        bodyFields.put("googleId", accountBundle.getString("googleId"));
-        bodyFields.put("preferences", "");
-
-        final String bodyJSON = new Gson().toJson(bodyFields);
-        StringRequest stringRequest = new StringRequest(
-                Request.Method.POST, ApiUtil.users,
-                response -> fetchUserId(),
-
-                error -> Log.i("Post user", error.toString())
-        ) {
-            @Override
-            public String getBodyContentType() {
-                return "application/json; charset=utf-8";
-            }
-
-            @Override
-            public byte[] getBody() {
-                return bodyJSON.getBytes();
-            }
-        };
-
-        requestQueue.add(stringRequest);
-    }
-
     public void fetchMenu() {
         StringRequest stringRequest = new StringRequest(
                 Request.Method.GET, ApiUtil.items + restaurantId,
@@ -316,7 +273,7 @@ public class TableSession implements SessionInterface {
                     if (orderResponses.size() != 0) {
                         OrderResponse currentOrder = orderResponses.get(orderResponses.size() - 1);
                         if (BuildConfig.DEBUG && !(currentOrder.restaurant_id.equals(ApiUtil.RESTAURANT_ID))) {
-                            throw new AssertionError("Restaurant ID invalid");
+                            throw new AssertionError("Restaurant ID invalid, restaurandid: " + restaurantId + "\n tableId: " + tableId);
                         }
 
                         orderId = currentOrder.id;
