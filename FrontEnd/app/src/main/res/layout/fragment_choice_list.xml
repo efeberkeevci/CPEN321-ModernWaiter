@@ -7,8 +7,8 @@
     android:id="@+id/fragment_choice_list"
     android:background="@color/design_default_color_background">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/choice_recycler"
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chip_group"
         android:name="com.cpen321.modernwaiter.customer.ui.choices.ChoiceFragment"
         android:layout_width="275dp"
         android:layout_height="543dp"

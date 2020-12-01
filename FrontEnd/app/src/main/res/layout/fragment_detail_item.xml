@@ -152,6 +152,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:text="150 cal"
+            android:textAlignment="center"
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -182,6 +183,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:text="Sushi"
+            android:textAlignment="center"
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -204,6 +206,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/quantity"
             app:layout_constraintVertical_bias="0.0" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

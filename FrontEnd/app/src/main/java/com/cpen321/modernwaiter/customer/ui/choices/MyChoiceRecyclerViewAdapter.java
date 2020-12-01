@@ -56,7 +56,7 @@ public class MyChoiceRecyclerViewAdapter extends RecyclerView.Adapter<MyChoiceRe
         }
 
         public void bind(final OnItemClickListener listener) {
-            itemView.setOnClickListener(new View.OnClickListener() {
+            view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     listener.onItemClick(choiceItem);

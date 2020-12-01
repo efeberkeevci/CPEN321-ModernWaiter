@@ -1,5 +1,6 @@
 package com.cpen321.modernwaiter.customer.ui.menu;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +20,8 @@ import com.cpen321.modernwaiter.R;
 import com.cpen321.modernwaiter.customer.application.MenuItem;
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
 public class DetailItemFragment extends Fragment {
 
     private final MenuItem menuItem;
@@ -35,6 +38,7 @@ public class DetailItemFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) { super.onCreate(savedInstanceState); }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -45,6 +49,12 @@ public class DetailItemFragment extends Fragment {
 
         TextView descriptionTextView = view.findViewById(R.id.description);
         descriptionTextView.setText(menuItem.description);
+
+        TextView calorieTextView = view.findViewById(R.id.calorieCount);
+        calorieTextView.setText(menuItem.calories + " cal");
+
+        TextView typeTextView = view.findViewById(R.id.typeName);
+        typeTextView.setText(menuItem.type);
 
         TextView priceTextView = view.findViewById(R.id.price);
         priceTextView.setText(menuItem.getPriceString());

@@ -472,58 +472,36 @@ public class TableSession implements SessionInterface {
         return choices;
     }
 
-    public void putChoicesInBackend(List<String> choices_list){
-        if(!choices.retainAll(choices_list)){
-            choices.clear();
-            choices.addAll(choices_list);
-        }
+    public void putChoicesInBackend(List<String> choices_list) {
 
-        String user = Integer.toString(5);
-        String url = ApiUtil.choices;
-        String data = "";
-        for(String s : choices){
-            data =  (new StringBuilder()).append(s).toString();
+        String preference = "";
+        for (String choice : choices_list) {
+            preference = preference + " " + choice;
         }
+        preference.substring(1);
 
-        final String choices_data = data;
-        Log.i("HERE ARE CHOICES SELECTED:", choices_data);
-        StringRequest putRequest = new StringRequest(Request.Method.PUT, url,
-                new Response.Listener<String>()
-                {
-                    @Override
-                    public void onResponse(String response) {
-                        // response
-                        Log.d("Response", response.toString());
-                    }
-                },
-                new Response.ErrorListener()
-                {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // error
-                        Log.d("Error.Response", error.toString());
-                    }
-                }
+        final Map<String, String> bodyFields = new HashMap<>();
+        bodyFields.put("userId", "" + userId);
+        bodyFields.put("preferences", preference);
+
+        final String bodyJSON = new Gson().toJson(bodyFields);
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.PUT, ApiUtil.choices,
+                response -> Log.i("Post preference", "success"),
+
+                error -> Log.i("Post preference", error.toString())
         ) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
 
             @Override
-            public Map<String, String> getHeaders()
-            {
-                Map<String, String> headers = new HashMap<String, String>();
-                headers.put("Content-Type", "application/json");
-                //or try with this:
-                //headers.put("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
-                return headers;
-            }
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("userId", user);
-                params.put("preferences", choices_data);
-                return params;
+            public byte[] getBody() {
+                return bodyJSON.getBytes();
             }
         };
 
-        requestQueue.add(putRequest);
+        requestQueue.add(stringRequest);
     }
 }

@@ -1,5 +1,6 @@
 package com.cpen321.modernwaiter.customer.ui.choices;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -28,6 +29,7 @@ import com.cpen321.modernwaiter.customer.ui.choices.dummy.DummyContent;
 import com.cpen321.modernwaiter.customer.ui.menu.DetailItemFragment;
 import com.cpen321.modernwaiter.customer.ui.menu.MenuRecyclerAdapter;
 import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,44 +55,39 @@ public class ChoiceFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_choice_list, container, false);
 
         //set recycler
-        RecyclerView recyclerView = view.findViewById(R.id.choice_recycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
+        ChipGroup chipGroup = view.findViewById(R.id.chip_group);
 
-        MyChoiceRecyclerViewAdapter.OnItemClickListener listener = new MyChoiceRecyclerViewAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(Chip chip) {
-                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                chip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton view, boolean isChecked) {
-                        // Handle the toggle.
-                        if(isChecked){
-                            List<String> session_choices_list = new ArrayList<>();
-                            session_choices_list.addAll(tableSession.getChoices());
-                            String option = chip.getText().toString();
-                            if(!session_choices_list.contains(option)){
-                                session_choices_list.add(option);
-                                tableSession.putChoicesInBackend(session_choices_list);
-                            }
-                        }
-                    }
-                });
-                fragmentTransaction.commit();
-            }
-        };
-        ArrayList<Chip> chipItems = getChipList();
-        MyChoiceRecyclerViewAdapter choiceRecyclerAdapter = new MyChoiceRecyclerViewAdapter(chipItems, listener);
+        for (Chip chip : getChipList()) {
+            chipGroup.addView(chip);
+        }
 
-        recyclerView.setAdapter(choiceRecyclerAdapter);
         return view;
     }
 
+    @SuppressLint("ResourceAsColor")
     private ArrayList<Chip> getChipList(){
         ArrayList<Chip> choices = new ArrayList<>();
         for(String name : ApiUtil.choices_name_list) {
             Chip chip = new Chip(view.getContext());
-            chip.setText(name);
+            chip.setText("   " + name + "    ");
+            chip.setCheckable(true);
+            chip.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                String text = chip.getText().toString();
+                if (isChecked) {
+                    chip.setText(text.replaceAll(" ", ""));
+                } else {
+                    chip.setText("   " + text + "    ");
+                }
+
+                ArrayList<String> choiceList = new ArrayList<>();
+                for (Chip chipIndex : choices) {
+                    if (chipIndex.isChecked()) {
+                        choiceList.add(chipIndex.getText().toString().replaceAll(" ", ""));
+                    }
+                }
+
+                tableSession.putChoicesInBackend(choiceList);
+            });
             choices.add(chip);
         }
         return choices;

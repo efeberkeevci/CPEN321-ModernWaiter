@@ -10,4 +10,10 @@
     <color name="yellow">#F2994A</color>
     <color name ="light_green">#6FCF97</color>
     <color name="black">#161616</color>
+    <color name="chip">
+        <selector xmlns:android="http://schemas.android.com/apk/res/android">
+        <item android:color="@color/red" android:state_checked="true" />
+        <item android:color="@color/black" />
+    </selector></color>
+
 </resources>
