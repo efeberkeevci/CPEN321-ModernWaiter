@@ -41,4 +41,6 @@ Proin vel imperdiet lorem. Nulla facilisi. Curabitur sagittis nibh et cursus sus
     <string name="hello_world">Hello Square World!</string>
     <string name="server_client_id">1031633982947-6dqn2p8mginechhj7ekn3n231tcsif9e.apps.googleusercontent.com</string>
     <string name="please_sign_in">Please sign in with Google to use the app</string>
+    <string name="choice_text">CHOICE 1 </string>
+    <string name="proceed_to_menu">Proceed to menu</string>
 </resources>

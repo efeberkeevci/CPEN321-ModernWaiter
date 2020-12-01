@@ -3,6 +3,7 @@ package com.cpen321.modernwaiter.customer.application;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -35,8 +36,8 @@ public class CustomerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FirebaseApp.initializeApp(this);
-        getQRCodeInformation();
-
+        //getQRCodeInformation();
+        signInGoogle();
         /*
 
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
@@ -83,7 +84,7 @@ public class CustomerActivity extends AppCompatActivity {
             if (account == null) {
                 signInGoogle();
             } else {
-                getQRCodeInformation();
+                //getQRCodeInformation();
                 startOrderingSession(account);
             }
 
@@ -94,7 +95,9 @@ public class CustomerActivity extends AppCompatActivity {
         }
     }
 
+    private void startChoices(){
 
+    }
 
     private void startOrderingSession(GoogleSignInAccount account) {
         requestQueue = Volley.newRequestQueue(this);

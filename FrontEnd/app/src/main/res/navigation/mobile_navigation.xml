@@ -6,6 +6,9 @@
     app:startDestination="@+id/navigation_menu">
 
     <fragment
+        android:id = "@id/navigation_choices"
+
+    <fragment
         android:id="@+id/navigation_menu"
         android:name="com.cpen321.modernwaiter.customer.ui.menu.MenuFragment"
         android:label="@string/title_menu"
