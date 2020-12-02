@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.cpen321.modernwaiter.R;
 import com.cpen321.modernwaiter.customer.application.MenuItem;
-import com.cpen321.modernwaiter.customer.ui.choices.dummy.DummyContent.DummyItem;
 import com.cpen321.modernwaiter.customer.ui.menu.MenuRecyclerAdapter;
 import com.google.android.material.chip.Chip;
 import com.squareup.picasso.Picasso;

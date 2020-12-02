@@ -29,7 +29,6 @@ import com.cpen321.modernwaiter.R;
 import com.cpen321.modernwaiter.customer.application.ApiUtil;
 import com.cpen321.modernwaiter.customer.application.MenuItem;
 import com.cpen321.modernwaiter.customer.application.TableSession;
-import com.cpen321.modernwaiter.customer.ui.choices.dummy.DummyContent;
 import com.cpen321.modernwaiter.customer.ui.menu.DetailItemFragment;
 import com.cpen321.modernwaiter.customer.ui.menu.MenuRecyclerAdapter;
 import com.google.android.material.chip.Chip;
