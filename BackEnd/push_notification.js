@@ -5,6 +5,7 @@
 // These registration tokens come from the client FCM SDKs.
 
 var admin = require('firebase-admin');
+const { use } = require('./backend_server');
 var serviceAccount = require("./modern-waiter-47e96-firebase-adminsdk-exb5m-82aceb8e76.json");
 var items = require("./routes/items");
 var users = require("./routes/users");
@@ -52,14 +53,14 @@ function unsubscribe(registrationToken, orderId){
     
 }
 
-function push_notification_payment_done(orderId){
+function push_notification_payment_done(orderId, userId) {
   console.log("Sending payment done push notification");
   let topic = orderId.toString()
 
   var message = {
     notification: {
       title: 'Payment Completed!',
-      body: 'All items are paid.'
+      body: '' + userId
     }
   };
 
@@ -74,14 +75,14 @@ function push_notification_payment_done(orderId){
     });
 }
 
-function push_notification_order_received(orderId){
+function push_notification_order_received(orderId, userId){
   console.log("Sending order received push notification for topic " + orderId);
   let topic = orderId.toString()
 
   var message = {
     notification: {
       title: 'Order Received!',
-      body: 'Your order is being prepared now'
+      body: '' + userId
     }
   };
 

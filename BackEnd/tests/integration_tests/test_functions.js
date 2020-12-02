@@ -1,5 +1,6 @@
 const app = require('../../backend_server')
 const supertest = require('supertest')
+const { user } = require('firebase-functions/lib/providers/auth')
 const request = supertest(app)
 
 // Test variables
@@ -126,7 +127,8 @@ async function testGetRecommendation() {
 async function testAddOrderedItems() {
     //Arrange
     let req_body =
-        [
+    {
+        "ordered_item_array" : [
             {
                 "orderId"  : orderId,
                 "itemId"  : 1
@@ -139,7 +141,9 @@ async function testAddOrderedItems() {
                 "orderId"  : orderId,
                 "itemId"  : 3
             }
-        ]
+        ],
+        "userId" : userId
+    }
  
     let url = "/ordered-items/"
 

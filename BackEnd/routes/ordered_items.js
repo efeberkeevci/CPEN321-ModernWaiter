@@ -35,7 +35,7 @@ function getOrderedItems(req, res){
  */
 function addOrderedItems(req, res){
     console.log("POST /ordered-items/")
-    let ordered_items = req.body
+    let ordered_items = req.body.ordered_item_array
 
     for(var i = 0; i < ordered_items.length; i++){
         let orderId = parseInt(ordered_items[i].orderId)
@@ -50,7 +50,7 @@ function addOrderedItems(req, res){
         con.query(sql_query, function(err, result){})
     }
     let orderId = parseInt(ordered_items[0].orderId)
-    push_notification.push_notification_order_received(orderId)
+    push_notification.push_notification_order_received(orderId, req.body.userId)
     res.status(201).send()
 }
 

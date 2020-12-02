@@ -64,20 +64,23 @@ async function testGetMenuInvalid() {
 async function testAddOrderedItemsInvalid() {
     //Arrange
     let req_body =
-        [
-            {
-                "orderId"  : dummyString,
-                "itemId"  : dummyString
-            },
-            {
-                "orderId"  : dummyString,
-                "itemId"  : dummyString
-            },
-            {
-                "orderId"  : dummyString,
-                "itemId"  : dummyString
-            }
-        ]
+        {
+            "ordered_item_array" : [
+                {
+                    "orderId"  : dummyString,
+                    "itemId"  : dummyString
+                },
+                {
+                    "orderId"  : dummyString,
+                    "itemId"  : dummyString
+                },
+                {
+                    "orderId"  : dummyString,
+                    "itemId"  : dummyString
+                }
+            ],
+            "userId" : userId
+        }
  
     let url = "/ordered-items/"
 
