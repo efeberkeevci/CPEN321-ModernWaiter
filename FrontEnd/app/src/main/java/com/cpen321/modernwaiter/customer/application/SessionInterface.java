@@ -2,9 +2,11 @@ package com.cpen321.modernwaiter.customer.application;
 
 import com.android.volley.Request;
 import com.cpen321.modernwaiter.customer.ui.payment.peritem.PaymentItem;
+import com.google.android.material.chip.Chip;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 public interface SessionInterface {
@@ -31,4 +33,6 @@ public interface SessionInterface {
     int getUserId();
 
     void endSession();
+    void putChoicesInBackend(List<String> choices_list);
+    List<String> getChoices();
 }

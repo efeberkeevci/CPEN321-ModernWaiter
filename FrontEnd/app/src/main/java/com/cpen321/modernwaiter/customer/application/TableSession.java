@@ -1,5 +1,6 @@
 package com.cpen321.modernwaiter.customer.application;
 
+import android.os.Bundle;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,22 +9,28 @@ import androidx.navigation.Navigation;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.cpen321.modernwaiter.BuildConfig;
 import com.cpen321.modernwaiter.R;
 import com.cpen321.modernwaiter.customer.ui.payment.peritem.PaymentItem;
+
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.material.chip.Chip;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static com.cpen321.modernwaiter.customer.application.CustomerActivity.tableSession;
 
 /*  Contains all the data required for this table's session such as its
     cart & the restaurant's menu.
@@ -38,6 +45,7 @@ public class TableSession implements SessionInterface {
     private final HashMap<MenuItem, Integer> orderedItems;
     private final ArrayList<PaymentItem> orderList = new ArrayList<>();
 
+    private List<String> choices = new ArrayList<>();
     public final RequestQueue requestQueue;
 
     private MenuItem featureItem;
@@ -49,26 +57,30 @@ public class TableSession implements SessionInterface {
     public boolean isActive = true;
 
     // Testing values, change later
-    private final String restaurantId = ApiUtil.RESTAURANT_ID;
-    private final String tableId = ApiUtil.TABLE_ID;
+    private final String restaurantId;
+    private final String tableId;
     private int userId;
 
     private final HashMap<Integer, String> customerIdToName = new HashMap<>();
 
-    private final GoogleSignInAccount googleAccount;
+    private final Bundle accountBundle;
 
     //creates a new session
-    TableSession(RequestQueue requestQueue, AppCompatActivity activity, GoogleSignInAccount googleAccount) {
+    TableSession(RequestQueue requestQueue, AppCompatActivity activity, Bundle accountBundle) {
         //Make request to server to retrieve menu items to display
         this.activity = activity;
         this.requestQueue = requestQueue;
-        this.googleAccount = googleAccount;
+        this.accountBundle = accountBundle;
+
+        restaurantId = accountBundle.getString("restaurantId");
+        tableId = accountBundle.getString("tableId");
+        userId = accountBundle.getInt("userId");
 
         orderedItems = new HashMap<>();
 
         customerIdToName.put(-1, "Not selected");
 
-        fetchUserId();
+        fetchOrderId();
     }
 
     @Override
@@ -210,50 +222,6 @@ public class TableSession implements SessionInterface {
         requestQueue.add(request);
     }
 
-    public void fetchUserId() {
-        StringRequest stringRequest = new StringRequest(
-                Request.Method.GET, ApiUtil.usersGoogle + googleAccount.getId(),
-                response -> {
-                    if (response.equals("")) {
-                        postUserId();
-                    } else {
-                        UserResponse userResponse = new Gson().fromJson(response, new TypeToken<UserResponse>() {}.getType());
-                        userId = userResponse.id;
-                        fetchOrderId();
-                    }
-                }, error -> Log.i("Fetch user Id", error.toString()));
-
-        requestQueue.add(stringRequest);
-    }
-
-    public void postUserId() {
-        final Map<String, String> bodyFields = new HashMap<>();
-        bodyFields.put("username", googleAccount.getDisplayName());
-        bodyFields.put("email", googleAccount.getEmail());
-        bodyFields.put("googleId", googleAccount.getId());
-        bodyFields.put("preferences", "");
-
-        final String bodyJSON = new Gson().toJson(bodyFields);
-        StringRequest stringRequest = new StringRequest(
-                Request.Method.POST, ApiUtil.users,
-                response -> fetchUserId(),
-
-                error -> Log.i("Post user", error.toString())
-        ) {
-            @Override
-            public String getBodyContentType() {
-                return "application/json; charset=utf-8";
-            }
-
-            @Override
-            public byte[] getBody() {
-                return bodyJSON.getBytes();
-            }
-        };
-
-        requestQueue.add(stringRequest);
-    }
-
     public void fetchMenu() {
         StringRequest stringRequest = new StringRequest(
                 Request.Method.GET, ApiUtil.items + restaurantId,
@@ -314,7 +282,7 @@ public class TableSession implements SessionInterface {
                     if (orderResponses.size() != 0) {
                         OrderResponse currentOrder = orderResponses.get(orderResponses.size() - 1);
                         if (BuildConfig.DEBUG && !(currentOrder.restaurant_id.equals(ApiUtil.RESTAURANT_ID))) {
-                            throw new AssertionError("Restaurant ID invalid");
+                            throw new AssertionError("Restaurant ID invalid, restaurandid: " + restaurantId + "\n tableId: " + tableId);
                         }
 
                         orderId = currentOrder.id;
@@ -424,6 +392,7 @@ public class TableSession implements SessionInterface {
         return userId;
     }
 
+
     private void refreshMenuFragment() {
         NavController navController = Navigation.findNavController(activity, R.id.nav_host_fragment);
 
@@ -497,5 +466,42 @@ public class TableSession implements SessionInterface {
     public class UserResponse {
         public String username;
         public int id;
+    }
+
+    public List<String> getChoices(){
+        return choices;
+    }
+
+    public void putChoicesInBackend(List<String> choices_list) {
+
+        String preference = "";
+        for (String choice : choices_list) {
+            preference = preference + " " + choice;
+        }
+        preference.substring(1);
+
+        final Map<String, String> bodyFields = new HashMap<>();
+        bodyFields.put("userId", "" + userId);
+        bodyFields.put("preferences", preference);
+
+        final String bodyJSON = new Gson().toJson(bodyFields);
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.PUT, ApiUtil.choices,
+                response -> Log.i("Post preference", "success"),
+
+                error -> Log.i("Post preference", error.toString())
+        ) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+
+            @Override
+            public byte[] getBody() {
+                return bodyJSON.getBytes();
+            }
+        };
+
+        requestQueue.add(stringRequest);
     }
 }

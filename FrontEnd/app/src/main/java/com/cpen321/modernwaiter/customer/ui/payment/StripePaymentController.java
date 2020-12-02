@@ -130,8 +130,6 @@ public class StripePaymentController {
                             stripe.handleNextActionForPayment(context, paymentIntentClientSecret);
                         } else {
                             putPaid();
-                            //TODO: End Session is unused
-                            //endSession();
                             tableSession.endSession();
                         }
                     }
@@ -161,7 +159,7 @@ public class StripePaymentController {
         String url = ApiUtil.paidOrderItems;
 
         ArrayList<MenuItem> orderedItems = tableSession.getOrderList().stream()
-                                            .filter(paymentItem -> (!mode.equals("per_item") || !paymentItem.selected ))
+                                            .filter(paymentItem -> (!mode.equals("per_item") || paymentItem.selectedByCurrentUser()))
                                             .map(paymentItem -> paymentItem.menuItem)
                                             .collect(Collectors.toCollection(ArrayList::new));
 
@@ -199,23 +197,5 @@ public class StripePaymentController {
 
             tableSession.add(jsonObjectRequest);
         }
-    }
-
-    private void endSession(){
-        // PUT request for order has been paid fully
-        String url = ApiUtil.orderSession;
-        final Map<String,String> params = new HashMap<>();
-        params.put("orderId", String.valueOf(tableSession.getOrderId()));
-        params.put("isActive", "0");
-        JSONObject parameters = new JSONObject(params);
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.PUT, url, parameters,
-                response -> {
-                    //on success
-                }, error -> Log.i("Request end session", error.toString())
-        );
-
-        tableSession.add(jsonObjectRequest);
     }
 }

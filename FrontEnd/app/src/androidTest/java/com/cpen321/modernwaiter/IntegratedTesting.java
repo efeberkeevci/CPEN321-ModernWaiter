@@ -1,8 +1,11 @@
 package com.cpen321.modernwaiter;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.test.InstrumentationRegistry;
 
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
@@ -19,6 +22,8 @@ import org.junit.Test;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -35,9 +40,16 @@ public class IntegratedTesting {
 
     @Before
     public void changeUserAndTableId() throws InterruptedException {
-        ApiUtil.TABLE_ID = "2";
-        ApiUtil.USER_ID = "2";
-        ActivityScenario.launch(CustomerActivity.class);
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), CustomerActivity.class);
+
+        Bundle bundle = new Bundle();
+        bundle.putInt("userId", 2);
+        bundle.putString("restaurantId", ApiUtil.RESTAURANT_ID);
+        bundle.putString("tableId", "2");
+
+        intent.putExtras(bundle);
+
+        ActivityScenario.launch(intent);
         Thread.sleep(1000);
     }
 
@@ -261,7 +273,7 @@ public class IntegratedTesting {
      * check if successful
      */
     @Test
-    public void payForAll(){
+    public void payForAll() throws InterruptedException {
 
         onView(withId(R.id.menu_recycler))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
@@ -296,16 +308,16 @@ public class IntegratedTesting {
                 .perform(click());
 
         //check that on payment options page
-        onView(withId(R.id.pay_for_all))
+        onView(withId(R.id.barcode_button))
                 .check(matches(isDisplayed()));
 
         //click on pay_for_all
-        onView(withId(R.id.pay_for_all))
+        onView(withId(R.id.barcode_button))
                 .perform(click());
 
 
         //input payment details
-        /*String creditCardNumber = "4242" + "4242" + "4242" + "4242";
+        String creditCardNumber = "4242" + "4242" + "4242" + "4242";
         String date = "424";
         String cv = "012";
         String postal = "123";
@@ -322,6 +334,6 @@ public class IntegratedTesting {
         onView(withId(R.id.textView2))
                 .check(matches(isDisplayed()));
         onView(withId(R.id.textView2))
-                .check(matches(withText(R.string.thank_you_post_payment)));*/
+                .check(matches(withText(R.string.thank_you_post_payment)));
     }
 }

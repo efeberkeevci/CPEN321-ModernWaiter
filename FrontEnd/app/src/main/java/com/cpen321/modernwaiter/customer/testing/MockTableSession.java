@@ -6,6 +6,7 @@ import com.android.volley.Request;
 import com.cpen321.modernwaiter.customer.application.MenuItem;
 import com.cpen321.modernwaiter.customer.application.SessionInterface;
 import com.cpen321.modernwaiter.customer.ui.payment.peritem.PaymentItem;
+import com.google.android.material.chip.Chip;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -178,5 +179,14 @@ public class MockTableSession implements SessionInterface {
                 .collect(Collectors.toMap(
                         menuItem -> menuItem, x -> 0
                 ));
+    }
+
+    @Override
+    public void putChoicesInBackend(List<String> choices_list){
+
+    }
+    @Override
+    public List<String> getChoices(){
+        return null;
     }
 }
