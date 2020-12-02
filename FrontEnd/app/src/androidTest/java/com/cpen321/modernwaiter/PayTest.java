@@ -182,7 +182,7 @@ public class PayTest {
         Thread.sleep(600);
 
         //click on pay_per_item
-        onView(withId(R.id.demo_button))
+        onView(withId(R.id.payPerItem))
                 .perform(click());
 
         Thread.sleep(600);
@@ -202,6 +202,105 @@ public class PayTest {
         String amount = "Pay $16.5";
         onView(withId(R.id.payButton))
                 .check(matches(withText(amount)));
+        onView(withId(R.id.payButton))
+                .perform(click());
+
+        Thread.sleep(1000);
+        //input payment details
+        String creditCardNumber = "4242" + "4242" + "4242" + "4242";
+        String date = "0522";
+        String cv = "012";
+        String postal = "V3Z8C7";
+        //check that the widget is displayed
+        onView(withResourceName("card_number_edit_text"))
+                .check(matches(isDisplayed()));
+
+        onView(withResourceName("card_number_edit_text"))
+                .perform(typeText(creditCardNumber+date+cv+postal), closeSoftKeyboard());
+
+
+        Thread.sleep(1000);
+        onView(withId(R.id.payButton))
+                .perform(click());
+
+        Thread.sleep(6000);
+        //check that payment was successful
+        onView(withId(R.id.textView2))
+                .check(matches(isDisplayed()));
+        onView(withId(R.id.textView2))
+                .check(matches(withText(R.string.thank_you_post_payment)));
+
+        //pay for the second item now
+        onView(withId(R.id.go_to_menu_button))
+                .check(matches(isDisplayed()));
+
+        onView(withId(R.id.go_to_menu_button))
+                .perform(click());
+
+        //click view cart
+        onView(withId(R.id.viewCartButton))
+                .perform(click());
+
+        //click on view bill
+        onView(withId(R.id.startBillButton))
+                .perform(click());
+
+        //check that its displaying the bill
+        onView(withId(R.id.fragment_bill))
+                .check(matches(isDisplayed()));
+
+
+        /////////paying the bill///////////
+
+        Thread.sleep(600);
+
+        //click on pay_per_item
+        onView(withId(R.id.payPerItem))
+                .perform(click());
+
+        Thread.sleep(600);
+
+        onView(withId(R.id.per_item_recycler))
+                .check(matches(isDisplayed()));
+        onView(withId(R.id.per_item_recycler))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(0,
+                        MyViewActionUtils.clickChildViewWithId(R.id.checkbox)));
+
+        Thread.sleep(1000);
+
+        //check that the total amount displayed is 16.50 only (price of item2)
+        onView(withId(R.id.payButton))
+                .check(matches(isDisplayed()));
+
+
+
+        onView(withId(R.id.payButton))
+                .check(matches(withText(amount)));
+        onView(withId(R.id.payButton))
+                .perform(click());
+
+        Thread.sleep(1000);
+
+        //check that the widget is displayed
+        onView(withResourceName("card_number_edit_text"))
+                .check(matches(isDisplayed()));
+
+        onView(withResourceName("card_number_edit_text"))
+                .perform(typeText(creditCardNumber+date+cv+postal), closeSoftKeyboard());
+
+
+        Thread.sleep(1000);
+        onView(withId(R.id.payButton))
+                .perform(click());
+
+        Thread.sleep(6000);
+        //check that payment was successful
+        onView(withId(R.id.textView2))
+                .check(matches(isDisplayed()));
+        onView(withId(R.id.textView2))
+                .check(matches(withText(R.string.thank_you_post_payment)));
 
     }
+
+
 }
