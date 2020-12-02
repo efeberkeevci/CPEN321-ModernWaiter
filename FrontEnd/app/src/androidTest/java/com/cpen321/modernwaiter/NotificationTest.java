@@ -88,7 +88,7 @@ public class NotificationTest {
         onView(withId(R.id.checkoutButton))
                 .perform(click());
 
-
+        //TODO: GIVES ERROR HERE
         UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
 
         device.openNotification();
