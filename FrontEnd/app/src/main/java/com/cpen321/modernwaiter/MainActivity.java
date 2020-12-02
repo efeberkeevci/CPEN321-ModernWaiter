@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -46,6 +47,10 @@ public class MainActivity extends AppCompatActivity {
 
         requestQueue = Volley.newRequestQueue(this);
 
+        start();
+    }
+
+    private void start() {
         account = GoogleSignIn.getLastSignedInAccount(this);
         if (account == null) {
             signInGoogle();
@@ -115,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
                         userId = userResponse.id;
                         setupButtons();
                     }
-                }, error -> Log.i("Fetch user Id", error.toString()));
+                }, error -> handleConnectionIssue());
 
         requestQueue.add(stringRequest);
     }
@@ -132,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
                 Request.Method.POST, ApiUtil.users,
                 response -> fetchUserId(),
 
-                error -> Log.i("Post user", error.toString())
+                error -> handleConnectionIssue()
         ) {
             @Override
             public String getBodyContentType() {
@@ -176,5 +181,25 @@ public class MainActivity extends AppCompatActivity {
 
         TextView loadingTextview = findViewById(R.id.loadingTextView);
         loadingTextview.setVisibility(View.INVISIBLE);
+
+        ImageView imageView;
+        imageView = findViewById(R.id.imageView);
+        imageView.setVisibility(View.VISIBLE);
+        imageView = findViewById(R.id.imageView2);
+        imageView.setVisibility(View.VISIBLE);
+        imageView = findViewById(R.id.imageView3);
+        imageView.setVisibility(View.VISIBLE);
+    }
+
+    private void handleConnectionIssue() {
+
+        TextView loadingTextView = findViewById(R.id.loadingTextView);
+        loadingTextView.setText("Connection Error\nRetrying Soon");
+        try {
+            Thread.sleep(30000);
+        } catch (InterruptedException ignored) {
+
+        }
+        start();
     }
 }
