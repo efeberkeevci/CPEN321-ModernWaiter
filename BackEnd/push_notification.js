@@ -34,7 +34,7 @@ function subscribe(registrationToken, orderId){
         });
     
 }
-//When payment is done, the customers are being unsubscribed from the abovementioned created subscription
+// When payment is done, the customers are being unsubscribed from the abovementioned created subscription
 // These registration tokens come from the client FCM SDKs.
 
 function unsubscribe(registrationToken, orderId){
@@ -99,7 +99,7 @@ function push_notification_order_received(orderId, userId){
 
 
 function push_notification_item_claimed(orderId) {
-  console.log("Sending order received push notification");
+  console.log("Sending item claimed push notification");
   let topic = orderId.toString()
 
   var message = {

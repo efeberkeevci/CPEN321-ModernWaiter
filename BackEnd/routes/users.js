@@ -119,16 +119,4 @@ function updateUserPreferences(req, res){
     })
 }
 
-// function getUserName(userId){
-//     let sql_query = mysql.format("SELECT username FROM users WHERE id = ?", [userId])
-//     con.query(sql_query, function(err, result){
-//         if (err) {
-//             console.log("Error in user name retrieval: ", err)
-//         }
-//         else{
-//             return result
-//         }
-//     })
-// }
-
-module.exports = {getUserById, getUserByGoogleId, addUser, getUserPreferences, updateUserPreferences} //getUserName
+module.exports = {getUserById, getUserByGoogleId, addUser, getUserPreferences, updateUserPreferences}

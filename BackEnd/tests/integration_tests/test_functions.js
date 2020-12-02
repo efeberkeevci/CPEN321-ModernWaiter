@@ -124,6 +124,18 @@ async function testGetRecommendation() {
     expect(response.body.itemId).toStrictEqual(expect.anything())
 }
 
+async function testGetUserPreferenceKeywords() {
+    // Arrange
+    const url = `/recommendation/keywords`
+
+    // Act
+    const response = await request.get(url)
+
+    // Assert
+    expect(response.status).toBe(200)
+    expect(response.body.keywords).toStrictEqual(expect.anything())
+}
+
 async function testAddOrderedItems() {
     //Arrange
     let req_body =
@@ -559,5 +571,5 @@ module.exports = {
     testGetUserPreferences, testUpdateUserPreferences, testAddToMenu, testGetMenuLatestItem,
     testOrderedItemUnpaid, testOrderedItemDeselected, testGetRestaurant, testAddRestaurant,
     testGetTable, testAddTable, testCreateStripePaymentRequiresAuth, testTokenRegistration,
-    testUnsubscribeToken
+    testUnsubscribeToken, testGetUserPreferenceKeywords
 }

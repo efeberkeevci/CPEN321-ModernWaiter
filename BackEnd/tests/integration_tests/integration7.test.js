@@ -1,4 +1,4 @@
-const { testCreateUser, testGetUserByGoogleId, testGetUserByUserId, testUpdateUserPreferences, testGetUserPreferences } = require('./test_functions')
+const { testCreateUser, testGetUserByGoogleId, testGetUserByUserId, testUpdateUserPreferences, testGetUserPreferences, testGetUserPreferenceKeywords } = require('./test_functions')
 const { testCreateUserInvalid, testGetUserByUserIdInvalid, testGetUserPreferencesInvalid, testUpdateUserPreferencesInvalid, testUpdateUserPreferencesInvalidAlt} = require('./test_functions_invalid')
 
 describe("Integration test 7: ", () => {
@@ -6,6 +6,7 @@ describe("Integration test 7: ", () => {
         await testCreateUser()
         await testGetUserByGoogleId()
         await testGetUserByUserId()
+        await testGetUserPreferenceKeywords()
         await testGetUserPreferences()
         await testUpdateUserPreferences()
         await testGetUserPreferences()
