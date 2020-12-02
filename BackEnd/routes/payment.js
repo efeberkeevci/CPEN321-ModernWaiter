@@ -67,7 +67,7 @@ async function createStripePayment(req, res){
         })
         res.send(generateResponse(intent))
         console.log("Sending payment done notification for orderId: " + orderId)
-        push_notification_payment_done(orderId)
+        push_notification_payment_done(orderId, req.body.userId)
         return
     } catch (e) {
         // Handle "hard declines" e.g. insufficient funds, expired card, etc

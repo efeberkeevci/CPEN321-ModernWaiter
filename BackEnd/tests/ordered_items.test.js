@@ -40,8 +40,8 @@ describe("Test getOrderedItems()", () =>{
 describe("Test addOrderedItems()", () => {
     it("Test invalid order id", async done=> {
         //Arrange
-        let req_body =
-            [
+        let req_body = {
+            "ordered_item_array" : [
                 {
                     "orderId" : "invalid orderId type",
                     "itemId"  : "1"
@@ -50,7 +50,9 @@ describe("Test addOrderedItems()", () => {
                     "orderId" : "2",
                     "itemId"  : "1"
                 }
-            ]
+            ],
+            "userId" : "1"
+        }
         
         let path = "/ordered-items"
 
@@ -65,17 +67,19 @@ describe("Test addOrderedItems()", () => {
 
     it("Test invalid items id", async done=> {
         //Arrange
-        let req_body =
-            [
-                {
-                    "orderId" : "2",
-                    "itemId"  : "1"
-                },
-                {
-                    "orderId" : "2",
-                    "itemId"  : "invalid type"
-                }
-            ]
+        let req_body = {
+            "ordered_item_array" : [
+                    {
+                        "orderId" : "2",
+                        "itemId"  : "1"
+                    },
+                    {
+                        "orderId" : "2",
+                        "itemId"  : "invalid type"
+                    }
+                ],
+            "userId" : "1"
+        }
         
         let path = "/ordered-items"
 
@@ -90,8 +94,8 @@ describe("Test addOrderedItems()", () => {
 
     it("Test valid request body", async done=> {
         //Arrange
-        let req_body =
-            [
+        let req_body = {
+            "ordered_item_array" : [
                 {
                     "orderId"  : 1,
                     "itemId"  : 1
@@ -100,7 +104,9 @@ describe("Test addOrderedItems()", () => {
                     "orderId"  : 2,
                     "itemId"  : 1
                 }
-            ]
+            ],
+            "userId" : "1"
+        }
          
         let path = "/ordered-items/"
 
