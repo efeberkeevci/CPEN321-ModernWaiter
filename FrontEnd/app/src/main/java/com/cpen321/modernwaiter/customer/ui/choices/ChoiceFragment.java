@@ -179,7 +179,7 @@ public class ChoiceFragment extends Fragment {
     }
 
     private class KeywordsWrapper {
-        KeywordsList keywords;
+        public KeywordsList keywords;
     }
     private class KeywordsList {
         public ArrayList<String> food_verbs;
