@@ -51,9 +51,6 @@ public class DetailItemFragment extends Fragment {
         TextView calorieTextView = view.findViewById(R.id.calorieCount);
         calorieTextView.setText(menuItem.calories + " cal");
 
-        TextView typeTextView = view.findViewById(R.id.typeName);
-        typeTextView.setText(menuItem.type);
-
         TextView priceTextView = view.findViewById(R.id.price);
         priceTextView.setText(menuItem.getPriceString());
 

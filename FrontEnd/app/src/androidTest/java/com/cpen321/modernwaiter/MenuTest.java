@@ -34,8 +34,7 @@ public class MenuTest {
         //check that the recommendation is displayed
         onView(withId(R.id.feature_name))
                 .check(matches(isDisplayed()));
-        onView(withId(R.id.feature_description))
-                .check(matches(isDisplayed()));
+
         //check that the menu items list is displayed
         onView(withId(R.id.menu_recycler))
                 .check(matches(isDisplayed()));

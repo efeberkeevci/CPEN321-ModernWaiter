@@ -60,7 +60,10 @@ public class PerItemRecyclerAdapter extends RecyclerView.Adapter<PerItemRecycler
             nameTextView.setText(paymentItem.menuItem.name);
 
             TextView usernameTextView = view.findViewById(R.id.user);
-            usernameTextView.setText(paymentItem.getUsername());
+            if (paymentItem.getUsername() != "Not selected")
+                usernameTextView.setText("Selected by " + paymentItem.getUsername());
+            else
+                usernameTextView.setText("Not selected");
 
             TextView priceTextView = view.findViewById(R.id.price);
             priceTextView.setText(String.valueOf(paymentItem.menuItem.cost));

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.cpen321.modernwaiter.R;
 import com.cpen321.modernwaiter.customer.application.MenuItem;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -57,6 +59,7 @@ public class MenuFragment extends Fragment {
         // Set the adapter
         RecyclerView recyclerView = view.findViewById(R.id.menu_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
+        recyclerView.setNestedScrollingEnabled(false);
 
         MenuRecyclerAdapter.OnItemClickListener listener = new MenuRecyclerAdapter.OnItemClickListener() {
             @Override
@@ -80,12 +83,14 @@ public class MenuFragment extends Fragment {
         if (tableSession.getFeatureItem() != null) {
            // recyclerView.setAdapter(menuRecyclerAdapter);
             TextView featureNameView = view.findViewById(R.id.feature_name);
-            String featureItemText = "Special: " + tableSession.getFeatureItem().name;
+            String featureItemText = tableSession.getFeatureItem().name;
+
+            ImageView imageView = view.findViewById(R.id.feature_image);
+            Picasso.get()
+                    .load(tableSession.getFeatureItem().getImageLink())
+                    .into(imageView);
 
             featureNameView.setText(featureItemText);
-
-            TextView featureDescView = view.findViewById(R.id.feature_description);
-            featureDescView.setText(tableSession.getFeatureItem().description);
 
             CardView featureCardView = view.findViewById(R.id.featureItem);
             featureCardView.setOnClickListener(new View.OnClickListener() {
