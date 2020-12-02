@@ -47,7 +47,8 @@ Proin vel imperdiet lorem. Nulla facilisi. Curabitur sagittis nibh et cursus sus
     <string name="start_barcode">Start Barcode</string>
     <string name="choice_text">CHOICE 1 </string>
     <string name="proceed_to_menu">Proceed to menu</string>
-    <string name="loading_user_information">Loading User Information...</string>
+    <string name="loading_user_information">Loading User\nInformation...</string>
     <string name="calorie_count">Calorie:</string>
     <string name="food_type">Type:</string>
+    <string name="bill_empty_string">No item ordered yet…\nPlease checkout item to bill</string>
 </resources>

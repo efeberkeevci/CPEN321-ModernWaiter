@@ -17,13 +17,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-/**
- * Instrumented test, which will execute on an Android device.
- *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
- */
-
-public class MenuTest {
+public class MenuDisplayTest {
     @Before
     public void createActivity() {
         ActivityScenario.launch(MockCustomerActivity.class);
@@ -34,8 +28,7 @@ public class MenuTest {
         //check that the recommendation is displayed
         onView(withId(R.id.feature_name))
                 .check(matches(isDisplayed()));
-        onView(withId(R.id.feature_description))
-                .check(matches(isDisplayed()));
+
         //check that the menu items list is displayed
         onView(withId(R.id.menu_recycler))
                 .check(matches(isDisplayed()));

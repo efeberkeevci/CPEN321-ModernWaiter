@@ -1,12 +1,5 @@
 package com.cpen321.modernwaiter.customer.application;
 
-//import com.stripe.android.model.PaymentMethodCreateParams;
-
-import com.google.android.material.chip.Chip;
-
-import java.util.ArrayList;
-import java.util.List;
-
 public class ApiUtil {
     public static final String RESTAURANT_ID = "1";
     public static String TABLE_ID = "1";
@@ -46,4 +39,6 @@ public class ApiUtil {
     public static final String registration = URL + "registrationToken/";
     public static final String unsubscribe = URL + "unsubscribedToken/";
     public static String recommendationKeyword = URL + "recommendation/keywords/";
+
+    public static boolean notificationEnabled = true;
 }

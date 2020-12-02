@@ -1,13 +1,11 @@
 package com.cpen321.modernwaiter.customer.ui.payment;
 
 import android.os.Bundle;
-import android.os.Debug;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -40,7 +38,7 @@ public class StripePaymentFragment extends Fragment {
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle savedInstanceState) throws RuntimeException{
 
         view = inflater.inflate(R.layout.fragment_stripe, container, false);
 

@@ -2,7 +2,6 @@ package com.cpen321.modernwaiter;
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
-import com.cpen321.modernwaiter.customer.application.CustomerActivity;
 import com.cpen321.modernwaiter.customer.testing.MockCustomerActivity;
 
 import org.junit.Rule;
@@ -14,7 +13,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
-public class OrderCartTest {
+public class CartDisplayTest {
     @Rule
     public ActivityScenarioRule<MockCustomerActivity> activityRule
             = new ActivityScenarioRule<>(MockCustomerActivity.class);

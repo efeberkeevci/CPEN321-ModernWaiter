@@ -103,11 +103,15 @@ public class ChoiceFragment extends Fragment {
             Chip chip = new Chip(view.getContext());
             chip.setText("   " + name + "    ");
             chip.setCheckable(true);
+            chip.setChecked(tableSession.getUserPreference().contains(name));
+
             chip.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 String text = chip.getText().toString();
                 if (isChecked) {
+                    tableSession.getUserPreference().add(name);
                     chip.setText(text.replaceAll(" ", ""));
                 } else {
+                    tableSession.getUserPreference().remove(name);
                     chip.setText("   " + text + "    ");
                 }
 
@@ -118,8 +122,9 @@ public class ChoiceFragment extends Fragment {
                     }
                 }
 
-                putChoicesInBackend(choiceList);
+                postUserPreference(choiceList);
             });
+
 
             chipGroup.addView(chip);
             allChips.add(chip);
@@ -128,7 +133,7 @@ public class ChoiceFragment extends Fragment {
         return chipGroup;
     }
 
-    private void putChoicesInBackend(List<String> choices_list) {
+    private void postUserPreference(List<String> choices_list) {
 
         StringBuilder preference = new StringBuilder();
         for (String choice : choices_list) {
@@ -137,7 +142,6 @@ public class ChoiceFragment extends Fragment {
         if (preference.length() != 0)
             preference = new StringBuilder(preference.substring(1));
 
-        String pref = preference.toString();
         final Map<String, String> bodyFields = new HashMap<>();
         bodyFields.put("userId", "" + tableSession.getUserId());
         bodyFields.put("preferences", preference.toString());
@@ -145,7 +149,7 @@ public class ChoiceFragment extends Fragment {
         final String bodyJSON = new Gson().toJson(bodyFields);
         StringRequest stringRequest = new StringRequest(
                 Request.Method.PUT, ApiUtil.choices,
-                response -> Log.i("Post preference", "preference set to\n" + pref),
+                response -> tableSession.fetchUserRecommendation(),
 
                 error -> Log.i("Post preference", error.toString())
         ) {
@@ -175,7 +179,7 @@ public class ChoiceFragment extends Fragment {
     }
 
     private class KeywordsWrapper {
-        KeywordsList keywords;
+        public KeywordsList keywords;
     }
     private class KeywordsList {
         public ArrayList<String> food_verbs;

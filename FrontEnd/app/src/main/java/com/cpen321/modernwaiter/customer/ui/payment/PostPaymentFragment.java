@@ -11,8 +11,6 @@ import androidx.navigation.Navigation;
 
 import com.cpen321.modernwaiter.R;
 
-import static com.cpen321.modernwaiter.customer.application.CustomerActivity.tableSession;
-
 public class PostPaymentFragment extends Fragment {
 
     @Override

@@ -19,6 +19,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/repeating_background"
         app:layout_constraintVertical_bias="0.0"
         tools:context=".customer.ui.bill.BillFragment"
         tools:listitem="@layout/item_bill" />
@@ -29,6 +30,12 @@
         android:layout_height="75dp"
         android:backgroundTint="@color/green"
         android:text="@string/checkout"
+        android:padding="0dp"
+        android:elevation="1dp"
+        android:translationZ="1dp"
+        android:insetBottom="0dp"
+        android:insetTop="0dp"
+        app:cornerRadius="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -42,11 +49,29 @@
         android:layout_height="75dp"
         android:backgroundTint="@color/orange"
         android:text="@string/view_bill"
+        android:padding="0dp"
+        android:elevation="1dp"
+        android:translationZ="1dp"
+        android:insetBottom="0dp"
+        android:insetTop="0dp"
+        app:cornerRadius="0dp"
         app:layout_constraintBottom_toTopOf="@+id/checkoutButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/emptyCartLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cart is empty...\nAdd items from the menu"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/order_recycler"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/order_recycler" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

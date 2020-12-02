@@ -14,8 +14,8 @@ function createOrder(req, res){
     let tableId = parseInt(req.body.tableId,10)
     let restaurantId = parseInt(req.body.restaurantId,10)
     let amount = parseFloat(req.body.amount)
-    let hasPaid = parseInt(req.body.hasPaid)
-    let isActive = parseInt(req.body.isActive)
+    let hasPaid = parseInt(req.body.hasPaid,10)
+    let isActive = parseInt(req.body.isActive,10)
 
     if (isNaN(userId) || isNaN(tableId) || isNaN(restaurantId) || isNaN(amount)){
         res.status(400).send("Invalid request body - user, table, restaurant ids, and hasPaid and isActive must be integers, amount must be a double")
@@ -44,7 +44,7 @@ function getUserOrder(req, res){
     console.log("GET /orders/user/{{userId}}")
     
     let users_id = parseInt(req.params.users_id,10)
-    let isActive = parseInt(req.query.isActive)
+    let isActive = parseInt(req.query.isActive,10)
 
     if (isNaN(users_id) || isNaN(isActive)){
         res.status(400).send("Invalid users_id or isActive type, must be an integer")
@@ -68,7 +68,7 @@ function getTableOrder(req, res){
     console.log("GET /orders/table/{{tableId}}")
 
     let tables_id = parseInt(req.params.tables_id,10)
-    let isActive = parseInt(req.query.isActive)
+    let isActive = parseInt(req.query.isActive,10)
 
     if (isNaN(tables_id) || isNaN(isActive)) {
         res.status(400).send("Invalid tables_id or isActive type, must be an integer")
@@ -94,8 +94,8 @@ function getTableOrder(req, res){
 function updateOrderSessionStatus(req, res){
     console.log("PUT /orders/session")
 
-    let orderId = parseInt(req.body.orderId)
-    let isActive = parseInt(req.body.isActive)
+    let orderId = parseInt(req.body.orderId,10)
+    let isActive = parseInt(req.body.isActive,10)
 
     if (isNaN(orderId) || isNaN(isActive)){
         res.status(400).send("Invalid orderId or isActive type, must be an integer")
@@ -121,8 +121,8 @@ function updateOrderSessionStatus(req, res){
 function updateOrderPaidStatus(req, res){
     console.log("PUT /orders/paid")
 
-    let orderId = parseInt(req.body.orderId)
-    let hasPaid = parseInt(req.body.hasPaid)
+    let orderId = parseInt(req.body.orderId,10)
+    let hasPaid = parseInt(req.body.hasPaid,10)
 
     if (isNaN(orderId) || isNaN(hasPaid)){
         res.status(400).send("Invalid orderId or isActive type, must be an integer")

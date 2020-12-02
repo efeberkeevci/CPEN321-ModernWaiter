@@ -6,12 +6,12 @@ import com.android.volley.Request;
 import com.cpen321.modernwaiter.customer.application.MenuItem;
 import com.cpen321.modernwaiter.customer.application.SessionInterface;
 import com.cpen321.modernwaiter.customer.ui.payment.peritem.PaymentItem;
-import com.google.android.material.chip.Chip;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -30,7 +30,6 @@ public class MockTableSession implements SessionInterface {
     public HashMap<MenuItem, Integer> orderedItems = new HashMap<>(dummyOrderItem());
     public ArrayList<PaymentItem> orderList = new ArrayList<>();
     public int featureItemId = 1;
-    public int updateBillCounter = 0;
     public int endSessionCounter = 0;
     public Request lastRequest;
     public int userCount = 1;
@@ -126,6 +125,16 @@ public class MockTableSession implements SessionInterface {
     @Override
     public int getUserId() {
         return 1;
+    }
+
+    @Override
+    public void fetchUserRecommendation() {
+        Log.d("MSG"," ");
+    }
+
+    @Override
+    public HashSet<String> getUserPreference() {
+        return new HashSet<>();
     }
 
     @Override

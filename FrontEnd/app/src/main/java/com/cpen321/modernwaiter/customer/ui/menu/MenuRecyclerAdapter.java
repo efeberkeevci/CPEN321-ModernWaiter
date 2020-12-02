@@ -66,14 +66,15 @@ public class MenuRecyclerAdapter extends RecyclerView.Adapter<MenuRecyclerAdapte
             TextView nameTextView = itemView.findViewById(R.id.name);
             nameTextView.setText(menuItem.name);
 
-            TextView description = itemView.findViewById(R.id.description);
-            description.setText(menuItem.description);
-
             TextView priceView = itemView.findViewById(R.id.price);
             priceView.setText(menuItem.getPriceString());
 
             TextView quantityTextView = itemView.findViewById(R.id.quantity);
             quantityTextView.setText(menuItem.quantity);
+            quantityTextView.setVisibility(menuItem.quantity.equals("0") ? View.INVISIBLE : View.VISIBLE);
+
+            TextView xTextView = itemView.findViewById(R.id.xTextView);
+            xTextView.setVisibility(menuItem.quantity.equals("0") ? View.INVISIBLE : View.VISIBLE);
 
             ImageView imageView = itemView.findViewById(R.id.image);
             Picasso.get()

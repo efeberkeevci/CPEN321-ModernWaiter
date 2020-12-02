@@ -27,12 +27,12 @@ public class MenuItem {
     }
 
     public void incrementQuantity() {
-        quantity = String.valueOf(Integer.parseInt(quantity) + 1);
+        quantity = String.valueOf(Integer.parseInt(quantity,10) + 1);
     }
 
     public void decrementQuantity() {
         if (!"0".equals(quantity))
-            quantity = String.valueOf(Integer.parseInt(quantity) - 1);
+            quantity = String.valueOf(Integer.parseInt(quantity,10) - 1);
     }
 
     public String getPriceString() {
@@ -42,7 +42,7 @@ public class MenuItem {
 
     public String getTotalCartPriceString() {
         return "$" + new DecimalFormat("#.##")
-                .format(cost * Integer.parseInt(quantity));
+                .format(cost * Integer.parseInt(quantity,10));
     }
 
     public String getTotalBillPriceString(int count) {
@@ -51,7 +51,7 @@ public class MenuItem {
     }
 
     public int getIntegerQuantity() {
-        return Integer.parseInt(quantity);
+        return Integer.parseInt(quantity,10);
     }
 
     public int getCost() {

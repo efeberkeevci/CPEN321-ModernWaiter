@@ -13,7 +13,7 @@ const push_notification = require("../push_notification.js")
 function getOrderedItems(req, res){
     console.log("GET /ordered-items/{{orderId}}")
 
-    let orderId = parseInt(req.params.orderId)
+    let orderId = parseInt(req.params.orderId,10)
     if (isNaN(orderId)){
         res.status(400).send("Invalid order id type, must be an integer")
         return
@@ -38,8 +38,8 @@ function addOrderedItems(req, res){
     let ordered_items = req.body.ordered_item_array
 
     for(var i = 0; i < ordered_items.length; i++){
-        let orderId = parseInt(ordered_items[i].orderId)
-        let itemId = parseInt(ordered_items[i].itemId)
+        let orderId = parseInt(ordered_items[i].orderId,10)
+        let itemId = parseInt(ordered_items[i].itemId,10)
 
         if (isNaN(orderId) || isNaN(itemId)){
             res.status(400).send("Invalid request body - order and item ids must be integers")
@@ -49,7 +49,7 @@ function addOrderedItems(req, res){
         let sql_query = mysql.format("INSERT INTO ordered_items (orders_id, items_id, has_paid, is_selected) VALUES(?, ?, 0, 0) ", [orderId,itemId])
         con.query(sql_query, function(err, result){})
     }
-    let orderId = parseInt(ordered_items[0].orderId)
+    let orderId = parseInt(ordered_items[0].orderId,10)
     push_notification.push_notification_order_received(orderId, req.body.userId)
     res.status(201).send()
 }
@@ -61,10 +61,10 @@ function addOrderedItems(req, res){
  */
 function updateSelectedStatus(req, res){
     console.log("PUT /ordered-items/selected")
-    let orderId = parseInt(req.body.orderId)
-    let itemId = parseInt(req.body.itemId)
-    let userId = parseInt(req.body.userId)
-    let isSelected = parseInt(req.body.isSelected === "1" ? 1 : 0)
+    let orderId = parseInt(req.body.orderId,10)
+    let itemId = parseInt(req.body.itemId,10)
+    let userId = parseInt(req.body.userId,10)
+    let isSelected = parseInt((req.body.isSelected === "1" ? 1 : 0),10)
 
     if (isNaN(orderId) || isNaN(itemId) || isNaN(userId) || isNaN(isSelected)){
         res.status(400).send("Invalid request body - order, item and user ids and isSelected must be integers")
@@ -87,9 +87,9 @@ function updateSelectedStatus(req, res){
  * @param {*} res Status code 200 if successful, else 400
  */
 function updateOrderedItemPaidStatus(req, res){
-    let orderId = parseInt(req.body.orderId)
-    let itemId = parseInt(req.body.itemId)
-    let hasPaid = parseInt(req.body.hasPaid)
+    let orderId = parseInt(req.body.orderId,10)
+    let itemId = parseInt(req.body.itemId,10)
+    let hasPaid = parseInt(req.body.hasPaid,10)
 
     if (isNaN(orderId) || isNaN(itemId) || isNaN(hasPaid)){
         res.status(400).send("Invalid request body - order and item ids, and hasPaid must be integers")
