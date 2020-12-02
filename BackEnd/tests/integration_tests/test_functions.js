@@ -538,7 +538,7 @@ async function testTokenRegistration() {
     const req_body = 
         {
             "orderId" : 1,
-            "registrationToken" : firebase_token
+            "registrationToken" : "fAv-GymGSmuArAwDwS50Cu:APA91bHsB1AnSZYCejt3QdgIKgdu0poQAl9Vz9Lq6AwKnQNG1Rs4G8JZ7HoRlfhwb7aFzI92Pc95HWMIO_MxhEzq3JGPKDcLUL5rFMcQuLUvBunZq3LwJ4EQFMb6OU8HIvEvYMw4gQZZ"
         }
 
     // Act
@@ -554,7 +554,8 @@ async function testUnsubscribeToken() {
     const req_body = 
         {
             "orderId" : 1,
-            "registrationToken" : firebase_token
+            "registrationToken" : "fAv-GymGSmuArAwDwS50Cu:APA91bHsB1AnSZYCejt3QdgIKgdu0poQAl9Vz9Lq6AwKnQNG1Rs4G8JZ7HoRlfhwb7aFzI92Pc95HWMIO_MxhEzq3JGPKDcLUL5rFMcQuLUvBunZq3LwJ4EQFMb6OU8HIvEvYMw4gQZZ"
+
         }
 
     // Act

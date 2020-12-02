@@ -74,20 +74,32 @@ app.put("/users/preferences", users.updateUserPreferences)
  * HTTP POST request to register token for
  * push notification service.
  */
-app.post("/registrationToken", (req,res) => {
+app.post("/registrationToken", async (req,res) => {
     console.log("/registrationToken")
     let orderId = req.body.orderId
     let registrationToken = req.body.registrationToken
     console.log(registrationToken)
-    res.send(push_notification.subscribe(registrationToken, orderId))
+    
+    if(registrationToken === "" || registrationToken === null || registrationToken === undefined) {
+        res.status(400).send()
+        return
+    }
+
+    res.status(200).send(await push_notification.subscribe(registrationToken, orderId))
 })
 
-app.post("/unsubscribedToken", (req,res) => {
+app.post("/unsubscribedToken", async (req,res) => {
     console.log("/unsubscribedToken")
     let orderId = req.body.orderId
     let registrationToken = req.body.registrationToken
     console.log(registrationToken)
-    res.send(push_notification.unsubscribe(registrationToken, orderId))
+
+    if(registrationToken === "" || registrationToken === null || registrationToken === undefined) {
+        res.status(400).send()
+        return
+    }
+
+    res.status(200).send(await push_notification.unsubscribe(registrationToken, orderId))
 })
 
 module.exports = app

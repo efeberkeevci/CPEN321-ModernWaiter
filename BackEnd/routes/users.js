@@ -50,8 +50,6 @@ function getUserByGoogleId(req, res){
  */
 function addUser(req, res){
     console.log("POST /users")
-    console.log(req)
-    console.log(req.body)
     let username = req.body.username
     let email = req.body.email
     let googleId = req.body.googleId
