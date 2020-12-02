@@ -24,10 +24,6 @@ async function subscribe(registrationToken, orderId){
         // for the contents of response.
         console.log('Successfully subscribed to topic: ' + topic, response);
         return "Succesfully added user to push notifications list";
-        })
-        .catch(error => {
-        // console.log('Error subscribing to topic:', error);
-        // return "Error adding user to push notifications list";
         });
     
 }
@@ -45,9 +41,6 @@ async function unsubscribe(registrationToken, orderId){
       // See the MessagingTopicManagementResponse reference documentation
       // for the contents of response.
       console.log('Successfully unsubscribed from topic:', response);
-      })
-      .catch(error => {
-      // console.log('Error unsubscribing from topic:', error);
       });
     
 }
@@ -68,9 +61,6 @@ async function push_notification_payment_done(orderId, userId) {
     .then(response => {
       // Response is a message ID string.
       console.log('Successfully sent message:', response);
-    })
-    .catch(error => {
-      // console.log('Error sending message:', error);
     });
 }
 
@@ -90,9 +80,6 @@ async function push_notification_order_received(orderId, userId){
     .then(response => {
       // Response is a message ID string.
       console.log('Successfully sent message:', response);
-    })
-    .catch(error => {
-      // console.log('Error sending message:', error);
     });
 }
 
@@ -112,9 +99,6 @@ async function push_notification_item_claimed(orderId) {
     .then(response => {
       // Response is a message ID string.
       console.log('Successfully sent message:', response);
-    })
-    .catch(error => {
-      // console.log('Error sending message:', error);
     });
 }
 module.exports = {push_notification_payment_done, push_notification_order_received, push_notification_item_claimed, subscribe, unsubscribe};
