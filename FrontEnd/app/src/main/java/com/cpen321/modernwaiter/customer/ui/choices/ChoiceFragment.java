@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -16,6 +17,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -43,6 +47,7 @@ import static com.cpen321.modernwaiter.customer.application.CustomerActivity.tab
  */
 public class ChoiceFragment extends Fragment {
     private View view;
+    private ArrayList<Chip> allChips = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,11 +60,27 @@ public class ChoiceFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_choice_list, container, false);
 
         //set recycler
-        ChipGroup chipGroup = view.findViewById(R.id.chip_group);
 
-        for (Chip chip : getChipList()) {
-            chipGroup.addView(chip);
+
+        LinearLayout scrollView = (LinearLayout) view.findViewById(R.id.scrollView);
+
+        for (int i = 0; i < 3; i++) {
+            TextView textView = new TextView(requireContext());
+            textView.setText("\nList " + i + "\n");
+            textView.setTextSize(20);
+            textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            scrollView.addView(textView);
+
+            ChipGroup chipGroup = new ChipGroup(requireContext());
+
+            for (Chip chip : getChipList()) {
+                chipGroup.addView(chip);
+                allChips.add(chip);
+            }
+
+            scrollView.addView(chipGroup);
         }
+
 
         return view;
     }
@@ -80,7 +101,7 @@ public class ChoiceFragment extends Fragment {
                 }
 
                 ArrayList<String> choiceList = new ArrayList<>();
-                for (Chip chipIndex : choices) {
+                for (Chip chipIndex : allChips) {
                     if (chipIndex.isChecked()) {
                         choiceList.add(chipIndex.getText().toString().replaceAll(" ", ""));
                     }
@@ -92,5 +113,4 @@ public class ChoiceFragment extends Fragment {
         }
         return choices;
     }
-
 }

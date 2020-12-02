@@ -21,24 +21,6 @@ public class ApiUtil {
     public static final String choices = URL + "users/preferences";
     public static final String[] choices_name_list = {"Mild-spice-level", "Medium-spice-level",
             "Hot-spice-level", "lactose-intolerant", "vegan-only", "vegetarian-only",
-            "non-alcoholic-drinks-only", "no-sugar-added-drinks", "gluten-free", "Medium-spice-level",
-            "Hot-spice-level", "lactose-intolerant", "vegan-only", "vegetarian-only",
-            "non-alcoholic-drinks-only", "no-sugar-added-drinks", "gluten-free", "Medium-spice-level",
-            "Hot-spice-level", "lactose-intolerant", "vegan-only", "vegetarian-only",
-            "non-alcoholic-drinks-only", "no-sugar-added-drinks", "gluten-free", "Medium-spice-level",
-            "Hot-spice-level", "lactose-intolerant", "vegan-only", "vegetarian-only",
-            "non-alcoholic-drinks-only", "no-sugar-added-drinks", "gluten-free", "Medium-spice-level",
-            "Hot-spice-level", "lactose-intolerant", "vegan-only", "vegetarian-only",
-            "non-alcoholic-drinks-only", "no-sugar-added-drinks", "gluten-free", "Medium-spice-level",
-            "Hot-spice-level", "lactose-intolerant", "vegan-only", "vegetarian-only",
-            "non-alcoholic-drinks-only", "no-sugar-added-drinks", "gluten-free", "Medium-spice-level",
-            "Hot-spice-level", "lactose-intolerant", "vegan-only", "vegetarian-only",
-            "non-alcoholic-drinks-only", "no-sugar-added-drinks", "gluten-free", "Medium-spice-level",
-            "Hot-spice-level", "lactose-intolerant", "vegan-only", "vegetarian-only",
-            "non-alcoholic-drinks-only", "no-sugar-added-drinks", "gluten-free", "Medium-spice-level",
-            "Hot-spice-level", "lactose-intolerant", "vegan-only", "vegetarian-only",
-            "non-alcoholic-drinks-only", "no-sugar-added-drinks", "gluten-free", "Medium-spice-level",
-            "Hot-spice-level", "lactose-intolerant", "vegan-only", "vegetarian-only",
             "non-alcoholic-drinks-only", "no-sugar-added-drinks", "gluten-free"};
     public static final String items = URL + "items/";
 
