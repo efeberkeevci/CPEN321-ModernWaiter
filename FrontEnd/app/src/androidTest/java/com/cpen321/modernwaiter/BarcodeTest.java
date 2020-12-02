@@ -1,18 +1,11 @@
 package com.cpen321.modernwaiter;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.os.Bundle;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
-import androidx.test.espresso.intent.Intents;
-import androidx.test.espresso.intent.matcher.IntentMatchers;
 
-import com.android.dx.command.Main;
-import com.cpen321.modernwaiter.barcode.BarcodeActivity;
 import com.cpen321.modernwaiter.customer.application.ApiUtil;
-import com.cpen321.modernwaiter.customer.application.CustomerActivity;
 
 import org.junit.Before;
 import org.junit.Test;

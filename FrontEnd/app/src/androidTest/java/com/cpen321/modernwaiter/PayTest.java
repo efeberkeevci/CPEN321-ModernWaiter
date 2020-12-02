@@ -10,6 +10,7 @@ import androidx.test.espresso.contrib.RecyclerViewActions;
 import com.android.volley.toolbox.StringRequest;
 import com.cpen321.modernwaiter.customer.application.ApiUtil;
 import com.cpen321.modernwaiter.customer.application.CustomerActivity;
+import com.cpen321.modernwaiter.util.MyViewAction;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -48,7 +49,7 @@ public class PayTest {
      * Check if the server is running
      */
     @Test public void checkServerConnection(){
-        StringRequest stringRequest = new StringRequest(GET, ApiUtil.health, response -> {
+        new StringRequest(GET, ApiUtil.health, response -> {
             if(response == null) Assert.fail("Received null response from backend health checkup");
             else Assert.assertTrue( true);
         }, error -> {
@@ -58,9 +59,7 @@ public class PayTest {
 
 
     /**
-     * Pay for all
-     */
-    /**
+     * Pay For All
      * view bill
      * initiate payment
      * pay for all
@@ -134,5 +133,79 @@ public class PayTest {
                 .check(matches(isDisplayed()));
         onView(withId(R.id.textView2))
                 .check(matches(withText(R.string.thank_you_post_payment)));
+    }
+
+    @Test
+    public void payPerItem() throws InterruptedException {
+
+        onView(withId(R.id.menu_recycler))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+
+        //add 1st item to cart
+        onView(withId(R.id.incrementButton))
+                .perform(click());
+
+        //now go back to menu
+        onView(withId(R.id.exitButton))
+                .perform(click());
+
+        onView(withId(R.id.menu_recycler))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+
+        //add 2nd item to cart
+        onView(withId(R.id.incrementButton))
+                .perform(click());
+
+        //now go back to menu
+        onView(withId(R.id.exitButton))
+                .perform(click());
+
+        //click view cart
+        onView(withId(R.id.viewCartButton))
+                .perform(click());
+
+        //click on checkout
+        onView(withId(R.id.checkoutButton))
+                .perform(click());
+
+        //click on view bill
+        onView(withId(R.id.startBillButton))
+                .perform(click());
+
+        //check that its displaying the bill
+        onView(withId(R.id.fragment_bill))
+                .check(matches(isDisplayed()));
+
+
+        /////////paying the bill///////////
+
+        //initiate payment
+        onView(withId(R.id.startPaymentButton))
+                .perform(click());
+
+        Thread.sleep(600);
+
+        //click on pay_per_item
+        onView(withId(R.id.demo_button))
+                .perform(click());
+
+        Thread.sleep(600);
+
+        onView(withId(R.id.per_item_recycler))
+                .check(matches(isDisplayed()));
+        onView(withId(R.id.per_item_recycler))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(0,
+                        MyViewAction.clickChildViewWithId(R.id.checkbox)));
+
+        Thread.sleep(1000);
+
+        //check that the total amount displayed is 16.50 only (price of item1)
+        onView(withId(R.id.payButton))
+                .check(matches(isDisplayed()));
+
+        String amount = "Pay $16.5";
+        onView(withId(R.id.payButton))
+                .check(matches(withText(amount)));
+
     }
 }
