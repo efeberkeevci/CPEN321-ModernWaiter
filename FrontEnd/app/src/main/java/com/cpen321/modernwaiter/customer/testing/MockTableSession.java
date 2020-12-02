@@ -129,7 +129,7 @@ public class MockTableSession implements SessionInterface {
 
     @Override
     public void fetchUserRecommendation() {
-
+        Log.d("MSG"," ");
     }
 
     @Override

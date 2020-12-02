@@ -1,14 +1,13 @@
 package com.cpen321.modernwaiter;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -39,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
     private int userId;
 
     private RequestQueue requestQueue;
-    private Toast toast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
