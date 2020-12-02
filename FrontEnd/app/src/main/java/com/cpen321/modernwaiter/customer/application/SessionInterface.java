@@ -33,6 +33,4 @@ public interface SessionInterface {
     int getUserId();
 
     void endSession();
-    void putChoicesInBackend(List<String> choices_list);
-    List<String> getChoices();
 }
