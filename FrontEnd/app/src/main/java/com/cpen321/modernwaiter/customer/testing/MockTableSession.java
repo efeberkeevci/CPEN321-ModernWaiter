@@ -180,13 +180,4 @@ public class MockTableSession implements SessionInterface {
                         menuItem -> menuItem, x -> 0
                 ));
     }
-
-    @Override
-    public void putChoicesInBackend(List<String> choices_list){
-
-    }
-    @Override
-    public List<String> getChoices(){
-        return null;
-    }
 }

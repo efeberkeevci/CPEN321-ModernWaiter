@@ -195,7 +195,11 @@ public class TableSession implements SessionInterface {
             menuItem.quantity = "0";
         }));
 
-        final String bodyJSON = new Gson().toJson(postMenuItems);
+        final Map<String, String> bodyFields = new HashMap<>();
+        bodyFields.put("ordered_item_array", new Gson().toJson(postMenuItems));
+        bodyFields.put("userId", "" + userId);
+
+        final String bodyJSON = new Gson().toJson(bodyFields);
         StringRequest stringRequest = new StringRequest(
                 Request.Method.POST, ApiUtil.orderedItems,
                 response -> {
@@ -466,42 +470,5 @@ public class TableSession implements SessionInterface {
     public class UserResponse {
         public String username;
         public int id;
-    }
-
-    public List<String> getChoices(){
-        return choices;
-    }
-
-    public void putChoicesInBackend(List<String> choices_list) {
-
-        String preference = "";
-        for (String choice : choices_list) {
-            preference = preference + " " + choice;
-        }
-        preference.substring(1);
-
-        final Map<String, String> bodyFields = new HashMap<>();
-        bodyFields.put("userId", "" + userId);
-        bodyFields.put("preferences", preference);
-
-        final String bodyJSON = new Gson().toJson(bodyFields);
-        StringRequest stringRequest = new StringRequest(
-                Request.Method.PUT, ApiUtil.choices,
-                response -> Log.i("Post preference", "success"),
-
-                error -> Log.i("Post preference", error.toString())
-        ) {
-            @Override
-            public String getBodyContentType() {
-                return "application/json; charset=utf-8";
-            }
-
-            @Override
-            public byte[] getBody() {
-                return bodyJSON.getBytes();
-            }
-        };
-
-        requestQueue.add(stringRequest);
     }
 }

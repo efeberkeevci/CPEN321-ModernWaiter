@@ -40,15 +40,19 @@ public class NotificationService extends FirebaseMessagingService {
         if ("Item Claimed!".equals(notification_title)){
             tableSession.fetchOrderList();
         } else if ("Order Received!".equals(notification_title)) {
-            notifyUser(remoteMessage);
             tableSession.fetchOrderList();
+
+            notifyUser(remoteMessage.getNotification().getTitle(),
+                    tableSession.getUsernameFromId(Integer.parseInt(remoteMessage.getNotification().getBody())) + " successfully ordered food");
         } else if ("Payment Completed!".equals(notification_title)) {
             tableSession.fetchOrderList();
-            notifyUser(remoteMessage);
+
+            notifyUser(remoteMessage.getNotification().getTitle(),
+                    tableSession.getUsernameFromId(Integer.parseInt(remoteMessage.getNotification().getBody())) + " successfully paid the bill");
         }
     }
 
-    private void notifyUser(RemoteMessage remoteMessage) {
+    private void notifyUser(String notification_title, String notification_body) {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         // create channel in new versions of android
@@ -63,8 +67,6 @@ public class NotificationService extends FirebaseMessagingService {
         }
 
         Log.d("MESSAGE: ","NEW PUSH NOTIFICATION");
-        String notification_title = remoteMessage.getNotification().getTitle();
-        String notification_body = remoteMessage.getNotification().getTitle();
         Notification notification = new NotificationCompat.Builder(this,"CHANNEL1")
                 .setContentTitle(notification_title)
                 .setContentText(notification_body)

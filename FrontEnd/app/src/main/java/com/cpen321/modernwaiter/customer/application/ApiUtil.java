@@ -45,4 +45,5 @@ public class ApiUtil {
     // Notification
     public static final String registration = URL + "registrationToken/";
     public static final String unsubscribe = URL + "unsubscribedToken/";
+    public static String recommendationKeyword = URL + "recommendation/keywords/";
 }
