@@ -3,6 +3,7 @@ package com.cpen321.modernwaiter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.test.InstrumentationRegistry;
+import android.widget.TextView;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
@@ -28,6 +29,8 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withInputType;
+import static androidx.test.espresso.matcher.ViewMatchers.withResourceName;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.android.volley.Request.Method.GET;
 import static org.junit.Assert.assertEquals;
@@ -309,7 +312,7 @@ public class IntegratedTesting {
         onView(withId(R.id.startPaymentButton))
                 .perform(click());
 
-        Thread.sleep(100);
+        Thread.sleep(600);
         //check that on payment options page
         onView(withId(R.id.barcode_button))
                 .check(matches(isDisplayed()));
@@ -323,17 +326,20 @@ public class IntegratedTesting {
 
         //input payment details
         String creditCardNumber = "4242" + "4242" + "4242" + "4242";
-        String date = "424";
+        String date = "0522";
         String cv = "012";
-        String postal = "123";
-        String info = creditCardNumber+date+cv;
-        //input details
-        onView(withId(R.id.cardInputWidget))
-                .perform(typeText(info), closeSoftKeyboard());
+        String postal = "V3Z8C7";
+        //check that the widget is displayed
+        onView(withResourceName("card_number_edit_text"))
+                .check(matches(isDisplayed()));
 
+        onView(withResourceName("card_number_edit_text"))
+                .perform(typeText(creditCardNumber+date+cv+postal), closeSoftKeyboard());
         //press pay
         onView(withId(R.id.payButton))
                 .perform(click());
+
+        Thread.sleep(2000);
 
         //check that payment was successful
         onView(withId(R.id.textView2))
