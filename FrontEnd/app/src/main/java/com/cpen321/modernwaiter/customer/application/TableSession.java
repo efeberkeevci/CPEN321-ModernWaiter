@@ -9,28 +9,23 @@ import androidx.navigation.Navigation;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.cpen321.modernwaiter.BuildConfig;
 import com.cpen321.modernwaiter.R;
 import com.cpen321.modernwaiter.customer.ui.payment.peritem.PaymentItem;
 
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.material.chip.Chip;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import static com.cpen321.modernwaiter.customer.application.CustomerActivity.tableSession;
 
 /*  Contains all the data required for this table's session such as its
     cart & the restaurant's menu.
@@ -60,6 +55,8 @@ public class TableSession implements SessionInterface {
     private final String restaurantId;
     private final String tableId;
     private int userId;
+
+    private HashSet<String> userPreference;
 
     private final HashMap<Integer, String> customerIdToName = new HashMap<>();
 
@@ -361,6 +358,11 @@ public class TableSession implements SessionInterface {
                         UserResponse userResponse = new Gson().fromJson(response, new TypeToken<UserResponse>() {}.getType());
                         customerIdToName.replace(userId, userResponse.username);
                         refreshOrderListFragment();
+
+                        if (userId == this.userId) {
+                            userPreference = new HashSet<>(Arrays.asList(userResponse.preferences.split(" ")));
+                            Log.i("Fetch user info", "Updated user preference");
+                        }
                     }
                 }, error -> Log.i("Fetch user info", error.toString()));
 
@@ -386,6 +388,11 @@ public class TableSession implements SessionInterface {
         );
 
         requestQueue.add(stringRequest);
+    }
+
+    @Override
+    public HashSet<String> getUserPreference() {
+        return userPreference;
     }
 
     public String getUsernameFromId(int id) {
@@ -468,6 +475,7 @@ public class TableSession implements SessionInterface {
 
     public class UserResponse {
         public String username;
+        public String preferences;
         public int id;
     }
 }

@@ -103,11 +103,15 @@ public class ChoiceFragment extends Fragment {
             Chip chip = new Chip(view.getContext());
             chip.setText("   " + name + "    ");
             chip.setCheckable(true);
+            chip.setChecked(tableSession.getUserPreference().contains(name));
+
             chip.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 String text = chip.getText().toString();
                 if (isChecked) {
+                    tableSession.getUserPreference().add(name);
                     chip.setText(text.replaceAll(" ", ""));
                 } else {
+                    tableSession.getUserPreference().remove(name);
                     chip.setText("   " + text + "    ");
                 }
 
@@ -120,6 +124,7 @@ public class ChoiceFragment extends Fragment {
 
                 postUserPreference(choiceList);
             });
+
 
             chipGroup.addView(chip);
             allChips.add(chip);
@@ -137,7 +142,6 @@ public class ChoiceFragment extends Fragment {
         if (preference.length() != 0)
             preference = new StringBuilder(preference.substring(1));
 
-        String pref = preference.toString();
         final Map<String, String> bodyFields = new HashMap<>();
         bodyFields.put("userId", "" + tableSession.getUserId());
         bodyFields.put("preferences", preference.toString());

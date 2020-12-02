@@ -12,6 +12,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -30,7 +31,6 @@ public class MockTableSession implements SessionInterface {
     public HashMap<MenuItem, Integer> orderedItems = new HashMap<>(dummyOrderItem());
     public ArrayList<PaymentItem> orderList = new ArrayList<>();
     public int featureItemId = 1;
-    public int updateBillCounter = 0;
     public int endSessionCounter = 0;
     public Request lastRequest;
     public int userCount = 1;
@@ -131,6 +131,11 @@ public class MockTableSession implements SessionInterface {
     @Override
     public void fetchUserRecommendation() {
 
+    }
+
+    @Override
+    public HashSet<String> getUserPreference() {
+        return new HashSet<>();
     }
 
     @Override
