@@ -179,10 +179,6 @@ public class PayTest {
 
         /////////paying the bill///////////
 
-        //initiate payment
-        onView(withId(R.id.startPaymentButton))
-                .perform(click());
-
         Thread.sleep(600);
 
         //click on pay_per_item
