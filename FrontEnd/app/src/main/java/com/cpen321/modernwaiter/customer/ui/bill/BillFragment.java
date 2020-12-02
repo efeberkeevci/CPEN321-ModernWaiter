@@ -44,6 +44,13 @@ public class BillFragment extends Fragment {
         TextView textView = view.findViewById(R.id.emptyLabel);
         textView.setVisibility(billRecyclerAdapter.isEmpty() ? View.VISIBLE : View.INVISIBLE);
 
+        textView = view.findViewById(R.id.totalLabel);
+        textView.setVisibility(billRecyclerAdapter.isEmpty() ? View.INVISIBLE : View.VISIBLE);
+
+
+        View view1 = view.findViewById(R.id.horizontal_line);
+        view1.setVisibility(billRecyclerAdapter.isEmpty() ? View.INVISIBLE : View.VISIBLE);
+
         int amount = tableSession.getOrderList().stream()
                 .reduce(0, (subtotal, menuItemBooleanPair) -> subtotal + menuItemBooleanPair.menuItem.getCost(), Integer::sum);
 
@@ -51,6 +58,7 @@ public class BillFragment extends Fragment {
                 .format((double) amount / 100);
         TextView totalPrice = view.findViewById(R.id.totalPrice);
         totalPrice.setText(amountText);
+        totalPrice.setVisibility(billRecyclerAdapter.isEmpty() ? View.INVISIBLE : View.VISIBLE);
 
         Button pay_for_all = view.findViewById(R.id.payForAll);
         pay_for_all.setVisibility(billRecyclerAdapter.isEmpty() ? View.INVISIBLE : View.VISIBLE);
