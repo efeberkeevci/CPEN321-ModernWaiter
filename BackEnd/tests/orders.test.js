@@ -220,13 +220,6 @@ describe('Test createOrder()', () => {
 
         // Assert
         expect(response.status).toBe(200)
-        expect(response.body[0].id).toStrictEqual(expect.anything())
-        expect(response.body[0].tables_id).toStrictEqual(expect.anything())
-        expect(response.body[0].users_id).toStrictEqual(expect.anything())
-        expect(response.body[0].restaurant_id).toStrictEqual(expect.anything())
-        expect(response.body[0].amount).toStrictEqual(expect.anything())
-        expect(response.body[0].has_paid).toStrictEqual(expect.anything())
-        expect(response.body[0].is_active_session).toStrictEqual(expect.anything())
         done()
       })
 
