@@ -40,6 +40,8 @@ public class IntegratedTesting {
 
     @Before
     public void changeUserAndTableId() throws InterruptedException {
+        ApiUtil.notificationEnabled = false;
+
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), CustomerActivity.class);
 
         Bundle bundle = new Bundle();

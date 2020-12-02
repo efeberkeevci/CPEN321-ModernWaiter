@@ -75,7 +75,8 @@ public class NotificationService extends FirebaseMessagingService {
                 .setPriority(NotificationCompat.PRIORITY_HIGH) // or NotificationCompat.PRIORITY_MAX
                 .build();
         NotificationManagerCompat manager = NotificationManagerCompat.from(getApplicationContext());
-        manager.notify(123, notification);
+        if (ApiUtil.notificationEnabled)
+            manager.notify(123, notification);
     }
 
     public static void sendToken(String orderId) {
