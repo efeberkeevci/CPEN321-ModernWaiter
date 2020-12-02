@@ -26,6 +26,41 @@ public class NavigationBarTest {
         //check if the navigation buttons can be clicked and navigate to the right view
         onView(withId(R.id.navigation_menu)).perform(click()).check(matches(isDisplayed()));
         onView(withId(R.id.navigation_order)).perform(click()).check(matches(isDisplayed()));
+        onView(withId(R.id.navigation_choices)).perform(click()).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testMenuToPref(){
+        //view menu as default (start_destination)
+        onView(withId(R.id.fragment_menu))
+                .check(matches(isDisplayed()));
+
+        //click on plus symbol in bottom navigation bar
+        onView(withId(R.id.navigation_choices))
+                .perform(click());
+
+        //check that the preferences tab is displayed
+        onView(withId(R.id.fragment_choice_list))
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testPrefToMenu(){
+        //view preferences tab
+        onView(withId(R.id.navigation_choices))
+                .perform(click());
+
+        //check that the pref tab is displayed
+        onView(withId(R.id.fragment_choice_list))
+                .check(matches(isDisplayed()));
+
+        //now click on menu in bottom navigation bar
+        onView(withId(R.id.navigation_menu))
+                .perform(click());
+
+        //check that the menu is displayed
+        onView(withId(R.id.fragment_menu))
+                .check(matches(isDisplayed()));
     }
 
     @Test
