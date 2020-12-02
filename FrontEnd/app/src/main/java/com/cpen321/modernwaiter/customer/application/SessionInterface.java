@@ -32,5 +32,7 @@ public interface SessionInterface {
 
     int getUserId();
 
+    void fetchUserRecommendation();
+
     void endSession();
 }

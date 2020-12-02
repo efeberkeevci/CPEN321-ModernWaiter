@@ -367,7 +367,7 @@ public class TableSession implements SessionInterface {
         requestQueue.add(stringRequest);
     }
 
-    private void fetchUserRecommendation() {
+    public void fetchUserRecommendation() {
         StringRequest stringRequest = new StringRequest(
                 Request.Method.GET, ApiUtil.recommend + userId + "/" + restaurantId,
                 response -> {
@@ -395,7 +395,6 @@ public class TableSession implements SessionInterface {
     public int getUserId() {
         return userId;
     }
-
 
     private void refreshMenuFragment() {
         NavController navController = Navigation.findNavController(activity, R.id.nav_host_fragment);

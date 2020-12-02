@@ -129,6 +129,11 @@ public class MockTableSession implements SessionInterface {
     }
 
     @Override
+    public void fetchUserRecommendation() {
+
+    }
+
+    @Override
     public void endSession() {
         endSessionCounter++;
     }

@@ -118,7 +118,7 @@ public class ChoiceFragment extends Fragment {
                     }
                 }
 
-                putChoicesInBackend(choiceList);
+                postUserPreference(choiceList);
             });
 
             chipGroup.addView(chip);
@@ -128,7 +128,7 @@ public class ChoiceFragment extends Fragment {
         return chipGroup;
     }
 
-    private void putChoicesInBackend(List<String> choices_list) {
+    private void postUserPreference(List<String> choices_list) {
 
         StringBuilder preference = new StringBuilder();
         for (String choice : choices_list) {
@@ -145,7 +145,7 @@ public class ChoiceFragment extends Fragment {
         final String bodyJSON = new Gson().toJson(bodyFields);
         StringRequest stringRequest = new StringRequest(
                 Request.Method.PUT, ApiUtil.choices,
-                response -> Log.i("Post preference", "preference set to\n" + pref),
+                response -> tableSession.fetchUserRecommendation(),
 
                 error -> Log.i("Post preference", error.toString())
         ) {
