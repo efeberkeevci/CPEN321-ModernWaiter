@@ -107,6 +107,18 @@ describe('Test getItemRecommendation() with mock recommendation logic', () => {
         expect(response.text).toStrictEqual("Invalid user and restaurant id types, must be an integer")
 	      done()
       })
+
+      it('Gets the recommendation keywords', async done => {
+        // Arrange
+        const url = `/recommendation/keywords`
+
+        // Act
+        const response = await request.get(url)
+
+        // Assert
+        expect(response.status).toBe(200)
+	      done()
+      })
   })
 
   

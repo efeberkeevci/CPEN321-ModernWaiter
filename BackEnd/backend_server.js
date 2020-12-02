@@ -53,6 +53,7 @@ app.post('/pay', payment.createStripePayment)
 
 // Routes for item recommendation
 app.get("/recommendation/:userId/:restaurantId", recommendation.getItemRecommendation) 
+app.get("/recommendation/keywords", recommendation.getKeyWords) 
 
 // Routes for restaurant
 app.get("/restaurants/:id", restaurants.getRestaurant)

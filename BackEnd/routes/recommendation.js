@@ -53,4 +53,23 @@ function getItemRecommendation(req, res){
     })
 }
 
-module.exports = {getItemRecommendation}
+/**
+ * Gets a general list of common food keywords.
+ * @param {*} req Params include userId and restaurantId
+ * @param {*} res Returns the recommended item Id with a
+ * status code of 200 if successful, otherwise 400
+ */
+function getKeyWords(req, res){
+    console.log("GET /recommendation/keywords")
+    var keywords = 
+    [
+        "bake", "boil", "fry", "grill", "poach", "roast", "steam", "crisp", 
+        "crunchy", "hot", "mild", "salty", "savory", "sour", "spicy", "sweet", 
+        "alcohol", "water", "pop", "soda", "chicken", "beef", "pork", "lamb", 
+        "prawns", "fish", "vegan", "vegetarian", "gluten-free"
+    ]
+
+    res.status(200).send({"keywords" : keywords})
+}
+
+module.exports = {getItemRecommendation, getKeyWords}
