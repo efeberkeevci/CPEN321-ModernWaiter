@@ -20,8 +20,6 @@ import com.cpen321.modernwaiter.R;
 import com.cpen321.modernwaiter.customer.application.MenuItem;
 import com.squareup.picasso.Picasso;
 
-import org.w3c.dom.Text;
-
 public class DetailItemFragment extends Fragment {
 
     private final MenuItem menuItem;

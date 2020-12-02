@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.cpen321.modernwaiter.R;
 import com.cpen321.modernwaiter.customer.application.MenuItem;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.HashMap;
 
