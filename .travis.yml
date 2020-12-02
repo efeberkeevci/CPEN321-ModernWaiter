@@ -10,7 +10,7 @@ before_install:
 - sudo mysql -e 'FLUSH PRIVILEGES;'
 - sudo mysql -e 'CREATE DATABASE MODERN_WAITER_DB;'
 - mysql -u admin --password=modernwaitercpen321! MODERN_WAITER_DB < travis.sql
-- sudo mysql -e 'CREATE DATABASE MWTSETDB;'
+- sudo mysql -e 'CREATE DATABASE MWTESTDB;'
 - mysql -u admin --password=modernwaitercpen321! MWTESTDB < travis.sql
 script: 
 - echo 'Build is starting!'
