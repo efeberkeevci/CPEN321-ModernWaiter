@@ -38,7 +38,7 @@ public class StripePaymentFragment extends Fragment {
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle savedInstanceState) throws RuntimeException{
 
         view = inflater.inflate(R.layout.fragment_stripe, container, false);
 
