@@ -518,6 +518,7 @@ async function testAddTable() {
     // Assert
     expect(response.status).toBe(200)
 }
+let firebase_token = "fAv-GymGSmuArAwDwS50Cu:APA91bHsB1AnSZYCejt3QdgIKgdu0poQAl9Vz9Lq6AwKnQNG1Rs4G8JZ7HoRlfhwb7aFzI92Pc95HWMIO_MxhEzq3JGPKDcLUL5rFMcQuLUvBunZq3LwJ4EQFMb6OU8HIvEvYMw4gQZZ";
 
 async function testTokenRegistration() {
     // Arrange
@@ -525,7 +526,7 @@ async function testTokenRegistration() {
     const req_body = 
         {
             "orderId" : 1,
-            "registrationToken" : dummyString
+            "registrationToken" : firebase_token
         }
 
     // Act
@@ -541,7 +542,7 @@ async function testUnsubscribeToken() {
     const req_body = 
         {
             "orderId" : 1,
-            "registrationToken" : dummyString
+            "registrationToken" : firebase_token
         }
 
     // Act
