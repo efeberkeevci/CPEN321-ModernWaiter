@@ -23,7 +23,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 
-public class MenuTest {
+public class MenuDisplayTest {
     @Before
     public void createActivity() {
         ActivityScenario.launch(MockCustomerActivity.class);
