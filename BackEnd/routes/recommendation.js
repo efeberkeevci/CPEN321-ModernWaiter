@@ -61,13 +61,21 @@ function getItemRecommendation(req, res){
  */
 function getKeyWords(req, res){
     console.log("GET /recommendation/keywords")
+
+    var foodVerbs = ["bake", "boil", "fry", "grill", "poach", "roast", "steam"]
+    var foodTaste = ["crisp", "crunchy", "hot", "mild", "salty", "savory", "sour", "spicy", "sweet"]
+    var foodOptions = ["vegan", "vegetarian", "gluten-free"]
+    var proteins = ["chicken", "beef", "pork", "lamb", "prawns", "tuna", "salmon", "tofu", "soy"]
+    var drinks = ["water", "pop", "soda", "tea", "coffee", "milkshake", "alcohol"]
+
     var keywords = 
-    [
-        "bake", "boil", "fry", "grill", "poach", "roast", "steam", "crisp", 
-        "crunchy", "hot", "mild", "salty", "savory", "sour", "spicy", "sweet", 
-        "alcohol", "water", "pop", "soda", "chicken", "beef", "pork", "lamb", 
-        "prawns", "fish", "vegan", "vegetarian", "gluten-free"
-    ]
+    {
+        "food_verbs" : foodVerbs,
+        "food_taste" : foodTaste,
+        "food_options" : foodOptions,
+        "proteins" : proteins,
+        "drinks" : drinks
+    }
 
     res.status(200).send({"keywords" : keywords})
 }
