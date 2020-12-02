@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/fragment_bill"
-    android:background="@color/design_default_color_background">
+    android:background="@drawable/repeating_background">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/bill_recycler"
