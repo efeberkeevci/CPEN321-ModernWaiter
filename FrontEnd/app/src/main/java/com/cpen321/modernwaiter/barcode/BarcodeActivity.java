@@ -38,9 +38,9 @@ public class BarcodeActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
                 //Extract restaurant_Id from result.getContents() and pass this to the activity which calls the menu and switch to menu view
-                setRestaurantId(parseInt(result.getContents().split(",",0)[0]));
+                setRestaurantId(parseInt((result.getContents().split(",",0)[0]),10));
                 //Extract table_Id from result.getContents() and pass this to the activity which creates an active session for that user in that table_id
-                setTableId(parseInt(result.getContents().split(",",0)[1]));
+                setTableId(parseInt((result.getContents().split(",",0)[1]),10));
 
                 Intent intent = new Intent();
                 intent.putExtra("restaurantId", result.getContents().split(",",0)[0]);

@@ -6,7 +6,6 @@ import com.android.volley.Request;
 import com.cpen321.modernwaiter.customer.application.MenuItem;
 import com.cpen321.modernwaiter.customer.application.SessionInterface;
 import com.cpen321.modernwaiter.customer.ui.payment.peritem.PaymentItem;
-import com.google.android.material.chip.Chip;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 

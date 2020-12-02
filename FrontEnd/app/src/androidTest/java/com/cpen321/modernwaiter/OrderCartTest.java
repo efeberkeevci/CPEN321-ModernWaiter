@@ -2,7 +2,6 @@ package com.cpen321.modernwaiter;
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
-import com.cpen321.modernwaiter.customer.application.CustomerActivity;
 import com.cpen321.modernwaiter.customer.testing.MockCustomerActivity;
 
 import org.junit.Rule;
