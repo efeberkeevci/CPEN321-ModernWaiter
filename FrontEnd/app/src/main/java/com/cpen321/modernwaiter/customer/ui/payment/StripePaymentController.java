@@ -102,6 +102,7 @@ public class StripePaymentController {
             bodyFields.put("currency", "cad");
             bodyFields.put("orderAmount", String.valueOf(totalAmount));
             bodyFields.put("orderId", String.valueOf(tableSession.getOrderId()));
+            bodyFields.put("userId", "" + tableSession.getUserId());
         } else {
             bodyFields.put("paymentIntentId", null);
         }
