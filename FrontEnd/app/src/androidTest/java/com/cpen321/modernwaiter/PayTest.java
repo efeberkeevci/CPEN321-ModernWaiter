@@ -78,7 +78,7 @@ public class PayTest {
         onView(withId(R.id.incrementButton))
                 .perform(click());
 
-        Thread.sleep(100);
+        Thread.sleep(300);
         //now go back to menu
         onView(withId(R.id.exitButton))
                 .perform(click());
