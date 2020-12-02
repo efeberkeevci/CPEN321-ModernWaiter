@@ -10,7 +10,7 @@ import androidx.test.espresso.contrib.RecyclerViewActions;
 import com.android.volley.toolbox.StringRequest;
 import com.cpen321.modernwaiter.customer.application.ApiUtil;
 import com.cpen321.modernwaiter.customer.application.CustomerActivity;
-import com.cpen321.modernwaiter.util.MyViewaction;
+import com.cpen321.modernwaiter.util.MyViewActionUtils;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -191,7 +191,7 @@ public class PayTest {
                 .check(matches(isDisplayed()));
         onView(withId(R.id.per_item_recycler))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0,
-                        MyViewaction.clickChildViewWithId(R.id.checkbox)));
+                        MyViewActionUtils.clickChildViewWithId(R.id.checkbox)));
 
         Thread.sleep(1000);
 
