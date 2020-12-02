@@ -2,7 +2,6 @@ package com.cpen321.modernwaiter;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
@@ -50,7 +49,7 @@ public class PayTest {
      * Check if the server is running
      */
     @Test public void checkServerConnection(){
-        StringRequest stringRequest = new StringRequest(GET, ApiUtil.health, response -> {
+        new StringRequest(GET, ApiUtil.health, response -> {
             if(response == null) Assert.fail("Received null response from backend health checkup");
             else Assert.assertTrue( true);
         }, error -> {
@@ -60,9 +59,7 @@ public class PayTest {
 
 
     /**
-     * Pay for all
-     */
-    /**
+     * Pay For All
      * view bill
      * initiate payment
      * pay for all
@@ -144,11 +141,10 @@ public class PayTest {
     @Test
     public void payPerItem() throws InterruptedException {
 
-        /****add first item to cart********/
         onView(withId(R.id.menu_recycler))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
-        //add item to cart
+        //add 1st item to cart
         onView(withId(R.id.incrementButton))
                 .perform(click());
 
@@ -156,11 +152,10 @@ public class PayTest {
         onView(withId(R.id.exitButton))
                 .perform(click());
 
-        /*********add second item to cart*********/
         onView(withId(R.id.menu_recycler))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
-        //add item to cart
+        //add 2nd item to cart
         onView(withId(R.id.incrementButton))
                 .perform(click());
 
@@ -172,7 +167,6 @@ public class PayTest {
         onView(withId(R.id.viewCartButton))
                 .perform(click());
 
-        /*********place order****************/
         //click on checkout
         onView(withId(R.id.checkoutButton))
                 .perform(click());
