@@ -47,25 +47,15 @@
         android:label="Bill"
         tools:layout="@layout/fragment_bill" >
         <action
-            android:id="@+id/action_navigation_bill_to_navigation_payment"
-            app:destination="@id/navigation_payment" />
-
-        <action
-            android:id="@+id/action_navigation_refresh_bill"
-            app:destination="@id/navigation_bill" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/navigation_payment"
-        android:name="com.cpen321.modernwaiter.customer.ui.payment.MainPaymentFragment"
-        android:label="Payment"
-        tools:layout="@layout/fragment_payment" >
-        <action
             android:id="@+id/action_navigation_payment_to_navigation_stripe"
             app:destination="@id/navigation_stripe" />
+
         <action
             android:id="@+id/action_navigation_payment_to_per_item_payment"
             app:destination="@id/navigation_per_item_payment" />
+        <action
+            android:id="@+id/action_navigation_refresh_bill"
+            app:destination="@id/navigation_bill" />
     </fragment>
 
     <fragment
@@ -99,7 +89,7 @@
         tools:layout="@layout/fragment_post_payment" >
         <action
             android:id="@+id/action_navigation_post_payment_to_navigation_payment"
-            app:destination="@id/navigation_payment" />
+            app:destination="@id/navigation_bill" />
         <action
             android:id="@+id/action_navigation_post_payment_to_navigation_menu"
             app:destination="@id/navigation_menu" />

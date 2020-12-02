@@ -78,6 +78,7 @@ public class PayTest {
         onView(withId(R.id.incrementButton))
                 .perform(click());
 
+        Thread.sleep(100);
         //now go back to menu
         onView(withId(R.id.exitButton))
                 .perform(click());
@@ -99,17 +100,13 @@ public class PayTest {
 
         /////////paying the bill///////////
 
-        //initiate payment
-        onView(withId(R.id.startPaymentButton))
-                .perform(click());
-
         Thread.sleep(600);
         //check that on payment options page
-        onView(withId(R.id.barcode_button))
+        onView(withId(R.id.payForAll))
                 .check(matches(isDisplayed()));
 
         //click on pay_for_all
-        onView(withId(R.id.barcode_button))
+        onView(withId(R.id.payForAll))
                 .perform(click());
 
         Thread.sleep(100);

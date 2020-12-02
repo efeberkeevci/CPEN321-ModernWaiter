@@ -52,11 +52,12 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/featureItem"
+                android:backgroundTint="#E8E8E8"
                 android:layout_width="match_parent"
                 android:layout_height="350dp"
-                android:layout_marginStart="32dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="32dp"
+                android:layout_marginEnd="20dp"
                 app:cardCornerRadius="20dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
