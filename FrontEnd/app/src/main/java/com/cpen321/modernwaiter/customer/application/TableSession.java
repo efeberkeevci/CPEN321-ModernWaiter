@@ -40,7 +40,6 @@ public class TableSession implements SessionInterface {
     private final HashMap<MenuItem, Integer> orderedItems;
     private final ArrayList<PaymentItem> orderList = new ArrayList<>();
 
-    private List<String> choices = new ArrayList<>();
     public final RequestQueue requestQueue;
 
     private MenuItem featureItem;
@@ -60,14 +59,11 @@ public class TableSession implements SessionInterface {
 
     private final HashMap<Integer, String> customerIdToName = new HashMap<>();
 
-    private final Bundle accountBundle;
-
     //creates a new session
     TableSession(RequestQueue requestQueue, AppCompatActivity activity, Bundle accountBundle) {
         //Make request to server to retrieve menu items to display
         this.activity = activity;
         this.requestQueue = requestQueue;
-        this.accountBundle = accountBundle;
 
         restaurantId = accountBundle.getString("restaurantId");
         tableId = accountBundle.getString("tableId");
