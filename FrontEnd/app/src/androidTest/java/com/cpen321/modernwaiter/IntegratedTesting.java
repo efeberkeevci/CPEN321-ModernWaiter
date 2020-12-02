@@ -309,6 +309,7 @@ public class IntegratedTesting {
         onView(withId(R.id.startPaymentButton))
                 .perform(click());
 
+        Thread.sleep(100);
         //check that on payment options page
         onView(withId(R.id.barcode_button))
                 .check(matches(isDisplayed()));
@@ -316,6 +317,8 @@ public class IntegratedTesting {
         //click on pay_for_all
         onView(withId(R.id.barcode_button))
                 .perform(click());
+
+        Thread.sleep(100);
 
 
         //input payment details
