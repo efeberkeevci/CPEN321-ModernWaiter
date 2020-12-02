@@ -14,8 +14,8 @@ var recommendation = require("../recommendation_logic.js")
 function getItemRecommendation(req, res){
     console.log("GET /recommendation")
     
-    let users_id = parseInt(req.params.userId)
-    let restaurant_id = parseInt(req.params.restaurantId)
+    let users_id = parseInt(req.params.userId,10)
+    let restaurant_id = parseInt(req.params.restaurantId,10)
     
     if (isNaN(users_id) || isNaN(restaurant_id)){
         res.status(400).send("Invalid user and restaurant id types, must be an integer")

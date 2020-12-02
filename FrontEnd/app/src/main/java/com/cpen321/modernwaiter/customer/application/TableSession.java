@@ -180,7 +180,7 @@ public class TableSession implements SessionInterface {
             if (menuItem.getIntegerQuantity() > 0) {
                 PostMenuItem postMenuItem = new PostMenuItem(orderId, menuItem.id);
 
-                for (int i = 0; i < Integer.parseInt(menuItem.quantity); i++) {
+                for (int i = 0; i < Integer.parseInt(menuItem.quantity,10); i++) {
                     postMenuItems.add(postMenuItem);
                 }
 

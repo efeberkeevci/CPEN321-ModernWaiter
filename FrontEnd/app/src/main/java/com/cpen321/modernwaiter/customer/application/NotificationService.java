@@ -43,12 +43,12 @@ public class NotificationService extends FirebaseMessagingService {
             tableSession.fetchOrderList();
 
             notifyUser(remoteMessage.getNotification().getTitle(),
-                    tableSession.getUsernameFromId(Integer.parseInt(remoteMessage.getNotification().getBody())) + " successfully ordered food");
+                    tableSession.getUsernameFromId(Integer.parseInt(remoteMessage.getNotification().getBody(),10)) + " successfully ordered food");
         } else if ("Payment Completed!".equals(notification_title)) {
             tableSession.fetchOrderList();
 
             notifyUser(remoteMessage.getNotification().getTitle(),
-                    tableSession.getUsernameFromId(Integer.parseInt(remoteMessage.getNotification().getBody())) + " successfully paid the bill");
+                    tableSession.getUsernameFromId(Integer.parseInt(remoteMessage.getNotification().getBody(),10)) + " successfully paid the bill");
         }
     }
 
