@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -65,6 +66,9 @@ public class OrderFragment extends Fragment {
 
         HashMap<MenuItem, Integer> billMap = CustomerActivity.tableSession.getCart();
         orderRecyclerAdapter = new OrderRecyclerAdapter(billMap, listener);
+
+        TextView textView = view.findViewById(R.id.emptyCartLabel);
+        textView.setVisibility(orderRecyclerAdapter.itemArray.isEmpty() ? View.VISIBLE : View.INVISIBLE);
 
         recyclerView.setAdapter(orderRecyclerAdapter);
 

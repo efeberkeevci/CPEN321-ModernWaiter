@@ -50,4 +50,5 @@ Proin vel imperdiet lorem. Nulla facilisi. Curabitur sagittis nibh et cursus sus
     <string name="loading_user_information">Loading User Information...</string>
     <string name="calorie_count">Calorie:</string>
     <string name="food_type">Type:</string>
+    <string name="bill_empty_string">No item ordered yet…\nPlease checkout item to bill</string>
 </resources>

@@ -195,8 +195,8 @@ public class TableSession implements SessionInterface {
             menuItem.quantity = "0";
         }));
 
-        final Map<String, String> bodyFields = new HashMap<>();
-        bodyFields.put("ordered_item_array", new Gson().toJson(postMenuItems));
+        final Map<String, Object> bodyFields = new HashMap<>();
+        bodyFields.put("ordered_item_array", postMenuItems);
         bodyFields.put("userId", "" + userId);
 
         final String bodyJSON = new Gson().toJson(bodyFields);

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -34,6 +35,8 @@ public class BillFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_bill, container, false);
 
+
+
         RecyclerView recyclerView = view.findViewById(R.id.bill_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
 
@@ -42,6 +45,8 @@ public class BillFragment extends Fragment {
         BillRecyclerAdapter billRecyclerAdapter = new BillRecyclerAdapter(billMap);
         recyclerView.setAdapter(billRecyclerAdapter);
 
+        TextView textView = view.findViewById(R.id.emptyLabel);
+        textView.setVisibility(billRecyclerAdapter.isEmpty() ? View.VISIBLE : View.INVISIBLE);
 
         Button startPaymentButton = view.findViewById(R.id.startPaymentButton);
 
