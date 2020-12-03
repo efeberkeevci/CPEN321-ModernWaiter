@@ -7,7 +7,7 @@ import androidx.test.espresso.ViewAction;
 
 import org.hamcrest.Matcher;
 
-public class MyViewaction {
+public class MyViewActionUtils {
     public static ViewAction clickChildViewWithId(final int id) {
         return new ViewAction() {
             @Override

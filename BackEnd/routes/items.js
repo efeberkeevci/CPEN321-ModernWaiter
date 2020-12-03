@@ -61,16 +61,4 @@ function addToMenu(req, res){
     })
 }
 
-// function getItemName(itemId){
-//     let sql_query = mysql.format("SELECT name FROM items WHERE id = ?", [itemId])
-//     con.query(sql_query, function(err, result){
-//         if (err) {
-//             console.log("Error in item name retrieval: ", err)
-//         }
-//         else{
-//             return result
-//         }
-//     })
-// }
-
 module.exports = {getMenu, addToMenu} //getItemName

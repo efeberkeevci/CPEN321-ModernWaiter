@@ -11,6 +11,8 @@ import androidx.navigation.Navigation;
 
 import com.cpen321.modernwaiter.R;
 
+import static com.cpen321.modernwaiter.customer.application.CustomerActivity.tableSession;
+
 public class PostPaymentFragment extends Fragment {
 
     @Override
@@ -28,7 +30,7 @@ public class PostPaymentFragment extends Fragment {
 
         // TODO: Removed tha bodging
         //if (tableSession.getOrderList().isEmpty())
-         //   go_to_menu.setVisibility(View.INVISIBLE);
+          // go_to_menu.setVisibility(View.INVISIBLE);
         //else pay_per_item.setVisibility(View.INVISIBLE);
         pay_per_item.setVisibility(View.INVISIBLE);
 

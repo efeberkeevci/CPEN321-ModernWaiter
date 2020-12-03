@@ -1,4 +1,4 @@
-const app = require('../backend_server')
+const app = require('../../backend_server')
 const supertest = require('supertest')
 const request = supertest(app)
 
@@ -237,21 +237,6 @@ describe('Test createOrder()', () => {
         expect(response.text).toStrictEqual("Invalid users_id or isActive type, must be an integer")
         done()
       })
-
-      // it('Gets an existing order with invalid userId', async done => {
-      //   // Arrange
-      //   const userId = 10000
-      //   const isActive = 1
-      //   const url = `/orders/user/${userId}?isActive=${isActive}`
-
-      //   // Act
-      //   const response = await request.get(url)
-
-      //   // Assert
-      //   expect(response.status).toBe(400)
-      //   expect(response.body).toStrictEqual("Invalid user id type, must be an integer")
-      //   done()
-      // })
   })
 
   describe('Test getTableOrder()', () => {

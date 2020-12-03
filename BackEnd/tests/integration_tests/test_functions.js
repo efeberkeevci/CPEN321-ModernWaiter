@@ -124,6 +124,18 @@ async function testGetRecommendation() {
     expect(response.body.itemId).toStrictEqual(expect.anything())
 }
 
+async function testGetUserPreferenceKeywords() {
+    // Arrange
+    const url = `/recommendation/keywords`
+
+    // Act
+    const response = await request.get(url)
+
+    // Assert
+    expect(response.status).toBe(200)
+    expect(response.body.keywords).toStrictEqual(expect.anything())
+}
+
 async function testAddOrderedItems() {
     //Arrange
     let req_body =
@@ -518,6 +530,7 @@ async function testAddTable() {
     // Assert
     expect(response.status).toBe(200)
 }
+let firebase_token = "fAv-GymGSmuArAwDwS50Cu:APA91bHsB1AnSZYCejt3QdgIKgdu0poQAl9Vz9Lq6AwKnQNG1Rs4G8JZ7HoRlfhwb7aFzI92Pc95HWMIO_MxhEzq3JGPKDcLUL5rFMcQuLUvBunZq3LwJ4EQFMb6OU8HIvEvYMw4gQZZ";
 
 async function testTokenRegistration() {
     // Arrange
@@ -525,7 +538,7 @@ async function testTokenRegistration() {
     const req_body = 
         {
             "orderId" : 1,
-            "registrationToken" : dummyString
+            "registrationToken" : "fAv-GymGSmuArAwDwS50Cu:APA91bHsB1AnSZYCejt3QdgIKgdu0poQAl9Vz9Lq6AwKnQNG1Rs4G8JZ7HoRlfhwb7aFzI92Pc95HWMIO_MxhEzq3JGPKDcLUL5rFMcQuLUvBunZq3LwJ4EQFMb6OU8HIvEvYMw4gQZZ"
         }
 
     // Act
@@ -541,7 +554,8 @@ async function testUnsubscribeToken() {
     const req_body = 
         {
             "orderId" : 1,
-            "registrationToken" : dummyString
+            "registrationToken" : "fAv-GymGSmuArAwDwS50Cu:APA91bHsB1AnSZYCejt3QdgIKgdu0poQAl9Vz9Lq6AwKnQNG1Rs4G8JZ7HoRlfhwb7aFzI92Pc95HWMIO_MxhEzq3JGPKDcLUL5rFMcQuLUvBunZq3LwJ4EQFMb6OU8HIvEvYMw4gQZZ"
+
         }
 
     // Act
@@ -559,5 +573,5 @@ module.exports = {
     testGetUserPreferences, testUpdateUserPreferences, testAddToMenu, testGetMenuLatestItem,
     testOrderedItemUnpaid, testOrderedItemDeselected, testGetRestaurant, testAddRestaurant,
     testGetTable, testAddTable, testCreateStripePaymentRequiresAuth, testTokenRegistration,
-    testUnsubscribeToken
+    testUnsubscribeToken, testGetUserPreferenceKeywords
 }

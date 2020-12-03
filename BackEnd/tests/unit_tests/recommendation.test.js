@@ -1,7 +1,7 @@
-const app = require('../backend_server')
+const app = require('../../backend_server')
 const supertest = require('supertest')
 const request = supertest(app)
-const recommendation_logic = require('../recommendation_logic')
+const recommendation_logic = require('../../recommendation_logic')
 
 describe('Test getItemRecommendation() with mock recommendation logic', () => {
     it('Gets the recommended item with valid user and restaurant', async done => {

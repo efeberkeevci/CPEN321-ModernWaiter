@@ -50,8 +50,6 @@ function getUserByGoogleId(req, res){
  */
 function addUser(req, res){
     console.log("POST /users")
-    console.log(req)
-    console.log(req.body)
     let username = req.body.username
     let email = req.body.email
     let googleId = req.body.googleId
@@ -119,16 +117,4 @@ function updateUserPreferences(req, res){
     })
 }
 
-// function getUserName(userId){
-//     let sql_query = mysql.format("SELECT username FROM users WHERE id = ?", [userId])
-//     con.query(sql_query, function(err, result){
-//         if (err) {
-//             console.log("Error in user name retrieval: ", err)
-//         }
-//         else{
-//             return result
-//         }
-//     })
-// }
-
-module.exports = {getUserById, getUserByGoogleId, addUser, getUserPreferences, updateUserPreferences} //getUserName
+module.exports = {getUserById, getUserByGoogleId, addUser, getUserPreferences, updateUserPreferences}

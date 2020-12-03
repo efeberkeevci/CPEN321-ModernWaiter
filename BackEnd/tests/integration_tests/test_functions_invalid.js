@@ -472,7 +472,7 @@ async function testTokenRegistrationInvalid() {
     const response = await request.post(url).send(req_body)
 
     // Assert
-    expect(response.status).toBe(500)
+    expect(response.status).toBe(400)
 }
 
 async function testUnsubscribeTokenInvalid() {
@@ -487,7 +487,7 @@ async function testUnsubscribeTokenInvalid() {
     const response = await request.post(url).send(req_body)
 
     // Assert
-    expect(response.status).toBe(500)
+    expect(response.status).toBe(400)
 }
 
 module.exports = {

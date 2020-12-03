@@ -21,6 +21,7 @@ describe("Integration test 9: ", () => {
         await testUnsubscribeTokenInvalid();
         done()
     })
+    //Need to write more tests to achieve coverage 100% for push notifications
 })
 
 

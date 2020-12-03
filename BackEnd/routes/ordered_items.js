@@ -33,7 +33,7 @@ function getOrderedItems(req, res){
  * @param {*} req Body includes array of orderId and itemId
  * @param {*} res Status code 201 if successful, else 400 for any invalid itemId or orderId
  */
-function addOrderedItems(req, res){
+async function addOrderedItems(req, res){
     console.log("POST /ordered-items/")
     let ordered_items = req.body.ordered_item_array
 
@@ -50,7 +50,7 @@ function addOrderedItems(req, res){
         con.query(sql_query, function(err, result){})
     }
     let orderId = parseInt(ordered_items[0].orderId,10)
-    push_notification.push_notification_order_received(orderId, req.body.userId)
+    await push_notification.push_notification_order_received(orderId, req.body.userId)
     res.status(201).send()
 }
 
@@ -59,7 +59,7 @@ function addOrderedItems(req, res){
  * @param {*} req Body includes orderId, itemId, userId, isSelected
  * @param {*} res Status code 200 if successful, else 400
  */
-function updateSelectedStatus(req, res){
+async function updateSelectedStatus(req, res){
     console.log("PUT /ordered-items/selected")
     let orderId = parseInt(req.body.orderId,10)
     let itemId = parseInt(req.body.itemId,10)
@@ -73,9 +73,9 @@ function updateSelectedStatus(req, res){
 
     let notIsSelected = isSelected === 1 ? 0 : 1
     let sql_query = mysql.format("UPDATE ordered_items SET is_selected = ?, users_id = ? WHERE orders_id = ? && items_id = ? && is_selected = ? && has_paid = 0 LIMIT 1", [isSelected, userId, orderId, itemId, notIsSelected])
-    con.query(sql_query, function(err, result){
+    con.query(sql_query, async function(err, result){
         res.status(200).send()
-        push_notification.push_notification_item_claimed(orderId)
+        await push_notification.push_notification_item_claimed(orderId)
         console.log(orderId + ":" + isSelected + " by " + userId + " for " + itemId)
         return
     })
