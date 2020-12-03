@@ -255,16 +255,8 @@ public class PayTest {
         Thread.sleep(600);
 
         //click on pay_per_item
-        onView(withId(R.id.payPerItem))
+        onView(withId(R.id.payForAll))
                 .perform(click());
-
-        Thread.sleep(600);
-
-        onView(withId(R.id.per_item_recycler))
-                .check(matches(isDisplayed()));
-        onView(withId(R.id.per_item_recycler))
-                .perform(RecyclerViewActions.actionOnItemAtPosition(0,
-                        MyViewActionUtils.clickChildViewWithId(R.id.checkbox)));
 
         Thread.sleep(1000);
 
@@ -272,10 +264,6 @@ public class PayTest {
         onView(withId(R.id.payButton))
                 .check(matches(isDisplayed()));
 
-
-
-        onView(withId(R.id.payButton))
-                .check(matches(withText(amount)));
         onView(withId(R.id.payButton))
                 .perform(click());
 
