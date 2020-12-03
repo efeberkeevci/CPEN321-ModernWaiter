@@ -79,16 +79,18 @@ public class MainActivity extends AppCompatActivity {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
         } else if (requestCode == BARCODE_ACTIVITY_CODE) {
-            Intent customerActivityIntent = new Intent(this, CustomerActivity.class);
-            Bundle bundle = new Bundle();
+            if (data != null) {
+                Intent customerActivityIntent = new Intent(this, CustomerActivity.class);
+                Bundle bundle = new Bundle();
 
-            bundle.putInt("userId", userId);
-            bundle.putString("restaurantId", data.getStringExtra("restaurantId"));
-            bundle.putString("tableId", data.getStringExtra("tableId"));
+                bundle.putInt("userId", userId);
+                bundle.putString("restaurantId", data.getStringExtra("restaurantId"));
+                bundle.putString("tableId", data.getStringExtra("tableId"));
 
-            customerActivityIntent.putExtras(bundle);
+                customerActivityIntent.putExtras(bundle);
 
-            startActivity(customerActivityIntent);
+                startActivity(customerActivityIntent);
+            }
         }
     }
 
@@ -96,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             account = completedTask.getResult(ApiException.class);
 
-            if (account == null) {
+            if (account.getId() == null) {
                 signInGoogle();
             } else {
                 fetchUserId();

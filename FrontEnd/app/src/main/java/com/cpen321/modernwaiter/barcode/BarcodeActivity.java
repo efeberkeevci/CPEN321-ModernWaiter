@@ -35,6 +35,7 @@ public class BarcodeActivity extends AppCompatActivity {
         if(result != null) {
             if(result.getContents() == null) {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+                finish();
             } else {
                 Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
                 //Extract restaurant_Id from result.getContents() and pass this to the activity which calls the menu and switch to menu view

@@ -56,6 +56,7 @@ public class TableSession implements SessionInterface {
     private int userId;
 
     private HashSet<String> userPreference;
+    private HashSet<Integer> userCount = new HashSet<>();
 
     private final HashMap<Integer, String> customerIdToName = new HashMap<>();
 
@@ -114,7 +115,7 @@ public class TableSession implements SessionInterface {
 
     @Override
     public int getUserCount() {
-        return customerIdToName.keySet().size();
+        return userCount.size();
     }
 
     @Override
@@ -280,7 +281,7 @@ public class TableSession implements SessionInterface {
                     if (orderResponses.size() != 0) {
                         OrderResponse currentOrder = orderResponses.get(orderResponses.size() - 1);
                         if (BuildConfig.DEBUG && !(currentOrder.restaurant_id.equals(ApiUtil.RESTAURANT_ID))) {
-                            throw new AssertionError("Restaurant ID invalid, restaurandid: " + restaurantId + "\n tableId: " + tableId);
+                            throw new AssertionError("Restaurant ID invalid, restaurandid: " + restaurantId + "\ntableId: " + tableId);
                         }
 
                         orderId = currentOrder.id;
@@ -305,6 +306,7 @@ public class TableSession implements SessionInterface {
                     orderList.clear();
 
                     HashMap<MenuItem, Integer> updatedBillMap = new HashMap<>();
+                    userCount = new HashSet<>();
 
                     for (OrderedItemResponse orderedItem : orderedItemResponses) {
                         // Put the username into our customer list
@@ -314,6 +316,7 @@ public class TableSession implements SessionInterface {
                         }
 
                         if (orderedItem.has_paid != 1) {
+                            userCount.add(orderedItem.users_id);
 
                             MenuItem fakeMenuItem = new MenuItem(orderedItem.items_id);
 
@@ -394,6 +397,8 @@ public class TableSession implements SessionInterface {
     }
 
     public String getUsernameFromId(int id) {
+        if (!customerIdToName.containsKey(id))
+            return "Another user ";
         return customerIdToName.get(id);
     }
 
