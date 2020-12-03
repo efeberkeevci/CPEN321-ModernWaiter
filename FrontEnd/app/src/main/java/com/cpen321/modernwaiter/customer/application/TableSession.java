@@ -316,7 +316,8 @@ public class TableSession implements SessionInterface {
                         }
 
                         if (orderedItem.has_paid != 1) {
-                            userCount.add(orderedItem.users_id);
+                            if (orderedItem.users_id != -1)
+                                userCount.add(orderedItem.users_id);
 
                             MenuItem fakeMenuItem = new MenuItem(orderedItem.items_id);
 
