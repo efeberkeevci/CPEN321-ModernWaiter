@@ -73,7 +73,7 @@ public class TableSession implements SessionInterface {
 
         customerIdToName.put(-1, "Not selected");
 
-        fetchOrderId();
+        fetchUserInfo(userId);
     }
 
     @Override
@@ -357,6 +357,7 @@ public class TableSession implements SessionInterface {
 
                         if (userId == this.userId) {
                             userPreference = new HashSet<>(Arrays.asList(userResponse.preferences.split(" ")));
+                            fetchOrderId();
                             Log.i("Fetch user info", "Updated user preference");
                         }
                     }
