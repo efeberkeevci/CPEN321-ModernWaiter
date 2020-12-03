@@ -72,6 +72,7 @@ public class TableSession implements SessionInterface {
         orderedItems = new HashMap<>();
 
         customerIdToName.put(-1, "Not selected");
+        customerIdToName.put(userId, "Loading...");
 
         fetchUserInfo(userId);
     }
