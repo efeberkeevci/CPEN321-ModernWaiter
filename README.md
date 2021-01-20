@@ -3,9 +3,9 @@ CPEN321-ModernWaiter
 
 With Modern Waiter App, restaurant customers can:
 - browse & order restaurant menu items
-![Menu GIF](https://github.com/efeberkeevci/CPEN321-ModernWaiter/blob/main/Demo%20Videos/menuRecording.gif = 250x350)
+![Menu GIF](https://github.com/efeberkeevci/CPEN321-ModernWaiter/blob/main/Demo%20Videos/menuRecording.gif)
 - browse & order synchoronosly
-![Synchronize Use GIF](https://github.com/efeberkeevci/CPEN321-ModernWaiter/blob/main/Demo%20Videos/synchronized.gif = 250x350)
+![Synchronize Use GIF](https://github.com/efeberkeevci/CPEN321-ModernWaiter/blob/main/Demo%20Videos/synchronized.gif)
 
 ![Slide#1](https://github.com/efeberkeevci/CPEN321-ModernWaiter/blob/main/presentation_screenshots/Screen%20Shot%202020-12-29%20at%2010.47.00.png?raw=true)
 
